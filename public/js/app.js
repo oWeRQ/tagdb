@@ -1977,10 +1977,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      dialog: false,
       loading: true,
       total: 0,
       items: [],
@@ -1991,7 +2030,18 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Name',
         value: 'name'
-      }]
+      }, {
+        text: 'Actions',
+        value: 'actions',
+        sortable: false
+      }],
+      editedIndex: -1,
+      editedItem: {
+        name: ''
+      },
+      defaultItem: {
+        name: ''
+      }
     };
   },
   watch: {
@@ -2013,6 +2063,53 @@ __webpack_require__.r(__webpack_exports__);
         _this.total = response.data.meta.total;
         _this.loading = false;
       });
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem: function deleteItem(item) {
+      var _this2 = this;
+
+      var index = this.items.indexOf(item);
+
+      if (confirm('Are you sure you want to delete this item?')) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/api/v1/entities/' + item.id).then(function (response) {
+          console.log('response', response);
+
+          _this2.items.splice(index, 1);
+        });
+      }
+    },
+    close: function close() {
+      var _this3 = this;
+
+      this.dialog = false;
+      this.$nextTick(function () {
+        _this3.editedItem = Object.assign({}, _this3.defaultItem);
+        _this3.editedIndex = -1;
+      });
+    },
+    save: function save() {
+      var _this4 = this;
+
+      if (this.editedIndex > -1) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(function (response) {
+          console.log('response', response);
+          Object.assign(_this4.items[_this4.editedIndex], _this4.editedItem);
+
+          _this4.close();
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/entities', this.editedItem).then(function (response) {
+          console.log('response', response);
+
+          _this4.items.push(response.data.data);
+
+          _this4.close();
+        });
+      }
     }
   }
 });
@@ -2042,10 +2139,49 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      dialog: false,
       loading: true,
       total: 0,
       items: [],
@@ -2056,7 +2192,18 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Name',
         value: 'name'
-      }]
+      }, {
+        text: 'Actions',
+        value: 'actions',
+        sortable: false
+      }],
+      editedIndex: -1,
+      editedItem: {
+        name: ''
+      },
+      defaultItem: {
+        name: ''
+      }
     };
   },
   watch: {
@@ -2078,6 +2225,53 @@ __webpack_require__.r(__webpack_exports__);
         _this.total = response.data.meta.total;
         _this.loading = false;
       });
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+    deleteItem: function deleteItem(item) {
+      var _this2 = this;
+
+      var index = this.items.indexOf(item);
+
+      if (confirm('Are you sure you want to delete this item?')) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/api/v1/tags/' + item.id).then(function (response) {
+          console.log('response', response);
+
+          _this2.items.splice(index, 1);
+        });
+      }
+    },
+    close: function close() {
+      var _this3 = this;
+
+      this.dialog = false;
+      this.$nextTick(function () {
+        _this3.editedItem = Object.assign({}, _this3.defaultItem);
+        _this3.editedIndex = -1;
+      });
+    },
+    save: function save() {
+      var _this4 = this;
+
+      if (this.editedIndex > -1) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/tags/' + this.editedItem.id, this.editedItem).then(function (response) {
+          console.log('response', response);
+          Object.assign(_this4.items[_this4.editedIndex], _this4.editedItem);
+
+          _this4.close();
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/tags', this.editedItem).then(function (response) {
+          console.log('response', response);
+
+          _this4.items.push(response.data.data);
+
+          _this4.close();
+        });
+      }
     }
   }
 });
@@ -20474,7 +20668,181 @@ var render = function() {
       "update:options": function($event) {
         _vm.options = $event
       }
-    }
+    },
+    scopedSlots: _vm._u([
+      {
+        key: "top",
+        fn: function() {
+          return [
+            _c(
+              "v-toolbar",
+              { attrs: { flat: "", color: "white" } },
+              [
+                _c("v-toolbar-title", [_vm._v("Entities")]),
+                _vm._v(" "),
+                _c("v-spacer"),
+                _vm._v(" "),
+                _c(
+                  "v-dialog",
+                  {
+                    attrs: { "max-width": "500px" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      color: "indigo"
+                                    }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _c("v-icon", { attrs: { dark: "" } }, [
+                                  _vm._v("mdi-plus")
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dialog,
+                      callback: function($$v) {
+                        _vm.dialog = $$v
+                      },
+                      expression: "dialog"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "v-card",
+                      [
+                        _c("v-card-title", [
+                          _c("span", { staticClass: "headline" }, [
+                            _vm._v("Entity")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-text",
+                          [
+                            _c("v-text-field", {
+                              attrs: { label: "Name", autofocus: true },
+                              model: {
+                                value: _vm.editedItem.name,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.editedItem, "name", $$v)
+                                },
+                                expression: "editedItem.name"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: { click: _vm.close }
+                              },
+                              [_vm._v("Cancel")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: { click: _vm.save }
+                              },
+                              [_vm._v("Save")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ]
+        },
+        proxy: true
+      },
+      {
+        key: "item.actions",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "v-icon",
+              {
+                staticClass: "mr-2",
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.editItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-pencil\n        ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "v-icon",
+              {
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.deleteItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-delete\n        ")]
+            )
+          ]
+        }
+      },
+      {
+        key: "no-data",
+        fn: function() {
+          return [
+            _c(
+              "v-btn",
+              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+              [_vm._v("Reset")]
+            )
+          ]
+        },
+        proxy: true
+      }
+    ])
   })
 }
 var staticRenderFns = []
@@ -20513,7 +20881,181 @@ var render = function() {
       "update:options": function($event) {
         _vm.options = $event
       }
-    }
+    },
+    scopedSlots: _vm._u([
+      {
+        key: "top",
+        fn: function() {
+          return [
+            _c(
+              "v-toolbar",
+              { attrs: { flat: "", color: "white" } },
+              [
+                _c("v-toolbar-title", [_vm._v("Tags")]),
+                _vm._v(" "),
+                _c("v-spacer"),
+                _vm._v(" "),
+                _c(
+                  "v-dialog",
+                  {
+                    attrs: { "max-width": "500px" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    attrs: {
+                                      fab: "",
+                                      dark: "",
+                                      color: "indigo"
+                                    }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _c("v-icon", { attrs: { dark: "" } }, [
+                                  _vm._v("mdi-plus")
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ]),
+                    model: {
+                      value: _vm.dialog,
+                      callback: function($$v) {
+                        _vm.dialog = $$v
+                      },
+                      expression: "dialog"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "v-card",
+                      [
+                        _c("v-card-title", [
+                          _c("span", { staticClass: "headline" }, [
+                            _vm._v("Tag")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-text",
+                          [
+                            _c("v-text-field", {
+                              attrs: { label: "Name", autofocus: true },
+                              model: {
+                                value: _vm.editedItem.name,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.editedItem, "name", $$v)
+                                },
+                                expression: "editedItem.name"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: { click: _vm.close }
+                              },
+                              [_vm._v("Cancel")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: { click: _vm.save }
+                              },
+                              [_vm._v("Save")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          ]
+        },
+        proxy: true
+      },
+      {
+        key: "item.actions",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "v-icon",
+              {
+                staticClass: "mr-2",
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.editItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-pencil\n        ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "v-icon",
+              {
+                attrs: { small: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.deleteItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-delete\n        ")]
+            )
+          ]
+        }
+      },
+      {
+        key: "no-data",
+        fn: function() {
+          return [
+            _c(
+              "v-btn",
+              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+              [_vm._v("Reset")]
+            )
+          ]
+        },
+        proxy: true
+      }
+    ])
   })
 }
 var staticRenderFns = []
