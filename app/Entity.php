@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Entity extends Model
 {
+    protected $fillable = [
+        'name',
+    ];
+
     public function tags()
     {
         return $this->belongsToMany('App\Tag', 'entities_tags');

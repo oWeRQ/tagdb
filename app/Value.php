@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Value extends Model
 {
+    protected $fillable = [
+        'content',
+        'entity_id',
+        'tag_id',
+    ];
+
     public function entity()
     {
         return $this->belongsTo('App\Entity');

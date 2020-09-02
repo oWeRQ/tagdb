@@ -18,4 +18,24 @@ class EntityController extends Controller
     {
         return new EntityResource(Entity::find($id));
     }
+
+    public function store(Request $request)
+    {
+        return new EntityResource(Entity::create($request->all()));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $entity = Entity::findOrFail($id);
+        $entity->update($request->all());
+
+        return new EntityResource($entity);
+    }
+
+    public function destroy($id)
+    {
+        Entity::find($id)->delete();
+
+        return 204;
+    }
 }

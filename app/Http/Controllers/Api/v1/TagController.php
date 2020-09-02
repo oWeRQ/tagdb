@@ -18,4 +18,24 @@ class TagController extends Controller
     {
         return new TagResource(Tag::find($id));
     }
+
+    public function store(Request $request)
+    {
+        return new TagResource(Tag::create($request->all()));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $tag = Tag::findOrFail($id);
+        $tag->update($request->all());
+
+        return new TagResource($tag);
+    }
+
+    public function destroy($id)
+    {
+        Tag::find($id)->delete();
+
+        return 204;
+    }
 }

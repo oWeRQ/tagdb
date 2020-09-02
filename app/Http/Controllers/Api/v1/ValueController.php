@@ -18,4 +18,24 @@ class ValueController extends Controller
     {
         return new ValueResource(Value::find($id));
     }
+
+    public function store(Request $request)
+    {
+        return new ValueResource(Value::create($request->all()));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $value = Value::findOrFail($id);
+        $value->update($request->all());
+
+        return new ValueResource($value);
+    }
+
+    public function destroy($id)
+    {
+        Value::find($id)->delete();
+
+        return 204;
+    }
 }

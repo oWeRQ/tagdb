@@ -16,7 +16,7 @@ class ValueResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'value' => $this->value,
+            'content' => $this->content,
             'entity_id' => $this->entity_id,
             'field_id' => $this->field_id,
             'field' => new FieldResource($this->field),

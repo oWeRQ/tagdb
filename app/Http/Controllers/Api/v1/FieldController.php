@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Field;
-use App\Http\Resources\EntityResource;
+use App\Http\Resources\FieldResource;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
@@ -11,11 +11,31 @@ class FieldController extends Controller
 {
     public function index(Request $request)
     {
-        return EntityResource::collection(Field::paginate());
+        return FieldResource::collection(Field::paginate());
     }
 
     public function show($id)
     {
-        return new EntityResource(Field::find($id));
+        return new FieldResource(Field::find($id));
+    }
+
+    public function store(Request $request)
+    {
+        return new FieldResource(Field::create($request->all()));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $field = Field::findOrFail($id);
+        $field->update($request->all());
+
+        return new FieldResource($field);
+    }
+
+    public function destroy($id)
+    {
+        Field::find($id)->delete();
+
+        return 204;
     }
 }
