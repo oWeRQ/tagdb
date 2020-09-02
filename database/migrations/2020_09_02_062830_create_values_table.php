@@ -17,6 +17,7 @@ class CreateValuesTable extends Migration
             $table->id();
             $table->integer('entity_id');
             $table->integer('field_id');
+            $table->text('value');
             $table->timestamps();
         });
     }
