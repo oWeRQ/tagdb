@@ -1963,6 +1963,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1972,102 +1974,111 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
+      loading: true,
+      total: 0,
+      items: [],
+      options: {},
       headers: [{
-        text: 'Dessert (100g serving)',
-        align: 'start',
-        sortable: false,
+        text: 'ID',
+        value: 'id'
+      }, {
+        text: 'Name',
         value: 'name'
-      }, {
-        text: 'Calories',
-        value: 'calories'
-      }, {
-        text: 'Fat (g)',
-        value: 'fat'
-      }, {
-        text: 'Carbs (g)',
-        value: 'carbs'
-      }, {
-        text: 'Protein (g)',
-        value: 'protein'
-      }, {
-        text: 'Iron (%)',
-        value: 'iron'
-      }],
-      desserts: [{
-        name: 'Frozen Yogurt',
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: '1%'
-      }, {
-        name: 'Ice cream sandwich',
-        calories: 237,
-        fat: 9.0,
-        carbs: 37,
-        protein: 4.3,
-        iron: '1%'
-      }, {
-        name: 'Eclair',
-        calories: 262,
-        fat: 16.0,
-        carbs: 23,
-        protein: 6.0,
-        iron: '7%'
-      }, {
-        name: 'Cupcake',
-        calories: 305,
-        fat: 3.7,
-        carbs: 67,
-        protein: 4.3,
-        iron: '8%'
-      }, {
-        name: 'Gingerbread',
-        calories: 356,
-        fat: 16.0,
-        carbs: 49,
-        protein: 3.9,
-        iron: '16%'
-      }, {
-        name: 'Jelly bean',
-        calories: 375,
-        fat: 0.0,
-        carbs: 94,
-        protein: 0.0,
-        iron: '0%'
-      }, {
-        name: 'Lollipop',
-        calories: 392,
-        fat: 0.2,
-        carbs: 98,
-        protein: 0,
-        iron: '2%'
-      }, {
-        name: 'Honeycomb',
-        calories: 408,
-        fat: 3.2,
-        carbs: 87,
-        protein: 6.5,
-        iron: '45%'
-      }, {
-        name: 'Donut',
-        calories: 452,
-        fat: 25.0,
-        carbs: 51,
-        protein: 4.9,
-        iron: '22%'
-      }, {
-        name: 'KitKat',
-        calories: 518,
-        fat: 26.0,
-        carbs: 65,
-        protein: 7,
-        iron: '6%'
       }]
     };
+  },
+  watch: {
+    options: {
+      handler: 'getItems',
+      deep: true
+    }
+  },
+  mounted: function mounted() {
+    this.getItems();
+  },
+  methods: {
+    getItems: function getItems() {
+      var _this = this;
+
+      this.loading = true;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/entities').then(function (response) {
+        _this.items = response.data.data;
+        _this.total = response.data.meta.total;
+        _this.loading = false;
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Tags.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Tags.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loading: true,
+      total: 0,
+      items: [],
+      options: {},
+      headers: [{
+        text: 'ID',
+        value: 'id'
+      }, {
+        text: 'Name',
+        value: 'name'
+      }]
+    };
+  },
+  watch: {
+    options: {
+      handler: 'getItems',
+      deep: true
+    }
+  },
+  mounted: function mounted() {
+    this.getItems();
+  },
+  methods: {
+    getItems: function getItems() {
+      var _this = this;
+
+      this.loading = true;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags').then(function (response) {
+        _this.items = response.data.data;
+        _this.total = response.data.meta.total;
+        _this.loading = false;
+      });
+    }
   }
 });
 
@@ -20377,7 +20388,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
-                { attrs: { to: "/tags" } },
+                { attrs: { link: "", to: "/tags" } },
                 [
                   _c(
                     "v-list-item-action",
@@ -20451,7 +20462,19 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("v-data-table", {
     staticClass: "elevation-1",
-    attrs: { headers: _vm.headers, items: _vm.desserts, "items-per-page": 5 }
+    attrs: {
+      headers: _vm.headers,
+      items: _vm.items,
+      options: _vm.options,
+      "items-per-page": 15,
+      "server-items-length": _vm.total,
+      loading: _vm.loading
+    },
+    on: {
+      "update:options": function($event) {
+        _vm.options = $event
+      }
+    }
   })
 }
 var staticRenderFns = []
@@ -20476,7 +20499,22 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h1", [_vm._v("Tags")])
+  return _c("v-data-table", {
+    staticClass: "elevation-1",
+    attrs: {
+      headers: _vm.headers,
+      items: _vm.items,
+      options: _vm.options,
+      "items-per-page": 15,
+      "server-items-length": _vm.total,
+      loading: _vm.loading
+    },
+    on: {
+      "update:options": function($event) {
+        _vm.options = $event
+      }
+    }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -79707,15 +79745,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Tags_vue_vue_type_template_id_7723f684___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Tags.vue?vue&type=template&id=7723f684& */ "./resources/js/components/Tags.vue?vue&type=template&id=7723f684&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Tags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tags.vue?vue&type=script&lang=js& */ "./resources/js/components/Tags.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Tags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _Tags_vue_vue_type_template_id_7723f684___WEBPACK_IMPORTED_MODULE_0__["render"],
   _Tags_vue_vue_type_template_id_7723f684___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -79729,6 +79769,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/Tags.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Tags.vue?vue&type=script&lang=js&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/components/Tags.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Tags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Tags.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Tags.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Tags_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
