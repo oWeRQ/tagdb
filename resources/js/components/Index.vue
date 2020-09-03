@@ -72,7 +72,7 @@
             </v-icon>
         </template>
         <template v-slot:no-data>
-            <v-btn color="primary" @click="initialize">Reset</v-btn>
+            <v-btn color="primary" @click="reset">Reset</v-btn>
         </template>
     </v-data-table>
 </template>
@@ -205,6 +205,9 @@
                         this.close();
                     });
                 }
+            },
+            reset() {
+                this.selectedTags = [];
             },
             addTag(tag) {
                 this.selectedTags.includes(tag.name) || this.selectedTags.push(tag.name);

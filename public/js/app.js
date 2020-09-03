@@ -2476,6 +2476,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         });
       }
     },
+    reset: function reset() {
+      this.selectedTags = [];
+    },
     addTag: function addTag(tag) {
       this.selectedTags.includes(tag.name) || this.selectedTags.push(tag.name);
     },
@@ -21386,7 +21389,7 @@ var render = function() {
           return [
             _c(
               "v-btn",
-              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+              { attrs: { color: "primary" }, on: { click: _vm.reset } },
               [_vm._v("Reset")]
             )
           ]
