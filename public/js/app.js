@@ -2450,7 +2450,7 @@ function getFields(items) {
       if (this.editedIndex > -1) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(function (response) {
           console.log('response', response);
-          Object.assign(_this3.items[_this3.editedIndex], _this3.processItem(_this3.editedItem));
+          Object.assign(_this3.items[_this3.editedIndex], _this3.processItem(response.data.data));
 
           _this3.close();
         });
@@ -23648,143 +23648,153 @@ var render = function() {
                 _vm._v(" "),
                 _c("v-spacer"),
                 _vm._v(" "),
-                _c(
-                  "v-dialog",
-                  {
-                    attrs: { "max-width": "500px" },
-                    scopedSlots: _vm._u([
+                _vm.editedItem
+                  ? _c(
+                      "v-dialog",
                       {
-                        key: "activator",
-                        fn: function(ref) {
-                          var on = ref.on
-                          var attrs = ref.attrs
-                          return [
-                            _c(
-                              "v-btn",
-                              _vm._g(
-                                _vm._b(
-                                  {
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      color: "indigo"
-                                    }
-                                  },
-                                  "v-btn",
-                                  attrs,
-                                  false
-                                ),
-                                on
-                              ),
-                              [
-                                _c("v-icon", { attrs: { dark: "" } }, [
-                                  _vm._v("mdi-plus")
-                                ])
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ]),
-                    model: {
-                      value: _vm.dialog,
-                      callback: function($$v) {
-                        _vm.dialog = $$v
-                      },
-                      expression: "dialog"
-                    }
-                  },
-                  [
-                    _vm._v(" "),
-                    _c(
-                      "v-card",
-                      [
-                        _c("v-card-title", [
-                          _c("span", { staticClass: "headline" }, [
-                            _vm._v("Entity")
-                          ])
-                        ]),
-                        _vm._v(" "),
-                        _c(
-                          "v-card-text",
+                        attrs: { "max-width": "500px" },
+                        scopedSlots: _vm._u(
                           [
-                            _c("v-autocomplete", {
-                              attrs: {
-                                items: _vm.tags,
-                                chips: "",
-                                multiple: "",
-                                color: "blue darken-1",
-                                label: "Tags",
-                                "item-text": "name",
-                                "item-value": "name",
-                                "return-object": true,
-                                "hide-selected": true,
-                                "deletable-chips": true,
-                                autofocus: true
-                              },
-                              model: {
-                                value: _vm.editedItem.tags,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.editedItem, "tags", $$v)
-                                },
-                                expression: "editedItem.tags"
+                            {
+                              key: "activator",
+                              fn: function(ref) {
+                                var on = ref.on
+                                var attrs = ref.attrs
+                                return [
+                                  _c(
+                                    "v-btn",
+                                    _vm._g(
+                                      _vm._b(
+                                        {
+                                          attrs: {
+                                            fab: "",
+                                            dark: "",
+                                            color: "indigo"
+                                          }
+                                        },
+                                        "v-btn",
+                                        attrs,
+                                        false
+                                      ),
+                                      on
+                                    ),
+                                    [
+                                      _c("v-icon", { attrs: { dark: "" } }, [
+                                        _vm._v("mdi-plus")
+                                      ])
+                                    ],
+                                    1
+                                  )
+                                ]
                               }
-                            }),
-                            _vm._v(" "),
-                            _c("v-text-field", {
-                              attrs: { label: "Name" },
-                              model: {
-                                value: _vm.editedItem.name,
-                                callback: function($$v) {
-                                  _vm.$set(_vm.editedItem, "name", $$v)
-                                },
-                                expression: "editedItem.name"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _vm._l(_vm.editedFields, function(field) {
-                              return _c("v-text-field", {
-                                key: field.id,
-                                attrs: { label: field.name },
-                                model: {
-                                  value: _vm.editedItem.contents[field.id],
-                                  callback: function($$v) {
-                                    _vm.$set(
-                                      _vm.editedItem.contents,
-                                      field.id,
-                                      $$v
-                                    )
-                                  },
-                                  expression: "editedItem.contents[field.id]"
-                                }
-                              })
-                            })
+                            }
                           ],
-                          2
+                          null,
+                          false,
+                          3018926050
                         ),
+                        model: {
+                          value: _vm.dialog,
+                          callback: function($$v) {
+                            _vm.dialog = $$v
+                          },
+                          expression: "dialog"
+                        }
+                      },
+                      [
                         _vm._v(" "),
                         _c(
-                          "v-card-actions",
+                          "v-card",
                           [
-                            _c("v-spacer"),
+                            _c("v-card-title", [
+                              _c("span", { staticClass: "headline" }, [
+                                _vm._v("Entity")
+                              ])
+                            ]),
                             _vm._v(" "),
                             _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "blue darken-1", text: "" },
-                                on: { click: _vm.close }
-                              },
-                              [_vm._v("Cancel")]
+                              "v-card-text",
+                              [
+                                _c("v-autocomplete", {
+                                  attrs: {
+                                    items: _vm.tags,
+                                    chips: "",
+                                    multiple: "",
+                                    color: "blue darken-1",
+                                    label: "Tags",
+                                    "item-text": "name",
+                                    "item-value": "name",
+                                    "return-object": true,
+                                    "hide-selected": true,
+                                    "deletable-chips": true,
+                                    autofocus: true
+                                  },
+                                  model: {
+                                    value: _vm.editedItem.tags,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.editedItem, "tags", $$v)
+                                    },
+                                    expression: "editedItem.tags"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("v-text-field", {
+                                  attrs: { label: "Name" },
+                                  model: {
+                                    value: _vm.editedItem.name,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.editedItem, "name", $$v)
+                                    },
+                                    expression: "editedItem.name"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _vm._l(_vm.editedFields, function(field) {
+                                  return _c("v-text-field", {
+                                    key: field.id,
+                                    attrs: { label: field.name },
+                                    model: {
+                                      value: _vm.editedItem.contents[field.id],
+                                      callback: function($$v) {
+                                        _vm.$set(
+                                          _vm.editedItem.contents,
+                                          field.id,
+                                          $$v
+                                        )
+                                      },
+                                      expression:
+                                        "editedItem.contents[field.id]"
+                                    }
+                                  })
+                                })
+                              ],
+                              2
                             ),
                             _vm._v(" "),
                             _c(
-                              "v-btn",
-                              {
-                                attrs: { color: "blue darken-1", text: "" },
-                                on: { click: _vm.save }
-                              },
-                              [_vm._v("Save")]
+                              "v-card-actions",
+                              [
+                                _c("v-spacer"),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "blue darken-1", text: "" },
+                                    on: { click: _vm.close }
+                                  },
+                                  [_vm._v("Cancel")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
+                                    attrs: { color: "blue darken-1", text: "" },
+                                    on: { click: _vm.save }
+                                  },
+                                  [_vm._v("Save")]
+                                )
+                              ],
+                              1
                             )
                           ],
                           1
@@ -23792,9 +23802,7 @@ var render = function() {
                       ],
                       1
                     )
-                  ],
-                  1
-                )
+                  : _vm._e()
               ],
               1
             )

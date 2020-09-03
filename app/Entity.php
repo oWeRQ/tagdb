@@ -38,7 +38,7 @@ class Entity extends Model
                 'entity_id' => $this->id,
                 'field_id' => $field_id,
             ], [
-                'content' => $content,
+                'content' => (string)$content,
             ]);
         }
     }

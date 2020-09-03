@@ -31,7 +31,7 @@
                     :deletable-chips="true"
                 ></v-autocomplete>
                 <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="500px">
+                <v-dialog v-if="editedItem" v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn fab dark color="indigo" v-bind="attrs" v-on="on">
                             <v-icon dark>mdi-plus</v-icon>
@@ -186,7 +186,7 @@
                 if (this.editedIndex > -1) {
                     axios.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(response => {
                         console.log('response', response);
-                        Object.assign(this.items[this.editedIndex], this.processItem(this.editedItem));
+                        Object.assign(this.items[this.editedIndex], this.processItem(response.data.data));
                         this.close();
                     });
                 } else {
