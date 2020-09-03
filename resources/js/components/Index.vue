@@ -186,13 +186,13 @@
                 if (this.editedIndex > -1) {
                     axios.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(response => {
                         console.log('response', response);
-                        Object.assign(this.items[this.editedIndex], this.editedItem);
+                        Object.assign(this.items[this.editedIndex], this.processItem(this.editedItem));
                         this.close();
                     });
                 } else {
                     axios.post('/api/v1/entities', this.editedItem).then(response => {
                         console.log('response', response);
-                        this.items.push(response.data.data);
+                        this.items.push(this.processItem(response.data.data));
                         this.close();
                     });
                 }

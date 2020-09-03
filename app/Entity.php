@@ -34,12 +34,12 @@ class Entity extends Model
             return;
 
         foreach ($contents as $field_id => $content) {
-            Value::firstOrNew([
+            Value::updateOrCreate([
                 'entity_id' => $this->id,
                 'field_id' => $field_id,
             ], [
                 'content' => $content,
-            ])->save();
+            ]);
         }
     }
 }

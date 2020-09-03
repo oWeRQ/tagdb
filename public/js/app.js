@@ -2450,7 +2450,7 @@ function getFields(items) {
       if (this.editedIndex > -1) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(function (response) {
           console.log('response', response);
-          Object.assign(_this3.items[_this3.editedIndex], _this3.editedItem);
+          Object.assign(_this3.items[_this3.editedIndex], _this3.processItem(_this3.editedItem));
 
           _this3.close();
         });
@@ -2458,7 +2458,7 @@ function getFields(items) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/entities', this.editedItem).then(function (response) {
           console.log('response', response);
 
-          _this3.items.push(response.data.data);
+          _this3.items.push(_this3.processItem(response.data.data));
 
           _this3.close();
         });
