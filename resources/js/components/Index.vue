@@ -15,28 +15,21 @@
                 <v-autocomplete
                     v-model="selectedTags"
                     :items="tags"
-                    dense
                     chips
+                    multiple
+                    clearable
+                    dense
                     solo
+                    single-line
                     color="blue-grey lighten-2"
                     label="Tags"
                     item-text="name"
                     item-value="name"
-                    multiple
+                    :return-object="false"
                     :hide-details="true"
-                >
-                    <template v-slot:selection="data">
-                        <v-chip
-                            v-bind="data.attrs"
-                            :input-value="data.selected"
-                            close
-                            @click="data.select"
-                            @click:close="removeTag(data.item)"
-                        >
-                            {{ data.item.name }}
-                        </v-chip>
-                    </template>
-                </v-autocomplete>
+                    :hide-selected="true"
+                    :deletable-chips="true"
+                ></v-autocomplete>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on, attrs }">
@@ -49,7 +42,25 @@
                             <span class="headline">Entity</span>
                         </v-card-title>
                         <v-card-text>
-                            <v-text-field v-model="editedItem.name" label="Name" :autofocus="true"></v-text-field>
+                            <v-autocomplete
+                                v-model="editedItem.tags"
+                                :items="tags"
+                                chips
+                                multiple
+                                color="blue darken-1"
+                                label="Tags"
+                                item-text="name"
+                                item-value="name"
+                                :return-object="true"
+                                :hide-selected="true"
+                                :deletable-chips="true"
+                                :autofocus="true"
+                            ></v-autocomplete>
+                            <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
+                            <v-text-field v-for="field in editedFields" :key="field.id"
+                                v-model="editedItem.contents[field.id]"
+                                :label="field.name"
+                            ></v-text-field>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -80,6 +91,14 @@
 <script>
     import axios from 'axios';
 
+    function getFields(items) {
+        let fields = [];
+        for (let item of items) {
+            fields = [...fields, ...item.fields];
+        }
+        return fields;
+    }
+
     export default {
         data() {
             return {
@@ -88,13 +107,8 @@
                 total: 0,
                 items: [],
                 options: {},
-                editedIndex: -1,
-                editedItem: {
-                    name: '',
-                },
-                defaultItem: {
-                    name: '',
-                },
+                editedIndex: null,
+                editedItem: null,
                 tags: [],
                 selectedTags: [],
             }
@@ -110,12 +124,8 @@
                 }
                 return tags;
             },
-            itemsFields() {
-                let fields = [];
-                for (let tag of this.itemsTags) {
-                    fields = [...fields, ...tag.fields];
-                }
-                return fields;
+            editedFields() {
+                return getFields(this.editedItem.tags);
             },
             headers() {
                 const before = [
@@ -126,7 +136,7 @@
                 const after = [
                     { text: 'Actions', value: 'actions', sortable: false },
                 ];
-                const fields = this.itemsFields.map((field) => {
+                const fields = getFields(this.itemsTags).map((field) => {
                     return { text: field.name, value: 'contents.' + field.id, sortable: false };
                 });
 
@@ -146,6 +156,7 @@
             },
         },
         mounted() {
+            this.editedReset();
             this.getTags();
             this.getItems();
         },
@@ -170,27 +181,6 @@
                     this.loading = false;
                 });
             },
-            editItem(item) {
-                this.editedIndex = this.items.indexOf(item);
-                this.editedItem = Object.assign({}, item);
-                this.dialog = true;
-            },
-            deleteItem(item) {
-                const index = this.items.indexOf(item);
-                if (confirm('Are you sure you want to delete this item?')) {
-                    axios.delete('/api/v1/entities/' + item.id).then(response => {
-                        console.log('response', response);
-                        this.items.splice(index, 1);
-                    });
-                }
-            },
-            close() {
-                this.dialog = false;
-                this.$nextTick(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem);
-                    this.editedIndex = -1;
-                });
-            },
             save() {
                 if (this.editedIndex > -1) {
                     axios.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(response => {
@@ -205,6 +195,31 @@
                         this.close();
                     });
                 }
+            },
+            deleteItem(item) {
+                const index = this.items.indexOf(item);
+                if (confirm('Are you sure you want to delete this item?')) {
+                    axios.delete('/api/v1/entities/' + item.id).then(response => {
+                        console.log('response', response);
+                        this.items.splice(index, 1);
+                    });
+                }
+            },
+            editItem(item) {
+                this.editedIndex = this.items.indexOf(item);
+                this.editedItem = Object.assign({}, item);
+                this.dialog = true;
+            },
+            close() {
+                this.dialog = false;
+                this.$nextTick(this.editedReset);
+            },
+            editedReset() {
+                this.editedItem = {
+                    tags: [],
+                    contents: {}
+                };
+                this.editedIndex = -1;
             },
             reset() {
                 this.selectedTags = [];

@@ -2268,6 +2268,38 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+function getFields(items) {
+  var fields = [];
+
+  var _iterator = _createForOfIteratorHelper(items),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var item = _step.value;
+      fields = [].concat(_toConsumableArray(fields), _toConsumableArray(item.fields));
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return fields;
+}
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2277,13 +2309,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       total: 0,
       items: [],
       options: {},
-      editedIndex: -1,
-      editedItem: {
-        name: ''
-      },
-      defaultItem: {
-        name: ''
-      },
+      editedIndex: null,
+      editedItem: null,
       tags: [],
       selectedTags: []
     };
@@ -2292,59 +2319,43 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     itemsTags: function itemsTags() {
       var tags = [];
 
-      var _iterator = _createForOfIteratorHelper(this.items),
-          _step;
+      var _iterator2 = _createForOfIteratorHelper(this.items),
+          _step2;
 
       try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var item = _step.value;
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var item = _step2.value;
 
-          var _iterator2 = _createForOfIteratorHelper(item.tags),
-              _step2;
+          var _iterator3 = _createForOfIteratorHelper(item.tags),
+              _step3;
 
           try {
             var _loop = function _loop() {
-              var tag = _step2.value;
+              var tag = _step3.value;
               if (!tags.some(function (t) {
                 return t.id === tag.id;
               })) tags.push(tag);
             };
 
-            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
               _loop();
             }
           } catch (err) {
-            _iterator2.e(err);
+            _iterator3.e(err);
           } finally {
-            _iterator2.f();
+            _iterator3.f();
           }
         }
       } catch (err) {
-        _iterator.e(err);
+        _iterator2.e(err);
       } finally {
-        _iterator.f();
+        _iterator2.f();
       }
 
       return tags;
     },
-    itemsFields: function itemsFields() {
-      var fields = [];
-
-      var _iterator3 = _createForOfIteratorHelper(this.itemsTags),
-          _step3;
-
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var tag = _step3.value;
-          fields = [].concat(_toConsumableArray(fields), _toConsumableArray(tag.fields));
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
-      }
-
-      return fields;
+    editedFields: function editedFields() {
+      return getFields(this.editedItem.tags);
     },
     headers: function headers() {
       var before = [{
@@ -2364,7 +2375,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         value: 'actions',
         sortable: false
       }];
-      var fields = this.itemsFields.map(function (field) {
+      var fields = getFields(this.itemsTags).map(function (field) {
         return {
           text: field.name,
           value: 'contents.' + field.id,
@@ -2387,6 +2398,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   mounted: function mounted() {
+    this.editedReset();
     this.getTags();
     this.getItems();
   },
@@ -2429,13 +2441,28 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this2.loading = false;
       });
     },
-    editItem: function editItem(item) {
-      this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+    save: function save() {
+      var _this3 = this;
+
+      if (this.editedIndex > -1) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(function (response) {
+          console.log('response', response);
+          Object.assign(_this3.items[_this3.editedIndex], _this3.editedItem);
+
+          _this3.close();
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/entities', this.editedItem).then(function (response) {
+          console.log('response', response);
+
+          _this3.items.push(response.data.data);
+
+          _this3.close();
+        });
+      }
     },
     deleteItem: function deleteItem(item) {
-      var _this3 = this;
+      var _this4 = this;
 
       var index = this.items.indexOf(item);
 
@@ -2443,38 +2470,25 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/api/v1/entities/' + item.id).then(function (response) {
           console.log('response', response);
 
-          _this3.items.splice(index, 1);
+          _this4.items.splice(index, 1);
         });
       }
+    },
+    editItem: function editItem(item) {
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
     },
     close: function close() {
-      var _this4 = this;
-
       this.dialog = false;
-      this.$nextTick(function () {
-        _this4.editedItem = Object.assign({}, _this4.defaultItem);
-        _this4.editedIndex = -1;
-      });
+      this.$nextTick(this.editedReset);
     },
-    save: function save() {
-      var _this5 = this;
-
-      if (this.editedIndex > -1) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(function (response) {
-          console.log('response', response);
-          Object.assign(_this5.items[_this5.editedIndex], _this5.editedItem);
-
-          _this5.close();
-        });
-      } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/entities', this.editedItem).then(function (response) {
-          console.log('response', response);
-
-          _this5.items.push(response.data.data);
-
-          _this5.close();
-        });
-      }
+    editedReset: function editedReset() {
+      this.editedItem = {
+        tags: [],
+        contents: {}
+      };
+      this.editedIndex = -1;
     },
     reset: function reset() {
       this.selectedTags = [];
@@ -21158,52 +21172,21 @@ var render = function() {
                 _c("v-autocomplete", {
                   attrs: {
                     items: _vm.tags,
-                    dense: "",
                     chips: "",
+                    multiple: "",
+                    clearable: "",
+                    dense: "",
                     solo: "",
+                    "single-line": "",
                     color: "blue-grey lighten-2",
                     label: "Tags",
                     "item-text": "name",
                     "item-value": "name",
-                    multiple: "",
-                    "hide-details": true
+                    "return-object": false,
+                    "hide-details": true,
+                    "hide-selected": true,
+                    "deletable-chips": true
                   },
-                  scopedSlots: _vm._u([
-                    {
-                      key: "selection",
-                      fn: function(data) {
-                        return [
-                          _c(
-                            "v-chip",
-                            _vm._b(
-                              {
-                                attrs: {
-                                  "input-value": data.selected,
-                                  close: ""
-                                },
-                                on: {
-                                  click: data.select,
-                                  "click:close": function($event) {
-                                    return _vm.removeTag(data.item)
-                                  }
-                                }
-                              },
-                              "v-chip",
-                              data.attrs,
-                              false
-                            ),
-                            [
-                              _vm._v(
-                                "\n                        " +
-                                  _vm._s(data.item.name) +
-                                  "\n                    "
-                              )
-                            ]
-                          )
-                        ]
-                      }
-                    }
-                  ]),
                   model: {
                     value: _vm.selectedTags,
                     callback: function($$v) {
@@ -21276,8 +21259,31 @@ var render = function() {
                         _c(
                           "v-card-text",
                           [
+                            _c("v-autocomplete", {
+                              attrs: {
+                                items: _vm.tags,
+                                chips: "",
+                                multiple: "",
+                                color: "blue darken-1",
+                                label: "Tags",
+                                "item-text": "name",
+                                "item-value": "name",
+                                "return-object": true,
+                                "hide-selected": true,
+                                "deletable-chips": true,
+                                autofocus: true
+                              },
+                              model: {
+                                value: _vm.editedItem.tags,
+                                callback: function($$v) {
+                                  _vm.$set(_vm.editedItem, "tags", $$v)
+                                },
+                                expression: "editedItem.tags"
+                              }
+                            }),
+                            _vm._v(" "),
                             _c("v-text-field", {
-                              attrs: { label: "Name", autofocus: true },
+                              attrs: { label: "Name" },
                               model: {
                                 value: _vm.editedItem.name,
                                 callback: function($$v) {
@@ -21285,9 +21291,27 @@ var render = function() {
                                 },
                                 expression: "editedItem.name"
                               }
+                            }),
+                            _vm._v(" "),
+                            _vm._l(_vm.editedFields, function(field) {
+                              return _c("v-text-field", {
+                                key: field.id,
+                                attrs: { label: field.name },
+                                model: {
+                                  value: _vm.editedItem.contents[field.id],
+                                  callback: function($$v) {
+                                    _vm.$set(
+                                      _vm.editedItem.contents,
+                                      field.id,
+                                      $$v
+                                    )
+                                  },
+                                  expression: "editedItem.contents[field.id]"
+                                }
+                              })
                             })
                           ],
-                          1
+                          2
                         ),
                         _vm._v(" "),
                         _c(
