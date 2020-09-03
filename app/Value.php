@@ -9,7 +9,7 @@ class Value extends Model
     protected $fillable = [
         'content',
         'entity_id',
-        'tag_id',
+        'field_id',
     ];
 
     public function entity()

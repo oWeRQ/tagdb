@@ -90,6 +90,7 @@
 
 <script>
     import axios from 'axios';
+    import cloneDeep from 'clone-deep';
 
     function getFields(items) {
         let fields = [];
@@ -207,7 +208,7 @@
             },
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item);
-                this.editedItem = Object.assign({}, item);
+                this.editedItem = cloneDeep(item);
                 this.dialog = true;
             },
             close() {

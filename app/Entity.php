@@ -19,4 +19,27 @@ class Entity extends Model
     {
         return $this->hasMany('App\Value');
     }
+
+    public function updateTags(array $tags = null)
+    {
+        if (!$tags)
+            return;
+
+        $this->tags()->sync(array_column($tags, 'id'));
+    }
+
+    public function updateContents(array $contents = null)
+    {
+        if (!$contents)
+            return;
+
+        foreach ($contents as $field_id => $content) {
+            Value::firstOrNew([
+                'entity_id' => $this->id,
+                'field_id' => $field_id,
+            ], [
+                'content' => $content,
+            ])->save();
+        }
+    }
 }

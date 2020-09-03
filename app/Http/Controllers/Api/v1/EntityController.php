@@ -31,13 +31,19 @@ class EntityController extends Controller
 
     public function store(Request $request)
     {
-        return new EntityResource(Entity::create($request->all()));
+        $entity = Entity::create($request->all());
+        $entity->updateTags($request->get('tags'));
+        $entity->updateContents($request->get('contents'));
+
+        return new EntityResource($entity);
     }
 
     public function update(Request $request, $id)
     {
         $entity = Entity::findOrFail($id);
         $entity->update($request->all());
+        $entity->updateTags($request->get('tags'));
+        $entity->updateContents($request->get('contents'));
 
         return new EntityResource($entity);
     }
