@@ -10,7 +10,7 @@
     >
         <template v-slot:top>
             <v-toolbar flat color="white">
-                <v-toolbar-title>Tags</v-toolbar-title>
+                <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on, attrs }">
@@ -20,7 +20,7 @@
                     </template>
                     <v-card>
                         <v-card-title>
-                            <span class="headline">Tag</span>
+                            <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }} Item</span>
                         </v-card-title>
                         <v-card-text>
                             <v-text-field v-model="editedItem.name" label="Name" :autofocus="true"></v-text-field>
@@ -52,6 +52,30 @@
     import axios from 'axios';
 
     export default {
+        props: {
+            title: {
+                type: String,
+                default: 'Items',
+            },
+            headers: {
+                type: Array,
+                default: [
+                    { text: 'ID', value: 'id' },
+                    { text: 'Name', value: 'name' },
+                    { text: 'Actions', value: 'actions', sortable: false },
+                ],
+            },
+            resource: {
+                type: String,
+                default: '/api/v1/items',
+            },
+            defaultItem: {
+                type: Object,
+                default: {
+                    name: '',
+                },
+            },
+        },
         data() {
             return {
                 dialog: false,
@@ -59,21 +83,14 @@
                 total: 0,
                 items: [],
                 options: {},
-                headers: [
-                    { text: 'ID', value: 'id' },
-                    { text: 'Name', value: 'name' },
-                    { text: 'Actions', value: 'actions', sortable: false },
-                ],
                 editedIndex: -1,
                 editedItem: {
-                    name: '',
-                },
-                defaultItem: {
                     name: '',
                 },
             }
         },
         watch: {
+            resource: 'getItems',
             options: {
                 handler: 'getItems',
                 deep: true,
@@ -85,25 +102,40 @@
         methods: {
             getItems() {
                 this.loading = true;
-                axios.get('/api/v1/tags').then(response => {
+                axios.get(this.resource).then(response => {
                     this.items = response.data.data;
                     this.total = response.data.meta.total;
                     this.loading = false;
                 });
             },
-            editItem(item) {
-                this.editedIndex = this.items.indexOf(item);
-                this.editedItem = Object.assign({}, item);
-                this.dialog = true;
+            save() {
+                if (this.editedIndex > -1) {
+                    axios.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(response => {
+                        console.log('response', response);
+                        Object.assign(this.items[this.editedIndex], this.editedItem);
+                        this.close();
+                    });
+                } else {
+                    axios.post(this.resource, this.editedItem).then(response => {
+                        console.log('response', response);
+                        this.items.push(response.data.data);
+                        this.close();
+                    });
+                }
             },
             deleteItem(item) {
                 const index = this.items.indexOf(item);
                 if (confirm('Are you sure you want to delete this item?')) {
-                    axios.delete('/api/v1/tags/' + item.id).then(response => {
+                    axios.delete(this.resource + '/' + item.id).then(response => {
                         console.log('response', response);
                         this.items.splice(index, 1);
                     });
                 }
+            },
+            editItem(item) {
+                this.editedIndex = this.items.indexOf(item);
+                this.editedItem = Object.assign({}, item);
+                this.dialog = true;
             },
             close() {
                 this.dialog = false;
@@ -111,21 +143,6 @@
                     this.editedItem = Object.assign({}, this.defaultItem);
                     this.editedIndex = -1;
                 });
-            },
-            save() {
-                if (this.editedIndex > -1) {
-                    axios.put('/api/v1/tags/' + this.editedItem.id, this.editedItem).then(response => {
-                        console.log('response', response);
-                        Object.assign(this.items[this.editedIndex], this.editedItem);
-                        this.close();
-                    });
-                } else {
-                    axios.post('/api/v1/tags', this.editedItem).then(response => {
-                        console.log('response', response);
-                        this.items.push(response.data.data);
-                        this.close();
-                    });
-                }
             },
         },
     };

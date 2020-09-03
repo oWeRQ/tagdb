@@ -7,7 +7,7 @@
                         <v-icon>mdi-home</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title>Home</v-list-item-title>
+                        <v-list-item-title>Entities</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item link to="/tags">
@@ -16,6 +16,22 @@
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-list-item-title>Tags</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/fields">
+                    <v-list-item-action>
+                        <v-icon>mdi-pencil-box-multiple</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Fields</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item link to="/Values">
+                    <v-list-item-action>
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Values</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
