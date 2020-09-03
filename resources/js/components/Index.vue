@@ -11,6 +11,32 @@
         <template v-slot:top>
             <v-toolbar flat color="white">
                 <v-toolbar-title>Entities</v-toolbar-title>
+                <v-divider class="mx-4" inset vertical></v-divider>
+                <v-autocomplete
+                    v-model="selectedTags"
+                    :items="tags"
+                    dense
+                    chips
+                    solo
+                    color="blue-grey lighten-2"
+                    label="Tags"
+                    item-text="name"
+                    item-value="name"
+                    multiple
+                    :hide-details="true"
+                >
+                    <template v-slot:selection="data">
+                        <v-chip
+                            v-bind="data.attrs"
+                            :input-value="data.selected"
+                            close
+                            @click="data.select"
+                            @click:close="removeTag(data.item)"
+                        >
+                            {{ data.item.name }}
+                        </v-chip>
+                    </template>
+                </v-autocomplete>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on, attrs }">
@@ -35,7 +61,7 @@
             </v-toolbar>
         </template>
         <template v-slot:item.tags="{ item }">
-            <v-chip v-for="tag in item.tags" :key="tag.name" class="mr-1">{{ tag.name }}</v-chip>
+            <v-chip v-for="tag in item.tags" :key="tag.name" class="mr-1" @click="addTag(tag)">{{ tag.name }}</v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
             <v-icon small @click="editItem(item)" class="mr-2">
@@ -69,6 +95,8 @@
                 defaultItem: {
                     name: '',
                 },
+                tags: [],
+                selectedTags: [],
             }
         },
         computed: {
@@ -91,7 +119,7 @@
             },
             headers() {
                 const before = [
-                    { text: 'ID', value: 'id' },
+                    { text: 'ID', value: 'id', width: '70px' },
                     { text: 'Tags', value: 'tags', sortable: false },
                     { text: 'Name', value: 'name' },
                 ];
@@ -104,14 +132,21 @@
 
                 return [...before, ...fields, ...after];
             },
+            query() {
+                return 'query=' + JSON.stringify({
+                    tags: this.selectedTags,
+                });
+            },
         },
         watch: {
+            selectedTags: 'getItems',
             options: {
                 handler: 'getItems',
                 deep: true,
             },
         },
         mounted() {
+            this.getTags();
             this.getItems();
         },
         methods: {
@@ -122,9 +157,14 @@
                 }
                 return { ...item, contents };
             },
+            getTags() {
+                axios.get('/api/v1/tags').then(response => {
+                    this.tags = response.data.data;
+                });
+            },
             getItems() {
                 this.loading = true;
-                axios.get('/api/v1/entities').then(response => {
+                axios.get('/api/v1/entities?' + this.query).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
@@ -165,6 +205,12 @@
                         this.close();
                     });
                 }
+            },
+            addTag(tag) {
+                this.selectedTags.includes(tag.name) || this.selectedTags.push(tag.name);
+            },
+            removeTag(tag) {
+                this.selectedTags = this.selectedTags.filter(item => item !== tag.name);
             },
         },
     };

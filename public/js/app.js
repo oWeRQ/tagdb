@@ -2242,6 +2242,32 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2257,7 +2283,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       },
       defaultItem: {
         name: ''
-      }
+      },
+      tags: [],
+      selectedTags: []
     };
   },
   computed: {
@@ -2321,7 +2349,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     headers: function headers() {
       var before = [{
         text: 'ID',
-        value: 'id'
+        value: 'id',
+        width: '70px'
       }, {
         text: 'Tags',
         value: 'tags',
@@ -2343,15 +2372,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         };
       });
       return [].concat(before, _toConsumableArray(fields), after);
+    },
+    query: function query() {
+      return 'query=' + JSON.stringify({
+        tags: this.selectedTags
+      });
     }
   },
   watch: {
+    selectedTags: 'getItems',
     options: {
       handler: 'getItems',
       deep: true
     }
   },
   mounted: function mounted() {
+    this.getTags();
     this.getItems();
   },
   methods: {
@@ -2376,14 +2412,21 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         contents: contents
       });
     },
-    getItems: function getItems() {
+    getTags: function getTags() {
       var _this = this;
 
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags').then(function (response) {
+        _this.tags = response.data.data;
+      });
+    },
+    getItems: function getItems() {
+      var _this2 = this;
+
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/entities').then(function (response) {
-        _this.items = response.data.data.map(_this.processItem);
-        _this.total = response.data.meta.total;
-        _this.loading = false;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/entities?' + this.query).then(function (response) {
+        _this2.items = response.data.data.map(_this2.processItem);
+        _this2.total = response.data.meta.total;
+        _this2.loading = false;
       });
     },
     editItem: function editItem(item) {
@@ -2392,7 +2435,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.dialog = true;
     },
     deleteItem: function deleteItem(item) {
-      var _this2 = this;
+      var _this3 = this;
 
       var index = this.items.indexOf(item);
 
@@ -2400,38 +2443,46 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/api/v1/entities/' + item.id).then(function (response) {
           console.log('response', response);
 
-          _this2.items.splice(index, 1);
+          _this3.items.splice(index, 1);
         });
       }
     },
     close: function close() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.dialog = false;
       this.$nextTick(function () {
-        _this3.editedItem = Object.assign({}, _this3.defaultItem);
-        _this3.editedIndex = -1;
+        _this4.editedItem = Object.assign({}, _this4.defaultItem);
+        _this4.editedIndex = -1;
       });
     },
     save: function save() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (this.editedIndex > -1) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(function (response) {
           console.log('response', response);
-          Object.assign(_this4.items[_this4.editedIndex], _this4.editedItem);
+          Object.assign(_this5.items[_this5.editedIndex], _this5.editedItem);
 
-          _this4.close();
+          _this5.close();
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/entities', this.editedItem).then(function (response) {
           console.log('response', response);
 
-          _this4.items.push(response.data.data);
+          _this5.items.push(response.data.data);
 
-          _this4.close();
+          _this5.close();
         });
       }
+    },
+    addTag: function addTag(tag) {
+      this.selectedTags.includes(tag.name) || this.selectedTags.push(tag.name);
+    },
+    removeTag: function removeTag(tag) {
+      this.selectedTags = this.selectedTags.filter(function (item) {
+        return item !== tag.name;
+      });
     }
   }
 });
@@ -21096,6 +21147,69 @@ var render = function() {
               [
                 _c("v-toolbar-title", [_vm._v("Entities")]),
                 _vm._v(" "),
+                _c("v-divider", {
+                  staticClass: "mx-4",
+                  attrs: { inset: "", vertical: "" }
+                }),
+                _vm._v(" "),
+                _c("v-autocomplete", {
+                  attrs: {
+                    items: _vm.tags,
+                    dense: "",
+                    chips: "",
+                    solo: "",
+                    color: "blue-grey lighten-2",
+                    label: "Tags",
+                    "item-text": "name",
+                    "item-value": "name",
+                    multiple: "",
+                    "hide-details": true
+                  },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "selection",
+                      fn: function(data) {
+                        return [
+                          _c(
+                            "v-chip",
+                            _vm._b(
+                              {
+                                attrs: {
+                                  "input-value": data.selected,
+                                  close: ""
+                                },
+                                on: {
+                                  click: data.select,
+                                  "click:close": function($event) {
+                                    return _vm.removeTag(data.item)
+                                  }
+                                }
+                              },
+                              "v-chip",
+                              data.attrs,
+                              false
+                            ),
+                            [
+                              _vm._v(
+                                "\n                        " +
+                                  _vm._s(data.item.name) +
+                                  "\n                    "
+                              )
+                            ]
+                          )
+                        ]
+                      }
+                    }
+                  ]),
+                  model: {
+                    value: _vm.selectedTags,
+                    callback: function($$v) {
+                      _vm.selectedTags = $$v
+                    },
+                    expression: "selectedTags"
+                  }
+                }),
+                _vm._v(" "),
                 _c("v-spacer"),
                 _vm._v(" "),
                 _c(
@@ -21216,9 +21330,19 @@ var render = function() {
         fn: function(ref) {
           var item = ref.item
           return _vm._l(item.tags, function(tag) {
-            return _c("v-chip", { key: tag.name, staticClass: "mr-1" }, [
-              _vm._v(_vm._s(tag.name))
-            ])
+            return _c(
+              "v-chip",
+              {
+                key: tag.name,
+                staticClass: "mr-1",
+                on: {
+                  click: function($event) {
+                    return _vm.addTag(tag)
+                  }
+                }
+              },
+              [_vm._v(_vm._s(tag.name))]
+            )
           })
         }
       },

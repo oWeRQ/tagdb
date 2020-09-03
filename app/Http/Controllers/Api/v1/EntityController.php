@@ -11,7 +11,17 @@ class EntityController extends Controller
 {
     public function index(Request $request)
     {
-        return EntityResource::collection(Entity::paginate());
+        $query = json_decode($request->get('query', '{}'), true);
+        $tags = $query['tags'] ?? null;
+
+        $entity = new Entity;
+        if ($tags) {
+            $entity = $entity->whereHas('tags', function($query) use($tags) {
+                $query->whereIn('name', $tags);
+            });
+        }
+
+        return EntityResource::collection($entity->paginate());
     }
 
     public function show($id)
