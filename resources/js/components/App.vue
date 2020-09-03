@@ -26,7 +26,7 @@
                         <v-list-item-title>Fields</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/Values">
+                <v-list-item link to="/values">
                     <v-list-item-action>
                         <v-icon>mdi-pencil</v-icon>
                     </v-list-item-action>

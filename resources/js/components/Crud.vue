@@ -23,7 +23,11 @@
                             <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }} Item</span>
                         </v-card-title>
                         <v-card-text>
-                            <v-text-field v-model="editedItem.name" label="Name" :autofocus="true"></v-text-field>
+                            <v-text-field v-for="(field, i) in editable" :key="field.value"
+                                v-model="editedItem[field.value]"
+                                :label="field.text"
+                                :autofocus="i === 0"
+                            ></v-text-field>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -59,21 +63,21 @@
             },
             headers: {
                 type: Array,
-                default: [
+                default: () => [
                     { text: 'ID', value: 'id' },
                     { text: 'Name', value: 'name' },
                     { text: 'Actions', value: 'actions', sortable: false },
                 ],
             },
+            editable: {
+                type: Array,
+                default: () => [
+                    { text: 'Name', value: 'name' },
+                ],
+            },
             resource: {
                 type: String,
                 default: '/api/v1/items',
-            },
-            defaultItem: {
-                type: Object,
-                default: {
-                    name: '',
-                },
             },
         },
         data() {
@@ -84,9 +88,7 @@
                 items: [],
                 options: {},
                 editedIndex: -1,
-                editedItem: {
-                    name: '',
-                },
+                editedItem: {},
             }
         },
         watch: {
@@ -140,7 +142,7 @@
             close() {
                 this.dialog = false;
                 this.$nextTick(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem);
+                    this.editedItem = {};
                     this.editedIndex = -1;
                 });
             },

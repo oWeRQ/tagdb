@@ -49,6 +49,12 @@ const app = new Vue({
                         { text: 'Code', value: 'code' },
                         { text: 'Actions', value: 'actions', sortable: false },
                     ],
+                    editable: [
+                        { text: 'Tag ID', value: 'tag_id' },
+                        { text: 'Type', value: 'type' },
+                        { text: 'Name', value: 'name' },
+                        { text: 'Code', value: 'code' },
+                    ],
                 },
             },
             {
@@ -67,6 +73,11 @@ const app = new Vue({
                         { text: 'Code', value: 'field.code' },
                         { text: 'Content', value: 'content' },
                         { text: 'Actions', value: 'actions', sortable: false },
+                    ],
+                    editable: [
+                        { text: 'Entity ID', value: 'entity_id' },
+                        { text: 'Field ID', value: 'field_id' },
+                        { text: 'Content', value: 'content' },
                     ],
                 },
             },

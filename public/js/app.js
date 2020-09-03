@@ -2031,6 +2031,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2040,27 +2044,32 @@ __webpack_require__.r(__webpack_exports__);
     },
     headers: {
       type: Array,
-      "default": [{
-        text: 'ID',
-        value: 'id'
-      }, {
-        text: 'Name',
-        value: 'name'
-      }, {
-        text: 'Actions',
-        value: 'actions',
-        sortable: false
-      }]
+      "default": function _default() {
+        return [{
+          text: 'ID',
+          value: 'id'
+        }, {
+          text: 'Name',
+          value: 'name'
+        }, {
+          text: 'Actions',
+          value: 'actions',
+          sortable: false
+        }];
+      }
+    },
+    editable: {
+      type: Array,
+      "default": function _default() {
+        return [{
+          text: 'Name',
+          value: 'name'
+        }];
+      }
     },
     resource: {
       type: String,
       "default": '/api/v1/items'
-    },
-    defaultItem: {
-      type: Object,
-      "default": {
-        name: ''
-      }
     }
   },
   data: function data() {
@@ -2071,9 +2080,7 @@ __webpack_require__.r(__webpack_exports__);
       items: [],
       options: {},
       editedIndex: -1,
-      editedItem: {
-        name: ''
-      }
+      editedItem: {}
     };
   },
   watch: {
@@ -2140,7 +2147,7 @@ __webpack_require__.r(__webpack_exports__);
 
       this.dialog = false;
       this.$nextTick(function () {
-        _this4.editedItem = Object.assign({}, _this4.defaultItem);
+        _this4.editedItem = {};
         _this4.editedIndex = -1;
       });
     }
@@ -20653,7 +20660,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
-                { attrs: { link: "", to: "/Values" } },
+                { attrs: { link: "", to: "/values" } },
                 [
                   _c(
                     "v-list-item-action",
@@ -20817,18 +20824,19 @@ var render = function() {
                         _vm._v(" "),
                         _c(
                           "v-card-text",
-                          [
-                            _c("v-text-field", {
-                              attrs: { label: "Name", autofocus: true },
+                          _vm._l(_vm.editable, function(field, i) {
+                            return _c("v-text-field", {
+                              key: field.value,
+                              attrs: { label: field.text, autofocus: i === 0 },
                               model: {
-                                value: _vm.editedItem.name,
+                                value: _vm.editedItem[field.value],
                                 callback: function($$v) {
-                                  _vm.$set(_vm.editedItem, "name", $$v)
+                                  _vm.$set(_vm.editedItem, field.value, $$v)
                                 },
-                                expression: "editedItem.name"
+                                expression: "editedItem[field.value]"
                               }
                             })
-                          ],
+                          }),
                           1
                         ),
                         _vm._v(" "),
@@ -80216,6 +80224,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
           text: 'Actions',
           value: 'actions',
           sortable: false
+        }],
+        editable: [{
+          text: 'Tag ID',
+          value: 'tag_id'
+        }, {
+          text: 'Type',
+          value: 'type'
+        }, {
+          text: 'Name',
+          value: 'name'
+        }, {
+          text: 'Code',
+          value: 'code'
         }]
       }
     }, {
@@ -80252,6 +80273,16 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
           text: 'Actions',
           value: 'actions',
           sortable: false
+        }],
+        editable: [{
+          text: 'Entity ID',
+          value: 'entity_id'
+        }, {
+          text: 'Field ID',
+          value: 'field_id'
+        }, {
+          text: 'Content',
+          value: 'content'
         }]
       }
     }]
