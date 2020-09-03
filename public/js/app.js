@@ -2069,7 +2069,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     resource: {
       type: String,
-      "default": '/api/v1/items'
+      required: true
     }
   },
   data: function data() {
@@ -2098,6 +2098,8 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.loading = true;
+      this.items = [];
+      this.total = 0;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource).then(function (response) {
         _this.items = response.data.data;
         _this.total = response.data.meta.total;
@@ -2167,6 +2169,29 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
 //
 //
 //
@@ -2226,17 +2251,6 @@ __webpack_require__.r(__webpack_exports__);
       total: 0,
       items: [],
       options: {},
-      headers: [{
-        text: 'ID',
-        value: 'id'
-      }, {
-        text: 'Name',
-        value: 'name'
-      }, {
-        text: 'Actions',
-        value: 'actions',
-        sortable: false
-      }],
       editedIndex: -1,
       editedItem: {
         name: ''
@@ -2245,6 +2259,91 @@ __webpack_require__.r(__webpack_exports__);
         name: ''
       }
     };
+  },
+  computed: {
+    itemsTags: function itemsTags() {
+      var tags = [];
+
+      var _iterator = _createForOfIteratorHelper(this.items),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var item = _step.value;
+
+          var _iterator2 = _createForOfIteratorHelper(item.tags),
+              _step2;
+
+          try {
+            var _loop = function _loop() {
+              var tag = _step2.value;
+              if (!tags.some(function (t) {
+                return t.id === tag.id;
+              })) tags.push(tag);
+            };
+
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              _loop();
+            }
+          } catch (err) {
+            _iterator2.e(err);
+          } finally {
+            _iterator2.f();
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      return tags;
+    },
+    itemsFields: function itemsFields() {
+      var fields = [];
+
+      var _iterator3 = _createForOfIteratorHelper(this.itemsTags),
+          _step3;
+
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var tag = _step3.value;
+          fields = [].concat(_toConsumableArray(fields), _toConsumableArray(tag.fields));
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
+
+      return fields;
+    },
+    headers: function headers() {
+      var before = [{
+        text: 'ID',
+        value: 'id'
+      }, {
+        text: 'Tags',
+        value: 'tags',
+        sortable: false
+      }, {
+        text: 'Name',
+        value: 'name'
+      }];
+      var after = [{
+        text: 'Actions',
+        value: 'actions',
+        sortable: false
+      }];
+      var fields = this.itemsFields.map(function (field) {
+        return {
+          text: field.name,
+          value: 'contents.' + field.id,
+          sortable: false
+        };
+      });
+      return [].concat(before, _toConsumableArray(fields), after);
+    }
   },
   watch: {
     options: {
@@ -2256,12 +2355,33 @@ __webpack_require__.r(__webpack_exports__);
     this.getItems();
   },
   methods: {
+    processItem: function processItem(item) {
+      var contents = {};
+
+      var _iterator4 = _createForOfIteratorHelper(item.values),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var value = _step4.value;
+          contents[value.field.id] = value.content;
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      return _objectSpread(_objectSpread({}, item), {}, {
+        contents: contents
+      });
+    },
     getItems: function getItems() {
       var _this = this;
 
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/entities').then(function (response) {
-        _this.items = response.data.data;
+        _this.items = response.data.data.map(_this.processItem);
         _this.total = response.data.meta.total;
         _this.loading = false;
       });
@@ -21090,6 +21210,17 @@ var render = function() {
           ]
         },
         proxy: true
+      },
+      {
+        key: "item.tags",
+        fn: function(ref) {
+          var item = ref.item
+          return _vm._l(item.tags, function(tag) {
+            return _c("v-chip", { key: tag.name, staticClass: "mr-1" }, [
+              _vm._v(_vm._s(tag.name))
+            ])
+          })
+        }
       },
       {
         key: "item.actions",

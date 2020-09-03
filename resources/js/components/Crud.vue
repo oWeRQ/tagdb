@@ -77,7 +77,7 @@
             },
             resource: {
                 type: String,
-                default: '/api/v1/items',
+                required: true,
             },
         },
         data() {
@@ -104,6 +104,8 @@
         methods: {
             getItems() {
                 this.loading = true;
+                this.items = [];
+                this.total = 0;
                 axios.get(this.resource).then(response => {
                     this.items = response.data.data;
                     this.total = response.data.meta.total;

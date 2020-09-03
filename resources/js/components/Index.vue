@@ -34,6 +34,9 @@
                 </v-dialog>
             </v-toolbar>
         </template>
+        <template v-slot:item.tags="{ item }">
+            <v-chip v-for="tag in item.tags" :key="tag.name" class="mr-1">{{ tag.name }}</v-chip>
+        </template>
         <template v-slot:item.actions="{ item }">
             <v-icon small @click="editItem(item)" class="mr-2">
                 mdi-pencil
@@ -59,11 +62,6 @@
                 total: 0,
                 items: [],
                 options: {},
-                headers: [
-                    { text: 'ID', value: 'id' },
-                    { text: 'Name', value: 'name' },
-                    { text: 'Actions', value: 'actions', sortable: false },
-                ],
                 editedIndex: -1,
                 editedItem: {
                     name: '',
@@ -72,6 +70,40 @@
                     name: '',
                 },
             }
+        },
+        computed: {
+            itemsTags() {
+                const tags = [];
+                for (let item of this.items) {
+                    for (let tag of item.tags) {
+                        if (!tags.some(t => t.id === tag.id))
+                            tags.push(tag);
+                    }
+                }
+                return tags;
+            },
+            itemsFields() {
+                let fields = [];
+                for (let tag of this.itemsTags) {
+                    fields = [...fields, ...tag.fields];
+                }
+                return fields;
+            },
+            headers() {
+                const before = [
+                    { text: 'ID', value: 'id' },
+                    { text: 'Tags', value: 'tags', sortable: false },
+                    { text: 'Name', value: 'name' },
+                ];
+                const after = [
+                    { text: 'Actions', value: 'actions', sortable: false },
+                ];
+                const fields = this.itemsFields.map((field) => {
+                    return { text: field.name, value: 'contents.' + field.id, sortable: false };
+                });
+
+                return [...before, ...fields, ...after];
+            },
         },
         watch: {
             options: {
@@ -83,10 +115,17 @@
             this.getItems();
         },
         methods: {
+            processItem(item) {
+                const contents = {};
+                for (let value of item.values) {
+                    contents[value.field.id] = value.content;
+                }
+                return { ...item, contents };
+            },
             getItems() {
                 this.loading = true;
                 axios.get('/api/v1/entities').then(response => {
-                    this.items = response.data.data;
+                    this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
                 });
