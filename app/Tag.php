@@ -19,4 +19,24 @@ class Tag extends Model
     {
         return $this->hasMany('App\Field');
     }
+
+    public function updateFields(array $fields = null)
+    {
+        if (!$fields)
+            return;
+
+        $ids = [];
+        foreach ($fields as $field) {
+            $ids[] = Field::updateOrCreate([
+                'id' => $field['id'] ?? null,
+                'tag_id' => $this->id,
+            ], $field)->id;
+        }
+
+        foreach ($this->fields as $field) {
+            if (!in_array($field->id, $ids)) {
+                $field->delete();
+            }
+        }
+    }
 }

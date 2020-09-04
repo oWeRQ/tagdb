@@ -21,13 +21,17 @@ class TagController extends Controller
 
     public function store(Request $request)
     {
-        return new TagResource(Tag::create($request->all()));
+        $tag = Tag::create($request->all());
+        $tag->updateFields($request->get('fields'));
+
+        return new TagResource($tag);
     }
 
     public function update(Request $request, $id)
     {
         $tag = Tag::findOrFail($id);
         $tag->update($request->all());
+        $tag->updateFields($request->get('fields'));
 
         return new TagResource($tag);
     }

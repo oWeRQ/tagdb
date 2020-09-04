@@ -2618,6 +2618,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     editable: {
@@ -2654,6 +2657,11 @@ __webpack_require__.r(__webpack_exports__);
         type: 'string',
         name: '',
         code: ''
+      });
+    },
+    remove: function remove(field) {
+      this.value.fields = this.value.fields.filter(function (item) {
+        return item !== field;
       });
     }
   }
@@ -24128,6 +24136,19 @@ var render = function() {
                   "v-list-item",
                   { key: "item" + i },
                   [
+                    _c(
+                      "v-list-item-action",
+                      {
+                        on: {
+                          click: function($event) {
+                            return _vm.remove(field)
+                          }
+                        }
+                      },
+                      [_c("v-icon", [_vm._v("mdi-close")])],
+                      1
+                    ),
+                    _vm._v(" "),
                     _c(
                       "v-list-item-content",
                       [

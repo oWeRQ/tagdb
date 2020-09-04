@@ -5,6 +5,9 @@
         <v-card>
             <v-list>
                 <v-list-item v-for="(field, i) in value.fields" :key="'item' + i">
+                    <v-list-item-action @click="remove(field)">
+                        <v-icon>mdi-close</v-icon>
+                    </v-list-item-action>
                     <v-list-item-content>
                         <v-row no-gutters>
                             <v-col>
@@ -61,6 +64,9 @@
                     name: '',
                     code: '',
                 });
+            },
+            remove(field) {
+                this.value.fields = this.value.fields.filter(item => item !== field);
             },
         },
     }
