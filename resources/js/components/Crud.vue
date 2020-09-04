@@ -23,12 +23,7 @@
                             <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }} Item</span>
                         </v-card-title>
                         <v-card-text>
-                            <!-- <v-text-field v-for="(field, i) in editable" :key="field.value"
-                                v-model="editedItem[field.value]"
-                                :label="field.text"
-                                :autofocus="i === 0"
-                            ></v-text-field> -->
-                            <component :is="form" :editable="editable" :editedItem.sync="editedItem"></component>
+                            <component :is="form" :editable="editable" v-model="editedItem"></component>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>

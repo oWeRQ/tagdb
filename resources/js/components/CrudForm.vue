@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-text-field v-for="(field, i) in editable" :key="field.value"
-            v-model="editedItem[field.value]"
+            v-model="value[field.value]"
             :label="field.text"
             :autofocus="i === 0"
         ></v-text-field>
@@ -14,7 +14,7 @@
             editable: {
                 type: Array,
             },
-            editedItem: {
+            value: {
                 type: Object,
             },
         },

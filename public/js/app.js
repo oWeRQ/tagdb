@@ -2032,11 +2032,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2191,7 +2186,7 @@ __webpack_require__.r(__webpack_exports__);
     editable: {
       type: Array
     },
-    editedItem: {
+    value: {
       type: Object
     }
   }
@@ -2597,7 +2592,7 @@ __webpack_require__.r(__webpack_exports__);
     editable: {
       type: Array
     },
-    editedItem: {
+    value: {
       type: Object
     }
   }
@@ -23561,17 +23556,13 @@ var render = function() {
                           [
                             _c(_vm.form, {
                               tag: "component",
-                              attrs: {
-                                editable: _vm.editable,
-                                editedItem: _vm.editedItem
-                              },
-                              on: {
-                                "update:editedItem": function($event) {
-                                  _vm.editedItem = $event
+                              attrs: { editable: _vm.editable },
+                              model: {
+                                value: _vm.editedItem,
+                                callback: function($$v) {
+                                  _vm.editedItem = $$v
                                 },
-                                "update:edited-item": function($event) {
-                                  _vm.editedItem = $event
-                                }
+                                expression: "editedItem"
                               }
                             })
                           ],
@@ -23695,11 +23686,11 @@ var render = function() {
         key: field.value,
         attrs: { label: field.text, autofocus: i === 0 },
         model: {
-          value: _vm.editedItem[field.value],
+          value: _vm.value[field.value],
           callback: function($$v) {
-            _vm.$set(_vm.editedItem, field.value, $$v)
+            _vm.$set(_vm.value, field.value, $$v)
           },
-          expression: "editedItem[field.value]"
+          expression: "value[field.value]"
         }
       })
     }),
@@ -24061,11 +24052,11 @@ var render = function() {
           key: field.value,
           attrs: { label: field.text, autofocus: i === 0 },
           model: {
-            value: _vm.editedItem[field.value],
+            value: _vm.value[field.value],
             callback: function($$v) {
-              _vm.$set(_vm.editedItem, field.value, $$v)
+              _vm.$set(_vm.value, field.value, $$v)
             },
-            expression: "editedItem[field.value]"
+            expression: "value[field.value]"
           }
         })
       })
