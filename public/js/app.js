@@ -1981,7 +1981,9 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
 //
 //
 //
@@ -2032,6 +2034,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2039,8 +2042,12 @@ __webpack_require__.r(__webpack_exports__);
     form: {
       type: Object,
       "default": function _default() {
-        return _CrudForm__WEBPACK_IMPORTED_MODULE_1__["default"];
+        return _CrudForm__WEBPACK_IMPORTED_MODULE_2__["default"];
       }
+    },
+    defaultItem: {
+      type: Object,
+      "default": function _default() {}
     },
     title: {
       type: String,
@@ -2095,6 +2102,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
+    this.editedReset();
     this.getItems();
   },
   methods: {
@@ -2145,17 +2153,16 @@ __webpack_require__.r(__webpack_exports__);
     },
     editItem: function editItem(item) {
       this.editedIndex = this.items.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
       this.dialog = true;
     },
     close: function close() {
-      var _this4 = this;
-
       this.dialog = false;
-      this.$nextTick(function () {
-        _this4.editedItem = {};
-        _this4.editedIndex = -1;
-      });
+      this.$nextTick(this.editedReset);
+    },
+    editedReset: function editedReset() {
+      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
+      this.editedIndex = -1;
     }
   }
 });
@@ -2587,6 +2594,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     editable: {
@@ -2594,6 +2625,36 @@ __webpack_require__.r(__webpack_exports__);
     },
     value: {
       type: Object
+    }
+  },
+  computed: {
+    types: function types() {
+      return [{
+        text: 'String',
+        value: 'string'
+      }, {
+        text: 'Text',
+        value: 'text'
+      }, {
+        text: 'Date',
+        value: 'date'
+      }, {
+        text: 'Time',
+        value: 'time'
+      }, {
+        text: 'DateTime',
+        value: 'datetiem'
+      }];
+    }
+  },
+  methods: {
+    add: function add() {
+      console.log(this.value);
+      this.value.fields.push({
+        type: 'string',
+        name: '',
+        code: ''
+      });
     }
   }
 });
@@ -24045,23 +24106,128 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h2", [_vm._v("Tag Form")]),
+      _c("v-text-field", {
+        attrs: { label: "Tag", autofocus: "" },
+        model: {
+          value: _vm.value.name,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "name", $$v)
+          },
+          expression: "value.name"
+        }
+      }),
       _vm._v(" "),
-      _vm._l(_vm.editable, function(field, i) {
-        return _c("v-text-field", {
-          key: field.value,
-          attrs: { label: field.text, autofocus: i === 0 },
-          model: {
-            value: _vm.value[field.value],
-            callback: function($$v) {
-              _vm.$set(_vm.value, field.value, $$v)
-            },
-            expression: "value[field.value]"
-          }
-        })
-      })
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-list",
+            [
+              _vm._l(_vm.value.fields, function(field, i) {
+                return _c(
+                  "v-list-item",
+                  { key: "item" + i },
+                  [
+                    _c(
+                      "v-list-item-content",
+                      [
+                        _c(
+                          "v-row",
+                          { attrs: { "no-gutters": "" } },
+                          [
+                            _c(
+                              "v-col",
+                              [
+                                _c("v-select", {
+                                  staticClass: "mr-4",
+                                  attrs: {
+                                    items: _vm.types,
+                                    label: "Type",
+                                    "hide-details": ""
+                                  },
+                                  model: {
+                                    value: field.type,
+                                    callback: function($$v) {
+                                      _vm.$set(field, "type", $$v)
+                                    },
+                                    expression: "field.type"
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-col",
+                              [
+                                _c("v-text-field", {
+                                  staticClass: "mr-4",
+                                  attrs: { label: "Name", "hide-details": "" },
+                                  model: {
+                                    value: field.name,
+                                    callback: function($$v) {
+                                      _vm.$set(field, "name", $$v)
+                                    },
+                                    expression: "field.name"
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-col",
+                              [
+                                _c("v-text-field", {
+                                  attrs: { label: "Code", "hide-details": "" },
+                                  model: {
+                                    value: field.code,
+                                    callback: function($$v) {
+                                      _vm.$set(field, "code", $$v)
+                                    },
+                                    expression: "field.code"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              }),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { on: { click: _vm.add } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-plus")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [_c("v-list-item-title", [_vm._v("Add")])],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            2
+          )
+        ],
+        1
+      )
     ],
-    2
+    1
   )
 }
 var staticRenderFns = []
@@ -83112,6 +83278,10 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
       props: {
         form: _components_TagForm_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+        defaultItem: {
+          name: '',
+          fields: []
+        },
         title: 'Tags',
         resource: '/api/v1/tags',
         headers: [{

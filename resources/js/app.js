@@ -31,6 +31,10 @@ const app = new Vue({
                 component: Crud,
                 props: {
                     form: TagForm,
+                    defaultItem: {
+                        name: '',
+                        fields: [],
+                    },
                     title: 'Tags',
                     resource: '/api/v1/tags',
                     headers: [

@@ -50,7 +50,7 @@
 
 <script>
     import axios from 'axios';
-
+    import cloneDeep from 'clone-deep';
     import CrudForm from './CrudForm';
 
     export default {
@@ -58,6 +58,10 @@
             form: {
                 type: Object,
                 default: () => CrudForm,
+            },
+            defaultItem: {
+                type: Object,
+                default: () => {},
             },
             title: {
                 type: String,
@@ -101,6 +105,7 @@
             },
         },
         mounted() {
+            this.editedReset();
             this.getItems();
         },
         methods: {
@@ -140,15 +145,16 @@
             },
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item);
-                this.editedItem = Object.assign({}, item);
+                this.editedItem = cloneDeep(item);
                 this.dialog = true;
             },
             close() {
                 this.dialog = false;
-                this.$nextTick(() => {
-                    this.editedItem = {};
-                    this.editedIndex = -1;
-                });
+                this.$nextTick(this.editedReset);
+            },
+            editedReset() {
+                this.editedItem = cloneDeep(this.defaultItem);
+                this.editedIndex = -1;
             },
         },
     };
