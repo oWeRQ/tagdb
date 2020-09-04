@@ -2281,6 +2281,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -2513,6 +2514,9 @@ function getFields(items) {
     },
     reset: function reset() {
       this.queryTags = [];
+    },
+    toggleTag: function toggleTag(tag) {
+      if (this.queryTags.includes(tag.name)) this.removeTag(tag);else this.addTag(tag);
     },
     addTag: function addTag(tag) {
       this.queryTags.includes(tag.name) || this.queryTags.push(tag.name);
@@ -23505,18 +23509,18 @@ var render = function() {
                               "v-btn",
                               {
                                 attrs: { color: "blue darken-1", text: "" },
-                                on: { click: _vm.close }
+                                on: { click: _vm.save }
                               },
-                              [_vm._v("Cancel")]
+                              [_vm._v("Save")]
                             ),
                             _vm._v(" "),
                             _c(
                               "v-btn",
                               {
                                 attrs: { color: "blue darken-1", text: "" },
-                                on: { click: _vm.save }
+                                on: { click: _vm.close }
                               },
-                              [_vm._v("Save")]
+                              [_vm._v("Cancel")]
                             )
                           ],
                           1
@@ -23640,20 +23644,19 @@ var render = function() {
                 _c("v-autocomplete", {
                   attrs: {
                     items: _vm.tags,
+                    color: "blue-grey lighten-2",
+                    label: "Tags",
+                    "item-text": "name",
+                    "item-value": "name",
                     chips: "",
                     multiple: "",
                     clearable: "",
                     dense: "",
                     solo: "",
                     "single-line": "",
-                    color: "blue-grey lighten-2",
-                    label: "Tags",
-                    "item-text": "name",
-                    "item-value": "name",
-                    "return-object": false,
-                    "hide-details": true,
-                    "hide-selected": true,
-                    "deletable-chips": true
+                    "hide-details": "",
+                    "hide-selected": "",
+                    "deletable-chips": ""
                   },
                   model: {
                     value: _vm.queryTags,
@@ -23737,19 +23740,29 @@ var render = function() {
                             _c(
                               "v-card-text",
                               [
+                                _c("v-text-field", {
+                                  attrs: { label: "Name", autofocus: "" },
+                                  model: {
+                                    value: _vm.editedItem.name,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.editedItem, "name", $$v)
+                                    },
+                                    expression: "editedItem.name"
+                                  }
+                                }),
+                                _vm._v(" "),
                                 _c("v-autocomplete", {
                                   attrs: {
                                     items: _vm.tags,
-                                    chips: "",
-                                    multiple: "",
                                     color: "blue darken-1",
                                     label: "Tags",
                                     "item-text": "name",
                                     "item-value": "name",
-                                    "return-object": true,
-                                    "hide-selected": true,
-                                    "deletable-chips": true,
-                                    autofocus: true
+                                    chips: "",
+                                    multiple: "",
+                                    "return-object": "",
+                                    "hide-selected": "",
+                                    "deletable-chips": ""
                                   },
                                   model: {
                                     value: _vm.editedItem.tags,
@@ -23757,17 +23770,6 @@ var render = function() {
                                       _vm.$set(_vm.editedItem, "tags", $$v)
                                     },
                                     expression: "editedItem.tags"
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _c("v-text-field", {
-                                  attrs: { label: "Name" },
-                                  model: {
-                                    value: _vm.editedItem.name,
-                                    callback: function($$v) {
-                                      _vm.$set(_vm.editedItem, "name", $$v)
-                                    },
-                                    expression: "editedItem.name"
                                   }
                                 }),
                                 _vm._v(" "),
@@ -23802,18 +23804,18 @@ var render = function() {
                                   "v-btn",
                                   {
                                     attrs: { color: "blue darken-1", text: "" },
-                                    on: { click: _vm.close }
+                                    on: { click: _vm.save }
                                   },
-                                  [_vm._v("Cancel")]
+                                  [_vm._v("Save")]
                                 ),
                                 _vm._v(" "),
                                 _c(
                                   "v-btn",
                                   {
                                     attrs: { color: "blue darken-1", text: "" },
-                                    on: { click: _vm.save }
+                                    on: { click: _vm.close }
                                   },
-                                  [_vm._v("Save")]
+                                  [_vm._v("Cancel")]
                                 )
                               ],
                               1
@@ -23842,13 +23844,19 @@ var render = function() {
               {
                 key: tag.name,
                 staticClass: "mr-1",
+                attrs: { dark: _vm.queryTags.includes(tag.name), small: "" },
                 on: {
                   click: function($event) {
-                    return _vm.addTag(tag)
+                    return _vm.toggleTag(tag)
                   }
                 }
               },
-              [_vm._v(_vm._s(tag.name))]
+              [
+                _vm._v("\n            " + _vm._s(tag.name) + "\n            "),
+                tag.fields.length
+                  ? _c("sup", [_vm._v(_vm._s(tag.fields.length))])
+                  : _vm._e()
+              ]
             )
           })
         }

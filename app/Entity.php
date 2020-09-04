@@ -20,6 +20,15 @@ class Entity extends Model
         return $this->hasMany('App\Value');
     }
 
+    public function havingTags(array $tags = null)
+    {
+        return $this->whereHas('tags', function($query) use($tags) {
+            $query->whereIn('name', $tags)
+                ->groupBy('entity_id')
+                ->havingRaw('count(*) = ?', [count($tags)]);
+        });
+    }
+
     public function updateTags(array $tags = null)
     {
         if (!$tags)

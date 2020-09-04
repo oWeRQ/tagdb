@@ -15,20 +15,19 @@
                 <v-autocomplete
                     v-model="queryTags"
                     :items="tags"
+                    color="blue-grey lighten-2"
+                    label="Tags"
+                    item-text="name"
+                    item-value="name"
                     chips
                     multiple
                     clearable
                     dense
                     solo
                     single-line
-                    color="blue-grey lighten-2"
-                    label="Tags"
-                    item-text="name"
-                    item-value="name"
-                    :return-object="false"
-                    :hide-details="true"
-                    :hide-selected="true"
-                    :deletable-chips="true"
+                    hide-details
+                    hide-selected
+                    deletable-chips
                 ></v-autocomplete>
                 <v-spacer></v-spacer>
                 <v-dialog v-if="editedItem" v-model="dialog" max-width="500px">
@@ -42,21 +41,20 @@
                             <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
                         </v-card-title>
                         <v-card-text>
+                            <v-text-field v-model="editedItem.name" label="Name" autofocus></v-text-field>
                             <v-autocomplete
                                 v-model="editedItem.tags"
                                 :items="tags"
-                                chips
-                                multiple
                                 color="blue darken-1"
                                 label="Tags"
                                 item-text="name"
                                 item-value="name"
-                                :return-object="true"
-                                :hide-selected="true"
-                                :deletable-chips="true"
-                                :autofocus="true"
+                                chips
+                                multiple
+                                return-object
+                                hide-selected
+                                deletable-chips
                             ></v-autocomplete>
-                            <v-text-field v-model="editedItem.name" label="Name"></v-text-field>
                             <v-text-field v-for="field in editedFields" :key="field.id"
                                 v-model="editedItem.contents[field.id]"
                                 :label="field.name"
@@ -64,15 +62,18 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                             <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
             </v-toolbar>
         </template>
         <template v-slot:item.tags="{ item }">
-            <v-chip v-for="tag in item.tags" :key="tag.name" class="mr-1" @click="addTag(tag)">{{ tag.name }}</v-chip>
+            <v-chip v-for="tag in item.tags" :key="tag.name" :dark="queryTags.includes(tag.name)" small class="mr-1" @click="toggleTag(tag)">
+                {{ tag.name }}
+                <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
+            </v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
             <v-icon small @click="editItem(item)" class="mr-2">
@@ -238,6 +239,12 @@
             },
             reset() {
                 this.queryTags = [];
+            },
+            toggleTag(tag) {
+                if (this.queryTags.includes(tag.name))
+                    this.removeTag(tag);
+                else
+                    this.addTag(tag);
             },
             addTag(tag) {
                 this.queryTags.includes(tag.name) || this.queryTags.push(tag.name);

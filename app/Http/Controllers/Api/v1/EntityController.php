@@ -16,11 +16,7 @@ class EntityController extends Controller
 
         $entity = new Entity;
         if ($tags) {
-            $entity = $entity->whereHas('tags', function($query) use($tags) {
-                $query->whereIn('name', $tags)
-                    ->groupBy('entity_id')
-                    ->havingRaw('count(*) = ?', [count($tags)]);
-            });
+            $entity = $entity->havingTags($tags);
         }
 
         return EntityResource::collection($entity->paginate());
