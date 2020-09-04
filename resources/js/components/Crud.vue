@@ -61,6 +61,10 @@
                 type: String,
                 default: 'Items',
             },
+            resource: {
+                type: String,
+                required: true,
+            },
             headers: {
                 type: Array,
                 default: () => [
@@ -74,10 +78,6 @@
                 default: () => [
                     { text: 'Name', value: 'name' },
                 ],
-            },
-            resource: {
-                type: String,
-                required: true,
             },
         },
         data() {

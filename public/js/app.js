@@ -2042,6 +2042,10 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       "default": 'Items'
     },
+    resource: {
+      type: String,
+      required: true
+    },
     headers: {
       type: Array,
       "default": function _default() {
@@ -2066,10 +2070,6 @@ __webpack_require__.r(__webpack_exports__);
           value: 'name'
         }];
       }
-    },
-    resource: {
-      type: String,
-      required: true
     }
   },
   data: function data() {
@@ -2305,6 +2305,16 @@ function getFields(items) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    title: {
+      type: String,
+      "default": 'Items'
+    },
+    resource: {
+      type: String,
+      required: true
+    }
+  },
   data: function data() {
     return {
       dialog: false,
@@ -2315,7 +2325,7 @@ function getFields(items) {
       editedIndex: null,
       editedItem: null,
       tags: [],
-      selectedTags: []
+      queryTags: []
     };
   },
   computed: {
@@ -2360,6 +2370,9 @@ function getFields(items) {
     editedFields: function editedFields() {
       return getFields(this.editedItem.tags);
     },
+    displayFields: function displayFields() {
+      return getFields(this.itemsTags); // return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
+    },
     headers: function headers() {
       var before = [{
         text: 'ID',
@@ -2378,7 +2391,7 @@ function getFields(items) {
         value: 'actions',
         sortable: false
       }];
-      var fields = getFields(this.itemsTags).map(function (field) {
+      var fields = this.displayFields.map(function (field) {
         return {
           text: field.name,
           value: 'contents.' + field.id,
@@ -2389,12 +2402,12 @@ function getFields(items) {
     },
     query: function query() {
       return 'query=' + JSON.stringify({
-        tags: this.selectedTags
+        tags: this.queryTags
       });
     }
   },
   watch: {
-    selectedTags: 'getItems',
+    queryTags: 'getItems',
     options: {
       handler: 'getItems',
       deep: true
@@ -2438,7 +2451,7 @@ function getFields(items) {
       var _this2 = this;
 
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/entities?' + this.query).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
         _this2.items = response.data.data.map(_this2.processItem);
         _this2.total = response.data.meta.total;
         _this2.loading = false;
@@ -2448,14 +2461,14 @@ function getFields(items) {
       var _this3 = this;
 
       if (this.editedIndex > -1) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(function (response) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
           console.log('response', response);
           Object.assign(_this3.items[_this3.editedIndex], _this3.processItem(response.data.data));
 
           _this3.close();
         });
       } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/entities', this.editedItem).then(function (response) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
           console.log('response', response);
 
           _this3.items.push(_this3.processItem(response.data.data));
@@ -2470,7 +2483,7 @@ function getFields(items) {
       var index = this.items.indexOf(item);
 
       if (confirm('Are you sure you want to delete this item?')) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"]('/api/v1/entities/' + item.id).then(function (response) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
           _this4.items.splice(index, 1);
@@ -2494,13 +2507,13 @@ function getFields(items) {
       this.editedIndex = -1;
     },
     reset: function reset() {
-      this.selectedTags = [];
+      this.queryTags = [];
     },
     addTag: function addTag(tag) {
-      this.selectedTags.includes(tag.name) || this.selectedTags.push(tag.name);
+      this.queryTags.includes(tag.name) || this.queryTags.push(tag.name);
     },
     removeTag: function removeTag(tag) {
-      this.selectedTags = this.selectedTags.filter(function (item) {
+      this.queryTags = this.queryTags.filter(function (item) {
         return item !== tag.name;
       });
     }
@@ -23612,7 +23625,7 @@ var render = function() {
               "v-toolbar",
               { attrs: { flat: "", color: "white" } },
               [
-                _c("v-toolbar-title", [_vm._v("Entities")]),
+                _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
                 _vm._v(" "),
                 _c("v-divider", {
                   staticClass: "mx-4",
@@ -23638,11 +23651,11 @@ var render = function() {
                     "deletable-chips": true
                   },
                   model: {
-                    value: _vm.selectedTags,
+                    value: _vm.queryTags,
                     callback: function($$v) {
-                      _vm.selectedTags = $$v
+                      _vm.queryTags = $$v
                     },
-                    expression: "selectedTags"
+                    expression: "queryTags"
                   }
                 }),
                 _vm._v(" "),
@@ -23708,7 +23721,11 @@ var render = function() {
                           [
                             _c("v-card-title", [
                               _c("span", { staticClass: "headline" }, [
-                                _vm._v("Entity")
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.editedIndex > -1 ? "Update" : "Create"
+                                  )
+                                )
                               ])
                             ]),
                             _vm._v(" "),
@@ -82916,8 +82933,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   vuetify: new vuetify__WEBPACK_IMPORTED_MODULE_3___default.a({}),
   router: new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
     routes: [{
-      path: '/',
-      component: _components_Index_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+      path: '',
+      component: _components_Index_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
+      props: {
+        title: 'Entities',
+        resource: '/api/v1/entities'
+      }
     }, {
       path: '/tags',
       component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_7__["default"],

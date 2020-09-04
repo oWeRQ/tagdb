@@ -10,10 +10,10 @@
     >
         <template v-slot:top>
             <v-toolbar flat color="white">
-                <v-toolbar-title>Entities</v-toolbar-title>
+                <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-autocomplete
-                    v-model="selectedTags"
+                    v-model="queryTags"
                     :items="tags"
                     chips
                     multiple
@@ -39,7 +39,7 @@
                     </template>
                     <v-card>
                         <v-card-title>
-                            <span class="headline">Entity</span>
+                            <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
                         </v-card-title>
                         <v-card-text>
                             <v-autocomplete
@@ -101,6 +101,16 @@
     }
 
     export default {
+        props: {
+            title: {
+                type: String,
+                default: 'Items',
+            },
+            resource: {
+                type: String,
+                required: true,
+            },
+        },
         data() {
             return {
                 dialog: false,
@@ -111,7 +121,7 @@
                 editedIndex: null,
                 editedItem: null,
                 tags: [],
-                selectedTags: [],
+                queryTags: [],
             }
         },
         computed: {
@@ -128,6 +138,10 @@
             editedFields() {
                 return getFields(this.editedItem.tags);
             },
+            displayFields() {
+                return getFields(this.itemsTags);
+                // return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
+            },
             headers() {
                 const before = [
                     { text: 'ID', value: 'id', width: '70px' },
@@ -137,7 +151,7 @@
                 const after = [
                     { text: 'Actions', value: 'actions', sortable: false },
                 ];
-                const fields = getFields(this.itemsTags).map((field) => {
+                const fields = this.displayFields.map((field) => {
                     return { text: field.name, value: 'contents.' + field.id, sortable: false };
                 });
 
@@ -145,12 +159,12 @@
             },
             query() {
                 return 'query=' + JSON.stringify({
-                    tags: this.selectedTags,
+                    tags: this.queryTags,
                 });
             },
         },
         watch: {
-            selectedTags: 'getItems',
+            queryTags: 'getItems',
             options: {
                 handler: 'getItems',
                 deep: true,
@@ -176,7 +190,7 @@
             },
             getItems() {
                 this.loading = true;
-                axios.get('/api/v1/entities?' + this.query).then(response => {
+                axios.get(this.resource + '?' + this.query).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
@@ -184,13 +198,13 @@
             },
             save() {
                 if (this.editedIndex > -1) {
-                    axios.put('/api/v1/entities/' + this.editedItem.id, this.editedItem).then(response => {
+                    axios.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(response => {
                         console.log('response', response);
                         Object.assign(this.items[this.editedIndex], this.processItem(response.data.data));
                         this.close();
                     });
                 } else {
-                    axios.post('/api/v1/entities', this.editedItem).then(response => {
+                    axios.post(this.resource, this.editedItem).then(response => {
                         console.log('response', response);
                         this.items.push(this.processItem(response.data.data));
                         this.close();
@@ -200,7 +214,7 @@
             deleteItem(item) {
                 const index = this.items.indexOf(item);
                 if (confirm('Are you sure you want to delete this item?')) {
-                    axios.delete('/api/v1/entities/' + item.id).then(response => {
+                    axios.delete(this.resource + '/' + item.id).then(response => {
                         console.log('response', response);
                         this.items.splice(index, 1);
                     });
@@ -223,13 +237,13 @@
                 this.editedIndex = -1;
             },
             reset() {
-                this.selectedTags = [];
+                this.queryTags = [];
             },
             addTag(tag) {
-                this.selectedTags.includes(tag.name) || this.selectedTags.push(tag.name);
+                this.queryTags.includes(tag.name) || this.queryTags.push(tag.name);
             },
             removeTag(tag) {
-                this.selectedTags = this.selectedTags.filter(item => item !== tag.name);
+                this.queryTags = this.queryTags.filter(item => item !== tag.name);
             },
         },
     };

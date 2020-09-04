@@ -18,8 +18,12 @@ const app = new Vue({
     router: new VueRouter({
         routes: [
             {
-                path: '/',
+                path: '',
                 component: Index,
+                props: {
+                    title: 'Entities',
+                    resource: '/api/v1/entities',
+                },
             },
             {
                 path: '/tags',
