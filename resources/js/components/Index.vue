@@ -139,8 +139,8 @@
                 return getFields(this.editedItem.tags);
             },
             displayFields() {
-                return getFields(this.itemsTags);
-                // return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
+                // return getFields(this.itemsTags);
+                return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
             },
             headers() {
                 const before = [

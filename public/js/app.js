@@ -2371,7 +2371,12 @@ function getFields(items) {
       return getFields(this.editedItem.tags);
     },
     displayFields: function displayFields() {
-      return getFields(this.itemsTags); // return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
+      var _this = this;
+
+      // return getFields(this.itemsTags);
+      return getFields(this.tags.filter(function (tag) {
+        return _this.queryTags.includes(tag.name);
+      }));
     },
     headers: function headers() {
       var before = [{
@@ -2441,44 +2446,44 @@ function getFields(items) {
       });
     },
     getTags: function getTags() {
-      var _this = this;
+      var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags').then(function (response) {
-        _this.tags = response.data.data;
+        _this2.tags = response.data.data;
       });
     },
     getItems: function getItems() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
-        _this2.items = response.data.data.map(_this2.processItem);
-        _this2.total = response.data.meta.total;
-        _this2.loading = false;
+        _this3.items = response.data.data.map(_this3.processItem);
+        _this3.total = response.data.meta.total;
+        _this3.loading = false;
       });
     },
     save: function save() {
-      var _this3 = this;
+      var _this4 = this;
 
       if (this.editedIndex > -1) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
           console.log('response', response);
-          Object.assign(_this3.items[_this3.editedIndex], _this3.processItem(response.data.data));
+          Object.assign(_this4.items[_this4.editedIndex], _this4.processItem(response.data.data));
 
-          _this3.close();
+          _this4.close();
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
           console.log('response', response);
 
-          _this3.items.push(_this3.processItem(response.data.data));
+          _this4.items.push(_this4.processItem(response.data.data));
 
-          _this3.close();
+          _this4.close();
         });
       }
     },
     deleteItem: function deleteItem(item) {
-      var _this4 = this;
+      var _this5 = this;
 
       var index = this.items.indexOf(item);
 
@@ -2486,7 +2491,7 @@ function getFields(items) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
-          _this4.items.splice(index, 1);
+          _this5.items.splice(index, 1);
         });
       }
     },
