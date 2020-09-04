@@ -23,11 +23,12 @@
                             <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }} Item</span>
                         </v-card-title>
                         <v-card-text>
-                            <v-text-field v-for="(field, i) in editable" :key="field.value"
+                            <!-- <v-text-field v-for="(field, i) in editable" :key="field.value"
                                 v-model="editedItem[field.value]"
                                 :label="field.text"
                                 :autofocus="i === 0"
-                            ></v-text-field>
+                            ></v-text-field> -->
+                            <component :is="form" :editable="editable" :editedItem.sync="editedItem"></component>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -55,8 +56,14 @@
 <script>
     import axios from 'axios';
 
+    import CrudForm from './CrudForm';
+
     export default {
         props: {
+            form: {
+                type: Object,
+                default: () => CrudForm,
+            },
             title: {
                 type: String,
                 default: 'Items',

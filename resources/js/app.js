@@ -8,6 +8,7 @@ import 'vuetify/dist/vuetify.min.css'
 import App from './components/App.vue';
 import Index from './components/Index.vue';
 import Crud from './components/Crud.vue';
+import TagForm from './components/TagForm.vue';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
@@ -29,6 +30,7 @@ const app = new Vue({
                 path: '/tags',
                 component: Crud,
                 props: {
+                    form: TagForm,
                     title: 'Tags',
                     resource: '/api/v1/tags',
                     headers: [
