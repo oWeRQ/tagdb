@@ -3,9 +3,11 @@
         :headers="headers"
         :items="items"
         :options.sync="options"
-        :items-per-page="15"
         :server-items-length="total"
         :loading="loading"
+        :footer-props="{
+            itemsPerPageOptions: [10, 20, 50, 100],
+        }"
         class="elevation-1"
     >
         <template v-slot:top>
@@ -101,6 +103,13 @@
         return fields;
     }
 
+    function queryPaginate(options) {
+        return {
+            page: options.page,
+            per_page: options.itemsPerPage,
+        };
+    }
+
     export default {
         props: {
             title: {
@@ -163,9 +172,11 @@
                 return [...before, ...fields, ...after];
             },
             query() {
-                return 'query=' + JSON.stringify({
+                const query = JSON.stringify({
                     tags: this.queryTags,
                 });
+
+                return new URLSearchParams({ query, ...queryPaginate(this.options) }).toString();
             },
         },
         watch: {

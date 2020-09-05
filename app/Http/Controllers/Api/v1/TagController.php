@@ -11,7 +11,9 @@ class TagController extends Controller
 {
     public function index(Request $request)
     {
-        return TagResource::collection(Tag::paginate());
+        $perPage = $request->get('per_page', 10);
+
+        return TagResource::collection(Tag::paginate($perPage));
     }
 
     public function show($id)

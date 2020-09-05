@@ -11,7 +11,9 @@ class ValueController extends Controller
 {
     public function index(Request $request)
     {
-        return ValueResource::collection(Value::paginate());
+        $perPage = $request->get('per_page', 10);
+
+        return ValueResource::collection(Value::paginate($perPage));
     }
 
     public function show($id)

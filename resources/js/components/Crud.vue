@@ -3,9 +3,11 @@
         :headers="headers"
         :items="items"
         :options.sync="options"
-        :items-per-page="15"
         :server-items-length="total"
         :loading="loading"
+        :footer-props="{
+            itemsPerPageOptions: [10, 20, 50, 100],
+        }"
         class="elevation-1"
     >
         <template v-slot:top>
@@ -51,6 +53,13 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import CrudForm from './CrudForm';
+
+    function queryPaginate(options) {
+        return {
+            page: options.page,
+            per_page: options.itemsPerPage,
+        };
+    }
 
     export default {
         props: {
@@ -102,6 +111,9 @@
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
+            query() {
+                return new URLSearchParams({ ...queryPaginate(this.options) }).toString();
+            },
         },
         watch: {
             resource: 'getItems',
@@ -119,7 +131,7 @@
                 this.loading = true;
                 this.items = [];
                 this.total = 0;
-                axios.get(this.resource).then(response => {
+                axios.get(this.resource + '?' + this.query).then(response => {
                     this.items = response.data.data;
                     this.total = response.data.meta.total;
                     this.loading = false;

@@ -19,7 +19,9 @@ class EntityController extends Controller
             $entity = $entity->havingTags($tags);
         }
 
-        return EntityResource::collection($entity->paginate());
+        $perPage = $request->get('per_page', 10);
+
+        return EntityResource::collection($entity->paginate($perPage));
     }
 
     public function show($id)

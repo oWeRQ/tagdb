@@ -11,7 +11,9 @@ class FieldController extends Controller
 {
     public function index(Request $request)
     {
-        return FieldResource::collection(Field::paginate());
+        $perPage = $request->get('per_page', 10);
+
+        return FieldResource::collection(Field::paginate($perPage));
     }
 
     public function show($id)
