@@ -12,12 +12,11 @@
             <v-toolbar flat color="white">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
+                <v-btn dark color="indigo" @click="editItem(defaultItem)">
+                    <v-icon dark left>mdi-plus</v-icon>
+                    Add
+                </v-btn>
                 <v-dialog v-model="dialog" max-width="500px">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn fab dark color="indigo" v-bind="attrs" v-on="on">
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
                     <v-card>
                         <v-card-title>
                             <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }} Item</span>
@@ -28,17 +27,17 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                            <v-btn color="grey darken-1" text @click="close">Cancel</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon small @click="editItem(item)" class="mr-2">
+            <v-icon @click="editItem(item)" color="grey darken-1" class="mr-2">
                 mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)">
+            <v-icon @click="deleteItem(item)" color="grey darken-1">
                 mdi-delete
             </v-icon>
         </template>
@@ -71,12 +70,11 @@
                 type: String,
                 required: true,
             },
-            headers: {
+            columns: {
                 type: Array,
                 default: () => [
                     { text: 'ID', value: 'id' },
                     { text: 'Name', value: 'name' },
-                    { text: 'Actions', value: 'actions', sortable: false },
                 ],
             },
             editable: {
@@ -97,6 +95,14 @@
                 editedItem: {},
             }
         },
+        computed: {
+            headers() {
+                return [
+                    ...this.columns,
+                    { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
+                ];
+            },
+        },
         watch: {
             resource: 'getItems',
             options: {
@@ -105,7 +111,7 @@
             },
         },
         mounted() {
-            this.editedReset();
+            // this.editedReset();
             this.getItems();
         },
         methods: {
@@ -150,7 +156,7 @@
             },
             close() {
                 this.dialog = false;
-                this.$nextTick(this.editedReset);
+                // this.$nextTick(this.editedReset);
             },
             editedReset() {
                 this.editedItem = cloneDeep(this.defaultItem);

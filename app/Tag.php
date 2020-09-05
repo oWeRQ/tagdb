@@ -22,7 +22,7 @@ class Tag extends Model
 
     public function updateFields(array $fields = null)
     {
-        if (!$fields)
+        if (!is_array($fields))
             return;
 
         $ids = [];

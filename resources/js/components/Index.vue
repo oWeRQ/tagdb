@@ -30,18 +30,16 @@
                     deletable-chips
                 ></v-autocomplete>
                 <v-spacer></v-spacer>
+                <v-btn dark color="indigo" @click="editItem(defaultItem)">
+                    <v-icon dark left>mdi-plus</v-icon>
+                    Add
+                </v-btn>
                 <v-dialog v-if="editedItem" v-model="dialog" max-width="500px">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn fab dark color="indigo" v-bind="attrs" v-on="on">
-                            <v-icon dark>mdi-plus</v-icon>
-                        </v-btn>
-                    </template>
                     <v-card>
                         <v-card-title>
                             <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
                         </v-card-title>
                         <v-card-text>
-                            <v-text-field v-model="editedItem.name" label="Name" autofocus></v-text-field>
                             <v-autocomplete
                                 v-model="editedItem.tags"
                                 :items="tags"
@@ -54,7 +52,9 @@
                                 return-object
                                 hide-selected
                                 deletable-chips
+                                :autofocus="!editedItem.tags.length"
                             ></v-autocomplete>
+                            <v-text-field v-model="editedItem.name" label="Name" :autofocus="editedItem.tags.length"></v-text-field>
                             <v-text-field v-for="field in editedFields" :key="field.id"
                                 v-model="editedItem.contents[field.id]"
                                 :label="field.name"
@@ -63,7 +63,7 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                            <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                            <v-btn color="grey darken-1" text @click="close">Cancel</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -76,10 +76,10 @@
             </v-chip>
         </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon small @click="editItem(item)" class="mr-2">
+            <v-icon @click="editItem(item)" color="grey darken-1" class="mr-2">
                 mdi-pencil
             </v-icon>
-            <v-icon small @click="deleteItem(item)">
+            <v-icon @click="deleteItem(item)" color="grey darken-1">
                 mdi-delete
             </v-icon>
         </template>
@@ -123,6 +123,10 @@
                 editedItem: null,
                 tags: [],
                 queryTags: [],
+                defaultItem: {
+                    tags: [],
+                    contents: {}
+                },
             }
         },
         computed: {
@@ -150,7 +154,7 @@
                     { text: 'Name', value: 'name' },
                 ];
                 const after = [
-                    { text: 'Actions', value: 'actions', sortable: false },
+                    { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
                 const fields = this.displayFields.map((field) => {
                     return { text: field.name, value: 'contents.' + field.id, sortable: false };
@@ -172,7 +176,7 @@
             },
         },
         mounted() {
-            this.editedReset();
+            // this.editedReset();
             this.getTags();
             this.getItems();
         },
@@ -224,17 +228,17 @@
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
+                if (this.editedIndex < 0) {
+                    this.editedItem.tags = this.tags.filter(tag => this.queryTags.includes(tag.name));
+                }
                 this.dialog = true;
             },
             close() {
                 this.dialog = false;
-                this.$nextTick(this.editedReset);
+                // this.$nextTick(this.editedReset);
             },
             editedReset() {
-                this.editedItem = {
-                    tags: [],
-                    contents: {}
-                };
+                this.editedItem = cloneDeep(this.defaultItem);
                 this.editedIndex = -1;
             },
             reset() {

@@ -31,7 +31,7 @@ class Entity extends Model
 
     public function updateTags(array $tags = null)
     {
-        if (!$tags)
+        if (!is_array($tags))
             return;
 
         $this->tags()->sync(array_column($tags, 'id'));

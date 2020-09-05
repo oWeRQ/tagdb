@@ -1984,7 +1984,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
-//
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -2057,7 +2068,7 @@ __webpack_require__.r(__webpack_exports__);
       type: String,
       required: true
     },
-    headers: {
+    columns: {
       type: Array,
       "default": function _default() {
         return [{
@@ -2066,10 +2077,6 @@ __webpack_require__.r(__webpack_exports__);
         }, {
           text: 'Name',
           value: 'name'
-        }, {
-          text: 'Actions',
-          value: 'actions',
-          sortable: false
         }];
       }
     },
@@ -2094,6 +2101,17 @@ __webpack_require__.r(__webpack_exports__);
       editedItem: {}
     };
   },
+  computed: {
+    headers: function headers() {
+      return [].concat(_toConsumableArray(this.columns), [{
+        text: 'Actions',
+        value: 'actions',
+        sortable: false,
+        width: '120px',
+        align: 'center'
+      }]);
+    }
+  },
   watch: {
     resource: 'getItems',
     options: {
@@ -2102,7 +2120,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   mounted: function mounted() {
-    this.editedReset();
+    // this.editedReset();
     this.getItems();
   },
   methods: {
@@ -2157,8 +2175,7 @@ __webpack_require__.r(__webpack_exports__);
       this.dialog = true;
     },
     close: function close() {
-      this.dialog = false;
-      this.$nextTick(this.editedReset);
+      this.dialog = false; // this.$nextTick(this.editedReset);
     },
     editedReset: function editedReset() {
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
@@ -2369,7 +2386,11 @@ function getFields(items) {
       editedIndex: null,
       editedItem: null,
       tags: [],
-      queryTags: []
+      queryTags: [],
+      defaultItem: {
+        tags: [],
+        contents: {}
+      }
     };
   },
   computed: {
@@ -2438,7 +2459,9 @@ function getFields(items) {
       var after = [{
         text: 'Actions',
         value: 'actions',
-        sortable: false
+        sortable: false,
+        width: '120px',
+        align: 'center'
       }];
       var fields = this.displayFields.map(function (field) {
         return {
@@ -2463,7 +2486,7 @@ function getFields(items) {
     }
   },
   mounted: function mounted() {
-    this.editedReset();
+    // this.editedReset();
     this.getTags();
     this.getItems();
   },
@@ -2540,19 +2563,24 @@ function getFields(items) {
       }
     },
     editItem: function editItem(item) {
+      var _this6 = this;
+
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
+
+      if (this.editedIndex < 0) {
+        this.editedItem.tags = this.tags.filter(function (tag) {
+          return _this6.queryTags.includes(tag.name);
+        });
+      }
+
       this.dialog = true;
     },
     close: function close() {
-      this.dialog = false;
-      this.$nextTick(this.editedReset);
+      this.dialog = false; // this.$nextTick(this.editedReset);
     },
     editedReset: function editedReset() {
-      this.editedItem = {
-        tags: [],
-        contents: {}
-      };
+      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
       this.editedIndex = -1;
     },
     reset: function reset() {
@@ -23559,44 +23587,28 @@ var render = function() {
                 _c("v-spacer"),
                 _vm._v(" "),
                 _c(
+                  "v-btn",
+                  {
+                    attrs: { dark: "", color: "indigo" },
+                    on: {
+                      click: function($event) {
+                        return _vm.editItem(_vm.defaultItem)
+                      }
+                    }
+                  },
+                  [
+                    _c("v-icon", { attrs: { dark: "", left: "" } }, [
+                      _vm._v("mdi-plus")
+                    ]),
+                    _vm._v("\n                Add\n            ")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
                   "v-dialog",
                   {
                     attrs: { "max-width": "500px" },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "activator",
-                        fn: function(ref) {
-                          var on = ref.on
-                          var attrs = ref.attrs
-                          return [
-                            _c(
-                              "v-btn",
-                              _vm._g(
-                                _vm._b(
-                                  {
-                                    attrs: {
-                                      fab: "",
-                                      dark: "",
-                                      color: "indigo"
-                                    }
-                                  },
-                                  "v-btn",
-                                  attrs,
-                                  false
-                                ),
-                                on
-                              ),
-                              [
-                                _c("v-icon", { attrs: { dark: "" } }, [
-                                  _vm._v("mdi-plus")
-                                ])
-                              ],
-                              1
-                            )
-                          ]
-                        }
-                      }
-                    ]),
                     model: {
                       value: _vm.dialog,
                       callback: function($$v) {
@@ -23606,7 +23618,6 @@ var render = function() {
                     }
                   },
                   [
-                    _vm._v(" "),
                     _c(
                       "v-card",
                       [
@@ -23655,7 +23666,7 @@ var render = function() {
                             _c(
                               "v-btn",
                               {
-                                attrs: { color: "blue darken-1", text: "" },
+                                attrs: { color: "grey darken-1", text: "" },
                                 on: { click: _vm.close }
                               },
                               [_vm._v("Cancel")]
@@ -23685,7 +23696,7 @@ var render = function() {
               "v-icon",
               {
                 staticClass: "mr-2",
-                attrs: { small: "" },
+                attrs: { color: "grey darken-1" },
                 on: {
                   click: function($event) {
                     return _vm.editItem(item)
@@ -23698,7 +23709,7 @@ var render = function() {
             _c(
               "v-icon",
               {
-                attrs: { small: "" },
+                attrs: { color: "grey darken-1" },
                 on: {
                   click: function($event) {
                     return _vm.deleteItem(item)
@@ -23847,51 +23858,30 @@ var render = function() {
                 _vm._v(" "),
                 _c("v-spacer"),
                 _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { dark: "", color: "indigo" },
+                    on: {
+                      click: function($event) {
+                        return _vm.editItem(_vm.defaultItem)
+                      }
+                    }
+                  },
+                  [
+                    _c("v-icon", { attrs: { dark: "", left: "" } }, [
+                      _vm._v("mdi-plus")
+                    ]),
+                    _vm._v("\n                Add\n            ")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
                 _vm.editedItem
                   ? _c(
                       "v-dialog",
                       {
                         attrs: { "max-width": "500px" },
-                        scopedSlots: _vm._u(
-                          [
-                            {
-                              key: "activator",
-                              fn: function(ref) {
-                                var on = ref.on
-                                var attrs = ref.attrs
-                                return [
-                                  _c(
-                                    "v-btn",
-                                    _vm._g(
-                                      _vm._b(
-                                        {
-                                          attrs: {
-                                            fab: "",
-                                            dark: "",
-                                            color: "indigo"
-                                          }
-                                        },
-                                        "v-btn",
-                                        attrs,
-                                        false
-                                      ),
-                                      on
-                                    ),
-                                    [
-                                      _c("v-icon", { attrs: { dark: "" } }, [
-                                        _vm._v("mdi-plus")
-                                      ])
-                                    ],
-                                    1
-                                  )
-                                ]
-                              }
-                            }
-                          ],
-                          null,
-                          false,
-                          3018926050
-                        ),
                         model: {
                           value: _vm.dialog,
                           callback: function($$v) {
@@ -23901,7 +23891,6 @@ var render = function() {
                         }
                       },
                       [
-                        _vm._v(" "),
                         _c(
                           "v-card",
                           [
@@ -23918,17 +23907,6 @@ var render = function() {
                             _c(
                               "v-card-text",
                               [
-                                _c("v-text-field", {
-                                  attrs: { label: "Name", autofocus: "" },
-                                  model: {
-                                    value: _vm.editedItem.name,
-                                    callback: function($$v) {
-                                      _vm.$set(_vm.editedItem, "name", $$v)
-                                    },
-                                    expression: "editedItem.name"
-                                  }
-                                }),
-                                _vm._v(" "),
                                 _c("v-autocomplete", {
                                   attrs: {
                                     items: _vm.tags,
@@ -23940,7 +23918,8 @@ var render = function() {
                                     multiple: "",
                                     "return-object": "",
                                     "hide-selected": "",
-                                    "deletable-chips": ""
+                                    "deletable-chips": "",
+                                    autofocus: !_vm.editedItem.tags.length
                                   },
                                   model: {
                                     value: _vm.editedItem.tags,
@@ -23948,6 +23927,20 @@ var render = function() {
                                       _vm.$set(_vm.editedItem, "tags", $$v)
                                     },
                                     expression: "editedItem.tags"
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _c("v-text-field", {
+                                  attrs: {
+                                    label: "Name",
+                                    autofocus: _vm.editedItem.tags.length
+                                  },
+                                  model: {
+                                    value: _vm.editedItem.name,
+                                    callback: function($$v) {
+                                      _vm.$set(_vm.editedItem, "name", $$v)
+                                    },
+                                    expression: "editedItem.name"
                                   }
                                 }),
                                 _vm._v(" "),
@@ -23990,7 +23983,7 @@ var render = function() {
                                 _c(
                                   "v-btn",
                                   {
-                                    attrs: { color: "blue darken-1", text: "" },
+                                    attrs: { color: "grey darken-1", text: "" },
                                     on: { click: _vm.close }
                                   },
                                   [_vm._v("Cancel")]
@@ -24048,7 +24041,7 @@ var render = function() {
               "v-icon",
               {
                 staticClass: "mr-2",
-                attrs: { small: "" },
+                attrs: { color: "grey darken-1" },
                 on: {
                   click: function($event) {
                     return _vm.editItem(item)
@@ -24061,7 +24054,7 @@ var render = function() {
             _c(
               "v-icon",
               {
-                attrs: { small: "" },
+                attrs: { color: "grey darken-1" },
                 on: {
                   click: function($event) {
                     return _vm.deleteItem(item)
@@ -24138,14 +24131,20 @@ var render = function() {
                   [
                     _c(
                       "v-list-item-action",
-                      {
-                        on: {
-                          click: function($event) {
-                            return _vm.remove(field)
-                          }
-                        }
-                      },
-                      [_c("v-icon", [_vm._v("mdi-close")])],
+                      [
+                        _c(
+                          "v-icon",
+                          {
+                            attrs: { color: "grey lighten-1" },
+                            on: {
+                              click: function($event) {
+                                return _vm.remove(field)
+                              }
+                            }
+                          },
+                          [_vm._v("mdi-close")]
+                        )
+                      ],
                       1
                     ),
                     _vm._v(" "),
@@ -83269,11 +83268,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/dist/vuetify.min.css */ "./node_modules/vuetify/dist/vuetify.min.css");
 /* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _components_App_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue");
-/* harmony import */ var _components_Index_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/Index.vue */ "./resources/js/components/Index.vue");
-/* harmony import */ var _components_Crud_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/Crud.vue */ "./resources/js/components/Crud.vue");
-/* harmony import */ var _components_TagForm_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/TagForm.vue */ "./resources/js/components/TagForm.vue");
-
-
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
 
 
 
@@ -83287,126 +83282,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   template: '<App></App>',
   vuetify: new vuetify__WEBPACK_IMPORTED_MODULE_3___default.a({}),
   router: new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
-    routes: [{
-      path: '',
-      component: _components_Index_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-      props: {
-        title: 'Entities',
-        resource: '/api/v1/entities'
-      }
-    }, {
-      path: '/tags',
-      component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-      props: {
-        form: _components_TagForm_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
-        defaultItem: {
-          name: '',
-          fields: []
-        },
-        title: 'Tags',
-        resource: '/api/v1/tags',
-        headers: [{
-          text: 'ID',
-          value: 'id'
-        }, {
-          text: 'Name',
-          value: 'name'
-        }, {
-          text: 'Fields',
-          value: 'fields.length'
-        }, {
-          text: 'Actions',
-          value: 'actions',
-          sortable: false
-        }]
-      }
-    }, {
-      path: '/fields',
-      component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-      props: {
-        title: 'Fields',
-        resource: '/api/v1/fields',
-        headers: [{
-          text: 'ID',
-          value: 'id'
-        }, {
-          text: 'Tag ID',
-          value: 'tag_id'
-        }, {
-          text: 'Type',
-          value: 'type'
-        }, {
-          text: 'Name',
-          value: 'name'
-        }, {
-          text: 'Code',
-          value: 'code'
-        }, {
-          text: 'Actions',
-          value: 'actions',
-          sortable: false
-        }],
-        editable: [{
-          text: 'Tag ID',
-          value: 'tag_id'
-        }, {
-          text: 'Type',
-          value: 'type'
-        }, {
-          text: 'Name',
-          value: 'name'
-        }, {
-          text: 'Code',
-          value: 'code'
-        }]
-      }
-    }, {
-      path: '/values',
-      component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-      props: {
-        title: 'Values',
-        resource: '/api/v1/values',
-        headers: [{
-          text: 'ID',
-          value: 'id'
-        }, {
-          text: 'Entity ID',
-          value: 'entity_id'
-        }, {
-          text: 'Field ID',
-          value: 'field_id'
-        }, {
-          text: 'Tag ID',
-          value: 'field.tag_id'
-        }, {
-          text: 'Type',
-          value: 'field.type'
-        }, {
-          text: 'Name',
-          value: 'field.name'
-        }, {
-          text: 'Code',
-          value: 'field.code'
-        }, {
-          text: 'Content',
-          value: 'content'
-        }, {
-          text: 'Actions',
-          value: 'actions',
-          sortable: false
-        }],
-        editable: [{
-          text: 'Entity ID',
-          value: 'entity_id'
-        }, {
-          text: 'Field ID',
-          value: 'field_id'
-        }, {
-          text: 'Content',
-          value: 'content'
-        }]
-      }
-    }]
+    routes: _routes__WEBPACK_IMPORTED_MODULE_6__["default"]
   }),
   components: {
     App: _components_App_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
@@ -83789,6 +83665,132 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TagForm_vue_vue_type_template_id_b2ddc43a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/routes.js":
+/*!********************************!*\
+  !*** ./resources/js/routes.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _components_Index_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Index.vue */ "./resources/js/components/Index.vue");
+/* harmony import */ var _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Crud.vue */ "./resources/js/components/Crud.vue");
+/* harmony import */ var _components_TagForm_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/TagForm.vue */ "./resources/js/components/TagForm.vue");
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  path: '',
+  component: _components_Index_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
+  props: {
+    title: 'Entities',
+    resource: '/api/v1/entities'
+  }
+}, {
+  path: '/tags',
+  component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+  props: {
+    form: _components_TagForm_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
+    defaultItem: {
+      name: '',
+      fields: []
+    },
+    title: 'Tags',
+    resource: '/api/v1/tags',
+    columns: [{
+      text: 'ID',
+      value: 'id'
+    }, {
+      text: 'Name',
+      value: 'name'
+    }, {
+      text: 'Fields',
+      value: 'fields.length'
+    }]
+  }
+}, {
+  path: '/fields',
+  component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+  props: {
+    title: 'Fields',
+    resource: '/api/v1/fields',
+    columns: [{
+      text: 'ID',
+      value: 'id'
+    }, {
+      text: 'Tag ID',
+      value: 'tag_id'
+    }, {
+      text: 'Type',
+      value: 'type'
+    }, {
+      text: 'Name',
+      value: 'name'
+    }, {
+      text: 'Code',
+      value: 'code'
+    }],
+    editable: [{
+      text: 'Tag ID',
+      value: 'tag_id'
+    }, {
+      text: 'Type',
+      value: 'type'
+    }, {
+      text: 'Name',
+      value: 'name'
+    }, {
+      text: 'Code',
+      value: 'code'
+    }]
+  }
+}, {
+  path: '/values',
+  component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+  props: {
+    title: 'Values',
+    resource: '/api/v1/values',
+    columns: [{
+      text: 'ID',
+      value: 'id'
+    }, {
+      text: 'Entity ID',
+      value: 'entity_id'
+    }, {
+      text: 'Field ID',
+      value: 'field_id'
+    }, {
+      text: 'Tag ID',
+      value: 'field.tag_id'
+    }, {
+      text: 'Type',
+      value: 'field.type'
+    }, {
+      text: 'Name',
+      value: 'field.name'
+    }, {
+      text: 'Code',
+      value: 'field.code'
+    }, {
+      text: 'Content',
+      value: 'content'
+    }],
+    editable: [{
+      text: 'Entity ID',
+      value: 'entity_id'
+    }, {
+      text: 'Field ID',
+      value: 'field_id'
+    }, {
+      text: 'Content',
+      value: 'content'
+    }]
+  }
+}]);
 
 /***/ }),
 

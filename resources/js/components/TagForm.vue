@@ -5,8 +5,8 @@
         <v-card>
             <v-list>
                 <v-list-item v-for="(field, i) in value.fields" :key="'item' + i">
-                    <v-list-item-action @click="remove(field)">
-                        <v-icon>mdi-close</v-icon>
+                    <v-list-item-action>
+                        <v-icon @click="remove(field)" color="grey lighten-1">mdi-close</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
                         <v-row no-gutters>
