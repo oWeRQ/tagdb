@@ -2483,7 +2483,10 @@ function getFields(items) {
 function queryPaginate(options) {
   return {
     page: options.page,
-    per_page: options.itemsPerPage
+    per_page: options.itemsPerPage,
+    sort: options.sortBy.map(function (v, i) {
+      return (options.sortDesc[i] ? '-' : '') + v;
+    }).join(',')
   };
 }
 
@@ -2593,8 +2596,7 @@ function queryPaginate(options) {
       var fields = this.displayFields.map(function (field) {
         return {
           text: field.name,
-          value: 'contents.' + field.id,
-          sortable: false
+          value: 'contents.' + field.id
         };
       });
       return [].concat(before, _toConsumableArray(fields), after);

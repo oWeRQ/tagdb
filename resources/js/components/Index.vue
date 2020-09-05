@@ -105,6 +105,7 @@
         return {
             page: options.page,
             per_page: options.itemsPerPage,
+            sort: options.sortBy.map((v, i) => (options.sortDesc[i] ? '-' : '') + v).join(','),
         };
     }
 
@@ -169,7 +170,7 @@
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
                 const fields = this.displayFields.map((field) => {
-                    return { text: field.name, value: 'contents.' + field.id, sortable: false };
+                    return { text: field.name, value: 'contents.' + field.id };
                 });
 
                 return [...before, ...fields, ...after];

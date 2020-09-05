@@ -11,19 +11,23 @@ class EntityController extends Controller
 {
     public function index(Request $request)
     {
-        $query = json_decode($request->get('query', '{}'), true);
+        $query = Entity::query();
 
-        $entity = new Entity;
-        if ($tags = $query['tags'] ?? null) {
-            $entity = $entity->havingTags($tags);
+        $queryData = json_decode($request->get('query', '{}'), true);
+
+        if ($tags = $queryData['tags'] ?? null) {
+            $query->havingTags($tags);
         }
-        if ($search = $query['search'] ?? null) {
-            $entity = $entity->where('name', 'like', '%'.$search.'%');
+        if ($search = $queryData['search'] ?? null) {
+            $query->search($search);
+        }
+        if ($sort = $request->get('sort')) {
+            $query->sort($sort);
         }
 
         $perPage = $request->get('per_page', 100);
 
-        return EntityResource::collection($entity->paginate($perPage));
+        return EntityResource::collection($query->paginate($perPage));
     }
 
     public function show($id)
