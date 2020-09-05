@@ -5,6 +5,7 @@
         :options.sync="options"
         :server-items-length="total"
         :loading="loading"
+        :items-per-page="100"
         :footer-props="{
             itemsPerPageOptions: [10, 20, 50, 100],
         }"

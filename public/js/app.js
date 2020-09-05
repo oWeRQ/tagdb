@@ -2055,6 +2055,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -2360,6 +2361,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
 //
 //
 //
@@ -23691,6 +23693,7 @@ var render = function() {
       options: _vm.options,
       "server-items-length": _vm.total,
       loading: _vm.loading,
+      "items-per-page": 100,
       "footer-props": {
         itemsPerPageOptions: [10, 20, 50, 100]
       }
@@ -24211,6 +24214,7 @@ var render = function() {
       options: _vm.options,
       "server-items-length": _vm.total,
       loading: _vm.loading,
+      "items-per-page": 100,
       "footer-props": {
         itemsPerPageOptions: [10, 20, 50, 100]
       }
