@@ -42,25 +42,7 @@
                             <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
                         </v-card-title>
                         <v-card-text>
-                            <v-autocomplete
-                                v-model="editedItem.tags"
-                                :items="tags"
-                                color="blue darken-1"
-                                label="Tags"
-                                item-text="name"
-                                item-value="name"
-                                chips
-                                multiple
-                                return-object
-                                hide-selected
-                                deletable-chips
-                                :autofocus="!editedItem.tags.length"
-                            ></v-autocomplete>
-                            <v-text-field v-model="editedItem.name" label="Name" :autofocus="editedItem.tags.length"></v-text-field>
-                            <v-text-field v-for="field in editedFields" :key="field.id"
-                                v-model="editedItem.contents[field.id]"
-                                :label="field.name"
-                            ></v-text-field>
+                            <entity-form v-model="editedItem" :editedFields="editedFields" :tags="tags" @submit="save"></entity-form>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -94,6 +76,7 @@
 <script>
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
+    import EntityForm from './EntityForm';
 
     function getFields(items) {
         let fields = [];
@@ -111,6 +94,9 @@
     }
 
     export default {
+        components: {
+            EntityForm,
+        },
         props: {
             title: {
                 type: String,

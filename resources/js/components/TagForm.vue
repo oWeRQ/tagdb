@@ -28,7 +28,7 @@
                         <v-icon>mdi-plus</v-icon>
                     </v-list-item-action>
                     <v-list-item-content>
-                        <v-list-item-title>Add</v-list-item-title>
+                        <v-list-item-title>Add Field</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
@@ -50,9 +50,11 @@
             types: () => [
                 { text: 'String', value: 'string' },
                 { text: 'Text', value: 'text' },
+                { text: 'Url', value: 'url' },
+                { text: 'Email', value: 'email' },
+                { text: 'Color', value: 'color' },
                 { text: 'Date', value: 'date' },
                 { text: 'Time', value: 'time' },
-                { text: 'DateTime', value: 'datetiem' },
             ],
         },
         methods: {

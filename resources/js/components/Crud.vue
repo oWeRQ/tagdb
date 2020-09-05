@@ -21,10 +21,10 @@
                 <v-dialog v-model="dialog" max-width="500px">
                     <v-card>
                         <v-card-title>
-                            <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }} Item</span>
+                            <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
                         </v-card-title>
                         <v-card-text>
-                            <component :is="form" :editable="editable" v-model="editedItem"></component>
+                            <component :is="form" :editable="editable" v-model="editedItem" @submit="save"></component>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
