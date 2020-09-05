@@ -2195,6 +2195,7 @@ function queryPaginate(options) {
       }
     },
     editItem: function editItem(item) {
+      this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
       this.dialog = true;
@@ -2236,7 +2237,8 @@ __webpack_require__.r(__webpack_exports__);
       type: Array
     },
     value: {
-      type: Object
+      type: Object,
+      "default": function _default() {}
     }
   }
 });
@@ -2252,6 +2254,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -2698,6 +2702,7 @@ function queryPaginate(options) {
     editItem: function editItem(item) {
       var _this6 = this;
 
+      this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
 
@@ -23770,6 +23775,7 @@ var render = function() {
                     _c(
                       "v-form",
                       {
+                        ref: "form",
                         on: {
                           submit: function($event) {
                             $event.preventDefault()
@@ -24185,6 +24191,17 @@ var render = function() {
                     ],
                     1
                   )
+                : field.type === "text"
+                ? _c("v-textarea", {
+                    attrs: { type: field.type, label: field.name, filled: "" },
+                    model: {
+                      value: _vm.value.contents[field.id],
+                      callback: function($$v) {
+                        _vm.$set(_vm.value.contents, field.id, $$v)
+                      },
+                      expression: "value.contents[field.id]"
+                    }
+                  })
                 : _c("v-text-field", {
                     attrs: { type: field.type, label: field.name },
                     model: {
@@ -24345,6 +24362,7 @@ var render = function() {
                         _c(
                           "v-form",
                           {
+                            ref: "form",
                             on: {
                               submit: function($event) {
                                 $event.preventDefault()
@@ -84226,6 +84244,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     title: 'Fields',
     resource: '/api/v1/fields',
+    defaultItem: {},
     columns: [{
       text: 'ID',
       value: 'id'
@@ -84262,6 +84281,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     title: 'Values',
     resource: '/api/v1/values',
+    defaultItem: {},
     columns: [{
       text: 'ID',
       value: 'id'

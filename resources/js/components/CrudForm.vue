@@ -16,6 +16,7 @@
             },
             value: {
                 type: Object,
+                default: () => {},
             },
         },
     }

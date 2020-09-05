@@ -20,7 +20,7 @@
                     Add
                 </v-btn>
                 <v-dialog v-model="dialog" max-width="500px">
-                    <v-form v-model="editedValid" @submit.prevent="save">
+                    <v-form ref="form" v-model="editedValid" @submit.prevent="save">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
@@ -169,6 +169,7 @@
                 }
             },
             editItem(item) {
+                this.$refs.form && this.$refs.form.resetValidation();
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
                 this.dialog = true;

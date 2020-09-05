@@ -35,6 +35,8 @@
                     <v-time-picker v-model="value.contents[field.id]" @click:minute="menu[field.id] = false" format="24hr"></v-time-picker>
                 </v-menu>
 
+                <v-textarea v-else-if="field.type === 'text'" v-model="value.contents[field.id]" :type="field.type" :label="field.name" filled></v-textarea>
+
                 <v-text-field v-else v-model="value.contents[field.id]" :type="field.type" :label="field.name"></v-text-field>
             </div>
         </template>

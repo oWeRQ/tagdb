@@ -35,6 +35,7 @@ export default [
         props: {
             title: 'Fields',
             resource: '/api/v1/fields',
+            defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
                 { text: 'Tag ID', value: 'tag_id' },
@@ -56,6 +57,7 @@ export default [
         props: {
             title: 'Values',
             resource: '/api/v1/values',
+            defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
                 { text: 'Entity ID', value: 'entity_id' },
