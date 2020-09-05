@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-text-field v-model="value.name" label="Tag" autofocus></v-text-field>
+        <v-text-field v-model="value.name" :rules="rules.name" label="Tag" autofocus></v-text-field>
 
         <v-card>
             <v-list>
@@ -56,6 +56,13 @@
                 { text: 'Date', value: 'date' },
                 { text: 'Time', value: 'time' },
             ],
+            rules() {
+                return {
+                    name: [
+                        v => !!v || 'Required',
+                    ],
+                };
+            },
         },
         methods: {
             add() {

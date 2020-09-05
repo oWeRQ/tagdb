@@ -19,19 +19,21 @@
                     Add
                 </v-btn>
                 <v-dialog v-model="dialog" max-width="500px">
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
-                        </v-card-title>
-                        <v-card-text>
-                            <component :is="form" :editable="editable" v-model="editedItem" @submit="save"></component>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-                            <v-btn color="grey darken-1" text @click="close">Cancel</v-btn>
-                        </v-card-actions>
-                    </v-card>
+                    <v-form v-model="editedValid" @submit.prevent="save">
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <component :is="form" :editable="editable" v-model="editedItem" @submit="save"></component>
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue darken-1" text type="submit" :disabled="!editedValid">Save</v-btn>
+                                <v-btn color="grey darken-1" text @click="close">Cancel</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-form>
                 </v-dialog>
             </v-toolbar>
         </template>
@@ -100,6 +102,7 @@
                 total: 0,
                 items: [],
                 options: {},
+                editedValid: false,
                 editedIndex: -1,
                 editedItem: {},
             }
@@ -138,6 +141,9 @@
                 });
             },
             save() {
+                if (!this.editedValid)
+                    return;
+
                 if (this.editedIndex > -1) {
                     axios.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(response => {
                         console.log('response', response);

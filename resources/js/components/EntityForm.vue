@@ -1,7 +1,8 @@
 <template>
-    <v-form>
+    <div>
         <v-autocomplete
             v-model="value.tags"
+            :rules="rules.tags"
             :items="tags"
             color="blue darken-1"
             label="Tags"
@@ -14,7 +15,9 @@
             deletable-chips
             :autofocus="!value.tags.length"
         ></v-autocomplete>
-        <v-text-field v-model="value.name" label="Name" :autofocus="!!value.tags.length"></v-text-field>
+
+        <v-text-field v-model="value.name" :rules="rules.name" label="Name" :autofocus="!!value.tags.length"></v-text-field>
+
         <template v-for="field in editedFields">
             <div :key="field.id">
                 <v-menu v-if="field.type === 'date'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
@@ -34,7 +37,7 @@
                 <v-text-field v-else v-model="value.contents[field.id]" :type="field.type" :label="field.name"></v-text-field>
             </div>
         </template>
-    </v-form>
+    </div>
 </template>
 
 <script>
@@ -54,6 +57,18 @@
             return {
                 menu: {},
             };
+        },
+        computed: {
+            rules() {
+                return {
+                    tags: [
+                        v => !!v.length || 'Required',
+                    ],
+                    name: [
+                        v => !!v || 'Required',
+                    ],
+                };
+            },
         },
     };
 </script>
