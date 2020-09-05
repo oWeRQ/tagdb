@@ -42,8 +42,11 @@
                     hide-selected
                     hide-no-data
                     deletable-chips
-                    class="shrink"
+                    class="shrink mr-3"
                 ></v-autocomplete>
+                <v-btn @click="getItems" :loading="loading">
+                    <v-icon dark>mdi-refresh</v-icon>
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn dark color="indigo" @click="editItem(defaultItem)">
                     <v-icon dark left>mdi-plus</v-icon>
@@ -68,6 +71,11 @@
                 </v-dialog>
             </v-toolbar>
         </template>
+        <template v-for="slot in displaySlots" v-slot:[slot.name]="{ value }">
+            <span :key="slot.name">
+                {{ value | truncate }}
+            </span>
+        </template>
         <template v-slot:item.tags="{ item }">
             <v-chip v-for="tag in item.tags" :key="tag.name" :dark="queryTags.includes(tag.name)" small class="mr-1" @click="toggleTag(tag)">
                 {{ tag.name }}
@@ -91,6 +99,7 @@
 <script>
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
+    import truncate from '../functions/truncate';
     import EntityForm from './EntityForm';
 
     function getFields(items) {
@@ -102,6 +111,9 @@
     }
 
     function queryPaginate(options) {
+        if (!options.sortBy)
+            return;
+
         return {
             page: options.page,
             per_page: options.itemsPerPage,
@@ -112,6 +124,9 @@
     export default {
         components: {
             EntityForm,
+        },
+        filters: {
+            truncate,
         },
         props: {
             title: {
@@ -159,6 +174,11 @@
             displayFields() {
                 // return getFields(this.itemsTags);
                 return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
+            },
+            displaySlots() {
+                return this.displayFields.map((field) => {
+                    return { name: 'item.contents.' + field.id, type: field.type };
+                });
             },
             headers() {
                 const before = [
