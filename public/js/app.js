@@ -2294,6 +2294,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -2439,6 +2440,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2496,6 +2509,7 @@ function queryPaginate(options) {
       editedItem: null,
       tags: [],
       queryTags: [],
+      search: '',
       defaultItem: {
         tags: [],
         contents: {}
@@ -2583,7 +2597,8 @@ function queryPaginate(options) {
     },
     query: function query() {
       var query = JSON.stringify({
-        tags: this.queryTags
+        tags: this.queryTags,
+        search: this.search
       });
       return new URLSearchParams(_objectSpread({
         query: query
@@ -2591,6 +2606,10 @@ function queryPaginate(options) {
     }
   },
   watch: {
+    search: function search() {
+      clearTimeout(this._timeout_search);
+      this._timeout_search = setTimeout(this.getItems, 500);
+    },
     queryTags: 'getItems',
     options: {
       handler: 'getItems',
@@ -23970,6 +23989,7 @@ var render = function() {
           multiple: "",
           "return-object": "",
           "hide-selected": "",
+          "hide-no-data": "",
           "deletable-chips": "",
           autofocus: !_vm.value.tags.length
         },
@@ -24240,7 +24260,27 @@ var render = function() {
                   attrs: { inset: "", vertical: "" }
                 }),
                 _vm._v(" "),
+                _c("v-text-field", {
+                  staticClass: "shrink mr-3",
+                  attrs: {
+                    label: "Search",
+                    dense: "",
+                    solo: "",
+                    "single-line": "",
+                    "hide-details": "",
+                    clearable: ""
+                  },
+                  model: {
+                    value: _vm.search,
+                    callback: function($$v) {
+                      _vm.search = $$v
+                    },
+                    expression: "search"
+                  }
+                }),
+                _vm._v(" "),
                 _c("v-autocomplete", {
+                  staticClass: "shrink",
                   attrs: {
                     items: _vm.tags,
                     color: "blue-grey lighten-2",
@@ -24255,6 +24295,7 @@ var render = function() {
                     "single-line": "",
                     "hide-details": "",
                     "hide-selected": "",
+                    "hide-no-data": "",
                     "deletable-chips": ""
                   },
                   model: {

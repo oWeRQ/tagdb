@@ -12,6 +12,7 @@
             multiple
             return-object
             hide-selected
+            hide-no-data
             deletable-chips
             :autofocus="!value.tags.length"
         ></v-autocomplete>

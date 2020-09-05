@@ -12,11 +12,13 @@ class EntityController extends Controller
     public function index(Request $request)
     {
         $query = json_decode($request->get('query', '{}'), true);
-        $tags = $query['tags'] ?? null;
 
         $entity = new Entity;
-        if ($tags) {
+        if ($tags = $query['tags'] ?? null) {
             $entity = $entity->havingTags($tags);
+        }
+        if ($search = $query['search'] ?? null) {
+            $entity = $entity->where('name', 'like', '%'.$search.'%');
         }
 
         $perPage = $request->get('per_page', 100);

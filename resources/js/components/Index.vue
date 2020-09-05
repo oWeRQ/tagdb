@@ -15,6 +15,16 @@
             <v-toolbar flat color="white">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
+                <v-text-field
+                    v-model="search"
+                    label="Search"
+                    dense
+                    solo
+                    single-line
+                    hide-details
+                    clearable
+                    class="shrink mr-3"
+                ></v-text-field>
                 <v-autocomplete
                     v-model="queryTags"
                     :items="tags"
@@ -30,7 +40,9 @@
                     single-line
                     hide-details
                     hide-selected
+                    hide-no-data
                     deletable-chips
+                    class="shrink"
                 ></v-autocomplete>
                 <v-spacer></v-spacer>
                 <v-btn dark color="indigo" @click="editItem(defaultItem)">
@@ -122,6 +134,7 @@
                 editedItem: null,
                 tags: [],
                 queryTags: [],
+                search: '',
                 defaultItem: {
                     tags: [],
                     contents: {}
@@ -164,12 +177,17 @@
             query() {
                 const query = JSON.stringify({
                     tags: this.queryTags,
+                    search: this.search,
                 });
 
                 return new URLSearchParams({ query, ...queryPaginate(this.options) }).toString();
             },
         },
         watch: {
+            search() {
+                clearTimeout(this._timeout_search);
+                this._timeout_search = setTimeout(this.getItems, 500);
+            },
             queryTags: 'getItems',
             options: {
                 handler: 'getItems',
