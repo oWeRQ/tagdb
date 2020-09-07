@@ -2542,6 +2542,7 @@ function queryPaginate(options) {
       editedValid: false,
       editedIndex: null,
       editedItem: null,
+      multiSort: false,
       tags: [],
       queryTags: [],
       search: '',
@@ -24304,7 +24305,7 @@ var render = function() {
       options: _vm.options,
       "server-items-length": _vm.total,
       loading: _vm.loading,
-      "multi-sort": true,
+      "multi-sort": _vm.multiSort,
       "items-per-page": 100,
       "footer-props": {
         itemsPerPageOptions: [10, 20, 50, 100]

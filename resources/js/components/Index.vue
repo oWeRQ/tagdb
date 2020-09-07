@@ -5,7 +5,7 @@
         :options.sync="options"
         :server-items-length="total"
         :loading="loading"
-        :multi-sort="true"
+        :multi-sort="multiSort"
         :items-per-page="100"
         :footer-props="{
             itemsPerPageOptions: [10, 20, 50, 100],
@@ -161,6 +161,7 @@
                 editedValid: false,
                 editedIndex: null,
                 editedItem: null,
+                multiSort: false,
                 tags: [],
                 queryTags: [],
                 search: '',
