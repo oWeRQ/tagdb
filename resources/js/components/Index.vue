@@ -73,7 +73,14 @@
         </template>
         <template v-for="slot in displaySlots" v-slot:[slot.name]="{ value }">
             <span :key="slot.name">
-                {{ value | truncate }}
+                <a v-if="value && slot.type === 'url'" :href="value" :title="value" target="_blank">{{ value | truncate }}</a>
+
+                <v-chip v-else-if="value && slot.type === 'color'">
+                    <v-avatar left :color="value"></v-avatar>
+                    {{ value }}
+                </v-chip>
+
+                <template v-else>{{ value | truncate }}</template>
             </span>
         </template>
         <template v-slot:item.tags="{ item }">

@@ -2471,6 +2471,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -24517,13 +24524,41 @@ var render = function() {
             fn: function(ref) {
               var value = ref.value
               return [
-                _c("span", { key: slot.name }, [
-                  _vm._v(
-                    "\n            " +
-                      _vm._s(_vm._f("truncate")(value)) +
-                      "\n        "
-                  )
-                ])
+                _c(
+                  "span",
+                  { key: slot.name },
+                  [
+                    value && slot.type === "url"
+                      ? _c(
+                          "a",
+                          {
+                            attrs: {
+                              href: value,
+                              title: value,
+                              target: "_blank"
+                            }
+                          },
+                          [_vm._v(_vm._s(_vm._f("truncate")(value)))]
+                        )
+                      : value && slot.type === "color"
+                      ? _c(
+                          "v-chip",
+                          [
+                            _c("v-avatar", {
+                              attrs: { left: "", color: value }
+                            }),
+                            _vm._v(
+                              "\n                " +
+                                _vm._s(value) +
+                                "\n            "
+                            )
+                          ],
+                          1
+                        )
+                      : [_vm._v(_vm._s(_vm._f("truncate")(value)))]
+                  ],
+                  2
+                )
               ]
             }
           }
