@@ -208,6 +208,9 @@
 
                 return [...before, ...fields, ...after];
             },
+            sortable() {
+                return this.headers.filter(header => header.sortable !== false).map(header => header.value);
+            },
             query() {
                 const query = JSON.stringify({
                     tags: this.queryTags,
@@ -222,7 +225,19 @@
                 clearTimeout(this._timeout_search);
                 this._timeout_search = setTimeout(this.getItems, 500);
             },
-            queryTags: 'getItems',
+            queryTags() {
+                const sortBy = this.options.sortBy.filter(value => this.sortable.includes(value));
+                if (this.options.sortBy.length !== sortBy.length) {
+                    this.options.sortBy = sortBy;
+                } else {
+                    this.getItems();
+                }
+            },
+            'options.sortBy'(value) {
+                if (value.length > 2) {
+                    this.options.sortBy = this.options.sortBy.slice(value.length - 2);
+                }
+            },
             options: {
                 handler: 'getItems',
                 deep: true,

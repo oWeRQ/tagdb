@@ -2638,6 +2638,13 @@ function queryPaginate(options) {
       });
       return [].concat(before, _toConsumableArray(fields), after);
     },
+    sortable: function sortable() {
+      return this.headers.filter(function (header) {
+        return header.sortable !== false;
+      }).map(function (header) {
+        return header.value;
+      });
+    },
     query: function query() {
       var query = JSON.stringify({
         tags: this.queryTags,
@@ -2653,7 +2660,24 @@ function queryPaginate(options) {
       clearTimeout(this._timeout_search);
       this._timeout_search = setTimeout(this.getItems, 500);
     },
-    queryTags: 'getItems',
+    queryTags: function queryTags() {
+      var _this2 = this;
+
+      var sortBy = this.options.sortBy.filter(function (value) {
+        return _this2.sortable.includes(value);
+      });
+
+      if (this.options.sortBy.length !== sortBy.length) {
+        this.options.sortBy = sortBy;
+      } else {
+        this.getItems();
+      }
+    },
+    'options.sortBy': function optionsSortBy(value) {
+      if (value.length > 2) {
+        this.options.sortBy = this.options.sortBy.slice(value.length - 2);
+      }
+    },
     options: {
       handler: 'getItems',
       deep: true
@@ -2687,46 +2711,46 @@ function queryPaginate(options) {
       });
     },
     getTags: function getTags() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags').then(function (response) {
-        _this2.tags = response.data.data;
+        _this3.tags = response.data.data;
       });
     },
     getItems: function getItems() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
-        _this3.items = response.data.data.map(_this3.processItem);
-        _this3.total = response.data.meta.total;
-        _this3.loading = false;
+        _this4.items = response.data.data.map(_this4.processItem);
+        _this4.total = response.data.meta.total;
+        _this4.loading = false;
       });
     },
     save: function save() {
-      var _this4 = this;
+      var _this5 = this;
 
       if (!this.editedValid) return;
 
       if (this.editedIndex > -1) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
           console.log('response', response);
-          Object.assign(_this4.items[_this4.editedIndex], _this4.processItem(response.data.data));
+          Object.assign(_this5.items[_this5.editedIndex], _this5.processItem(response.data.data));
 
-          _this4.close();
+          _this5.close();
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
           console.log('response', response);
 
-          _this4.items.splice(0, 0, _this4.processItem(response.data.data));
+          _this5.items.splice(0, 0, _this5.processItem(response.data.data));
 
-          _this4.close();
+          _this5.close();
         });
       }
     },
     deleteItem: function deleteItem(item) {
-      var _this5 = this;
+      var _this6 = this;
 
       var index = this.items.indexOf(item);
 
@@ -2734,12 +2758,12 @@ function queryPaginate(options) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
-          _this5.items.splice(index, 1);
+          _this6.items.splice(index, 1);
         });
       }
     },
     editItem: function editItem(item) {
-      var _this6 = this;
+      var _this7 = this;
 
       this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
@@ -2747,7 +2771,7 @@ function queryPaginate(options) {
 
       if (this.editedIndex < 0) {
         this.editedItem.tags = this.tags.filter(function (tag) {
-          return _this6.queryTags.includes(tag.name);
+          return _this7.queryTags.includes(tag.name);
         });
       }
 
