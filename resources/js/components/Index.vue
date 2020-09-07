@@ -226,9 +226,11 @@
                 this._timeout_search = setTimeout(this.getItems, 500);
             },
             queryTags() {
-                const sortBy = this.options.sortBy.filter(value => this.sortable.includes(value));
-                if (this.options.sortBy.length !== sortBy.length) {
-                    this.options.sortBy = sortBy;
+                const sortable = this.options.sortBy.map(value => this.sortable.includes(value));
+                if (!sortable.every(Boolean)) {
+                    //FIXME: double trigger options watcher
+                    this.options.sortBy = this.options.sortBy.filter((v, i) => sortable[i]);
+                    this.options.sortDesc = this.options.sortDesc.filter((v, i) => sortable[i]);
                 } else {
                     this.getItems();
                 }
@@ -236,6 +238,7 @@
             'options.sortBy'(value) {
                 if (value.length > 2) {
                     this.options.sortBy = this.options.sortBy.slice(value.length - 2);
+                    this.options.sortDesc = this.options.sortDesc.slice(value.length - 2);
                 }
             },
             options: {
@@ -246,7 +249,7 @@
         mounted() {
             // this.editedReset();
             this.getTags();
-            this.getItems();
+            // this.getItems();
         },
         methods: {
             processItem(item) {
@@ -262,6 +265,7 @@
                 });
             },
             getItems() {
+                console.error('getItems');
                 this.loading = true;
                 axios.get(this.resource + '?' + this.query).then(response => {
                     this.items = response.data.data.map(this.processItem);

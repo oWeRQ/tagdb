@@ -2663,12 +2663,18 @@ function queryPaginate(options) {
     queryTags: function queryTags() {
       var _this2 = this;
 
-      var sortBy = this.options.sortBy.filter(function (value) {
+      var sortable = this.options.sortBy.map(function (value) {
         return _this2.sortable.includes(value);
       });
 
-      if (this.options.sortBy.length !== sortBy.length) {
-        this.options.sortBy = sortBy;
+      if (!sortable.every(Boolean)) {
+        //FIXME: double trigger options watcher
+        this.options.sortBy = this.options.sortBy.filter(function (v, i) {
+          return sortable[i];
+        });
+        this.options.sortDesc = this.options.sortDesc.filter(function (v, i) {
+          return sortable[i];
+        });
       } else {
         this.getItems();
       }
@@ -2676,6 +2682,7 @@ function queryPaginate(options) {
     'options.sortBy': function optionsSortBy(value) {
       if (value.length > 2) {
         this.options.sortBy = this.options.sortBy.slice(value.length - 2);
+        this.options.sortDesc = this.options.sortDesc.slice(value.length - 2);
       }
     },
     options: {
@@ -2685,8 +2692,7 @@ function queryPaginate(options) {
   },
   mounted: function mounted() {
     // this.editedReset();
-    this.getTags();
-    this.getItems();
+    this.getTags(); // this.getItems();
   },
   methods: {
     processItem: function processItem(item) {
@@ -2720,6 +2726,7 @@ function queryPaginate(options) {
     getItems: function getItems() {
       var _this4 = this;
 
+      console.error('getItems');
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
         _this4.items = response.data.data.map(_this4.processItem);
