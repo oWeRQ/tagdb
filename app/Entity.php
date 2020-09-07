@@ -54,21 +54,21 @@ class Entity extends Model
         if (!$sort)
             return $query->orderBy('created_at', 'desc');
 
-        $column = explode('.', trim($sort, '+-'));
-        $direction = $sort[0] === '-' ? 'desc' : 'asc';
+        foreach (explode(',', $sort) as $i => $part) {
+            $column = explode('.', trim($part, '+-'));
+            $direction = $part[0] === '-' ? 'desc' : 'asc';
 
-        if ($column[0] === 'contents') {
-            $query->select('entities.*')
-                ->leftJoin('values', function($join) use($column) {
-                    $join->on('values.entity_id', '=', 'entities.id');
-                    $join->where('values.field_id', '=', $column[1]);
-                })
-                ->orderBy('values.content', $direction);
-        } else {
-            $query->orderBy($column[0], $direction);
+            if ($column[0] === 'contents') {
+                $query->leftJoin("values as values$i", function($join) use($i, $column) {
+                    $join->on("values$i.entity_id", '=', 'entities.id');
+                    $join->where("values$i.field_id", '=', $column[1]);
+                })->orderBy("values$i.content", $direction);
+            } else {
+                $query->orderBy($column[0], $direction);
+            }
         }
 
-        return $query;
+        return $query->select('entities.*');
     }
 
     public function updateTags(array $tags = null)

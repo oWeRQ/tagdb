@@ -2477,7 +2477,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
 
 
 
@@ -2623,7 +2622,7 @@ function queryPaginate(options) {
       var after = [{
         text: 'Created',
         value: 'created_at',
-        width: '104px'
+        width: '120px'
       }, {
         text: 'Actions',
         value: 'actions',
@@ -24291,6 +24290,7 @@ var render = function() {
       options: _vm.options,
       "server-items-length": _vm.total,
       loading: _vm.loading,
+      "multi-sort": true,
       "items-per-page": 100,
       "footer-props": {
         itemsPerPageOptions: [10, 20, 50, 100]
@@ -24366,18 +24366,9 @@ var render = function() {
                   }),
                   _vm._v(" "),
                   _c(
-                    "v-btn",
-                    {
-                      staticClass: "mr-3",
-                      attrs: { loading: _vm.loading },
-                      on: { click: _vm.getItems }
-                    },
-                    [
-                      _c("v-icon", { attrs: { dark: "" } }, [
-                        _vm._v("mdi-refresh")
-                      ])
-                    ],
-                    1
+                    "v-icon",
+                    { staticClass: "mr-3", on: { click: _vm.getItems } },
+                    [_vm._v("mdi-refresh")]
                   ),
                   _vm._v(" "),
                   _c("v-spacer"),

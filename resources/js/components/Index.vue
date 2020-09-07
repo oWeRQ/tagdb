@@ -5,6 +5,7 @@
         :options.sync="options"
         :server-items-length="total"
         :loading="loading"
+        :multi-sort="true"
         :items-per-page="100"
         :footer-props="{
             itemsPerPageOptions: [10, 20, 50, 100],
@@ -44,9 +45,7 @@
                     deletable-chips
                     class="shrink mr-3"
                 ></v-autocomplete>
-                <v-btn @click="getItems" :loading="loading" class="mr-3">
-                    <v-icon dark>mdi-refresh</v-icon>
-                </v-btn>
+                <v-icon @click="getItems" class="mr-3">mdi-refresh</v-icon>
                 <v-spacer></v-spacer>
                 <v-btn dark color="indigo" @click="editItem(defaultItem)">
                     <v-icon dark left>mdi-plus</v-icon>
@@ -200,7 +199,7 @@
                     { text: 'Name', value: 'name' },
                 ];
                 const after = [
-                    { text: 'Created', value: 'created_at', width: '104px' },
+                    { text: 'Created', value: 'created_at', width: '120px' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
                 const fields = this.displayFields.map((field) => {
