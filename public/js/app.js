@@ -2668,7 +2668,6 @@ function queryPaginate(options) {
       });
 
       if (!sortable.every(Boolean)) {
-        //FIXME: double trigger options watcher
         this.options.sortBy = this.options.sortBy.filter(function (v, i) {
           return sortable[i];
         });
@@ -2685,10 +2684,7 @@ function queryPaginate(options) {
         this.options.sortDesc = this.options.sortDesc.slice(value.length - 2);
       }
     },
-    options: {
-      handler: 'getItems',
-      deep: true
-    }
+    options: 'getItems'
   },
   mounted: function mounted() {
     // this.editedReset();
@@ -2726,7 +2722,6 @@ function queryPaginate(options) {
     getItems: function getItems() {
       var _this4 = this;
 
-      console.error('getItems');
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
         _this4.items = response.data.data.map(_this4.processItem);
