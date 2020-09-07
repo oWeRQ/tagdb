@@ -185,7 +185,6 @@
                 return getFields(this.editedItem.tags);
             },
             displayFields() {
-                // return getFields(this.itemsTags);
                 return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
             },
             displaySlots() {
@@ -243,9 +242,7 @@
             options: 'getItems',
         },
         mounted() {
-            // this.editedReset();
             this.getTags();
-            // this.getItems();
         },
         methods: {
             processItem(item) {
@@ -306,26 +303,14 @@
             },
             close() {
                 this.dialog = false;
-                // this.$nextTick(this.editedReset);
             },
             editedReset() {
                 this.editedItem = cloneDeep(this.defaultItem);
                 this.editedIndex = -1;
             },
             reset() {
+                this.search = '';
                 this.queryTags = [];
-            },
-            toggleTag(tag) {
-                if (this.queryTags.includes(tag.name))
-                    this.removeTag(tag);
-                else
-                    this.addTag(tag);
-            },
-            addTag(tag) {
-                this.queryTags.includes(tag.name) || this.queryTags.push(tag.name);
-            },
-            removeTag(tag) {
-                this.queryTags = this.queryTags.filter(item => item !== tag.name);
             },
         },
     };

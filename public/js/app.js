@@ -2596,7 +2596,6 @@ function queryPaginate(options) {
     displayFields: function displayFields() {
       var _this = this;
 
-      // return getFields(this.itemsTags);
       return getFields(this.tags.filter(function (tag) {
         return _this.queryTags.includes(tag.name);
       }));
@@ -2687,8 +2686,7 @@ function queryPaginate(options) {
     options: 'getItems'
   },
   mounted: function mounted() {
-    // this.editedReset();
-    this.getTags(); // this.getItems();
+    this.getTags();
   },
   methods: {
     processItem: function processItem(item) {
@@ -2780,25 +2778,15 @@ function queryPaginate(options) {
       this.dialog = true;
     },
     close: function close() {
-      this.dialog = false; // this.$nextTick(this.editedReset);
+      this.dialog = false;
     },
     editedReset: function editedReset() {
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
       this.editedIndex = -1;
     },
     reset: function reset() {
+      this.search = '';
       this.queryTags = [];
-    },
-    toggleTag: function toggleTag(tag) {
-      if (this.queryTags.includes(tag.name)) this.removeTag(tag);else this.addTag(tag);
-    },
-    addTag: function addTag(tag) {
-      this.queryTags.includes(tag.name) || this.queryTags.push(tag.name);
-    },
-    removeTag: function removeTag(tag) {
-      this.queryTags = this.queryTags.filter(function (item) {
-        return item !== tag.name;
-      });
     }
   }
 });
