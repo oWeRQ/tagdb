@@ -20,6 +20,21 @@ class Entity extends Model
         return $this->hasMany('App\Value');
     }
 
+    public function scopeQueryJson($query, $json)
+    {
+        $queryData = json_decode($json, true);
+
+        if ($tags = $queryData['tags'] ?? null) {
+            $query->havingTags($tags);
+        }
+
+        if ($search = $queryData['search'] ?? null) {
+            $query->search($search);
+        }
+
+        return $query;
+    }
+
     public function scopeHavingTags($query, array $tags = null)
     {
         return $query->whereHas('tags', function($query) use($tags) {
@@ -34,8 +49,11 @@ class Entity extends Model
         return $query->where('name', 'like', '%'.$search.'%');
     }
 
-    public function scopeSort($query, $sort)
+    public function scopeSort($query, $sort = null)
     {
+        if (!$sort)
+            return $query->orderBy('created_at', 'desc');
+
         $column = explode('.', trim($sort, '+-'));
         $direction = $sort[0] === '-' ? 'desc' : 'asc';
 

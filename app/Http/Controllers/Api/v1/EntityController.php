@@ -13,17 +13,8 @@ class EntityController extends Controller
     {
         $query = Entity::query();
 
-        $queryData = json_decode($request->get('query', '{}'), true);
-
-        if ($tags = $queryData['tags'] ?? null) {
-            $query->havingTags($tags);
-        }
-        if ($search = $queryData['search'] ?? null) {
-            $query->search($search);
-        }
-        if ($sort = $request->get('sort')) {
-            $query->sort($sort);
-        }
+        $query->queryJson($request->get('query', '{}'));
+        $query->sort($request->get('sort'));
 
         $perPage = $request->get('per_page', 100);
 
