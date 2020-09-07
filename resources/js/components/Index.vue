@@ -84,8 +84,11 @@
                 </v-chip>
             </v-chip-group>
         </template>
+        <template v-slot:item.created_at="{ item, value }">
+            {{ value | date }}
+        </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon @click="editItem(item)" color="grey darken-1" class="mr-2">
+            <v-icon @click="editItem(item)" color="grey darken-1" class="mr-2" :title="'ID: ' + item.id">
                 mdi-pencil
             </v-icon>
             <v-icon @click="deleteItem(item)" color="grey darken-1">
@@ -101,6 +104,7 @@
 <script>
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
+    import date from '../functions/date';
     import truncate from '../functions/truncate';
     import EntityForm from './EntityForm';
 
@@ -128,6 +132,7 @@
             EntityForm,
         },
         filters: {
+            date,
             truncate,
         },
         props: {
@@ -184,11 +189,11 @@
             },
             headers() {
                 const before = [
-                    { text: 'ID', value: 'id', width: '70px' },
                     { text: 'Tags', value: 'tags', sortable: false, width: '1%' },
                     { text: 'Name', value: 'name' },
                 ];
                 const after = [
+                    { text: 'Created', value: 'created_at', width: '104px' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
                 const fields = this.displayFields.map((field) => {

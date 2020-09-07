@@ -2345,8 +2345,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
-/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+/* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
+/* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
+/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2467,6 +2468,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+
 
 
 
@@ -2505,10 +2510,11 @@ function queryPaginate(options) {
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_3__["default"]
+    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   filters: {
-    truncate: _functions_truncate__WEBPACK_IMPORTED_MODULE_2__["default"]
+    date: _functions_date__WEBPACK_IMPORTED_MODULE_2__["default"],
+    truncate: _functions_truncate__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: {
     title: {
@@ -2599,10 +2605,6 @@ function queryPaginate(options) {
     },
     headers: function headers() {
       var before = [{
-        text: 'ID',
-        value: 'id',
-        width: '70px'
-      }, {
         text: 'Tags',
         value: 'tags',
         sortable: false,
@@ -2612,6 +2614,10 @@ function queryPaginate(options) {
         value: 'name'
       }];
       var after = [{
+        text: 'Created',
+        value: 'created_at',
+        width: '104px'
+      }, {
         text: 'Actions',
         value: 'actions',
         sortable: false,
@@ -24564,6 +24570,16 @@ var render = function() {
           }
         },
         {
+          key: "item.created_at",
+          fn: function(ref) {
+            var item = ref.item
+            var value = ref.value
+            return [
+              _vm._v("\n        " + _vm._s(_vm._f("date")(value)) + "\n    ")
+            ]
+          }
+        },
+        {
           key: "item.actions",
           fn: function(ref) {
             var item = ref.item
@@ -24572,7 +24588,7 @@ var render = function() {
                 "v-icon",
                 {
                   staticClass: "mr-2",
-                  attrs: { color: "grey darken-1" },
+                  attrs: { color: "grey darken-1", title: "ID: " + item.id },
                   on: {
                     click: function($event) {
                       return _vm.editItem(item)
@@ -84268,6 +84284,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TagForm_vue_vue_type_template_id_b2ddc43a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
+
+/***/ }),
+
+/***/ "./resources/js/functions/date.js":
+/*!****************************************!*\
+  !*** ./resources/js/functions/date.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  return new Date(str).toISOString().substr(0, 10);
+});
+;
 
 /***/ }),
 
