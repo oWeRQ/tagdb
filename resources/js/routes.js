@@ -1,6 +1,7 @@
 import Index from './components/Index.vue';
 import Crud from './components/Crud.vue';
 import TagForm from './components/TagForm.vue';
+import Preset from './components/Preset.vue';
 
 export default [
     {
@@ -95,4 +96,8 @@ export default [
             ],
         },
     },
+    {
+        path: '/presets/:id',
+        component: Preset,
+    }
 ];

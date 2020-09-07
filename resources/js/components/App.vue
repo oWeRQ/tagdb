@@ -1,47 +1,59 @@
 <template>
     <v-app>
         <v-navigation-drawer v-model="drawer" app clipped>
-            <v-list dense>
-                <v-list-item link to="/">
-                    <v-list-item-action>
-                        <v-icon>mdi-home</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Entities</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link to="/tags">
-                    <v-list-item-action>
-                        <v-icon>mdi-tag</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Tags</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link to="/presets">
-                    <v-list-item-action>
-                        <v-icon>mdi-database</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Presets</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link to="/fields">
-                    <v-list-item-action>
-                        <v-icon>mdi-pencil-box-multiple</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Fields</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link to="/values">
-                    <v-list-item-action>
-                        <v-icon>mdi-pencil</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Values</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+            <v-list nav dense>
+                <v-list-item-group color="primary">
+                    <v-list-item link to="/">
+                        <v-list-item-action>
+                            <v-icon>mdi-home</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Entities</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/tags">
+                        <v-list-item-action>
+                            <v-icon>mdi-tag</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Tags</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/presets" exact>
+                        <v-list-item-action>
+                            <v-icon>mdi-database-settings</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Presets</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/fields">
+                        <v-list-item-action>
+                            <v-icon>mdi-pencil-box-multiple</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Fields</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/values">
+                        <v-list-item-action>
+                            <v-icon>mdi-pencil</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Values</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                    <v-subheader>Presets</v-subheader>
+                    <v-list-item v-for="preset in presets" :key="preset.id" link :to="{ path: '/presets/:id', params: { id: preset.id }}">
+                        <v-list-item-action>
+                            <v-icon>mdi-database</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ preset.name }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </v-list-item-group>
             </v-list>
         </v-navigation-drawer>
 
@@ -59,9 +71,22 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         data: () => ({
             drawer: null,
+            presets: [],
         }),
+        mounted() {
+            this.getPresets();
+        },
+        methods: {
+            getPresets() {
+                axios.get('/api/v1/presets').then(response => {
+                    this.presets = response.data.data;
+                });
+            },
+        },
     }
 </script>
