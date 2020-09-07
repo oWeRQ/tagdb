@@ -41,7 +41,7 @@ class Entity extends Model
 
         if ($column[0] === 'contents') {
             $query->select('entities.*')
-                ->join('values', function($join) use($column) {
+                ->leftJoin('values', function($join) use($column) {
                     $join->on('values.entity_id', '=', 'entities.id');
                     $join->where('values.field_id', '=', $column[1]);
                 })
