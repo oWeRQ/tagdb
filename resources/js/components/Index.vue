@@ -44,7 +44,7 @@
                     deletable-chips
                     class="shrink mr-3"
                 ></v-autocomplete>
-                <v-btn @click="getItems" :loading="loading">
+                <v-btn @click="getItems" :loading="loading" class="mr-3">
                     <v-icon dark>mdi-refresh</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
@@ -77,10 +77,12 @@
             </span>
         </template>
         <template v-slot:item.tags="{ item }">
-            <v-chip v-for="tag in item.tags" :key="tag.name" :dark="queryTags.includes(tag.name)" small class="mr-1" @click="toggleTag(tag)">
-                {{ tag.name }}
-                <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
-            </v-chip>
+            <v-chip-group multiple active-class="primary--text" v-model="queryTags">
+                <v-chip v-for="tag in item.tags" :key="tag.name" :value="tag.name" small outlined>
+                    {{ tag.name }}
+                    <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
+                </v-chip>
+            </v-chip-group>
         </template>
         <template v-slot:item.actions="{ item }">
             <v-icon @click="editItem(item)" color="grey darken-1" class="mr-2">
@@ -183,7 +185,7 @@
             headers() {
                 const before = [
                     { text: 'ID', value: 'id', width: '70px' },
-                    { text: 'Tags', value: 'tags', sortable: false },
+                    { text: 'Tags', value: 'tags', sortable: false, width: '1%' },
                     { text: 'Name', value: 'name' },
                 ];
                 const after = [

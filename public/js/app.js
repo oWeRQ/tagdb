@@ -2465,6 +2465,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 
 
 
@@ -2603,7 +2605,8 @@ function queryPaginate(options) {
       }, {
         text: 'Tags',
         value: 'tags',
-        sortable: false
+        sortable: false,
+        width: '1%'
       }, {
         text: 'Name',
         value: 'name'
@@ -24352,6 +24355,7 @@ var render = function() {
                   _c(
                     "v-btn",
                     {
+                      staticClass: "mr-3",
                       attrs: { loading: _vm.loading },
                       on: { click: _vm.getItems }
                     },
@@ -24522,29 +24526,41 @@ var render = function() {
           key: "item.tags",
           fn: function(ref) {
             var item = ref.item
-            return _vm._l(item.tags, function(tag) {
-              return _c(
-                "v-chip",
+            return [
+              _c(
+                "v-chip-group",
                 {
-                  key: tag.name,
-                  staticClass: "mr-1",
-                  attrs: { dark: _vm.queryTags.includes(tag.name), small: "" },
-                  on: {
-                    click: function($event) {
-                      return _vm.toggleTag(tag)
-                    }
+                  attrs: { multiple: "", "active-class": "primary--text" },
+                  model: {
+                    value: _vm.queryTags,
+                    callback: function($$v) {
+                      _vm.queryTags = $$v
+                    },
+                    expression: "queryTags"
                   }
                 },
-                [
-                  _vm._v(
-                    "\n            " + _vm._s(tag.name) + "\n            "
-                  ),
-                  tag.fields.length
-                    ? _c("sup", [_vm._v(_vm._s(tag.fields.length))])
-                    : _vm._e()
-                ]
+                _vm._l(item.tags, function(tag) {
+                  return _c(
+                    "v-chip",
+                    {
+                      key: tag.name,
+                      attrs: { value: tag.name, small: "", outlined: "" }
+                    },
+                    [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(tag.name) +
+                          "\n                "
+                      ),
+                      tag.fields.length
+                        ? _c("sup", [_vm._v(_vm._s(tag.fields.length))])
+                        : _vm._e()
+                    ]
+                  )
+                }),
+                1
               )
-            })
+            ]
           }
         },
         {
