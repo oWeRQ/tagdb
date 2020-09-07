@@ -2720,7 +2720,7 @@ function queryPaginate(options) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
           console.log('response', response);
 
-          _this4.items.push(_this4.processItem(response.data.data));
+          _this4.items.splice(0, 0, _this4.processItem(response.data.data));
 
           _this4.close();
         });

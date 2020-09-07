@@ -268,7 +268,7 @@
                 } else {
                     axios.post(this.resource, this.editedItem).then(response => {
                         console.log('response', response);
-                        this.items.push(this.processItem(response.data.data));
+                        this.items.splice(0, 0, this.processItem(response.data.data));
                         this.close();
                     });
                 }
