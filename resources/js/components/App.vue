@@ -18,6 +18,14 @@
                         <v-list-item-title>Tags</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+                <v-list-item link to="/presets">
+                    <v-list-item-action>
+                        <v-icon>mdi-database</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>
+                        <v-list-item-title>Presets</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
                 <v-list-item link to="/fields">
                     <v-list-item-action>
                         <v-icon>mdi-pencil-box-multiple</v-icon>

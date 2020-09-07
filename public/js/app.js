@@ -1960,6 +1960,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -23664,6 +23672,25 @@ var render = function() {
                   _c(
                     "v-list-item-content",
                     [_c("v-list-item-title", [_vm._v("Tags")])],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-list-item",
+                { attrs: { link: "", to: "/presets" } },
+                [
+                  _c(
+                    "v-list-item-action",
+                    [_c("v-icon", [_vm._v("mdi-database")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item-content",
+                    [_c("v-list-item-title", [_vm._v("Presets")])],
                     1
                   )
                 ],
@@ -84487,6 +84514,37 @@ __webpack_require__.r(__webpack_exports__);
     }, {
       text: 'Content',
       value: 'content'
+    }]
+  }
+}, {
+  path: '/presets',
+  component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+  props: {
+    title: 'Presets',
+    resource: '/api/v1/presets',
+    defaultItem: {},
+    columns: [{
+      text: 'ID',
+      value: 'id'
+    }, {
+      text: 'Name',
+      value: 'name'
+    }, {
+      text: 'Sort',
+      value: 'sort'
+    }, {
+      text: 'Query',
+      value: 'query'
+    }],
+    editable: [{
+      text: 'Name',
+      value: 'name'
+    }, {
+      text: 'Sort',
+      value: 'sort'
+    }, {
+      text: 'Query',
+      value: 'query'
     }]
   }
 }]);

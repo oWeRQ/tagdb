@@ -75,4 +75,24 @@ export default [
             ],
         },
     },
+    {
+        path: '/presets',
+        component: Crud,
+        props: {
+            title: 'Presets',
+            resource: '/api/v1/presets',
+            defaultItem: {},
+            columns: [
+                { text: 'ID', value: 'id' },
+                { text: 'Name', value: 'name' },
+                { text: 'Sort', value: 'sort' },
+                { text: 'Query', value: 'query' },
+            ],
+            editable: [
+                { text: 'Name', value: 'name' },
+                { text: 'Sort', value: 'sort' },
+                { text: 'Query', value: 'query' },
+            ],
+        },
+    },
 ];

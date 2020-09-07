@@ -23,4 +23,5 @@ Route::prefix('v1')->group(function ($route) {
     $route->resource('tags', 'Api\v1\TagController');
     $route->resource('fields', 'Api\v1\FieldController');
     $route->resource('values', 'Api\v1\ValueController');
+    $route->resource('presets', 'Api\v1\PresetController');
 });
