@@ -2661,7 +2661,7 @@ function queryPaginate(options) {
         width: '120px',
         align: 'center'
       }];
-      var fields = this.displayFields.map(function (field) {
+      var fields = this.loading ? [] : this.displayFields.map(function (field) {
         return {
           text: field.name,
           value: 'contents.' + field.id
