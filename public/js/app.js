@@ -1982,24 +1982,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      drawer: null,
-      presets: []
+      drawer: null
     };
   },
-  mounted: function mounted() {
-    this.getPresets();
-  },
-  methods: {
-    getPresets: function getPresets() {
-      var _this = this;
-
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/presets').then(function (response) {
-        _this.presets = response.data.data;
-      });
+  computed: {
+    presets: function presets() {
+      return this.$root.presets;
     }
   }
 });
@@ -2579,7 +2572,6 @@ function queryPaginate(options) {
       editedIndex: null,
       editedItem: null,
       multiSort: false,
-      tags: [],
       queryTags: [],
       search: '',
       defaultItem: {
@@ -2589,6 +2581,9 @@ function queryPaginate(options) {
     };
   },
   computed: {
+    tags: function tags() {
+      return this.$root.tags;
+    },
     itemsTags: function itemsTags() {
       var tags = [];
 
@@ -2722,9 +2717,6 @@ function queryPaginate(options) {
     },
     options: 'getItems'
   },
-  mounted: function mounted() {
-    this.getTags();
-  },
   methods: {
     processItem: function processItem(item) {
       var contents = {};
@@ -2747,47 +2739,40 @@ function queryPaginate(options) {
         contents: contents
       });
     },
-    getTags: function getTags() {
-      var _this3 = this;
-
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags').then(function (response) {
-        _this3.tags = response.data.data;
-      });
-    },
     getItems: function getItems() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.loading = true;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
-        _this4.items = response.data.data.map(_this4.processItem);
-        _this4.total = response.data.meta.total;
-        _this4.loading = false;
+        _this3.items = response.data.data.map(_this3.processItem);
+        _this3.total = response.data.meta.total;
+        _this3.loading = false;
       });
     },
     save: function save() {
-      var _this5 = this;
+      var _this4 = this;
 
       if (!this.editedValid) return;
 
       if (this.editedIndex > -1) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
           console.log('response', response);
-          Object.assign(_this5.items[_this5.editedIndex], _this5.processItem(response.data.data));
+          Object.assign(_this4.items[_this4.editedIndex], _this4.processItem(response.data.data));
 
-          _this5.close();
+          _this4.close();
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
           console.log('response', response);
 
-          _this5.items.splice(0, 0, _this5.processItem(response.data.data));
+          _this4.items.splice(0, 0, _this4.processItem(response.data.data));
 
-          _this5.close();
+          _this4.close();
         });
       }
     },
     deleteItem: function deleteItem(item) {
-      var _this6 = this;
+      var _this5 = this;
 
       var index = this.items.indexOf(item);
 
@@ -2795,12 +2780,12 @@ function queryPaginate(options) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
-          _this6.items.splice(index, 1);
+          _this5.items.splice(index, 1);
         });
       }
     },
     editItem: function editItem(item) {
-      var _this7 = this;
+      var _this6 = this;
 
       this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
@@ -2808,7 +2793,7 @@ function queryPaginate(options) {
 
       if (this.editedIndex < 0) {
         this.editedItem.tags = this.tags.filter(function (tag) {
-          return _this7.queryTags.includes(tag.name);
+          return _this6.queryTags.includes(tag.name);
         });
       }
 
@@ -2839,13 +2824,328 @@ function queryPaginate(options) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
+/* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
+/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+
+function getFields(items) {
+  var fields = [];
+
+  var _iterator = _createForOfIteratorHelper(items),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var item = _step.value;
+      fields = [].concat(_toConsumableArray(fields), _toConsumableArray(item.fields));
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return fields;
+}
+
+function queryPaginate(options) {
+  if (!options.sortBy) return;
+  return {
+    page: options.page,
+    per_page: options.itemsPerPage,
+    sort: options.sortBy.map(function (v, i) {
+      return (options.sortDesc[i] ? '-' : '') + v;
+    }).join(',')
+  };
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_4__["default"]
+  },
+  filters: {
+    date: _functions_date__WEBPACK_IMPORTED_MODULE_2__["default"],
+    truncate: _functions_truncate__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
+  props: {
+    resource: {
+      type: String,
+      required: true
+    }
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      loading: true,
+      total: 0,
+      items: [],
+      options: {},
+      editedValid: false,
+      editedIndex: null,
+      editedItem: null,
+      defaultItem: {
+        tags: [],
+        contents: {}
+      }
+    };
+  },
+  computed: {
+    tags: function tags() {
+      return this.$root.tags;
+    },
+    title: function title() {
+      return this.$route.params.name;
+    },
+    itemsTags: function itemsTags() {
+      var tags = [];
+
+      var _iterator2 = _createForOfIteratorHelper(this.items),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var item = _step2.value;
+
+          var _iterator3 = _createForOfIteratorHelper(item.tags),
+              _step3;
+
+          try {
+            var _loop = function _loop() {
+              var tag = _step3.value;
+              if (!tags.some(function (t) {
+                return t.id === tag.id;
+              })) tags.push(tag);
+            };
+
+            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+              _loop();
+            }
+          } catch (err) {
+            _iterator3.e(err);
+          } finally {
+            _iterator3.f();
+          }
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      return tags;
+    },
+    editedFields: function editedFields() {
+      return getFields(this.editedItem.tags);
+    },
+    displayFields: function displayFields() {
+      return getFields(this.itemsTags);
+    },
+    displaySlots: function displaySlots() {
+      return this.displayFields.map(function (field) {
+        return {
+          name: 'item.contents.' + field.id,
+          type: field.type
+        };
+      });
+    },
+    headers: function headers() {
+      var before = [{
+        text: 'Name',
+        value: 'name'
+      }];
+      var after = [{
+        text: 'Created',
+        value: 'created_at',
+        width: '120px'
+      }, {
+        text: 'Actions',
+        value: 'actions',
+        sortable: false,
+        width: '120px',
+        align: 'center'
+      }];
+      var fields = this.displayFields.map(function (field) {
+        return {
+          text: field.name,
+          value: 'contents.' + field.id
+        };
+      });
+      return [].concat(before, _toConsumableArray(fields), after);
+    },
+    query: function query() {
+      return new URLSearchParams(_objectSpread({
+        preset: this.$route.params.name
+      }, queryPaginate(this.options))).toString();
+    }
+  },
+  mounted: function mounted() {
+    this.getItems();
+  },
+  methods: {
+    processItem: function processItem(item) {
+      var contents = {};
+
+      var _iterator4 = _createForOfIteratorHelper(item.values),
+          _step4;
+
+      try {
+        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+          var value = _step4.value;
+          contents[value.field.id] = value.content;
+        }
+      } catch (err) {
+        _iterator4.e(err);
+      } finally {
+        _iterator4.f();
+      }
+
+      return _objectSpread(_objectSpread({}, item), {}, {
+        contents: contents
+      });
+    },
+    getItems: function getItems() {
+      var _this = this;
+
+      this.loading = true;
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
+        _this.items = response.data.data.map(_this.processItem);
+        _this.total = response.data.meta.total;
+        _this.loading = false;
+      });
+    },
+    save: function save() {
+      var _this2 = this;
+
+      if (!this.editedValid) return;
+
+      if (this.editedIndex > -1) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
+          console.log('response', response);
+          Object.assign(_this2.items[_this2.editedIndex], _this2.editedItem);
+
+          _this2.close();
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
+          console.log('response', response);
+
+          _this2.items.push(response.data.data);
+
+          _this2.close();
+        });
+      }
+    },
+    deleteItem: function deleteItem(item) {
+      var _this3 = this;
+
+      var index = this.items.indexOf(item);
+
+      if (confirm('Are you sure you want to delete this item?')) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
+          console.log('response', response);
+
+          _this3.items.splice(index, 1);
+        });
+      }
+    },
+    editItem: function editItem(item) {
+      this.$refs.form && this.$refs.form.resetValidation();
+      this.editedIndex = this.items.indexOf(item);
+      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
+      this.dialog = true;
+    },
+    close: function close() {
+      this.dialog = false; // this.$nextTick(this.editedReset);
+    },
+    editedReset: function editedReset() {
+      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
+      this.editedIndex = -1;
+    }
+  }
+});
 
 /***/ }),
 
@@ -23784,46 +24084,55 @@ var render = function() {
                       )
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _c("v-subheader", [_vm._v("Presets")]),
-                  _vm._v(" "),
-                  _vm._l(_vm.presets, function(preset) {
-                    return _c(
-                      "v-list-item",
-                      {
-                        key: preset.id,
-                        attrs: {
-                          link: "",
-                          to: {
-                            path: "/presets/:id",
-                            params: { id: preset.id }
-                          }
-                        }
-                      },
-                      [
-                        _c(
-                          "v-list-item-action",
-                          [_c("v-icon", [_vm._v("mdi-database")])],
-                          1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-list-item-content",
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.presets.length
+                ? _c(
+                    "v-list-item-group",
+                    { attrs: { color: "primary" } },
+                    [
+                      _c("v-subheader", [_vm._v("Presets")]),
+                      _vm._v(" "),
+                      _vm._l(_vm.presets, function(preset) {
+                        return _c(
+                          "v-list-item",
+                          {
+                            key: preset.id,
+                            attrs: {
+                              link: "",
+                              to: {
+                                name: "preset",
+                                params: { name: preset.name }
+                              }
+                            }
+                          },
                           [
-                            _c("v-list-item-title", [
-                              _vm._v(_vm._s(preset.name))
-                            ])
+                            _c(
+                              "v-list-item-action",
+                              [_c("v-icon", [_vm._v("mdi-database")])],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-item-content",
+                              [
+                                _c("v-list-item-title", [
+                                  _vm._v(_vm._s(preset.name))
+                                ])
+                              ],
+                              1
+                            )
                           ],
                           1
                         )
-                      ],
-                      1
-                    )
-                  })
-                ],
-                2
-              )
+                      })
+                    ],
+                    2
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -24154,30 +24463,32 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("v-autocomplete", {
-        attrs: {
-          rules: _vm.rules.tags,
-          items: _vm.tags,
-          color: "blue darken-1",
-          label: "Tags",
-          "item-text": "name",
-          "item-value": "name",
-          chips: "",
-          multiple: "",
-          "return-object": "",
-          "hide-selected": "",
-          "hide-no-data": "",
-          "deletable-chips": "",
-          autofocus: !_vm.value.tags.length
-        },
-        model: {
-          value: _vm.value.tags,
-          callback: function($$v) {
-            _vm.$set(_vm.value, "tags", $$v)
-          },
-          expression: "value.tags"
-        }
-      }),
+      _vm.tags
+        ? _c("v-autocomplete", {
+            attrs: {
+              rules: _vm.rules.tags,
+              items: _vm.tags,
+              color: "blue darken-1",
+              label: "Tags",
+              "item-text": "name",
+              "item-value": "name",
+              chips: "",
+              multiple: "",
+              "return-object": "",
+              "hide-selected": "",
+              "hide-no-data": "",
+              "deletable-chips": "",
+              autofocus: !_vm.value.tags.length
+            },
+            model: {
+              value: _vm.value.tags,
+              callback: function($$v) {
+                _vm.$set(_vm.value, "tags", $$v)
+              },
+              expression: "value.tags"
+            }
+          })
+        : _vm._e(),
       _vm._v(" "),
       _c("v-text-field", {
         attrs: {
@@ -24812,9 +25123,222 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("h1", [
-    _vm._v("\n    Preset " + _vm._s(_vm.$route.params.id) + "\n")
-  ])
+  return _c("v-data-table", {
+    staticClass: "elevation-1",
+    attrs: {
+      headers: _vm.headers,
+      items: _vm.items,
+      options: _vm.options,
+      "server-items-length": _vm.total,
+      loading: _vm.loading,
+      "items-per-page": 100,
+      "footer-props": {
+        itemsPerPageOptions: [10, 20, 50, 100]
+      }
+    },
+    on: {
+      "update:options": function($event) {
+        _vm.options = $event
+      }
+    },
+    scopedSlots: _vm._u([
+      {
+        key: "top",
+        fn: function() {
+          return [
+            _c(
+              "v-toolbar",
+              { attrs: { flat: "", color: "white" } },
+              [
+                _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
+                _vm._v(" "),
+                _c("v-spacer"),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    attrs: { dark: "", color: "indigo" },
+                    on: {
+                      click: function($event) {
+                        return _vm.editItem(_vm.defaultItem)
+                      }
+                    }
+                  },
+                  [
+                    _c("v-icon", { attrs: { dark: "", left: "" } }, [
+                      _vm._v("mdi-plus")
+                    ]),
+                    _vm._v("\n                Add\n            ")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _vm.editedItem
+                  ? _c(
+                      "v-dialog",
+                      {
+                        attrs: { "max-width": "500px" },
+                        model: {
+                          value: _vm.dialog,
+                          callback: function($$v) {
+                            _vm.dialog = $$v
+                          },
+                          expression: "dialog"
+                        }
+                      },
+                      [
+                        _c(
+                          "v-form",
+                          {
+                            ref: "form",
+                            on: {
+                              submit: function($event) {
+                                $event.preventDefault()
+                                return _vm.save($event)
+                              }
+                            },
+                            model: {
+                              value: _vm.editedValid,
+                              callback: function($$v) {
+                                _vm.editedValid = $$v
+                              },
+                              expression: "editedValid"
+                            }
+                          },
+                          [
+                            _c(
+                              "v-card",
+                              [
+                                _c("v-card-title", [
+                                  _c("span", { staticClass: "headline" }, [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.editedIndex > -1
+                                          ? "Update"
+                                          : "Create"
+                                      )
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "v-card-text",
+                                  [
+                                    _c("entity-form", {
+                                      attrs: {
+                                        editedFields: _vm.editedFields,
+                                        tags: _vm.tags
+                                      },
+                                      model: {
+                                        value: _vm.editedItem,
+                                        callback: function($$v) {
+                                          _vm.editedItem = $$v
+                                        },
+                                        expression: "editedItem"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-card-actions",
+                                  [
+                                    _c("v-spacer"),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "blue darken-1",
+                                          text: "",
+                                          type: "submit",
+                                          disabled: !_vm.editedValid
+                                        }
+                                      },
+                                      [_vm._v("Save")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "v-btn",
+                                      {
+                                        attrs: {
+                                          color: "grey darken-1",
+                                          text: ""
+                                        },
+                                        on: { click: _vm.close }
+                                      },
+                                      [_vm._v("Cancel")]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              ],
+              1
+            )
+          ]
+        },
+        proxy: true
+      },
+      {
+        key: "item.actions",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "v-icon",
+              {
+                staticClass: "mr-2",
+                attrs: { color: "grey darken-1" },
+                on: {
+                  click: function($event) {
+                    return _vm.editItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-pencil\n        ")]
+            ),
+            _vm._v(" "),
+            _c(
+              "v-icon",
+              {
+                attrs: { color: "grey darken-1" },
+                on: {
+                  click: function($event) {
+                    return _vm.deleteItem(item)
+                  }
+                }
+              },
+              [_vm._v("\n            mdi-delete\n        ")]
+            )
+          ]
+        }
+      },
+      {
+        key: "no-data",
+        fn: function() {
+          return [
+            _c(
+              "v-btn",
+              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
+              [_vm._v("Reset")]
+            )
+          ]
+        },
+        proxy: true
+      }
+    ])
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -84001,8 +84525,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuetify/dist/vuetify.min.css */ "./node_modules/vuetify/dist/vuetify.min.css");
 /* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _components_App_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue");
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _components_App_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+
 
 
 
@@ -84016,10 +84543,36 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   template: '<App></App>',
   vuetify: new vuetify__WEBPACK_IMPORTED_MODULE_3___default.a({}),
   router: new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
-    routes: _routes__WEBPACK_IMPORTED_MODULE_6__["default"]
+    routes: _routes__WEBPACK_IMPORTED_MODULE_7__["default"]
   }),
   components: {
-    App: _components_App_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+    App: _components_App_vue__WEBPACK_IMPORTED_MODULE_6__["default"]
+  },
+  data: function data() {
+    return {
+      tags: [],
+      presets: []
+    };
+  },
+  mounted: function mounted() {
+    this.getTags();
+    this.getPresets();
+  },
+  methods: {
+    getTags: function getTags() {
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/tags').then(function (response) {
+        _this.tags = response.data.data;
+      });
+    },
+    getPresets: function getPresets() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/presets').then(function (response) {
+        _this2.presets = response.data.data;
+      });
+    }
   }
 }).$mount('#app');
 
@@ -84735,8 +85288,12 @@ __webpack_require__.r(__webpack_exports__);
     }]
   }
 }, {
-  path: '/presets/:id',
-  component: _components_Preset_vue__WEBPACK_IMPORTED_MODULE_3__["default"]
+  path: '/presets/:name',
+  name: 'preset',
+  component: _components_Preset_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  props: {
+    resource: '/api/v1/entities'
+  }
 }]);
 
 /***/ }),

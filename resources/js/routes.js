@@ -97,7 +97,11 @@ export default [
         },
     },
     {
-        path: '/presets/:id',
+        path: '/presets/:name',
+        name: 'preset',
         component: Preset,
+        props: {
+            resource: '/api/v1/entities',
+        },
     }
 ];

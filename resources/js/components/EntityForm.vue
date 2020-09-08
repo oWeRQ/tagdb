@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-autocomplete
+        <v-autocomplete v-if="tags"
             v-model="value.tags"
             :rules="rules.tags"
             :items="tags"

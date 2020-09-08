@@ -43,9 +43,10 @@
                             <v-list-item-title>Values</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-
+                </v-list-item-group>
+                <v-list-item-group color="primary" v-if="presets.length">
                     <v-subheader>Presets</v-subheader>
-                    <v-list-item v-for="preset in presets" :key="preset.id" link :to="{ path: '/presets/:id', params: { id: preset.id }}">
+                    <v-list-item v-for="preset in presets" :key="preset.id" link :to="{ name: 'preset', params: { name: preset.name }}">
                         <v-list-item-action>
                             <v-icon>mdi-database</v-icon>
                         </v-list-item-action>
@@ -76,16 +77,10 @@
     export default {
         data: () => ({
             drawer: null,
-            presets: [],
         }),
-        mounted() {
-            this.getPresets();
-        },
-        methods: {
-            getPresets() {
-                axios.get('/api/v1/presets').then(response => {
-                    this.presets = response.data.data;
-                });
+        computed: {
+            presets() {
+                return this.$root.presets;
             },
         },
     }

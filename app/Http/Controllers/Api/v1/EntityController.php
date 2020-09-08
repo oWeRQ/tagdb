@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Entity;
+use App\Preset;
 use App\Http\Resources\EntityResource;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
@@ -13,8 +14,14 @@ class EntityController extends Controller
     {
         $query = Entity::query();
 
-        $query->queryJson($request->get('query', '{}'));
-        $query->sort($request->get('sort'));
+        if ($request->has('preset')) {
+            $preset = Preset::firstWhere('name', $request->get('preset'));
+            $query->queryJson($preset->query);
+            $query->sort($preset->sort);
+        } else {
+            $query->queryJson($request->get('query', '{}'));
+            $query->sort($request->get('sort'));
+        }
 
         $perPage = $request->get('per_page', 100);
 

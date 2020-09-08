@@ -162,7 +162,6 @@
                 editedIndex: null,
                 editedItem: null,
                 multiSort: false,
-                tags: [],
                 queryTags: [],
                 search: '',
                 defaultItem: {
@@ -172,6 +171,9 @@
             }
         },
         computed: {
+            tags() {
+                return this.$root.tags;
+            },
             itemsTags() {
                 const tags = [];
                 for (let item of this.items) {
@@ -242,9 +244,6 @@
             },
             options: 'getItems',
         },
-        mounted() {
-            this.getTags();
-        },
         methods: {
             processItem(item) {
                 const contents = {};
@@ -252,11 +251,6 @@
                     contents[value.field.id] = value.content;
                 }
                 return { ...item, contents };
-            },
-            getTags() {
-                axios.get('/api/v1/tags').then(response => {
-                    this.tags = response.data.data;
-                });
             },
             getItems() {
                 this.loading = true;
