@@ -2506,6 +2506,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -2547,6 +2576,8 @@ function queryPaginate(options) {
       loading: true,
       total: 0,
       items: [],
+      selected: [],
+      selectedTag: null,
       options: {},
       editedValid: false,
       editedIndex: null,
@@ -2796,6 +2827,37 @@ function queryPaginate(options) {
     reset: function reset() {
       this.search = '';
       this.queryTagNames = [];
+    },
+    selectedToggleTag: function selectedToggleTag(state) {
+      var _this7 = this;
+
+      var tag = this.tags.find(function (tag) {
+        return tag.name === _this7.selectedTag;
+      });
+      var items = this.selected.filter(function (item) {
+        var idx = item.tags.findIndex(function (tag) {
+          return tag.name === _this7.selectedTag;
+        });
+
+        if (state && idx === -1) {
+          item.tags.push(tag);
+          return true;
+        }
+
+        if (!state && idx !== -1) {
+          item.tags.splice(idx, 1);
+          return true;
+        }
+
+        return false;
+      });
+      var requests = items.map(function (item) {
+        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(_this7.resource + '/' + item.id, {
+          tags: item.tags
+        });
+      });
+      this.selected = [];
+      Promise.all(requests).then(this.getItems);
     }
   }
 });
@@ -24699,6 +24761,7 @@ var render = function() {
   return _c("v-data-table", {
     staticClass: "elevation-1",
     attrs: {
+      "show-select": true,
       headers: _vm.headers,
       items: _vm.items,
       options: _vm.options,
@@ -24721,187 +24784,267 @@ var render = function() {
           key: "top",
           fn: function() {
             return [
-              _c(
-                "v-toolbar",
-                { attrs: { flat: "", color: "white" } },
-                [
-                  _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
-                  _vm._v(" "),
-                  _c("v-divider", {
-                    staticClass: "mx-4",
-                    attrs: { inset: "", vertical: "" }
-                  }),
-                  _vm._v(" "),
-                  _c("v-text-field", {
-                    staticClass: "shrink mr-3",
-                    attrs: {
-                      label: "Search",
-                      dense: "",
-                      solo: "",
-                      "single-line": "",
-                      "hide-details": "",
-                      clearable: ""
-                    },
-                    model: {
-                      value: _vm.search,
-                      callback: function($$v) {
-                        _vm.search = $$v
-                      },
-                      expression: "search"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("v-autocomplete", {
-                    staticClass: "shrink mr-3",
-                    attrs: {
-                      items: _vm.tags,
-                      color: "blue-grey lighten-2",
-                      label: "Tags",
-                      "item-text": "name",
-                      "item-value": "name",
-                      chips: "",
-                      multiple: "",
-                      clearable: "",
-                      dense: "",
-                      solo: "",
-                      "single-line": "",
-                      "hide-details": "",
-                      "hide-selected": "",
-                      "hide-no-data": "",
-                      "deletable-chips": ""
-                    },
-                    model: {
-                      value: _vm.queryTagNames,
-                      callback: function($$v) {
-                        _vm.queryTagNames = $$v
-                      },
-                      expression: "queryTagNames"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "v-icon",
-                    { staticClass: "mr-3", on: { click: _vm.getItems } },
-                    [_vm._v("mdi-refresh")]
-                  ),
-                  _vm._v(" "),
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { dark: "", color: "indigo" },
-                      on: {
-                        click: function($event) {
-                          return _vm.editItem(_vm.defaultItem)
-                        }
-                      }
-                    },
+              _vm.selected.length
+                ? _c(
+                    "v-toolbar",
+                    { attrs: { flat: "", dark: "", color: "grey darken-2" } },
                     [
-                      _c("v-icon", { attrs: { dark: "", left: "" } }, [
-                        _vm._v("mdi-plus")
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { icon: "" },
+                          on: {
+                            click: function($event) {
+                              _vm.selected = []
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("mdi-close")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c("v-toolbar-title", [
+                        _vm._v(_vm._s(_vm.selected.length) + " selected")
                       ]),
-                      _vm._v("\n                Add\n            ")
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c("v-autocomplete", {
+                        style: { maxWidth: "240px" },
+                        attrs: {
+                          items: _vm.tags,
+                          "item-text": "name",
+                          label: "Tag",
+                          "hide-details": "",
+                          "single-line": ""
+                        },
+                        model: {
+                          value: _vm.selectedTag,
+                          callback: function($$v) {
+                            _vm.selectedTag = $$v
+                          },
+                          expression: "selectedTag"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { icon: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.selectedToggleTag(true)
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("mdi-tag-plus")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { icon: "" },
+                          on: {
+                            click: function($event) {
+                              return _vm.selectedToggleTag(false)
+                            }
+                          }
+                        },
+                        [_c("v-icon", [_vm._v("mdi-tag-minus")])],
+                        1
+                      )
                     ],
                     1
-                  ),
-                  _vm._v(" "),
-                  _vm.editedItem
-                    ? _c(
-                        "v-dialog",
+                  )
+                : _c(
+                    "v-toolbar",
+                    { attrs: { flat: "", color: "white" } },
+                    [
+                      _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
+                      _vm._v(" "),
+                      _c("v-divider", {
+                        staticClass: "mx-4",
+                        attrs: { inset: "", vertical: "" }
+                      }),
+                      _vm._v(" "),
+                      _c("v-text-field", {
+                        staticClass: "shrink mr-3",
+                        attrs: {
+                          label: "Search",
+                          dense: "",
+                          solo: "",
+                          "single-line": "",
+                          "hide-details": "",
+                          clearable: ""
+                        },
+                        model: {
+                          value: _vm.search,
+                          callback: function($$v) {
+                            _vm.search = $$v
+                          },
+                          expression: "search"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("v-autocomplete", {
+                        staticClass: "shrink mr-3",
+                        attrs: {
+                          items: _vm.tags,
+                          color: "blue-grey lighten-2",
+                          label: "Tags",
+                          "item-text": "name",
+                          "item-value": "name",
+                          chips: "",
+                          multiple: "",
+                          clearable: "",
+                          dense: "",
+                          solo: "",
+                          "single-line": "",
+                          "hide-details": "",
+                          "hide-selected": "",
+                          "hide-no-data": "",
+                          "deletable-chips": ""
+                        },
+                        model: {
+                          value: _vm.queryTagNames,
+                          callback: function($$v) {
+                            _vm.queryTagNames = $$v
+                          },
+                          expression: "queryTagNames"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "v-icon",
+                        { staticClass: "mr-3", on: { click: _vm.getItems } },
+                        [_vm._v("mdi-refresh")]
+                      ),
+                      _vm._v(" "),
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
                         {
-                          attrs: { "max-width": "500px" },
-                          model: {
-                            value: _vm.dialog,
-                            callback: function($$v) {
-                              _vm.dialog = $$v
-                            },
-                            expression: "dialog"
+                          attrs: { dark: "", color: "indigo" },
+                          on: {
+                            click: function($event) {
+                              return _vm.editItem(_vm.defaultItem)
+                            }
                           }
                         },
                         [
-                          _c(
-                            "v-form",
+                          _c("v-icon", { attrs: { dark: "", left: "" } }, [
+                            _vm._v("mdi-plus")
+                          ]),
+                          _vm._v("\n                Add\n            ")
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _vm.editedItem
+                        ? _c(
+                            "v-dialog",
                             {
-                              ref: "form",
-                              on: {
-                                submit: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.save($event)
-                                }
-                              },
+                              attrs: { "max-width": "500px" },
                               model: {
-                                value: _vm.editedValid,
+                                value: _vm.dialog,
                                 callback: function($$v) {
-                                  _vm.editedValid = $$v
+                                  _vm.dialog = $$v
                                 },
-                                expression: "editedValid"
+                                expression: "dialog"
                               }
                             },
                             [
                               _c(
-                                "v-card",
+                                "v-form",
+                                {
+                                  ref: "form",
+                                  on: {
+                                    submit: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.save($event)
+                                    }
+                                  },
+                                  model: {
+                                    value: _vm.editedValid,
+                                    callback: function($$v) {
+                                      _vm.editedValid = $$v
+                                    },
+                                    expression: "editedValid"
+                                  }
+                                },
                                 [
-                                  _c("v-card-title", [
-                                    _c("span", { staticClass: "headline" }, [
-                                      _vm._v(
-                                        _vm._s(
-                                          _vm.editedIndex > -1
-                                            ? "Update"
-                                            : "Create"
+                                  _c(
+                                    "v-card",
+                                    [
+                                      _c("v-card-title", [
+                                        _c(
+                                          "span",
+                                          { staticClass: "headline" },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.editedIndex > -1
+                                                  ? "Update"
+                                                  : "Create"
+                                              )
+                                            )
+                                          ]
                                         )
-                                      )
-                                    ])
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-card-text",
-                                    [
-                                      _c("entity-form", {
-                                        attrs: {
-                                          editedFields: _vm.editedFields,
-                                          tags: _vm.tags
-                                        },
-                                        model: {
-                                          value: _vm.editedItem,
-                                          callback: function($$v) {
-                                            _vm.editedItem = $$v
-                                          },
-                                          expression: "editedItem"
-                                        }
-                                      })
-                                    ],
-                                    1
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "v-card-actions",
-                                    [
-                                      _c("v-spacer"),
+                                      ]),
                                       _vm._v(" "),
                                       _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            color: "blue darken-1",
-                                            text: "",
-                                            type: "submit",
-                                            disabled: !_vm.editedValid
-                                          }
-                                        },
-                                        [_vm._v("Save")]
+                                        "v-card-text",
+                                        [
+                                          _c("entity-form", {
+                                            attrs: {
+                                              editedFields: _vm.editedFields,
+                                              tags: _vm.tags
+                                            },
+                                            model: {
+                                              value: _vm.editedItem,
+                                              callback: function($$v) {
+                                                _vm.editedItem = $$v
+                                              },
+                                              expression: "editedItem"
+                                            }
+                                          })
+                                        ],
+                                        1
                                       ),
                                       _vm._v(" "),
                                       _c(
-                                        "v-btn",
-                                        {
-                                          attrs: {
-                                            color: "grey darken-1",
-                                            text: ""
-                                          },
-                                          on: { click: _vm.close }
-                                        },
-                                        [_vm._v("Cancel")]
+                                        "v-card-actions",
+                                        [
+                                          _c("v-spacer"),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                color: "blue darken-1",
+                                                text: "",
+                                                type: "submit",
+                                                disabled: !_vm.editedValid
+                                              }
+                                            },
+                                            [_vm._v("Save")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                color: "grey darken-1",
+                                                text: ""
+                                              },
+                                              on: { click: _vm.close }
+                                            },
+                                            [_vm._v("Cancel")]
+                                          )
+                                        ],
+                                        1
                                       )
                                     ],
                                     1
@@ -24912,13 +25055,10 @@ var render = function() {
                             ],
                             1
                           )
-                        ],
-                        1
-                      )
-                    : _vm._e()
-                ],
-                1
-              )
+                        : _vm._e()
+                    ],
+                    1
+                  )
             ]
           },
           proxy: true
@@ -25069,7 +25209,14 @@ var render = function() {
       ],
       null,
       true
-    )
+    ),
+    model: {
+      value: _vm.selected,
+      callback: function($$v) {
+        _vm.selected = $$v
+      },
+      expression: "selected"
+    }
   })
 }
 var staticRenderFns = []

@@ -1,5 +1,7 @@
 <template>
     <v-data-table
+        v-model="selected"
+        :show-select="true"
         :headers="headers"
         :items="items"
         :options.sync="options"
@@ -13,7 +15,34 @@
         class="elevation-1"
     >
         <template v-slot:top>
-            <v-toolbar flat color="white">
+            <v-toolbar v-if="selected.length" flat dark color="grey darken-2">
+                <v-btn icon @click="selected=[]">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+
+                <v-toolbar-title>{{ selected.length }} selected</v-toolbar-title>
+
+                <v-spacer></v-spacer>
+
+                <v-autocomplete
+                    v-model="selectedTag"
+                    :items="tags"
+                    item-text="name"
+                    label="Tag"
+                    hide-details
+                    single-line
+                    :style="{maxWidth: '240px'}"
+                ></v-autocomplete>
+
+                <v-btn icon @click="selectedToggleTag(true)">
+                    <v-icon>mdi-tag-plus</v-icon>
+                </v-btn>
+
+                <v-btn icon @click="selectedToggleTag(false)">
+                    <v-icon>mdi-tag-minus</v-icon>
+                </v-btn>
+            </v-toolbar>
+            <v-toolbar v-else flat color="white">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-text-field
@@ -149,6 +178,8 @@
                 loading: true,
                 total: 0,
                 items: [],
+                selected: [],
+                selectedTag: null,
                 options: {},
                 editedValid: false,
                 editedIndex: null,
@@ -301,6 +332,29 @@
             reset() {
                 this.search = '';
                 this.queryTagNames = [];
+            },
+            selectedToggleTag(state) {
+                const tag = this.tags.find(tag => tag.name === this.selectedTag);
+
+                const items = this.selected.filter(item => {
+                    const idx = item.tags.findIndex(tag => tag.name === this.selectedTag);
+                    if (state && idx === -1) {
+                        item.tags.push(tag);
+                        return true;
+                    }
+                    if (!state && idx !== -1) {
+                        item.tags.splice(idx, 1);
+                        return true;
+                    }
+                    return false;
+                });
+
+                const requests = items.map(item => {
+                    return axios.put(this.resource + '/' + item.id, {tags: item.tags});
+                });
+
+                this.selected = [];
+                Promise.all(requests).then(this.getItems);
             },
         },
     };
