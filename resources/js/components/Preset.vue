@@ -59,14 +59,6 @@
     import truncate from '../functions/truncate';
     import EntityForm from './EntityForm';
 
-    function getFields(items) {
-        let fields = [];
-        for (let item of items) {
-            fields = [...fields, ...item.fields];
-        }
-        return fields;
-    }
-
     function queryPaginate(options) {
         if (!options.sortBy)
             return;
@@ -126,10 +118,10 @@
                 return tags;
             },
             editedFields() {
-                return getFields(this.editedItem.tags);
+                return this.editedItem.tags.flatMap(item => item.fields);
             },
             displayFields() {
-                return getFields(this.itemsTags);
+                return this.itemsTags.flatMap(item => item.fields);
             },
             displaySlots() {
                 return this.displayFields.map((field) => {

@@ -2512,26 +2512,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-function getFields(items) {
-  var fields = [];
-
-  var _iterator = _createForOfIteratorHelper(items),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var item = _step.value;
-      fields = [].concat(_toConsumableArray(fields), _toConsumableArray(item.fields));
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  return fields;
-}
-
 function queryPaginate(options) {
   if (!options.sortBy) return;
   return {
@@ -2572,7 +2552,7 @@ function queryPaginate(options) {
       editedIndex: null,
       editedItem: null,
       multiSort: false,
-      queryTags: [],
+      queryTagNames: [],
       search: '',
       defaultItem: {
         tags: [],
@@ -2587,50 +2567,57 @@ function queryPaginate(options) {
     itemsTags: function itemsTags() {
       var tags = [];
 
-      var _iterator2 = _createForOfIteratorHelper(this.items),
-          _step2;
+      var _iterator = _createForOfIteratorHelper(this.items),
+          _step;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var item = _step2.value;
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var item = _step.value;
 
-          var _iterator3 = _createForOfIteratorHelper(item.tags),
-              _step3;
+          var _iterator2 = _createForOfIteratorHelper(item.tags),
+              _step2;
 
           try {
             var _loop = function _loop() {
-              var tag = _step3.value;
+              var tag = _step2.value;
               if (!tags.some(function (t) {
                 return t.id === tag.id;
               })) tags.push(tag);
             };
 
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
               _loop();
             }
           } catch (err) {
-            _iterator3.e(err);
+            _iterator2.e(err);
           } finally {
-            _iterator3.f();
+            _iterator2.f();
           }
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator2.f();
+        _iterator.f();
       }
 
       return tags;
     },
-    editedFields: function editedFields() {
-      return getFields(this.editedItem.tags);
-    },
-    displayFields: function displayFields() {
+    queryTags: function queryTags() {
       var _this = this;
 
-      return getFields(this.tags.filter(function (tag) {
-        return _this.queryTags.includes(tag.name);
-      }));
+      return this.tags.filter(function (tag) {
+        return _this.queryTagNames.includes(tag.name);
+      });
+    },
+    editedFields: function editedFields() {
+      return this.editedItem.tags.flatMap(function (item) {
+        return item.fields;
+      });
+    },
+    displayFields: function displayFields() {
+      return this.queryTags.flatMap(function (item) {
+        return item.fields;
+      });
     },
     displaySlots: function displaySlots() {
       return this.displayFields.map(function (field) {
@@ -2678,7 +2665,7 @@ function queryPaginate(options) {
     },
     query: function query() {
       var query = JSON.stringify({
-        tags: this.queryTags,
+        tags: this.queryTagNames,
         search: this.search
       });
       return new URLSearchParams(_objectSpread({
@@ -2691,7 +2678,7 @@ function queryPaginate(options) {
       clearTimeout(this._timeout_search);
       this._timeout_search = setTimeout(this.getItems, 500);
     },
-    queryTags: function queryTags() {
+    queryTagNames: function queryTagNames() {
       var _this2 = this;
 
       var sortable = this.options.sortBy.map(function (value) {
@@ -2721,18 +2708,18 @@ function queryPaginate(options) {
     processItem: function processItem(item) {
       var contents = {};
 
-      var _iterator4 = _createForOfIteratorHelper(item.values),
-          _step4;
+      var _iterator3 = _createForOfIteratorHelper(item.values),
+          _step3;
 
       try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var value = _step4.value;
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var value = _step3.value;
           contents[value.field.id] = value.content;
         }
       } catch (err) {
-        _iterator4.e(err);
+        _iterator3.e(err);
       } finally {
-        _iterator4.f();
+        _iterator3.f();
       }
 
       return _objectSpread(_objectSpread({}, item), {}, {
@@ -2793,7 +2780,7 @@ function queryPaginate(options) {
 
       if (this.editedIndex < 0) {
         this.editedItem.tags = this.tags.filter(function (tag) {
-          return _this6.queryTags.includes(tag.name);
+          return _this6.queryTagNames.includes(tag.name);
         });
       }
 
@@ -2808,7 +2795,7 @@ function queryPaginate(options) {
     },
     reset: function reset() {
       this.search = '';
-      this.queryTags = [];
+      this.queryTagNames = [];
     }
   }
 });
@@ -2911,26 +2898,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-function getFields(items) {
-  var fields = [];
-
-  var _iterator = _createForOfIteratorHelper(items),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var item = _step.value;
-      fields = [].concat(_toConsumableArray(fields), _toConsumableArray(item.fields));
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  return fields;
-}
-
 function queryPaginate(options) {
   if (!options.sortBy) return;
   return {
@@ -2982,46 +2949,50 @@ function queryPaginate(options) {
     itemsTags: function itemsTags() {
       var tags = [];
 
-      var _iterator2 = _createForOfIteratorHelper(this.items),
-          _step2;
+      var _iterator = _createForOfIteratorHelper(this.items),
+          _step;
 
       try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var item = _step2.value;
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var item = _step.value;
 
-          var _iterator3 = _createForOfIteratorHelper(item.tags),
-              _step3;
+          var _iterator2 = _createForOfIteratorHelper(item.tags),
+              _step2;
 
           try {
             var _loop = function _loop() {
-              var tag = _step3.value;
+              var tag = _step2.value;
               if (!tags.some(function (t) {
                 return t.id === tag.id;
               })) tags.push(tag);
             };
 
-            for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
               _loop();
             }
           } catch (err) {
-            _iterator3.e(err);
+            _iterator2.e(err);
           } finally {
-            _iterator3.f();
+            _iterator2.f();
           }
         }
       } catch (err) {
-        _iterator2.e(err);
+        _iterator.e(err);
       } finally {
-        _iterator2.f();
+        _iterator.f();
       }
 
       return tags;
     },
     editedFields: function editedFields() {
-      return getFields(this.editedItem.tags);
+      return this.editedItem.tags.flatMap(function (item) {
+        return item.fields;
+      });
     },
     displayFields: function displayFields() {
-      return getFields(this.itemsTags);
+      return this.itemsTags.flatMap(function (item) {
+        return item.fields;
+      });
     },
     displaySlots: function displaySlots() {
       return this.displayFields.map(function (field) {
@@ -3068,18 +3039,18 @@ function queryPaginate(options) {
     processItem: function processItem(item) {
       var contents = {};
 
-      var _iterator4 = _createForOfIteratorHelper(item.values),
-          _step4;
+      var _iterator3 = _createForOfIteratorHelper(item.values),
+          _step3;
 
       try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var value = _step4.value;
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var value = _step3.value;
           contents[value.field.id] = value.content;
         }
       } catch (err) {
-        _iterator4.e(err);
+        _iterator3.e(err);
       } finally {
-        _iterator4.f();
+        _iterator3.f();
       }
 
       return _objectSpread(_objectSpread({}, item), {}, {
@@ -24800,11 +24771,11 @@ var render = function() {
                       "deletable-chips": ""
                     },
                     model: {
-                      value: _vm.queryTags,
+                      value: _vm.queryTagNames,
                       callback: function($$v) {
-                        _vm.queryTags = $$v
+                        _vm.queryTagNames = $$v
                       },
-                      expression: "queryTags"
+                      expression: "queryTagNames"
                     }
                   }),
                   _vm._v(" "),
@@ -25007,11 +24978,11 @@ var render = function() {
                 {
                   attrs: { multiple: "", "active-class": "primary--text" },
                   model: {
-                    value: _vm.queryTags,
+                    value: _vm.queryTagNames,
                     callback: function($$v) {
-                      _vm.queryTags = $$v
+                      _vm.queryTagNames = $$v
                     },
-                    expression: "queryTags"
+                    expression: "queryTagNames"
                   }
                 },
                 _vm._l(item.tags, function(tag) {

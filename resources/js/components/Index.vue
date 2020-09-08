@@ -27,7 +27,7 @@
                     class="shrink mr-3"
                 ></v-text-field>
                 <v-autocomplete
-                    v-model="queryTags"
+                    v-model="queryTagNames"
                     :items="tags"
                     color="blue-grey lighten-2"
                     label="Tags"
@@ -83,7 +83,7 @@
             </span>
         </template>
         <template v-slot:item.tags="{ item }">
-            <v-chip-group multiple active-class="primary--text" v-model="queryTags">
+            <v-chip-group multiple active-class="primary--text" v-model="queryTagNames">
                 <v-chip v-for="tag in item.tags" :key="tag.name" :value="tag.name" small outlined>
                     {{ tag.name }}
                     <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
@@ -113,14 +113,6 @@
     import date from '../functions/date';
     import truncate from '../functions/truncate';
     import EntityForm from './EntityForm';
-
-    function getFields(items) {
-        let fields = [];
-        for (let item of items) {
-            fields = [...fields, ...item.fields];
-        }
-        return fields;
-    }
 
     function queryPaginate(options) {
         if (!options.sortBy)
@@ -162,7 +154,7 @@
                 editedIndex: null,
                 editedItem: null,
                 multiSort: false,
-                queryTags: [],
+                queryTagNames: [],
                 search: '',
                 defaultItem: {
                     tags: [],
@@ -184,11 +176,14 @@
                 }
                 return tags;
             },
+            queryTags() {
+                return this.tags.filter(tag => this.queryTagNames.includes(tag.name));
+            },
             editedFields() {
-                return getFields(this.editedItem.tags);
+                return this.editedItem.tags.flatMap(item => item.fields);
             },
             displayFields() {
-                return getFields(this.tags.filter(tag => this.queryTags.includes(tag.name)));
+                return this.queryTags.flatMap(item => item.fields);
             },
             displaySlots() {
                 return this.displayFields.map((field) => {
@@ -215,7 +210,7 @@
             },
             query() {
                 const query = JSON.stringify({
-                    tags: this.queryTags,
+                    tags: this.queryTagNames,
                     search: this.search,
                 });
 
@@ -227,7 +222,7 @@
                 clearTimeout(this._timeout_search);
                 this._timeout_search = setTimeout(this.getItems, 500);
             },
-            queryTags() {
+            queryTagNames() {
                 const sortable = this.options.sortBy.map(value => this.sortable.includes(value));
                 if (!sortable.every(Boolean)) {
                     this.options.sortBy = this.options.sortBy.filter((v, i) => sortable[i]);
@@ -292,7 +287,7 @@
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
                 if (this.editedIndex < 0) {
-                    this.editedItem.tags = this.tags.filter(tag => this.queryTags.includes(tag.name));
+                    this.editedItem.tags = this.tags.filter(tag => this.queryTagNames.includes(tag.name));
                 }
                 this.dialog = true;
             },
@@ -305,7 +300,7 @@
             },
             reset() {
                 this.search = '';
-                this.queryTags = [];
+                this.queryTagNames = [];
             },
         },
     };
