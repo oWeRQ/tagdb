@@ -9,10 +9,11 @@
         :footer-props="{
             itemsPerPageOptions: [10, 20, 50, 100],
         }"
-        class="elevation-1"
+        :fixed-header="true"
+        class="fill-height d-flex flex-column"
     >
         <template v-slot:top>
-            <v-toolbar flat color="white">
+            <v-toolbar flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-btn dark color="indigo" @click="editItem(defaultItem)">

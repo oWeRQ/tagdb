@@ -64,9 +64,7 @@
         </v-app-bar>
 
         <v-main>
-            <v-container fluid>
-                <router-view></router-view>
-            </v-container>
+            <router-view></router-view>
         </v-main>
     </v-app>
 </template>
@@ -85,3 +83,9 @@
         },
     }
 </script>
+
+<style>
+    .v-data-table__wrapper {
+        flex: 1 1 0;
+    }
+</style>

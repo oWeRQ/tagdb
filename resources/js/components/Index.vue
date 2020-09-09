@@ -12,10 +12,11 @@
         :footer-props="{
             itemsPerPageOptions: [10, 20, 50, 100],
         }"
-        class="elevation-1"
+        :fixed-header="true"
+        class="fill-height d-flex flex-column"
     >
         <template v-slot:top>
-            <v-toolbar v-if="selected.length" flat dark color="grey darken-2">
+            <v-toolbar v-if="selected.length" flat color="grey lighten-2" class="flex-grow-0">
                 <v-btn icon @click="selected=[]">
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
@@ -42,7 +43,7 @@
                     <v-icon>mdi-tag-minus</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-toolbar v-else flat color="white">
+            <v-toolbar v-else flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-autocomplete
