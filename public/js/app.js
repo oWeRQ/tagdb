@@ -2535,6 +2535,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 
 
 
@@ -24868,25 +24870,6 @@ var render = function() {
                         attrs: { inset: "", vertical: "" }
                       }),
                       _vm._v(" "),
-                      _c("v-text-field", {
-                        staticClass: "shrink mr-3",
-                        attrs: {
-                          label: "Search",
-                          dense: "",
-                          solo: "",
-                          "single-line": "",
-                          "hide-details": "",
-                          clearable: ""
-                        },
-                        model: {
-                          value: _vm.search,
-                          callback: function($$v) {
-                            _vm.search = $$v
-                          },
-                          expression: "search"
-                        }
-                      }),
-                      _vm._v(" "),
                       _c("v-autocomplete", {
                         staticClass: "shrink mr-3",
                         attrs: {
@@ -24915,10 +24898,34 @@ var render = function() {
                         }
                       }),
                       _vm._v(" "),
+                      _c("v-text-field", {
+                        staticClass: "shrink mr-2",
+                        attrs: {
+                          label: "Search",
+                          dense: "",
+                          solo: "",
+                          "single-line": "",
+                          "hide-details": "",
+                          clearable: ""
+                        },
+                        model: {
+                          value: _vm.search,
+                          callback: function($$v) {
+                            _vm.search = $$v
+                          },
+                          expression: "search"
+                        }
+                      }),
+                      _vm._v(" "),
                       _c(
-                        "v-icon",
-                        { staticClass: "mr-3", on: { click: _vm.getItems } },
-                        [_vm._v("mdi-refresh")]
+                        "v-btn",
+                        {
+                          staticClass: "mr-2",
+                          attrs: { icon: "" },
+                          on: { click: _vm.getItems }
+                        },
+                        [_c("v-icon", [_vm._v("mdi-magnify")])],
+                        1
                       ),
                       _vm._v(" "),
                       _c("v-spacer"),

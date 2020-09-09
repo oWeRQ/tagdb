@@ -45,16 +45,6 @@
             <v-toolbar v-else flat color="white">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
-                <v-text-field
-                    v-model="search"
-                    label="Search"
-                    dense
-                    solo
-                    single-line
-                    hide-details
-                    clearable
-                    class="shrink mr-3"
-                ></v-text-field>
                 <v-autocomplete
                     v-model="queryTagNames"
                     :items="tags"
@@ -74,7 +64,19 @@
                     deletable-chips
                     class="shrink mr-3"
                 ></v-autocomplete>
-                <v-icon @click="getItems" class="mr-3">mdi-refresh</v-icon>
+                <v-text-field
+                    v-model="search"
+                    label="Search"
+                    dense
+                    solo
+                    single-line
+                    hide-details
+                    clearable
+                    class="shrink mr-2"
+                ></v-text-field>
+                <v-btn icon @click="getItems" class="mr-2">
+                    <v-icon>mdi-magnify</v-icon>
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn dark color="indigo" @click="editItem(defaultItem)">
                     <v-icon dark left>mdi-plus</v-icon>
