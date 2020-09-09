@@ -2858,8 +2858,7 @@ function queryPaginate(options) {
           tags: item.tags
         });
       });
-      this.selected = [];
-      Promise.all(requests).then(this.getItems);
+      this.selected = []; // Promise.all(requests).then(this.getItems);
     }
   }
 });

@@ -357,7 +357,7 @@
                 });
 
                 this.selected = [];
-                Promise.all(requests).then(this.getItems);
+                // Promise.all(requests).then(this.getItems);
             },
         },
     };

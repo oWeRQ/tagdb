@@ -13,7 +13,7 @@ class TagController extends Controller
     {
         $perPage = $request->get('per_page', 100);
 
-        return TagResource::collection(Tag::paginate($perPage));
+        return TagResource::collection(Tag::orderByEntities()->paginate($perPage));
     }
 
     public function show($id)

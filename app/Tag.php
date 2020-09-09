@@ -20,6 +20,11 @@ class Tag extends Model
         return $this->hasMany('App\Field');
     }
 
+    public function scopeOrderByEntities($query)
+    {
+        $query->withCount('entities')->orderBy('entities_count', 'desc');
+    }
+
     public function updateFields(array $fields = null)
     {
         if (!is_array($fields))
