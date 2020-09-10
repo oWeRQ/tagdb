@@ -17,10 +17,6 @@
     >
         <template v-slot:top>
             <v-toolbar v-if="selected.length" flat color="grey lighten-2" class="flex-grow-0">
-                <v-btn icon @click="selected=[]">
-                    <v-icon>mdi-close</v-icon>
-                </v-btn>
-
                 <v-toolbar-title>{{ selected.length }} selected</v-toolbar-title>
 
                 <v-spacer></v-spacer>
@@ -43,7 +39,7 @@
                     <v-icon>mdi-tag-minus</v-icon>
                 </v-btn>
             </v-toolbar>
-            <v-toolbar v-else flat color="white" class="flex-grow-0">
+            <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-autocomplete
@@ -79,8 +75,8 @@
                     <v-icon>mdi-magnify</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn dark color="indigo" @click="editItem(defaultItem)">
-                    <v-icon dark left>mdi-plus</v-icon>
+                <v-btn text large color="grey darken-2" @click="editItem(defaultItem)">
+                    <v-icon left>mdi-plus</v-icon>
                     Add
                 </v-btn>
                 <v-dialog v-if="editedItem" v-model="editedDialog" max-width="500px">
@@ -334,6 +330,8 @@
             },
             selectedToggleTag(state) {
                 const tag = this.tags.find(tag => tag.name === this.selectedTag);
+                if (!tag)
+                    return;
 
                 const items = this.selected.filter(item => {
                     const idx = item.tags.findIndex(tag => tag.name === this.selectedTag);

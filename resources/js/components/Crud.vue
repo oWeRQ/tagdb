@@ -16,8 +16,8 @@
             <v-toolbar flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn dark color="indigo" @click="editItem(defaultItem)">
-                    <v-icon dark left>mdi-plus</v-icon>
+                <v-btn text large color="grey darken-2" @click="editItem(defaultItem)">
+                    <v-icon left>mdi-plus</v-icon>
                     Add
                 </v-btn>
                 <v-dialog v-model="editedDialog" max-width="500px">

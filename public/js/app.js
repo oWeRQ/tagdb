@@ -2565,10 +2565,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -2858,6 +2854,7 @@ function queryPaginate(options) {
       var tag = this.tags.find(function (tag) {
         return tag.name === _this6.selectedTag;
       });
+      if (!tag) return;
       var items = this.selected.filter(function (item) {
         var idx = item.tags.findIndex(function (tag) {
           return tag.name === _this6.selectedTag;
@@ -24382,7 +24379,7 @@ var render = function() {
                 _c(
                   "v-btn",
                   {
-                    attrs: { dark: "", color: "indigo" },
+                    attrs: { text: "", large: "", color: "grey darken-2" },
                     on: {
                       click: function($event) {
                         return _vm.editItem(_vm.defaultItem)
@@ -24390,9 +24387,7 @@ var render = function() {
                     }
                   },
                   [
-                    _c("v-icon", { attrs: { dark: "", left: "" } }, [
-                      _vm._v("mdi-plus")
-                    ]),
+                    _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
                     _vm._v("\n                Add\n            ")
                   ],
                   1
@@ -24918,20 +24913,6 @@ var render = function() {
                       attrs: { flat: "", color: "grey lighten-2" }
                     },
                     [
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { icon: "" },
-                          on: {
-                            click: function($event) {
-                              _vm.selected = []
-                            }
-                          }
-                        },
-                        [_c("v-icon", [_vm._v("mdi-close")])],
-                        1
-                      ),
-                      _vm._v(" "),
                       _c("v-toolbar-title", [
                         _vm._v(_vm._s(_vm.selected.length) + " selected")
                       ]),
@@ -24986,202 +24967,205 @@ var render = function() {
                     ],
                     1
                   )
-                : _c(
-                    "v-toolbar",
+                : _vm._e(),
+              _vm._v(" "),
+              _c(
+                "v-toolbar",
+                {
+                  directives: [
                     {
-                      staticClass: "flex-grow-0",
-                      attrs: { flat: "", color: "white" }
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.selected.length,
+                      expression: "!selected.length"
+                    }
+                  ],
+                  staticClass: "flex-grow-0",
+                  attrs: { flat: "", color: "white" }
+                },
+                [
+                  _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
+                  _vm._v(" "),
+                  _c("v-divider", {
+                    staticClass: "mx-4",
+                    attrs: { inset: "", vertical: "" }
+                  }),
+                  _vm._v(" "),
+                  _c("v-autocomplete", {
+                    staticClass: "shrink mr-3",
+                    attrs: {
+                      items: _vm.tags,
+                      color: "blue-grey lighten-2",
+                      label: "Tags",
+                      "item-text": "name",
+                      "item-value": "name",
+                      chips: "",
+                      multiple: "",
+                      clearable: "",
+                      dense: "",
+                      solo: "",
+                      "single-line": "",
+                      "hide-details": "",
+                      "hide-selected": "",
+                      "hide-no-data": "",
+                      "deletable-chips": ""
+                    },
+                    model: {
+                      value: _vm.query.tags,
+                      callback: function($$v) {
+                        _vm.$set(_vm.query, "tags", $$v)
+                      },
+                      expression: "query.tags"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("v-text-field", {
+                    staticClass: "shrink mr-2",
+                    attrs: {
+                      label: "Search",
+                      dense: "",
+                      solo: "",
+                      "single-line": "",
+                      "hide-details": "",
+                      clearable: ""
+                    },
+                    model: {
+                      value: _vm.query.search,
+                      callback: function($$v) {
+                        _vm.$set(_vm.query, "search", $$v)
+                      },
+                      expression: "query.search"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "mr-2",
+                      attrs: { icon: "" },
+                      on: { click: _vm.getItems }
+                    },
+                    [_c("v-icon", [_vm._v("mdi-magnify")])],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { text: "", large: "", color: "grey darken-2" },
+                      on: {
+                        click: function($event) {
+                          return _vm.editItem(_vm.defaultItem)
+                        }
+                      }
                     },
                     [
-                      _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
-                      _vm._v(" "),
-                      _c("v-divider", {
-                        staticClass: "mx-4",
-                        attrs: { inset: "", vertical: "" }
-                      }),
-                      _vm._v(" "),
-                      _c("v-autocomplete", {
-                        staticClass: "shrink mr-3",
-                        attrs: {
-                          items: _vm.tags,
-                          color: "blue-grey lighten-2",
-                          label: "Tags",
-                          "item-text": "name",
-                          "item-value": "name",
-                          chips: "",
-                          multiple: "",
-                          clearable: "",
-                          dense: "",
-                          solo: "",
-                          "single-line": "",
-                          "hide-details": "",
-                          "hide-selected": "",
-                          "hide-no-data": "",
-                          "deletable-chips": ""
-                        },
-                        model: {
-                          value: _vm.query.tags,
-                          callback: function($$v) {
-                            _vm.$set(_vm.query, "tags", $$v)
-                          },
-                          expression: "query.tags"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("v-text-field", {
-                        staticClass: "shrink mr-2",
-                        attrs: {
-                          label: "Search",
-                          dense: "",
-                          solo: "",
-                          "single-line": "",
-                          "hide-details": "",
-                          clearable: ""
-                        },
-                        model: {
-                          value: _vm.query.search,
-                          callback: function($$v) {
-                            _vm.$set(_vm.query, "search", $$v)
-                          },
-                          expression: "query.search"
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
+                      _c("v-icon", { attrs: { left: "" } }, [
+                        _vm._v("mdi-plus")
+                      ]),
+                      _vm._v("\n                Add\n            ")
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm.editedItem
+                    ? _c(
+                        "v-dialog",
                         {
-                          staticClass: "mr-2",
-                          attrs: { icon: "" },
-                          on: { click: _vm.getItems }
-                        },
-                        [_c("v-icon", [_vm._v("mdi-magnify")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c("v-spacer"),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { dark: "", color: "indigo" },
-                          on: {
-                            click: function($event) {
-                              return _vm.editItem(_vm.defaultItem)
-                            }
+                          attrs: { "max-width": "500px" },
+                          model: {
+                            value: _vm.editedDialog,
+                            callback: function($$v) {
+                              _vm.editedDialog = $$v
+                            },
+                            expression: "editedDialog"
                           }
                         },
                         [
-                          _c("v-icon", { attrs: { dark: "", left: "" } }, [
-                            _vm._v("mdi-plus")
-                          ]),
-                          _vm._v("\n                Add\n            ")
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _vm.editedItem
-                        ? _c(
-                            "v-dialog",
+                          _c(
+                            "v-form",
                             {
-                              attrs: { "max-width": "500px" },
+                              ref: "form",
+                              on: {
+                                submit: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.saveEdited($event)
+                                }
+                              },
                               model: {
-                                value: _vm.editedDialog,
+                                value: _vm.editedValid,
                                 callback: function($$v) {
-                                  _vm.editedDialog = $$v
+                                  _vm.editedValid = $$v
                                 },
-                                expression: "editedDialog"
+                                expression: "editedValid"
                               }
                             },
                             [
                               _c(
-                                "v-form",
-                                {
-                                  ref: "form",
-                                  on: {
-                                    submit: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.saveEdited($event)
-                                    }
-                                  },
-                                  model: {
-                                    value: _vm.editedValid,
-                                    callback: function($$v) {
-                                      _vm.editedValid = $$v
-                                    },
-                                    expression: "editedValid"
-                                  }
-                                },
+                                "v-card",
                                 [
-                                  _c(
-                                    "v-card",
-                                    [
-                                      _c("v-card-title", [
-                                        _c(
-                                          "span",
-                                          { staticClass: "headline" },
-                                          [
-                                            _vm._v(
-                                              _vm._s(
-                                                _vm.editedIndex > -1
-                                                  ? "Update"
-                                                  : "Create"
-                                              )
-                                            )
-                                          ]
+                                  _c("v-card-title", [
+                                    _c("span", { staticClass: "headline" }, [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.editedIndex > -1
+                                            ? "Update"
+                                            : "Create"
                                         )
-                                      ]),
+                                      )
+                                    ])
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-card-text",
+                                    [
+                                      _c("entity-form", {
+                                        attrs: {
+                                          editedFields: _vm.editedFields,
+                                          tags: _vm.tags
+                                        },
+                                        model: {
+                                          value: _vm.editedItem,
+                                          callback: function($$v) {
+                                            _vm.editedItem = $$v
+                                          },
+                                          expression: "editedItem"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "v-card-actions",
+                                    [
+                                      _c("v-spacer"),
                                       _vm._v(" "),
                                       _c(
-                                        "v-card-text",
-                                        [
-                                          _c("entity-form", {
-                                            attrs: {
-                                              editedFields: _vm.editedFields,
-                                              tags: _vm.tags
-                                            },
-                                            model: {
-                                              value: _vm.editedItem,
-                                              callback: function($$v) {
-                                                _vm.editedItem = $$v
-                                              },
-                                              expression: "editedItem"
-                                            }
-                                          })
-                                        ],
-                                        1
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "blue darken-1",
+                                            text: "",
+                                            type: "submit",
+                                            disabled: !_vm.editedValid
+                                          }
+                                        },
+                                        [_vm._v("Save")]
                                       ),
                                       _vm._v(" "),
                                       _c(
-                                        "v-card-actions",
-                                        [
-                                          _c("v-spacer"),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-btn",
-                                            {
-                                              attrs: {
-                                                color: "blue darken-1",
-                                                text: "",
-                                                type: "submit",
-                                                disabled: !_vm.editedValid
-                                              }
-                                            },
-                                            [_vm._v("Save")]
-                                          ),
-                                          _vm._v(" "),
-                                          _c(
-                                            "v-btn",
-                                            {
-                                              attrs: {
-                                                color: "grey darken-1",
-                                                text: ""
-                                              },
-                                              on: { click: _vm.closeEdited }
-                                            },
-                                            [_vm._v("Cancel")]
-                                          )
-                                        ],
-                                        1
+                                        "v-btn",
+                                        {
+                                          attrs: {
+                                            color: "grey darken-1",
+                                            text: ""
+                                          },
+                                          on: { click: _vm.closeEdited }
+                                        },
+                                        [_vm._v("Cancel")]
                                       )
                                     ],
                                     1
@@ -25192,10 +25176,13 @@ var render = function() {
                             ],
                             1
                           )
-                        : _vm._e()
-                    ],
-                    1
-                  )
+                        ],
+                        1
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
             ]
           },
           proxy: true
@@ -25424,7 +25411,7 @@ var render = function() {
                 _c(
                   "v-btn",
                   {
-                    attrs: { dark: "", color: "indigo" },
+                    attrs: { text: "", large: "", color: "grey darken-2" },
                     on: {
                       click: function($event) {
                         return _vm.editItem(_vm.defaultItem)
@@ -25432,9 +25419,7 @@ var render = function() {
                     }
                   },
                   [
-                    _c("v-icon", { attrs: { dark: "", left: "" } }, [
-                      _vm._v("mdi-plus")
-                    ]),
+                    _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
                     _vm._v("\n                Add\n            ")
                   ],
                   1
