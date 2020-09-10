@@ -2139,11 +2139,11 @@ function queryPaginate(options) {
   },
   data: function data() {
     return {
-      dialog: false,
       loading: true,
       total: 0,
       items: [],
       options: {},
+      editedDialog: false,
       editedValid: false,
       editedIndex: -1,
       editedItem: {}
@@ -2159,7 +2159,7 @@ function queryPaginate(options) {
         align: 'center'
       }]);
     },
-    query: function query() {
+    requestString: function requestString() {
       return new URLSearchParams(_objectSpread({}, queryPaginate(this.options))).toString();
     }
   },
@@ -2171,7 +2171,6 @@ function queryPaginate(options) {
     }
   },
   mounted: function mounted() {
-    // this.editedReset();
     this.getItems();
   },
   methods: {
@@ -2181,13 +2180,13 @@ function queryPaginate(options) {
       this.loading = true;
       this.items = [];
       this.total = 0;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.requestString).then(function (response) {
         _this.items = response.data.data;
         _this.total = response.data.meta.total;
         _this.loading = false;
       });
     },
-    save: function save() {
+    saveEdited: function saveEdited() {
       var _this2 = this;
 
       if (!this.editedValid) return;
@@ -2197,7 +2196,7 @@ function queryPaginate(options) {
           console.log('response', response);
           Object.assign(_this2.items[_this2.editedIndex], _this2.editedItem);
 
-          _this2.close();
+          _this2.closeEdited();
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
@@ -2205,7 +2204,7 @@ function queryPaginate(options) {
 
           _this2.items.push(response.data.data);
 
-          _this2.close();
+          _this2.closeEdited();
         });
       }
     },
@@ -2226,14 +2225,10 @@ function queryPaginate(options) {
       this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
-      this.dialog = true;
+      this.editedDialog = true;
     },
-    close: function close() {
-      this.dialog = false; // this.$nextTick(this.editedReset);
-    },
-    editedReset: function editedReset() {
-      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
-      this.editedIndex = -1;
+    closeEdited: function closeEdited() {
+      this.editedDialog = false;
     }
   }
 });
@@ -2574,19 +2569,21 @@ function queryPaginate(options) {
   },
   data: function data() {
     return {
-      dialog: false,
       loading: true,
       total: 0,
       items: [],
+      options: {},
       selected: [],
       selectedTag: null,
-      options: {},
+      editedDialog: false,
       editedValid: false,
       editedIndex: null,
       editedItem: null,
       multiSort: false,
-      queryTagNames: [],
-      search: '',
+      query: {
+        tags: [],
+        search: ''
+      },
       defaultItem: {
         tags: [],
         contents: {}
@@ -2639,7 +2636,7 @@ function queryPaginate(options) {
       var _this = this;
 
       return this.tags.filter(function (tag) {
-        return _this.queryTagNames.includes(tag.name);
+        return _this.query.tags.includes(tag.name);
       });
     },
     editedFields: function editedFields() {
@@ -2696,22 +2693,18 @@ function queryPaginate(options) {
         return header.value;
       });
     },
-    query: function query() {
-      var query = JSON.stringify({
-        tags: this.queryTagNames,
-        search: this.search
-      });
+    requestString: function requestString() {
       return new URLSearchParams(_objectSpread({
-        query: query
+        query: JSON.stringify(this.query)
       }, queryPaginate(this.options))).toString();
     }
   },
   watch: {
-    search: function search() {
+    'query.search': function querySearch() {
       clearTimeout(this._timeout_search);
       this._timeout_search = setTimeout(this.getItems, 500);
     },
-    queryTagNames: function queryTagNames() {
+    'query.tags': function queryTags() {
       var _this2 = this;
 
       var sortable = this.options.sortBy.map(function (value) {
@@ -2763,13 +2756,13 @@ function queryPaginate(options) {
       var _this3 = this;
 
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.requestString).then(function (response) {
         _this3.items = response.data.data.map(_this3.processItem);
         _this3.total = response.data.meta.total;
         _this3.loading = false;
       });
     },
-    save: function save() {
+    saveEdited: function saveEdited() {
       var _this4 = this;
 
       if (!this.editedValid) return;
@@ -2779,7 +2772,7 @@ function queryPaginate(options) {
           console.log('response', response);
           Object.assign(_this4.items[_this4.editedIndex], _this4.processItem(response.data.data));
 
-          _this4.close();
+          _this4.closeEdited();
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
@@ -2787,7 +2780,7 @@ function queryPaginate(options) {
 
           _this4.items.splice(0, 0, _this4.processItem(response.data.data));
 
-          _this4.close();
+          _this4.closeEdited();
         });
       }
     },
@@ -2805,40 +2798,32 @@ function queryPaginate(options) {
       }
     },
     editItem: function editItem(item) {
-      var _this6 = this;
-
       this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
 
       if (this.editedIndex < 0) {
-        this.editedItem.tags = this.tags.filter(function (tag) {
-          return _this6.queryTagNames.includes(tag.name);
-        });
+        this.editedItem.tags = this.queryTags;
       }
 
-      this.dialog = true;
+      this.editedDialog = true;
     },
-    close: function close() {
-      this.dialog = false;
+    closeEdited: function closeEdited() {
+      this.editedDialog = false;
     },
-    editedReset: function editedReset() {
-      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
-      this.editedIndex = -1;
-    },
-    reset: function reset() {
-      this.search = '';
-      this.queryTagNames = [];
+    resetQuery: function resetQuery() {
+      this.query.search = '';
+      this.query.tags = [];
     },
     selectedToggleTag: function selectedToggleTag(state) {
-      var _this7 = this;
+      var _this6 = this;
 
       var tag = this.tags.find(function (tag) {
-        return tag.name === _this7.selectedTag;
+        return tag.name === _this6.selectedTag;
       });
       var items = this.selected.filter(function (item) {
         var idx = item.tags.findIndex(function (tag) {
-          return tag.name === _this7.selectedTag;
+          return tag.name === _this6.selectedTag;
         });
 
         if (state && idx === -1) {
@@ -2854,7 +2839,7 @@ function queryPaginate(options) {
         return false;
       });
       var requests = items.map(function (item) {
-        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(_this7.resource + '/' + item.id, {
+        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(_this6.resource + '/' + item.id, {
           tags: item.tags
         });
       });
@@ -2989,11 +2974,11 @@ function queryPaginate(options) {
   },
   data: function data() {
     return {
-      dialog: false,
       loading: true,
       total: 0,
       items: [],
       options: {},
+      editedDialog: false,
       editedValid: false,
       editedIndex: null,
       editedItem: null,
@@ -3090,7 +3075,7 @@ function queryPaginate(options) {
       });
       return [].concat(before, _toConsumableArray(fields), after);
     },
-    query: function query() {
+    requestString: function requestString() {
       return new URLSearchParams(_objectSpread({
         preset: this.$route.params.name
       }, queryPaginate(this.options))).toString();
@@ -3125,13 +3110,13 @@ function queryPaginate(options) {
       var _this = this;
 
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.query).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.requestString).then(function (response) {
         _this.items = response.data.data.map(_this.processItem);
         _this.total = response.data.meta.total;
         _this.loading = false;
       });
     },
-    save: function save() {
+    saveEdited: function saveEdited() {
       var _this2 = this;
 
       if (!this.editedValid) return;
@@ -3141,7 +3126,7 @@ function queryPaginate(options) {
           console.log('response', response);
           Object.assign(_this2.items[_this2.editedIndex], _this2.editedItem);
 
-          _this2.close();
+          _this2.closeEdited();
         });
       } else {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
@@ -3149,7 +3134,7 @@ function queryPaginate(options) {
 
           _this2.items.push(response.data.data);
 
-          _this2.close();
+          _this2.closeEdited();
         });
       }
     },
@@ -3170,14 +3155,10 @@ function queryPaginate(options) {
       this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
-      this.dialog = true;
+      this.editedDialog = true;
     },
-    close: function close() {
-      this.dialog = false; // this.$nextTick(this.editedReset);
-    },
-    editedReset: function editedReset() {
-      this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.defaultItem);
-      this.editedIndex = -1;
+    closeEdited: function closeEdited() {
+      this.editedDialog = false;
     }
   }
 });
@@ -24328,11 +24309,11 @@ var render = function() {
                   {
                     attrs: { "max-width": "500px" },
                     model: {
-                      value: _vm.dialog,
+                      value: _vm.editedDialog,
                       callback: function($$v) {
-                        _vm.dialog = $$v
+                        _vm.editedDialog = $$v
                       },
-                      expression: "dialog"
+                      expression: "editedDialog"
                     }
                   },
                   [
@@ -24343,7 +24324,7 @@ var render = function() {
                         on: {
                           submit: function($event) {
                             $event.preventDefault()
-                            return _vm.save($event)
+                            return _vm.saveEdited($event)
                           }
                         },
                         model: {
@@ -24374,7 +24355,6 @@ var render = function() {
                                 _c(_vm.form, {
                                   tag: "component",
                                   attrs: { editable: _vm.editable },
-                                  on: { submit: _vm.save },
                                   model: {
                                     value: _vm.editedItem,
                                     callback: function($$v) {
@@ -24409,7 +24389,7 @@ var render = function() {
                                   "v-btn",
                                   {
                                     attrs: { color: "grey darken-1", text: "" },
-                                    on: { click: _vm.close }
+                                    on: { click: _vm.closeEdited }
                                   },
                                   [_vm._v("Cancel")]
                                 )
@@ -24946,11 +24926,11 @@ var render = function() {
                           "deletable-chips": ""
                         },
                         model: {
-                          value: _vm.queryTagNames,
+                          value: _vm.query.tags,
                           callback: function($$v) {
-                            _vm.queryTagNames = $$v
+                            _vm.$set(_vm.query, "tags", $$v)
                           },
-                          expression: "queryTagNames"
+                          expression: "query.tags"
                         }
                       }),
                       _vm._v(" "),
@@ -24965,11 +24945,11 @@ var render = function() {
                           clearable: ""
                         },
                         model: {
-                          value: _vm.search,
+                          value: _vm.query.search,
                           callback: function($$v) {
-                            _vm.search = $$v
+                            _vm.$set(_vm.query, "search", $$v)
                           },
-                          expression: "search"
+                          expression: "query.search"
                         }
                       }),
                       _vm._v(" "),
@@ -25011,11 +24991,11 @@ var render = function() {
                             {
                               attrs: { "max-width": "500px" },
                               model: {
-                                value: _vm.dialog,
+                                value: _vm.editedDialog,
                                 callback: function($$v) {
-                                  _vm.dialog = $$v
+                                  _vm.editedDialog = $$v
                                 },
-                                expression: "dialog"
+                                expression: "editedDialog"
                               }
                             },
                             [
@@ -25026,7 +25006,7 @@ var render = function() {
                                   on: {
                                     submit: function($event) {
                                       $event.preventDefault()
-                                      return _vm.save($event)
+                                      return _vm.saveEdited($event)
                                     }
                                   },
                                   model: {
@@ -25102,7 +25082,7 @@ var render = function() {
                                                 color: "grey darken-1",
                                                 text: ""
                                               },
-                                              on: { click: _vm.close }
+                                              on: { click: _vm.closeEdited }
                                             },
                                             [_vm._v("Cancel")]
                                           )
@@ -25181,11 +25161,11 @@ var render = function() {
                 {
                   attrs: { multiple: "", "active-class": "primary--text" },
                   model: {
-                    value: _vm.queryTagNames,
+                    value: _vm.query.tags,
                     callback: function($$v) {
-                      _vm.queryTagNames = $$v
+                      _vm.$set(_vm.query, "tags", $$v)
                     },
-                    expression: "queryTagNames"
+                    expression: "query.tags"
                   }
                 },
                 _vm._l(item.tags, function(tag) {
@@ -25262,7 +25242,7 @@ var render = function() {
             return [
               _c(
                 "v-btn",
-                { attrs: { color: "primary" }, on: { click: _vm.reset } },
+                { attrs: { color: "primary" }, on: { click: _vm.resetQuery } },
                 [_vm._v("Reset")]
               )
             ]
@@ -25364,11 +25344,11 @@ var render = function() {
                       {
                         attrs: { "max-width": "500px" },
                         model: {
-                          value: _vm.dialog,
+                          value: _vm.editedDialog,
                           callback: function($$v) {
-                            _vm.dialog = $$v
+                            _vm.editedDialog = $$v
                           },
-                          expression: "dialog"
+                          expression: "editedDialog"
                         }
                       },
                       [
@@ -25379,7 +25359,7 @@ var render = function() {
                             on: {
                               submit: function($event) {
                                 $event.preventDefault()
-                                return _vm.save($event)
+                                return _vm.saveEdited($event)
                               }
                             },
                             model: {
@@ -25451,7 +25431,7 @@ var render = function() {
                                           color: "grey darken-1",
                                           text: ""
                                         },
-                                        on: { click: _vm.close }
+                                        on: { click: _vm.closeEdited }
                                       },
                                       [_vm._v("Cancel")]
                                     )

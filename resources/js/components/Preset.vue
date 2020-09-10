@@ -20,8 +20,8 @@
                     <v-icon dark left>mdi-plus</v-icon>
                     Add
                 </v-btn>
-                <v-dialog v-if="editedItem" v-model="dialog" max-width="500px">
-                    <v-form ref="form" v-model="editedValid" @submit.prevent="save">
+                <v-dialog v-if="editedItem" v-model="editedDialog" max-width="500px">
+                    <v-form ref="form" v-model="editedValid" @submit.prevent="saveEdited">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
@@ -32,7 +32,7 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text type="submit" :disabled="!editedValid">Save</v-btn>
-                                <v-btn color="grey darken-1" text @click="close">Cancel</v-btn>
+                                <v-btn color="grey darken-1" text @click="closeEdited">Cancel</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-form>
@@ -87,11 +87,11 @@
         },
         data() {
             return {
-                dialog: false,
                 loading: true,
                 total: 0,
                 items: [],
                 options: {},
+                editedDialog: false,
                 editedValid: false,
                 editedIndex: null,
                 editedItem: null,
@@ -143,7 +143,7 @@
 
                 return [...before, ...fields, ...after];
             },
-            query() {
+            requestString() {
                 return new URLSearchParams({
                     preset: this.$route.params.name,
                     ...queryPaginate(this.options)
@@ -163,13 +163,13 @@
             },
             getItems() {
                 this.loading = true;
-                axios.get(this.resource + '?' + this.query).then(response => {
+                axios.get(this.resource + '?' + this.requestString).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
                 });
             },
-            save() {
+            saveEdited() {
                 if (!this.editedValid)
                     return;
 
@@ -177,13 +177,13 @@
                     axios.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(response => {
                         console.log('response', response);
                         Object.assign(this.items[this.editedIndex], this.editedItem);
-                        this.close();
+                        this.closeEdited();
                     });
                 } else {
                     axios.post(this.resource, this.editedItem).then(response => {
                         console.log('response', response);
                         this.items.push(response.data.data);
-                        this.close();
+                        this.closeEdited();
                     });
                 }
             },
@@ -200,15 +200,10 @@
                 this.$refs.form && this.$refs.form.resetValidation();
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
-                this.dialog = true;
+                this.editedDialog = true;
             },
-            close() {
-                this.dialog = false;
-                // this.$nextTick(this.editedReset);
-            },
-            editedReset() {
-                this.editedItem = cloneDeep(this.defaultItem);
-                this.editedIndex = -1;
+            closeEdited() {
+                this.editedDialog = false;
             },
         },
     }

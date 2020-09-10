@@ -47,7 +47,7 @@
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-autocomplete
-                    v-model="queryTagNames"
+                    v-model="query.tags"
                     :items="tags"
                     color="blue-grey lighten-2"
                     label="Tags"
@@ -66,7 +66,7 @@
                     class="shrink mr-3"
                 ></v-autocomplete>
                 <v-text-field
-                    v-model="search"
+                    v-model="query.search"
                     label="Search"
                     dense
                     solo
@@ -83,8 +83,8 @@
                     <v-icon dark left>mdi-plus</v-icon>
                     Add
                 </v-btn>
-                <v-dialog v-if="editedItem" v-model="dialog" max-width="500px">
-                    <v-form ref="form" v-model="editedValid" @submit.prevent="save">
+                <v-dialog v-if="editedItem" v-model="editedDialog" max-width="500px">
+                    <v-form ref="form" v-model="editedValid" @submit.prevent="saveEdited">
                         <v-card>
                             <v-card-title>
                                 <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
@@ -95,7 +95,7 @@
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="blue darken-1" text type="submit" :disabled="!editedValid">Save</v-btn>
-                                <v-btn color="grey darken-1" text @click="close">Cancel</v-btn>
+                                <v-btn color="grey darken-1" text @click="closeEdited">Cancel</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-form>
@@ -115,7 +115,7 @@
             </span>
         </template>
         <template v-slot:item.tags="{ item }">
-            <v-chip-group multiple active-class="primary--text" v-model="queryTagNames">
+            <v-chip-group multiple active-class="primary--text" v-model="query.tags">
                 <v-chip v-for="tag in item.tags" :key="tag.name" :value="tag.name" small outlined>
                     {{ tag.name }}
                     <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
@@ -134,7 +134,7 @@
             </v-icon>
         </template>
         <template v-slot:no-data>
-            <v-btn color="primary" @click="reset">Reset</v-btn>
+            <v-btn color="primary" @click="resetQuery">Reset</v-btn>
         </template>
     </v-data-table>
 </template>
@@ -177,19 +177,21 @@
         },
         data() {
             return {
-                dialog: false,
                 loading: true,
                 total: 0,
                 items: [],
+                options: {},
                 selected: [],
                 selectedTag: null,
-                options: {},
+                editedDialog: false,
                 editedValid: false,
                 editedIndex: null,
                 editedItem: null,
                 multiSort: false,
-                queryTagNames: [],
-                search: '',
+                query: {
+                    tags: [],
+                    search: '',
+                },
                 defaultItem: {
                     tags: [],
                     contents: {}
@@ -211,7 +213,7 @@
                 return tags;
             },
             queryTags() {
-                return this.tags.filter(tag => this.queryTagNames.includes(tag.name));
+                return this.tags.filter(tag => this.query.tags.includes(tag.name));
             },
             editedFields() {
                 return this.editedItem.tags.flatMap(item => item.fields);
@@ -242,21 +244,19 @@
             sortable() {
                 return this.headers.filter(header => header.sortable !== false).map(header => header.value);
             },
-            query() {
-                const query = JSON.stringify({
-                    tags: this.queryTagNames,
-                    search: this.search,
-                });
-
-                return new URLSearchParams({ query, ...queryPaginate(this.options) }).toString();
+            requestString() {
+                return new URLSearchParams({
+                    query: JSON.stringify(this.query),
+                    ...queryPaginate(this.options),
+                }).toString();
             },
         },
         watch: {
-            search() {
+            'query.search'() {
                 clearTimeout(this._timeout_search);
                 this._timeout_search = setTimeout(this.getItems, 500);
             },
-            queryTagNames() {
+            'query.tags'() {
                 const sortable = this.options.sortBy.map(value => this.sortable.includes(value));
                 if (!sortable.every(Boolean)) {
                     this.options.sortBy = this.options.sortBy.filter((v, i) => sortable[i]);
@@ -283,13 +283,13 @@
             },
             getItems() {
                 this.loading = true;
-                axios.get(this.resource + '?' + this.query).then(response => {
+                axios.get(this.resource + '?' + this.requestString).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
                 });
             },
-            save() {
+            saveEdited() {
                 if (!this.editedValid)
                     return;
 
@@ -297,13 +297,13 @@
                     axios.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(response => {
                         console.log('response', response);
                         Object.assign(this.items[this.editedIndex], this.processItem(response.data.data));
-                        this.close();
+                        this.closeEdited();
                     });
                 } else {
                     axios.post(this.resource, this.editedItem).then(response => {
                         console.log('response', response);
                         this.items.splice(0, 0, this.processItem(response.data.data));
-                        this.close();
+                        this.closeEdited();
                     });
                 }
             },
@@ -321,20 +321,16 @@
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
                 if (this.editedIndex < 0) {
-                    this.editedItem.tags = this.tags.filter(tag => this.queryTagNames.includes(tag.name));
+                    this.editedItem.tags = this.queryTags;
                 }
-                this.dialog = true;
+                this.editedDialog = true;
             },
-            close() {
-                this.dialog = false;
+            closeEdited() {
+                this.editedDialog = false;
             },
-            editedReset() {
-                this.editedItem = cloneDeep(this.defaultItem);
-                this.editedIndex = -1;
-            },
-            reset() {
-                this.search = '';
-                this.queryTagNames = [];
+            resetQuery() {
+                this.query.search = '';
+                this.query.tags = [];
             },
             selectedToggleTag(state) {
                 const tag = this.tags.find(tag => tag.name === this.selectedTag);
