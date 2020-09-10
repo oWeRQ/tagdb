@@ -2,6 +2,8 @@
     <div>
         <v-text-field v-model="value.name" :rules="rules.name" label="Tag" autofocus></v-text-field>
 
+        <ColorSwitcher v-model="value.color" label="Color"></ColorSwitcher>
+
         <v-card>
             <v-list>
                 <v-list-item v-for="(field, i) in value.fields" :key="'item' + i">
@@ -37,7 +39,12 @@
 </template>
 
 <script>
+    import ColorSwitcher from './ColorSwitcher';
+
     export default {
+        components: {
+            ColorSwitcher,
+        },
         props: {
             editable: {
                 type: Array,
@@ -66,8 +73,6 @@
         },
         methods: {
             add() {
-                console.log(this.value);
-
                 this.value.fields.push({
                     type: 'string',
                     name: '',
