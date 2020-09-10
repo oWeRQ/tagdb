@@ -2021,12 +2021,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     value: {
       type: String,
-      "default": 'black'
+      "default": ''
     },
     colors: {
       type: Array,
       "default": function _default() {
-        return ['black', 'red', 'orange', 'yellow', 'lime', 'green', 'blue', 'indigo', 'purple'];
+        return ['', 'black', 'red', 'orange', 'yellow', 'lime', 'green', 'blue', 'indigo', 'purple'];
       }
     }
   }
@@ -24302,7 +24302,7 @@ var render = function() {
         {
           key: color,
           staticClass: "mr-2",
-          attrs: { color: color, size: "24" },
+          attrs: { color: color || "grey", size: "24" },
           on: {
             click: function($event) {
               return _vm.$emit("input", color)
@@ -25267,7 +25267,15 @@ var render = function() {
                     "v-chip",
                     {
                       key: tag.name,
-                      attrs: { value: tag.name, small: "", outlined: "" }
+                      staticClass: "lighten-2",
+                      attrs: {
+                        value: tag.name,
+                        color: _vm.query.tags.includes(tag.name)
+                          ? null
+                          : tag.color,
+                        dark: !!tag.color,
+                        small: ""
+                      }
                     },
                     [
                       _vm._v(
@@ -85528,6 +85536,9 @@ __webpack_require__.r(__webpack_exports__);
     }, {
       text: 'Name',
       value: 'name'
+    }, {
+      text: 'Color',
+      value: 'color'
     }, {
       text: 'Fields',
       value: 'fields.length'

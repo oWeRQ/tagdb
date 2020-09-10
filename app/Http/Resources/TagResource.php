@@ -17,6 +17,7 @@ class TagResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'color' => $this->color,
             // 'entities' => EntityResource::collection($this->entities),
             'fields' => FieldResource::collection($this->fields),
             // 'created_at' => $this->created_at,

@@ -116,7 +116,7 @@
         </template>
         <template v-slot:item.tags="{ item }">
             <v-chip-group multiple active-class="primary--text" v-model="query.tags">
-                <v-chip v-for="tag in item.tags" :key="tag.name" :value="tag.name" small outlined>
+                <v-chip v-for="tag in item.tags" :key="tag.name" :value="tag.name" :color="query.tags.includes(tag.name) ? null : tag.color" :dark="!!tag.color" small class="lighten-2">
                     {{ tag.name }}
                     <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
                 </v-chip>

@@ -26,6 +26,7 @@ export default [
             columns: [
                 { text: 'ID', value: 'id' },
                 { text: 'Name', value: 'name' },
+                { text: 'Color', value: 'color' },
                 { text: 'Fields', value: 'fields.length' },
             ],
         },
