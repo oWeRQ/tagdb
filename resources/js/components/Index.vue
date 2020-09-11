@@ -140,18 +140,8 @@
     import cloneDeep from 'clone-deep';
     import date from '../functions/date';
     import truncate from '../functions/truncate';
+    import stringifySort from '../functions/stringifySort';
     import EntityForm from './EntityForm';
-
-    function queryPaginate(options) {
-        if (!options.sortBy)
-            return;
-
-        return {
-            page: options.page,
-            per_page: options.itemsPerPage,
-            sort: options.sortBy.map((v, i) => (options.sortDesc[i] ? '-' : '') + v).join(','),
-        };
-    }
 
     export default {
         components: {
@@ -240,11 +230,8 @@
             sortable() {
                 return this.headers.filter(header => header.sortable !== false).map(header => header.value);
             },
-            requestString() {
-                return new URLSearchParams({
-                    query: JSON.stringify(this.query),
-                    ...queryPaginate(this.options),
-                }).toString();
+            sort() {
+                return stringifySort(this.options.sortBy, this.options.sortDesc);
             },
         },
         watch: {
@@ -278,8 +265,15 @@
                 return { ...item, contents };
             },
             getItems() {
+                const params = {
+                    query: this.query,
+                    sort: this.sort,
+                    page: this.options.page,
+                    per_page: this.options.itemsPerPage,
+                };
+
                 this.loading = true;
-                axios.get(this.resource + '?' + this.requestString).then(response => {
+                axios.get(this.resource, { params }).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;

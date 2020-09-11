@@ -56,14 +56,8 @@
 <script>
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
+    import stringifySort from '../functions/stringifySort';
     import CrudForm from './CrudForm';
-
-    function queryPaginate(options) {
-        return {
-            page: options.page,
-            per_page: options.itemsPerPage,
-        };
-    }
 
     export default {
         props: {
@@ -116,10 +110,8 @@
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
-            requestString() {
-                return new URLSearchParams({
-                    ...queryPaginate(this.options),
-                }).toString();
+            sort() {
+                return stringifySort(this.options.sortBy, this.options.sortDesc);
             },
         },
         watch: {
@@ -134,10 +126,16 @@
         },
         methods: {
             getItems() {
+                const params = {
+                    sort: this.sort,
+                    page: this.options.page,
+                    per_page: this.options.itemsPerPage,
+                };
+
                 this.loading = true;
                 this.items = [];
                 this.total = 0;
-                axios.get(this.resource + '?' + this.requestString).then(response => {
+                axios.get(this.resource, { params }).then(response => {
                     this.items = response.data.data;
                     this.total = response.data.meta.total;
                     this.loading = false;

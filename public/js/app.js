@@ -2047,13 +2047,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
+/* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
+/* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2125,19 +2120,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-function queryPaginate(options) {
-  return {
-    page: options.page,
-    per_page: options.itemsPerPage
-  };
-}
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     form: {
       type: Object,
       "default": function _default() {
-        return _CrudForm__WEBPACK_IMPORTED_MODULE_2__["default"];
+        return _CrudForm__WEBPACK_IMPORTED_MODULE_3__["default"];
       }
     },
     defaultItem: {
@@ -2196,8 +2184,8 @@ function queryPaginate(options) {
         align: 'center'
       }]);
     },
-    requestString: function requestString() {
-      return new URLSearchParams(_objectSpread({}, queryPaginate(this.options))).toString();
+    sort: function sort() {
+      return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.options.sortBy, this.options.sortDesc);
     }
   },
   watch: {
@@ -2214,10 +2202,17 @@ function queryPaginate(options) {
     getItems: function getItems() {
       var _this = this;
 
+      var params = {
+        sort: this.sort,
+        page: this.options.page,
+        per_page: this.options.itemsPerPage
+      };
       this.loading = true;
       this.items = [];
       this.total = 0;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.requestString).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource, {
+        params: params
+      }).then(function (response) {
         _this.items = response.data.data;
         _this.total = response.data.meta.total;
         _this.loading = false;
@@ -2407,7 +2402,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
 /* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
-/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+/* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
+/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2571,20 +2567,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-function queryPaginate(options) {
-  if (!options.sortBy) return;
-  return {
-    page: options.page,
-    per_page: options.itemsPerPage,
-    sort: options.sortBy.map(function (v, i) {
-      return (options.sortDesc[i] ? '-' : '') + v;
-    }).join(',')
-  };
-}
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_4__["default"]
+    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   filters: {
     date: _functions_date__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -2726,10 +2711,8 @@ function queryPaginate(options) {
         return header.value;
       });
     },
-    requestString: function requestString() {
-      return new URLSearchParams(_objectSpread({
-        query: JSON.stringify(this.query)
-      }, queryPaginate(this.options))).toString();
+    sort: function sort() {
+      return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_4__["default"])(this.options.sortBy, this.options.sortDesc);
     }
   },
   watch: {
@@ -2788,8 +2771,16 @@ function queryPaginate(options) {
     getItems: function getItems() {
       var _this3 = this;
 
+      var params = {
+        query: this.query,
+        sort: this.sort,
+        page: this.options.page,
+        per_page: this.options.itemsPerPage
+      };
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.requestString).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource, {
+        params: params
+      }).then(function (response) {
         _this3.items = response.data.data.map(_this3.processItem);
         _this3.total = response.data.meta.total;
         _this3.loading = false;
@@ -2899,7 +2890,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
 /* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
-/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+/* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
+/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2981,20 +2973,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-function queryPaginate(options) {
-  if (!options.sortBy) return;
-  return {
-    page: options.page,
-    per_page: options.itemsPerPage,
-    sort: options.sortBy.map(function (v, i) {
-      return (options.sortDesc[i] ? '-' : '') + v;
-    }).join(',')
-  };
-}
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_4__["default"]
+    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   filters: {
     date: _functions_date__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -3109,11 +3090,12 @@ function queryPaginate(options) {
       });
       return [].concat(before, _toConsumableArray(fields), after);
     },
-    requestString: function requestString() {
-      return new URLSearchParams(_objectSpread({
-        preset: this.$route.params.name
-      }, queryPaginate(this.options))).toString();
+    sort: function sort() {
+      return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_4__["default"])(this.options.sortBy, this.options.sortDesc);
     }
+  },
+  watch: {
+    options: 'getItems'
   },
   mounted: function mounted() {
     this.getItems();
@@ -3143,8 +3125,16 @@ function queryPaginate(options) {
     getItems: function getItems() {
       var _this = this;
 
+      var params = {
+        preset: this.$route.params.name,
+        sort: this.sort,
+        page: this.options.page,
+        per_page: this.options.itemsPerPage
+      };
       this.loading = true;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource + '?' + this.requestString).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource, {
+        params: params
+      }).then(function (response) {
         _this.items = response.data.data.map(_this.processItem);
         _this.total = response.data.meta.total;
         _this.loading = false;
@@ -85457,6 +85447,23 @@ __webpack_require__.r(__webpack_exports__);
   return new Date(str).toISOString().substr(0, 10);
 });
 ;
+
+/***/ }),
+
+/***/ "./resources/js/functions/stringifySort.js":
+/*!*************************************************!*\
+  !*** ./resources/js/functions/stringifySort.js ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (sortBy, sortDesc) {
+  return sortBy && sortBy.map(function (v, i) {
+    return (sortDesc[i] ? '-' : '') + v;
+  }).join(',');
+});
 
 /***/ }),
 
