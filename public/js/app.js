@@ -2300,6 +2300,96 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EntityDialog.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EntityDialog.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
+  props: {
+    resource: {
+      type: String
+    },
+    editedItem: {
+      type: Object
+    },
+    isUpdate: {
+      type: Boolean
+    }
+  },
+  data: function data() {
+    return {
+      visible: false,
+      isValid: false
+    };
+  },
+  methods: {
+    save: function save() {
+      var _this = this;
+
+      if (!this.isValid) return;
+
+      if (this.isUpdate) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
+          _this.$emit('save', response.data.data);
+
+          _this.close();
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
+          _this.$emit('save', response.data.data);
+
+          _this.close();
+        });
+      }
+    },
+    show: function show() {
+      this.resetValidation();
+      this.visible = true;
+    },
+    close: function close() {
+      this.visible = false;
+    },
+    resetValidation: function resetValidation() {
+      this.$refs.form && this.$refs.form.resetValidation();
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EntityForm.vue?vue&type=script&lang=js&":
 /*!*********************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EntityForm.vue?vue&type=script&lang=js& ***!
@@ -2358,12 +2448,6 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     value: {
       type: Object
-    },
-    editedFields: {
-      type: Array
-    },
-    tags: {
-      type: Array
     }
   },
   data: function data() {
@@ -2381,6 +2465,14 @@ __webpack_require__.r(__webpack_exports__);
           return !!v || 'Required';
         }]
       };
+    },
+    tags: function tags() {
+      return this.$root.tags;
+    },
+    editedFields: function editedFields() {
+      return this.value.tags.flatMap(function (item) {
+        return item.fields;
+      });
     }
   }
 });
@@ -2486,6 +2578,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
 /* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
 /* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
+/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2613,16 +2706,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -2630,6 +2714,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
+    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_5__["default"],
     EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_3__["default"],
     EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
@@ -2651,8 +2736,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       options: {},
       selected: [],
       selectedTag: null,
-      editedDialog: false,
-      editedValid: false,
       editedIndex: null,
       editedItem: null,
       multiSort: false,
@@ -2713,11 +2796,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       return this.tags.filter(function (tag) {
         return _this.query.tags.includes(tag.name);
-      });
-    },
-    editedFields: function editedFields() {
-      return this.editedItem.tags.flatMap(function (item) {
-        return item.fields;
       });
     },
     displayFields: function displayFields() {
@@ -2845,30 +2923,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _this3.loading = false;
       });
     },
-    saveEdited: function saveEdited() {
-      var _this4 = this;
-
-      if (!this.editedValid) return;
-
-      if (this.editedIndex > -1) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
-          console.log('response', response);
-          Object.assign(_this4.items[_this4.editedIndex], _this4.processItem(response.data.data));
-
-          _this4.closeEdited();
-        });
-      } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
-          console.log('response', response);
-
-          _this4.items.splice(0, 0, _this4.processItem(response.data.data));
-
-          _this4.closeEdited();
-        });
-      }
-    },
     deleteItem: function deleteItem(item) {
-      var _this5 = this;
+      var _this4 = this;
 
       var index = this.items.indexOf(item);
 
@@ -2876,12 +2932,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
-          _this5.items.splice(index, 1);
+          _this4.items.splice(index, 1);
         });
       }
     },
+    addItem: function addItem() {
+      this.editItem(this.defaultItem);
+    },
     editItem: function editItem(item) {
-      this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
 
@@ -2889,25 +2947,29 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         this.editedItem.tags = this.queryTags;
       }
 
-      this.editedDialog = true;
+      this.$refs.entityDialog.show();
     },
-    closeEdited: function closeEdited() {
-      this.editedDialog = false;
+    saveEdited: function saveEdited(rawItem) {
+      if (this.editedIndex > -1) {
+        Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
+      } else {
+        this.items.splice(0, 0, this.processItem(rawItem));
+      }
     },
     resetQuery: function resetQuery() {
       this.query.search = '';
       this.query.tags = [];
     },
     selectedToggleTag: function selectedToggleTag(state) {
-      var _this6 = this;
+      var _this5 = this;
 
       var tag = this.tags.find(function (tag) {
-        return tag.name === _this6.selectedTag;
+        return tag.name === _this5.selectedTag;
       });
       if (!tag) return;
       var items = this.selected.filter(function (item) {
         var idx = item.tags.findIndex(function (tag) {
-          return tag.name === _this6.selectedTag;
+          return tag.name === _this5.selectedTag;
         });
 
         if (state && idx === -1) {
@@ -2923,7 +2985,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         return false;
       });
       var requests = items.map(function (item) {
-        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(_this6.resource + '/' + item.id, {
+        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(_this5.resource + '/' + item.id, {
           tags: item.tags
         });
       });
@@ -3106,11 +3168,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
 
       return tags;
-    },
-    editedFields: function editedFields() {
-      return this.editedItem.tags.flatMap(function (item) {
-        return item.fields;
-      });
     },
     displayFields: function displayFields() {
       return this.itemsTags.flatMap(function (item) {
@@ -24647,6 +24704,126 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EntityDialog.vue?vue&type=template&id=32b80d76&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EntityDialog.vue?vue&type=template&id=32b80d76& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.editedItem
+    ? _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "500px" },
+          model: {
+            value: _vm.visible,
+            callback: function($$v) {
+              _vm.visible = $$v
+            },
+            expression: "visible"
+          }
+        },
+        [
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.save($event)
+                }
+              },
+              model: {
+                value: _vm.isValid,
+                callback: function($$v) {
+                  _vm.isValid = $$v
+                },
+                expression: "isValid"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v(_vm._s(_vm.isUpdate ? "Update" : "Create"))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("entity-form", {
+                        model: {
+                          value: _vm.editedItem,
+                          callback: function($$v) {
+                            _vm.editedItem = $$v
+                          },
+                          expression: "editedItem"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "blue darken-1",
+                            text: "",
+                            type: "submit",
+                            disabled: !_vm.isValid
+                          }
+                        },
+                        [_vm._v("Save")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "grey darken-1", text: "" },
+                          on: { click: _vm.close }
+                        },
+                        [_vm._v("Cancel")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EntityForm.vue?vue&type=template&id=cf1d271c&":
 /*!*************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/EntityForm.vue?vue&type=template&id=cf1d271c& ***!
@@ -25284,11 +25461,7 @@ var render = function() {
                   "v-btn",
                   {
                     attrs: { text: "", large: "", color: "grey darken-2" },
-                    on: {
-                      click: function($event) {
-                        return _vm.editItem(_vm.defaultItem)
-                      }
-                    }
+                    on: { click: _vm.addItem }
                   },
                   [
                     _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
@@ -25297,116 +25470,15 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
-                _vm.editedItem
-                  ? _c(
-                      "v-dialog",
-                      {
-                        attrs: { "max-width": "500px" },
-                        model: {
-                          value: _vm.editedDialog,
-                          callback: function($$v) {
-                            _vm.editedDialog = $$v
-                          },
-                          expression: "editedDialog"
-                        }
-                      },
-                      [
-                        _c(
-                          "v-form",
-                          {
-                            ref: "form",
-                            on: {
-                              submit: function($event) {
-                                $event.preventDefault()
-                                return _vm.saveEdited($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.editedValid,
-                              callback: function($$v) {
-                                _vm.editedValid = $$v
-                              },
-                              expression: "editedValid"
-                            }
-                          },
-                          [
-                            _c(
-                              "v-card",
-                              [
-                                _c("v-card-title", [
-                                  _c("span", { staticClass: "headline" }, [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.editedIndex > -1
-                                          ? "Update"
-                                          : "Create"
-                                      )
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-text",
-                                  [
-                                    _c("entity-form", {
-                                      attrs: {
-                                        editedFields: _vm.editedFields,
-                                        tags: _vm.tags
-                                      },
-                                      model: {
-                                        value: _vm.editedItem,
-                                        callback: function($$v) {
-                                          _vm.editedItem = $$v
-                                        },
-                                        expression: "editedItem"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-actions",
-                                  [
-                                    _c("v-spacer"),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "blue darken-1",
-                                          text: "",
-                                          type: "submit",
-                                          disabled: !_vm.editedValid
-                                        }
-                                      },
-                                      [_vm._v("Save")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "grey darken-1",
-                                          text: ""
-                                        },
-                                        on: { click: _vm.closeEdited }
-                                      },
-                                      [_vm._v("Cancel")]
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  : _vm._e()
+                _c("EntityDialog", {
+                  ref: "entityDialog",
+                  attrs: {
+                    resource: _vm.resource,
+                    isUpdate: _vm.editedIndex > -1,
+                    editedItem: _vm.editedItem
+                  },
+                  on: { save: _vm.saveEdited }
+                })
               ],
               1
             )
@@ -25591,10 +25663,6 @@ var render = function() {
                                   "v-card-text",
                                   [
                                     _c("entity-form", {
-                                      attrs: {
-                                        editedFields: _vm.editedFields,
-                                        tags: _vm.tags
-                                      },
                                       model: {
                                         value: _vm.editedItem,
                                         callback: function($$v) {
@@ -85726,6 +85794,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CrudForm_vue_vue_type_template_id_121c218d___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CrudForm_vue_vue_type_template_id_121c218d___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/EntityDialog.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/EntityDialog.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _EntityDialog_vue_vue_type_template_id_32b80d76___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./EntityDialog.vue?vue&type=template&id=32b80d76& */ "./resources/js/components/EntityDialog.vue?vue&type=template&id=32b80d76&");
+/* harmony import */ var _EntityDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./EntityDialog.vue?vue&type=script&lang=js& */ "./resources/js/components/EntityDialog.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _EntityDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _EntityDialog_vue_vue_type_template_id_32b80d76___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _EntityDialog_vue_vue_type_template_id_32b80d76___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/EntityDialog.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/EntityDialog.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/EntityDialog.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntityDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./EntityDialog.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EntityDialog.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_EntityDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/EntityDialog.vue?vue&type=template&id=32b80d76&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/EntityDialog.vue?vue&type=template&id=32b80d76& ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntityDialog_vue_vue_type_template_id_32b80d76___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./EntityDialog.vue?vue&type=template&id=32b80d76& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/EntityDialog.vue?vue&type=template&id=32b80d76&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntityDialog_vue_vue_type_template_id_32b80d76___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_EntityDialog_vue_vue_type_template_id_32b80d76___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

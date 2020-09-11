@@ -49,12 +49,6 @@
             value: {
                 type: Object,
             },
-            editedFields: {
-                type: Array,
-            },
-            tags: {
-                type: Array,
-            },
         },
         data() {
             return {
@@ -71,6 +65,12 @@
                         v => !!v || 'Required',
                     ],
                 };
+            },
+            tags() {
+                return this.$root.tags;
+            },
+            editedFields() {
+                return this.value.tags.flatMap(item => item.fields);
             },
         },
     };

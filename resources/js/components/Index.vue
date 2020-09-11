@@ -75,27 +75,17 @@
                     <v-icon>mdi-magnify</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
-                <v-btn text large color="grey darken-2" @click="editItem(defaultItem)">
+                <v-btn text large color="grey darken-2" @click="addItem">
                     <v-icon left>mdi-plus</v-icon>
                     Add
                 </v-btn>
-                <v-dialog v-if="editedItem" v-model="editedDialog" max-width="500px">
-                    <v-form ref="form" v-model="editedValid" @submit.prevent="saveEdited">
-                        <v-card>
-                            <v-card-title>
-                                <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
-                            </v-card-title>
-                            <v-card-text>
-                                <entity-form v-model="editedItem" :editedFields="editedFields" :tags="tags"></entity-form>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text type="submit" :disabled="!editedValid">Save</v-btn>
-                                <v-btn color="grey darken-1" text @click="closeEdited">Cancel</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-form>
-                </v-dialog>
+                <EntityDialog
+                    ref="entityDialog"
+                    :resource="resource"
+                    :isUpdate="editedIndex > -1"
+                    :editedItem="editedItem"
+                    @save="saveEdited"
+                ></EntityDialog>
             </v-toolbar>
         </template>
         <template v-slot:item="{ item, headers, isSelected, select }">
@@ -121,9 +111,11 @@
     import stringifySort from '../functions/stringifySort';
     import EntityForm from './EntityForm';
     import EntityRow from './EntityRow';
+    import EntityDialog from './EntityDialog';
 
     export default {
         components: {
+            EntityDialog,
             EntityForm,
             EntityRow,
         },
@@ -145,8 +137,6 @@
                 options: {},
                 selected: [],
                 selectedTag: null,
-                editedDialog: false,
-                editedValid: false,
                 editedIndex: null,
                 editedItem: null,
                 multiSort: false,
@@ -176,9 +166,6 @@
             },
             queryTags() {
                 return this.tags.filter(tag => this.query.tags.includes(tag.name));
-            },
-            editedFields() {
-                return this.editedItem.tags.flatMap(item => item.fields);
             },
             displayFields() {
                 return this.queryTags.flatMap(item => item.fields);
@@ -255,24 +242,6 @@
                     this.loading = false;
                 });
             },
-            saveEdited() {
-                if (!this.editedValid)
-                    return;
-
-                if (this.editedIndex > -1) {
-                    axios.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(response => {
-                        console.log('response', response);
-                        Object.assign(this.items[this.editedIndex], this.processItem(response.data.data));
-                        this.closeEdited();
-                    });
-                } else {
-                    axios.post(this.resource, this.editedItem).then(response => {
-                        console.log('response', response);
-                        this.items.splice(0, 0, this.processItem(response.data.data));
-                        this.closeEdited();
-                    });
-                }
-            },
             deleteItem(item) {
                 const index = this.items.indexOf(item);
                 if (confirm('Are you sure you want to delete this item?')) {
@@ -282,17 +251,23 @@
                     });
                 }
             },
+            addItem() {
+                this.editItem(this.defaultItem);
+            },
             editItem(item) {
-                this.$refs.form && this.$refs.form.resetValidation();
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
                 if (this.editedIndex < 0) {
                     this.editedItem.tags = this.queryTags;
                 }
-                this.editedDialog = true;
+                this.$refs.entityDialog.show();
             },
-            closeEdited() {
-                this.editedDialog = false;
+            saveEdited(rawItem) {
+                if (this.editedIndex > -1) {
+                    Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
+                } else {
+                    this.items.splice(0, 0, this.processItem(rawItem));
+                }
             },
             resetQuery() {
                 this.query.search = '';

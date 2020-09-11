@@ -27,7 +27,7 @@
                                 <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
                             </v-card-title>
                             <v-card-text>
-                                <entity-form v-model="editedItem" :editedFields="editedFields" :tags="tags"></entity-form>
+                                <entity-form v-model="editedItem"></entity-form>
                             </v-card-text>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
@@ -107,9 +107,6 @@
                     }
                 }
                 return tags;
-            },
-            editedFields() {
-                return this.editedItem.tags.flatMap(item => item.fields);
             },
             displayFields() {
                 return this.itemsTags.flatMap(item => item.fields);
