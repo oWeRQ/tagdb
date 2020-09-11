@@ -98,36 +98,16 @@
                 </v-dialog>
             </v-toolbar>
         </template>
-        <template v-for="slot in displaySlots" v-slot:[slot.name]="{ value }">
-            <span :key="slot.name">
-                <a v-if="value && slot.type === 'url'" :href="value" :title="value" target="_blank">{{ value | truncate }}</a>
-
-                <v-chip v-else-if="value && slot.type === 'color'">
-                    <v-avatar left :color="value"></v-avatar>
-                    {{ value }}
-                </v-chip>
-
-                <template v-else>{{ value | truncate }}</template>
-            </span>
-        </template>
-        <template v-slot:item.tags="{ item }">
-            <v-chip-group multiple active-class="primary--text" v-model="query.tags">
-                <v-chip v-for="tag in item.tags" :key="tag.name" :value="tag.name" :color="query.tags.includes(tag.name) ? null : tag.color" :dark="!!tag.color" small class="lighten-2">
-                    {{ tag.name }}
-                    <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
-                </v-chip>
-            </v-chip-group>
-        </template>
-        <template v-slot:item.created_at="{ item, value }">
-            {{ value | date }}
-        </template>
-        <template v-slot:item.actions="{ item }">
-            <v-icon @click="editItem(item)" color="grey darken-1" class="mr-2" :title="'ID: ' + item.id">
-                mdi-pencil
-            </v-icon>
-            <v-icon @click="deleteItem(item)" color="grey darken-1">
-                mdi-delete
-            </v-icon>
+        <template v-slot:item="{ item, headers, isSelected, select }">
+            <EntityRow
+                :query="query"
+                :item="item"
+                :headers="headers"
+                :isSelected="isSelected"
+                :select="select"
+                @edit="editItem(item)"
+                @delete="deleteItem(item)"
+            ></EntityRow>
         </template>
         <template v-slot:no-data>
             <v-btn color="primary" @click="resetQuery">Reset</v-btn>
@@ -138,18 +118,14 @@
 <script>
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
-    import date from '../functions/date';
-    import truncate from '../functions/truncate';
     import stringifySort from '../functions/stringifySort';
     import EntityForm from './EntityForm';
+    import EntityRow from './EntityRow';
 
     export default {
         components: {
             EntityForm,
-        },
-        filters: {
-            date,
-            truncate,
+            EntityRow,
         },
         props: {
             title: {
@@ -222,7 +198,7 @@
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
                 const fields = this.loading ? [] : this.displayFields.map((field) => {
-                    return { text: field.name, value: 'contents.' + field.id };
+                    return { text: field.name, value: 'contents.' + field.id, type: field.type };
                 });
 
                 return [...before, ...fields, ...after];
