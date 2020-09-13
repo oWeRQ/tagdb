@@ -2759,12 +2759,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       selectedTag: null,
       editedIndex: null,
       editedItem: null,
+      editedPreset: null,
       multiSort: false,
       query: {
         tags: [],
         search: ''
-      },
-      preset: null
+      }
     };
   },
   computed: {
@@ -3008,7 +3008,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.selected = []; // Promise.all(requests).then(this.getItems);
     },
     addPreset: function addPreset() {
-      this.preset = {
+      this.editedPreset = {
         name: this.query.tags.join(' '),
         sort: this.sort,
         query: JSON.stringify(this.query)
@@ -3116,6 +3116,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -3142,10 +3143,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       options: {},
       editedIndex: null,
       editedItem: null,
-      defaultItem: {
-        tags: [],
-        contents: {}
-      }
+      editedPreset: null
     };
   },
   computed: {
@@ -3322,7 +3320,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
       this.$refs.entityDialog.show();
     },
-    saveEdited: function saveEdited(rawItem) {
+    saveItem: function saveItem(rawItem) {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
       } else {
@@ -3330,7 +3328,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     },
     editPreset: function editPreset() {
+      this.editedPreset = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(this.preset);
       this.$refs.presetDialog.show();
+    },
+    savePreset: function savePreset(rawPreset) {
+      this.$root.getPresets();
+      this.$router.push({
+        name: 'preset',
+        params: {
+          name: rawPreset.name
+        }
+      });
     }
   }
 });
@@ -24325,6 +24333,7 @@ var render = function() {
       _c(
         "v-navigation-drawer",
         {
+          staticClass: "elevation-2",
           attrs: { app: "", clipped: "" },
           model: {
             value: _vm.drawer,
@@ -25626,7 +25635,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("PresetDialog", {
                   ref: "presetDialog",
-                  attrs: { value: _vm.preset }
+                  attrs: { value: _vm.editedPreset }
                 })
               ],
               1
@@ -25785,12 +25794,13 @@ var render = function() {
                     isUpdate: _vm.editedIndex > -1,
                     editedItem: _vm.editedItem
                   },
-                  on: { save: _vm.saveEdited }
+                  on: { save: _vm.saveItem }
                 }),
                 _vm._v(" "),
                 _c("PresetDialog", {
                   ref: "presetDialog",
-                  attrs: { isUpdate: true, value: _vm.preset }
+                  attrs: { isUpdate: true, value: _vm.editedPreset },
+                  on: { save: _vm.savePreset }
                 })
               ],
               1
@@ -85647,14 +85657,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     getTags: function getTags() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/tags').then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/tags').then(function (response) {
         _this.tags = response.data.data;
       });
     },
     getPresets: function getPresets() {
       var _this2 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/presets').then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/presets').then(function (response) {
         _this2.presets = response.data.data;
       });
     }

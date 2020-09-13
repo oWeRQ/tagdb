@@ -31,12 +31,13 @@
                     :resource="resource"
                     :isUpdate="editedIndex > -1"
                     :editedItem="editedItem"
-                    @save="saveEdited"
+                    @save="saveItem"
                 ></EntityDialog>
                 <PresetDialog
                     ref="presetDialog"
                     :isUpdate="true"
-                    :value="preset"
+                    :value="editedPreset"
+                    @save="savePreset"
                 ></PresetDialog>
             </v-toolbar>
         </template>
@@ -85,10 +86,7 @@
                 options: {},
                 editedIndex: null,
                 editedItem: null,
-                defaultItem: {
-                    tags: [],
-                    contents: {}
-                },
+                editedPreset: null,
             };
         },
         computed: {
@@ -195,7 +193,7 @@
                 this.editedItem = cloneDeep(item);
                 this.$refs.entityDialog.show();
             },
-            saveEdited(rawItem) {
+            saveItem(rawItem) {
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
                 } else {
@@ -203,7 +201,12 @@
                 }
             },
             editPreset() {
+                this.editedPreset = cloneDeep(this.preset);
                 this.$refs.presetDialog.show();
+            },
+            savePreset(rawPreset) {
+                this.$root.getPresets();
+                this.$router.push({name: 'preset', params: { name: rawPreset.name }});
             },
         },
     }

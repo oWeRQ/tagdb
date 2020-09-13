@@ -91,7 +91,7 @@
                 ></EntityDialog>
                 <PresetDialog
                     ref="presetDialog"
-                    :value="preset"
+                    :value="editedPreset"
                 ></PresetDialog>
             </v-toolbar>
         </template>
@@ -146,12 +146,12 @@
                 selectedTag: null,
                 editedIndex: null,
                 editedItem: null,
+                editedPreset: null,
                 multiSort: false,
                 query: {
                     tags: [],
                     search: '',
                 },
-                preset: null,
             }
         },
         computed: {
@@ -303,7 +303,7 @@
                 // Promise.all(requests).then(this.getItems);
             },
             addPreset() {
-                this.preset = {
+                this.editedPreset = {
                     name: this.query.tags.join(' '),
                     sort: this.sort,
                     query: JSON.stringify(this.query),

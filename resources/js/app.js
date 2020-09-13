@@ -33,12 +33,12 @@ const app = new Vue({
     },
     methods: {
         getTags() {
-            axios.get('/api/v1/tags').then(response => {
+            return axios.get('/api/v1/tags').then(response => {
                 this.tags = response.data.data;
             });
         },
         getPresets() {
-            axios.get('/api/v1/presets').then(response => {
+            return axios.get('/api/v1/presets').then(response => {
                 this.presets = response.data.data;
             });
         },

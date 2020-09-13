@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-navigation-drawer v-model="drawer" app clipped>
+        <v-navigation-drawer v-model="drawer" app clipped class="elevation-2">
             <v-list nav dense>
                 <v-list-item-group color="primary">
                     <v-list-item link to="/">
