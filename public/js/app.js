@@ -2543,7 +2543,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     query: {
-      type: Object
+      type: Object,
+      "default": function _default() {
+        return {
+          tags: []
+        };
+      }
     },
     item: {
       type: Object
@@ -2576,9 +2581,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
-/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
 /* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
-/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2711,11 +2715,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
-
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_5__["default"],
-    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_3__["default"],
+    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_3__["default"],
     EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: {
@@ -2742,10 +2744,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       query: {
         tags: [],
         search: ''
-      },
-      defaultItem: {
-        tags: [],
-        contents: {}
       }
     };
   },
@@ -2753,7 +2751,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     tags: function tags() {
       return this.$root.tags;
     },
-    itemsTags: function itemsTags() {
+    availableTags: function availableTags() {
       var tags = [];
 
       var _iterator = _createForOfIteratorHelper(this.items),
@@ -2937,16 +2935,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     },
     addItem: function addItem() {
-      this.editItem(this.defaultItem);
+      this.editItem({
+        tags: this.queryTags,
+        contents: {}
+      });
     },
     editItem: function editItem(item) {
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
-
-      if (this.editedIndex < 0) {
-        this.editedItem.tags = this.queryTags;
-      }
-
       this.$refs.entityDialog.show();
     },
     saveEdited: function saveEdited(rawItem) {
@@ -3009,10 +3005,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
-/* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
-/* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
-/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+/* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
+/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
+/* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3081,14 +3076,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-
 
 
 
@@ -3096,11 +3083,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EntityForm: _EntityForm__WEBPACK_IMPORTED_MODULE_5__["default"]
-  },
-  filters: {
-    date: _functions_date__WEBPACK_IMPORTED_MODULE_2__["default"],
-    truncate: _functions_truncate__WEBPACK_IMPORTED_MODULE_3__["default"]
+    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_3__["default"],
+    EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: {
     resource: {
@@ -3114,8 +3098,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       total: 0,
       items: [],
       options: {},
-      editedDialog: false,
-      editedValid: false,
       editedIndex: null,
       editedItem: null,
       defaultItem: {
@@ -3128,10 +3110,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     tags: function tags() {
       return this.$root.tags;
     },
-    title: function title() {
-      return this.$route.params.name;
+    preset: function preset() {
+      var name = this.$route.params.name;
+      return this.$root.presets.find(function (preset) {
+        return preset.name === name;
+      });
     },
-    itemsTags: function itemsTags() {
+    title: function title() {
+      return this.preset && this.preset.name;
+    },
+    query: function query() {
+      return this.preset ? JSON.parse(this.preset.query) : undefined;
+    },
+    availableTags: function availableTags() {
       var tags = [];
 
       var _iterator = _createForOfIteratorHelper(this.items),
@@ -3169,8 +3160,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       return tags;
     },
+    queryTags: function queryTags() {
+      var _this = this;
+
+      return this.tags.filter(function (tag) {
+        return _this.query.tags.includes(tag.name);
+      });
+    },
     displayFields: function displayFields() {
-      return this.itemsTags.flatMap(function (item) {
+      return this.availableTags.flatMap(function (item) {
         return item.fields;
       });
     },
@@ -3184,6 +3182,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     headers: function headers() {
       var before = [{
+        text: 'Tags',
+        value: 'tags'
+      }, {
         text: 'Name',
         value: 'name'
       }];
@@ -3207,14 +3208,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       return [].concat(before, _toConsumableArray(fields), after);
     },
     sort: function sort() {
-      return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_4__["default"])(this.options.sortBy, this.options.sortDesc);
+      return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.options.sortBy, this.options.sortDesc);
     }
   },
   watch: {
+    preset: 'getItems',
     options: 'getItems'
-  },
-  mounted: function mounted() {
-    this.getItems();
   },
   methods: {
     processItem: function processItem(item) {
@@ -3239,10 +3238,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     getItems: function getItems() {
-      var _this = this;
+      var _this2 = this;
 
+      if (!this.preset) return;
       var params = {
-        preset: this.$route.params.name,
+        preset: this.preset.name,
         sort: this.sort,
         page: this.options.page,
         per_page: this.options.itemsPerPage
@@ -3251,32 +3251,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource, {
         params: params
       }).then(function (response) {
-        _this.items = response.data.data.map(_this.processItem);
-        _this.total = response.data.meta.total;
-        _this.loading = false;
+        _this2.items = response.data.data.map(_this2.processItem);
+        _this2.total = response.data.meta.total;
+        _this2.loading = false;
       });
-    },
-    saveEdited: function saveEdited() {
-      var _this2 = this;
-
-      if (!this.editedValid) return;
-
-      if (this.editedIndex > -1) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
-          console.log('response', response);
-          Object.assign(_this2.items[_this2.editedIndex], _this2.editedItem);
-
-          _this2.closeEdited();
-        });
-      } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
-          console.log('response', response);
-
-          _this2.items.push(response.data.data);
-
-          _this2.closeEdited();
-        });
-      }
     },
     deleteItem: function deleteItem(item) {
       var _this3 = this;
@@ -3291,14 +3269,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         });
       }
     },
+    addItem: function addItem() {
+      this.editItem({
+        tags: this.queryTags,
+        contents: {}
+      });
+    },
     editItem: function editItem(item) {
-      this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
-      this.editedDialog = true;
+      this.$refs.entityDialog.show();
     },
-    closeEdited: function closeEdited() {
-      this.editedDialog = false;
+    saveEdited: function saveEdited(rawItem) {
+      if (this.editedIndex > -1) {
+        Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
+      } else {
+        this.items.splice(0, 0, this.processItem(rawItem));
+      }
     }
   }
 });
@@ -25598,11 +25585,7 @@ var render = function() {
                   "v-btn",
                   {
                     attrs: { text: "", large: "", color: "grey darken-2" },
-                    on: {
-                      click: function($event) {
-                        return _vm.editItem(_vm.defaultItem)
-                      }
-                    }
+                    on: { click: _vm.addItem }
                   },
                   [
                     _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
@@ -25611,112 +25594,15 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
-                _vm.editedItem
-                  ? _c(
-                      "v-dialog",
-                      {
-                        attrs: { "max-width": "500px" },
-                        model: {
-                          value: _vm.editedDialog,
-                          callback: function($$v) {
-                            _vm.editedDialog = $$v
-                          },
-                          expression: "editedDialog"
-                        }
-                      },
-                      [
-                        _c(
-                          "v-form",
-                          {
-                            ref: "form",
-                            on: {
-                              submit: function($event) {
-                                $event.preventDefault()
-                                return _vm.saveEdited($event)
-                              }
-                            },
-                            model: {
-                              value: _vm.editedValid,
-                              callback: function($$v) {
-                                _vm.editedValid = $$v
-                              },
-                              expression: "editedValid"
-                            }
-                          },
-                          [
-                            _c(
-                              "v-card",
-                              [
-                                _c("v-card-title", [
-                                  _c("span", { staticClass: "headline" }, [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.editedIndex > -1
-                                          ? "Update"
-                                          : "Create"
-                                      )
-                                    )
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-text",
-                                  [
-                                    _c("entity-form", {
-                                      model: {
-                                        value: _vm.editedItem,
-                                        callback: function($$v) {
-                                          _vm.editedItem = $$v
-                                        },
-                                        expression: "editedItem"
-                                      }
-                                    })
-                                  ],
-                                  1
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-card-actions",
-                                  [
-                                    _c("v-spacer"),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "blue darken-1",
-                                          text: "",
-                                          type: "submit",
-                                          disabled: !_vm.editedValid
-                                        }
-                                      },
-                                      [_vm._v("Save")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "v-btn",
-                                      {
-                                        attrs: {
-                                          color: "grey darken-1",
-                                          text: ""
-                                        },
-                                        on: { click: _vm.closeEdited }
-                                      },
-                                      [_vm._v("Cancel")]
-                                    )
-                                  ],
-                                  1
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  : _vm._e()
+                _c("EntityDialog", {
+                  ref: "entityDialog",
+                  attrs: {
+                    resource: _vm.resource,
+                    isUpdate: _vm.editedIndex > -1,
+                    editedItem: _vm.editedItem
+                  },
+                  on: { save: _vm.saveEdited }
+                })
               ],
               1
             )
@@ -25725,36 +25611,30 @@ var render = function() {
         proxy: true
       },
       {
-        key: "item.actions",
+        key: "item",
         fn: function(ref) {
           var item = ref.item
+          var headers = ref.headers
+          var isSelected = ref.isSelected
+          var select = ref.select
           return [
-            _c(
-              "v-icon",
-              {
-                staticClass: "mr-2",
-                attrs: { color: "grey darken-1" },
-                on: {
-                  click: function($event) {
-                    return _vm.editItem(item)
-                  }
-                }
+            _c("EntityRow", {
+              attrs: {
+                query: _vm.query,
+                item: item,
+                headers: headers,
+                isSelected: isSelected,
+                select: select
               },
-              [_vm._v("\n            mdi-pencil\n        ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "v-icon",
-              {
-                attrs: { color: "grey darken-1" },
-                on: {
-                  click: function($event) {
-                    return _vm.deleteItem(item)
-                  }
+              on: {
+                edit: function($event) {
+                  return _vm.editItem(item)
+                },
+                delete: function($event) {
+                  return _vm.deleteItem(item)
                 }
-              },
-              [_vm._v("\n            mdi-delete\n        ")]
-            )
+              }
+            })
           ]
         }
       },

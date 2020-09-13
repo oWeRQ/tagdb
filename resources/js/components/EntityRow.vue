@@ -53,6 +53,7 @@
         props: {
             query: {
                 type: Object,
+                default: () => ({tags: []}),
             },
             item: {
                 type: Object,

@@ -109,14 +109,12 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
-    import EntityForm from './EntityForm';
-    import EntityRow from './EntityRow';
     import EntityDialog from './EntityDialog';
+    import EntityRow from './EntityRow';
 
     export default {
         components: {
             EntityDialog,
-            EntityForm,
             EntityRow,
         },
         props: {
@@ -144,17 +142,13 @@
                     tags: [],
                     search: '',
                 },
-                defaultItem: {
-                    tags: [],
-                    contents: {}
-                },
             }
         },
         computed: {
             tags() {
                 return this.$root.tags;
             },
-            itemsTags() {
+            availableTags() {
                 const tags = [];
                 for (let item of this.items) {
                     for (let tag of item.tags) {
@@ -252,14 +246,14 @@
                 }
             },
             addItem() {
-                this.editItem(this.defaultItem);
+                this.editItem({
+                    tags: this.queryTags,
+                    contents: {}
+                });
             },
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
-                if (this.editedIndex < 0) {
-                    this.editedItem.tags = this.queryTags;
-                }
                 this.$refs.entityDialog.show();
             },
             saveEdited(rawItem) {
