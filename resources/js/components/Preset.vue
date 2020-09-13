@@ -15,6 +15,9 @@
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
+                <v-btn icon @click="editPreset" class="mr-2">
+                    <v-icon>mdi-cog</v-icon>
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn text large color="grey darken-2" @click="addItem">
                     <v-icon left>mdi-plus</v-icon>
@@ -27,6 +30,11 @@
                     :editedItem="editedItem"
                     @save="saveEdited"
                 ></EntityDialog>
+                <PresetDialog
+                    ref="presetDialog"
+                    :isUpdate="true"
+                    :value="preset"
+                ></PresetDialog>
             </v-toolbar>
         </template>
         <template v-slot:item="{ item, headers, isSelected, select }">
@@ -50,13 +58,15 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
-    import EntityDialog from './EntityDialog';
     import EntityRow from './EntityRow';
+    import EntityDialog from './EntityDialog';
+    import PresetDialog from './PresetDialog';
 
     export default {
         components: {
-            EntityDialog,
             EntityRow,
+            EntityDialog,
+            PresetDialog,
         },
         props: {
             resource: {
@@ -186,8 +196,11 @@
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
                 } else {
-                    this.items.splice(0, 0, this.processItem(rawItem));
+                    this.items.unshift(this.processItem(rawItem));
                 }
+            },
+            editPreset() {
+                this.$refs.presetDialog.show();
             },
         },
     }

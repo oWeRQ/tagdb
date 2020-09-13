@@ -74,6 +74,9 @@
                 <v-btn icon @click="getItems" class="mr-2">
                     <v-icon>mdi-magnify</v-icon>
                 </v-btn>
+                <v-btn icon @click="addPreset" class="mr-2">
+                    <v-icon>mdi-database-plus</v-icon>
+                </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn text large color="grey darken-2" @click="addItem">
                     <v-icon left>mdi-plus</v-icon>
@@ -86,6 +89,10 @@
                     :editedItem="editedItem"
                     @save="saveEdited"
                 ></EntityDialog>
+                <PresetDialog
+                    ref="presetDialog"
+                    :value="preset"
+                ></PresetDialog>
             </v-toolbar>
         </template>
         <template v-slot:item="{ item, headers, isSelected, select }">
@@ -109,13 +116,15 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
-    import EntityDialog from './EntityDialog';
     import EntityRow from './EntityRow';
+    import EntityDialog from './EntityDialog';
+    import PresetDialog from './PresetDialog';
 
     export default {
         components: {
-            EntityDialog,
             EntityRow,
+            EntityDialog,
+            PresetDialog,
         },
         props: {
             title: {
@@ -142,6 +151,7 @@
                     tags: [],
                     search: '',
                 },
+                preset: null,
             }
         },
         computed: {
@@ -260,7 +270,7 @@
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
                 } else {
-                    this.items.splice(0, 0, this.processItem(rawItem));
+                    this.items.unshift(this.processItem(rawItem));
                 }
             },
             resetQuery() {
@@ -291,6 +301,14 @@
 
                 this.selected = [];
                 // Promise.all(requests).then(this.getItems);
+            },
+            addPreset() {
+                this.preset = {
+                    name: this.query.tags.join(' '),
+                    sort: this.sort,
+                    query: JSON.stringify(this.query),
+                };
+                this.$refs.presetDialog.show();
             },
         },
     };

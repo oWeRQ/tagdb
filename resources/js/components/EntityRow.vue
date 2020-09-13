@@ -1,6 +1,6 @@
 <template>
     <tr>
-        <td v-for="header in headers" :key="header.value">
+        <td v-for="header in headers" :key="header.value" :class="header.align && 'text-' + header.align">
             <template v-if="header.value === 'data-table-select'">
                 <v-simple-checkbox :value="isSelected" @input="select" class="v-data-table__checkbox"></v-simple-checkbox>
             </template>
