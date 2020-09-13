@@ -13,8 +13,8 @@
                 </v-icon>
             </template>
             <template v-else-if="header.value === 'tags'">
-                <v-chip-group multiple active-class="primary--text" v-model="query.tags">
-                    <v-chip v-for="tag in item.tags" :key="tag.name" :value="tag.name" :color="query.tags.includes(tag.name) ? null : tag.color" :dark="!!tag.color" small class="lighten-2">
+                <v-chip-group>
+                    <v-chip v-for="tag in visibleTags" :key="tag.name" @click="query.tags.push(tag.name)" :color="tag.color" :dark="!!tag.color" small class="lighten-2">
                         {{ tag.name }}
                         <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
                     </v-chip>
@@ -66,6 +66,11 @@
             },
             select: {
                 type: Function,
+            },
+        },
+        computed: {
+            visibleTags() {
+                return this.item.tags.filter(tag => !this.query.tags.includes(tag.name));
             },
         },
     }

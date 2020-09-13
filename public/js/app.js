@@ -2562,6 +2562,15 @@ __webpack_require__.r(__webpack_exports__);
     select: {
       type: Function
     }
+  },
+  computed: {
+    visibleTags: function visibleTags() {
+      var _this = this;
+
+      return this.item.tags.filter(function (tag) {
+        return !_this.query.tags.includes(tag.name);
+      });
+    }
   }
 });
 
@@ -3048,6 +3057,9 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
+//
+//
 //
 //
 //
@@ -5606,7 +5618,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.v-data-table__wrapper {\n    flex: 1 1 0;\n}\n", ""]);
+exports.push([module.i, "\nhtml {\n    overflow-y: auto;\n}\n.v-data-table__wrapper {\n    flex: 1 1 0;\n}\n", ""]);
 
 // exports
 
@@ -25284,29 +25296,21 @@ var render = function() {
             ? [
                 _c(
                   "v-chip-group",
-                  {
-                    attrs: { multiple: "", "active-class": "primary--text" },
-                    model: {
-                      value: _vm.query.tags,
-                      callback: function($$v) {
-                        _vm.$set(_vm.query, "tags", $$v)
-                      },
-                      expression: "query.tags"
-                    }
-                  },
-                  _vm._l(_vm.item.tags, function(tag) {
+                  _vm._l(_vm.visibleTags, function(tag) {
                     return _c(
                       "v-chip",
                       {
                         key: tag.name,
                         staticClass: "lighten-2",
                         attrs: {
-                          value: tag.name,
-                          color: _vm.query.tags.includes(tag.name)
-                            ? null
-                            : tag.color,
+                          color: tag.color,
                           dark: !!tag.color,
                           small: ""
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.query.tags.push(tag.name)
+                          }
                         }
                       },
                       [
@@ -25740,11 +25744,22 @@ var render = function() {
                 _c(
                   "v-btn",
                   {
-                    staticClass: "mr-2",
+                    staticClass: "ml-2",
                     attrs: { icon: "" },
                     on: { click: _vm.editPreset }
                   },
                   [_c("v-icon", [_vm._v("mdi-cog")])],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-btn",
+                  {
+                    staticClass: "mr-2",
+                    attrs: { icon: "" },
+                    on: { click: _vm.getItems }
+                  },
+                  [_c("v-icon", [_vm._v("mdi-refresh")])],
                   1
                 ),
                 _vm._v(" "),

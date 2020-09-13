@@ -15,8 +15,11 @@
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
-                <v-btn icon @click="editPreset" class="mr-2">
+                <v-btn icon @click="editPreset" class="ml-2">
                     <v-icon>mdi-cog</v-icon>
+                </v-btn>
+                <v-btn icon @click="getItems" class="mr-2">
+                    <v-icon>mdi-refresh</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn text large color="grey darken-2" @click="addItem">

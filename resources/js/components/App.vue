@@ -85,6 +85,10 @@
 </script>
 
 <style>
+    html {
+        overflow-y: auto;
+    }
+
     .v-data-table__wrapper {
         flex: 1 1 0;
     }
