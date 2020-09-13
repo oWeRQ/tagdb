@@ -205,8 +205,11 @@
                 this.$refs.presetDialog.show();
             },
             savePreset(rawPreset) {
+                if (this.preset.name !== rawPreset.name) {
+                    this.$router.push({name: 'preset', params: { name: rawPreset.name }});
+                }
+
                 this.$root.getPresets();
-                this.$router.push({name: 'preset', params: { name: rawPreset.name }});
             },
         },
     }
