@@ -3699,15 +3699,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       immediate: true
     },
     sort: {
-      handler: function handler() {
-        this.$emit('input', Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.sort.sortBy, this.sort.sortDesc));
-      },
+      handler: 'input',
       deep: true
     }
   },
   methods: {
+    input: function input() {
+      this.$emit('input', Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.sort.sortBy, this.sort.sortDesc));
+    },
     reverse: function reverse(index) {
       this.sort.sortDesc[index] = !this.sort.sortDesc[index];
+      this.input();
     }
   }
 });
@@ -26462,6 +26464,7 @@ var render = function() {
               {
                 on: {
                   click: function($event) {
+                    $event.stopPropagation()
                     return _vm.reverse(index)
                   }
                 }

@@ -9,7 +9,7 @@
         :menuProps="{ closeOnContentClick: true }"
     >
         <template v-slot:selection="{ item, index }">
-            <v-chip @click="reverse(index)">
+            <v-chip @click.stop="reverse(index)">
                 {{ item.name }}
                 <v-icon color="grey darken-1" size="18">
                     mdi-arrow-{{ sort.sortDesc[index] ? 'down' : 'up' }}
@@ -64,15 +64,17 @@
                 immediate: true,
             },
             sort: {
-                handler() {
-                    this.$emit('input', stringifySort(this.sort.sortBy, this.sort.sortDesc));
-                },
+                handler: 'input',
                 deep: true,
             },
         },
         methods: {
+            input() {
+                this.$emit('input', stringifySort(this.sort.sortBy, this.sort.sortDesc));
+            },
             reverse(index) {
                 this.sort.sortDesc[index] = !this.sort.sortDesc[index];
+                this.input();
             },
         },
     }
