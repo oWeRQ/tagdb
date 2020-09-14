@@ -2942,7 +2942,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         page: this.options.page,
         per_page: this.options.itemsPerPage
       };
-      this.loading = true;
+      this.loading = true; // this.items = [];
+      // this.total = 0;
+
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource, {
         params: params
       }).then(function (response) {
@@ -25352,6 +25354,23 @@ var render = function() {
                 _c(
                   "v-chip-group",
                   [
+                    _vm.invisibleTags.length
+                      ? _c(
+                          "v-chip",
+                          {
+                            staticClass: "grey--text",
+                            attrs: { small: "", outlined: "" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    " +
+                                _vm._s(_vm.invisibleTags.length) +
+                                "\n                "
+                            )
+                          ]
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
                     _vm._l(_vm.visibleTags, function(tag) {
                       return _c(
                         "v-chip",
@@ -25380,24 +25399,7 @@ var render = function() {
                             : _vm._e()
                         ]
                       )
-                    }),
-                    _vm._v(" "),
-                    _vm.invisibleTags.length
-                      ? _c(
-                          "v-chip",
-                          {
-                            staticClass: "grey--text",
-                            attrs: { small: "", outlined: "" }
-                          },
-                          [
-                            _vm._v(
-                              "\n                    +" +
-                                _vm._s(_vm.invisibleTags.length) +
-                                "\n                "
-                            )
-                          ]
-                        )
-                      : _vm._e()
+                    })
                   ],
                   2
                 )

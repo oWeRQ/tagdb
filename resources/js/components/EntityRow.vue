@@ -14,12 +14,12 @@
             </template>
             <template v-else-if="header.value === 'tags'">
                 <v-chip-group>
+                    <v-chip v-if="invisibleTags.length" small outlined class="grey--text">
+                        {{ invisibleTags.length }}
+                    </v-chip>
                     <v-chip v-for="tag in visibleTags" :key="tag.name" @click="query.tags.push(tag.name)" :color="tag.color" :dark="!!tag.color" small class="lighten-2">
                         {{ tag.name }}
                         <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
-                    </v-chip>
-                    <v-chip v-if="invisibleTags.length" small outlined class="grey--text">
-                        +{{ invisibleTags.length }}
                     </v-chip>
                 </v-chip-group>
             </template>
