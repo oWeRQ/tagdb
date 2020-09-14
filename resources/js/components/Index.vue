@@ -16,29 +16,11 @@
         class="fill-height d-flex flex-column"
     >
         <template v-slot:top>
-            <v-toolbar v-if="selected.length" flat color="grey lighten-2" class="flex-grow-0">
-                <v-toolbar-title>{{ selected.length }} selected</v-toolbar-title>
-
-                <v-spacer></v-spacer>
-
-                <v-autocomplete
-                    v-model="selectedTag"
-                    :items="tags"
-                    item-text="name"
-                    label="Tag"
-                    hide-details
-                    single-line
-                    :style="{maxWidth: '240px'}"
-                ></v-autocomplete>
-
-                <v-btn icon @click="selectedToggleTag(true)">
-                    <v-icon>mdi-tag-plus</v-icon>
-                </v-btn>
-
-                <v-btn icon @click="selectedToggleTag(false)">
-                    <v-icon>mdi-tag-minus</v-icon>
-                </v-btn>
-            </v-toolbar>
+            <EntitySelectionToolbar v-if="selected.length"
+                v-model="selected"
+                :resource="resource"
+                class="flex-grow-0"
+            ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
@@ -116,12 +98,14 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
+    import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
     import EntityDialog from './EntityDialog';
     import PresetDialog from './PresetDialog';
 
     export default {
         components: {
+            EntitySelectionToolbar,
             EntityRow,
             EntityDialog,
             PresetDialog,
@@ -143,7 +127,6 @@
                 items: [],
                 options: {},
                 selected: [],
-                selectedTag: null,
                 editedIndex: null,
                 editedItem: null,
                 editedPreset: null,
@@ -278,31 +261,6 @@
             resetQuery() {
                 this.query.search = '';
                 this.query.tags = [];
-            },
-            selectedToggleTag(state) {
-                const tag = this.tags.find(tag => tag.name === this.selectedTag);
-                if (!tag)
-                    return;
-
-                const items = this.selected.filter(item => {
-                    const idx = item.tags.findIndex(tag => tag.name === this.selectedTag);
-                    if (state && idx === -1) {
-                        item.tags.push(tag);
-                        return true;
-                    }
-                    if (!state && idx !== -1) {
-                        item.tags.splice(idx, 1);
-                        return true;
-                    }
-                    return false;
-                });
-
-                const requests = items.map(item => {
-                    return axios.put(this.resource + '/' + item.id, {tags: item.tags});
-                });
-
-                this.selected = [];
-                // Promise.all(requests).then(this.getItems);
             },
             addPreset() {
                 this.editedPreset = {
