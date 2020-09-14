@@ -6,7 +6,7 @@
                     <span class="headline">{{ isUpdate ? 'Update' : 'Create' }}</span>
                 </v-card-title>
                 <v-card-text>
-                    <crud-form v-model="value" :editable="editable"></crud-form>
+                    <PresetForm v-model="value" :editable="editable"></PresetForm>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -20,11 +20,11 @@
 
 <script>
     import axios from 'axios';
-    import CrudForm from './CrudForm';
+    import PresetForm from './PresetForm';
 
     export default {
         components: {
-            CrudForm,
+            PresetForm,
         },
         props: {
             resource: {
