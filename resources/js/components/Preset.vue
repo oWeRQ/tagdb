@@ -1,5 +1,7 @@
 <template>
     <v-data-table
+        v-model="selected"
+        :show-select="true"
         :headers="headers"
         :items="items"
         :options.sync="options"
@@ -13,7 +15,12 @@
         class="fill-height d-flex flex-column"
     >
         <template v-slot:top>
-            <v-toolbar flat color="white" class="flex-grow-0">
+            <EntitySelectionToolbar v-if="selected.length"
+                v-model="selected"
+                :resource="resource"
+                class="flex-grow-0"
+            ></EntitySelectionToolbar>
+            <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-btn icon @click="editPreset" class="ml-2">
                     <v-icon>mdi-cog</v-icon>
@@ -62,12 +69,14 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
+    import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
     import EntityDialog from './EntityDialog';
     import PresetDialog from './PresetDialog';
 
     export default {
         components: {
+            EntitySelectionToolbar,
             EntityRow,
             EntityDialog,
             PresetDialog,
@@ -84,6 +93,7 @@
                 total: 0,
                 items: [],
                 options: {},
+                selected: [],
                 editedIndex: null,
                 editedItem: null,
                 editedPreset: null,

@@ -3100,9 +3100,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
-/* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
-/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
-/* harmony import */ var _PresetDialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./PresetDialog */ "./resources/js/components/PresetDialog.vue");
+/* harmony import */ var _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntitySelectionToolbar */ "./resources/js/components/EntitySelectionToolbar.vue");
+/* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
+/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
+/* harmony import */ var _PresetDialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PresetDialog */ "./resources/js/components/PresetDialog.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3183,6 +3184,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3191,9 +3200,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_3__["default"],
-    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_4__["default"],
-    PresetDialog: _PresetDialog__WEBPACK_IMPORTED_MODULE_5__["default"]
+    EntitySelectionToolbar: _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_3__["default"],
+    EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_4__["default"],
+    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_5__["default"],
+    PresetDialog: _PresetDialog__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   props: {
     resource: {
@@ -3207,6 +3217,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       total: 0,
       items: [],
       options: {},
+      selected: [],
       editedIndex: null,
       editedItem: null,
       editedPreset: null
@@ -25884,6 +25895,7 @@ var render = function() {
   return _c("v-data-table", {
     staticClass: "fill-height d-flex flex-column",
     attrs: {
+      "show-select": true,
       headers: _vm.headers,
       items: _vm.items,
       options: _vm.options,
@@ -25905,9 +25917,31 @@ var render = function() {
         key: "top",
         fn: function() {
           return [
+            _vm.selected.length
+              ? _c("EntitySelectionToolbar", {
+                  staticClass: "flex-grow-0",
+                  attrs: { resource: _vm.resource },
+                  model: {
+                    value: _vm.selected,
+                    callback: function($$v) {
+                      _vm.selected = $$v
+                    },
+                    expression: "selected"
+                  }
+                })
+              : _vm._e(),
+            _vm._v(" "),
             _c(
               "v-toolbar",
               {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.selected.length,
+                    expression: "!selected.length"
+                  }
+                ],
                 staticClass: "flex-grow-0",
                 attrs: { flat: "", color: "white" }
               },
@@ -26014,7 +26048,14 @@ var render = function() {
         },
         proxy: true
       }
-    ])
+    ]),
+    model: {
+      value: _vm.selected,
+      callback: function($$v) {
+        _vm.selected = $$v
+      },
+      expression: "selected"
+    }
   })
 }
 var staticRenderFns = []
