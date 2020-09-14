@@ -144,7 +144,7 @@
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
                 const fields = this.displayFields.map((field) => {
-                    return { text: field.name, value: 'contents.' + field.id };
+                    return { text: field.name, value: 'contents.' + field.id, type: field.type };
                 });
 
                 return [...before, ...fields, ...after];

@@ -69,11 +69,12 @@
                     :resource="resource"
                     :isUpdate="editedIndex > -1"
                     :editedItem="editedItem"
-                    @save="saveEdited"
+                    @save="saveItem"
                 ></EntityDialog>
                 <PresetDialog
                     ref="presetDialog"
                     :value="editedPreset"
+                    @save="savePreset"
                 ></PresetDialog>
             </v-toolbar>
         </template>
@@ -251,7 +252,7 @@
                 this.editedItem = cloneDeep(item);
                 this.$refs.entityDialog.show();
             },
-            saveEdited(rawItem) {
+            saveItem(rawItem) {
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
                 } else {
@@ -269,6 +270,9 @@
                     query: JSON.stringify(this.query),
                 };
                 this.$refs.presetDialog.show();
+            },
+            savePreset(rawPreset) {
+                this.$root.getPresets();
             },
         },
     };

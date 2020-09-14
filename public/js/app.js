@@ -2821,6 +2821,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -3062,7 +3063,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
       this.$refs.entityDialog.show();
     },
-    saveEdited: function saveEdited(rawItem) {
+    saveItem: function saveItem(rawItem) {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
       } else {
@@ -3080,6 +3081,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         query: JSON.stringify(this.query)
       };
       this.$refs.presetDialog.show();
+    },
+    savePreset: function savePreset(rawPreset) {
+      this.$root.getPresets();
     }
   }
 });
@@ -3319,7 +3323,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var fields = this.displayFields.map(function (field) {
         return {
           text: field.name,
-          value: 'contents.' + field.id
+          value: 'contents.' + field.id,
+          type: field.type
         };
       });
       return [].concat(before, _toConsumableArray(fields), after);
@@ -25865,12 +25870,13 @@ var render = function() {
                     isUpdate: _vm.editedIndex > -1,
                     editedItem: _vm.editedItem
                   },
-                  on: { save: _vm.saveEdited }
+                  on: { save: _vm.saveItem }
                 }),
                 _vm._v(" "),
                 _c("PresetDialog", {
                   ref: "presetDialog",
-                  attrs: { value: _vm.editedPreset }
+                  attrs: { value: _vm.editedPreset },
+                  on: { save: _vm.savePreset }
                 })
               ],
               1
