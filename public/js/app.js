@@ -24768,6 +24768,15 @@ var render = function() {
                                 _c(
                                   "v-btn",
                                   {
+                                    attrs: { color: "blue darken-1", text: "" },
+                                    on: { click: _vm.closeEdited }
+                                  },
+                                  [_vm._v("Cancel")]
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-btn",
+                                  {
                                     attrs: {
                                       color: "blue darken-1",
                                       text: "",
@@ -24776,15 +24785,6 @@ var render = function() {
                                     }
                                   },
                                   [_vm._v("Save")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: { color: "grey darken-1", text: "" },
-                                    on: { click: _vm.closeEdited }
-                                  },
-                                  [_vm._v("Cancel")]
                                 )
                               ],
                               1
@@ -24983,6 +24983,15 @@ var render = function() {
                       _c(
                         "v-btn",
                         {
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: { click: _vm.close }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
                           attrs: {
                             color: "blue darken-1",
                             text: "",
@@ -24991,15 +25000,6 @@ var render = function() {
                           }
                         },
                         [_vm._v("Save")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "grey darken-1", text: "" },
-                          on: { click: _vm.close }
-                        },
-                        [_vm._v("Cancel")]
                       )
                     ],
                     1
@@ -26009,6 +26009,15 @@ var render = function() {
                       _c(
                         "v-btn",
                         {
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: { click: _vm.close }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
                           attrs: {
                             color: "blue darken-1",
                             text: "",
@@ -26017,15 +26026,6 @@ var render = function() {
                           }
                         },
                         [_vm._v("Save")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          attrs: { color: "grey darken-1", text: "" },
-                          on: { click: _vm.close }
-                        },
-                        [_vm._v("Cancel")]
                       )
                     ],
                     1
@@ -26067,7 +26067,7 @@ var render = function() {
     "div",
     [
       _c("v-text-field", {
-        attrs: { label: _vm.Name, autofocus: "" },
+        attrs: { label: "Name", autofocus: "" },
         model: {
           value: _vm.value.name,
           callback: function($$v) {
@@ -26078,7 +26078,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("v-text-field", {
-        attrs: { label: _vm.Sort },
+        attrs: { label: "Sort" },
         model: {
           value: _vm.value.sort,
           callback: function($$v) {
@@ -26089,7 +26089,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("v-text-field", {
-        attrs: { label: _vm.Query },
+        attrs: { label: "Query" },
         model: {
           value: _vm.value.query,
           callback: function($$v) {
