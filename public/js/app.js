@@ -3545,6 +3545,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SortField__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SortField */ "./resources/js/components/SortField.vue");
+/* harmony import */ var _QueryField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./QueryField */ "./resources/js/components/QueryField.vue");
 //
 //
 //
@@ -3553,7 +3555,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    SortField: _SortField__WEBPACK_IMPORTED_MODULE_0__["default"],
+    QueryField: _QueryField__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   props: {
     editable: {
       type: Array
@@ -3561,6 +3569,58 @@ __webpack_require__.r(__webpack_exports__);
     value: {
       type: Object,
       "default": function _default() {}
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/QueryField.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/QueryField.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    value: {
+      type: String
+    },
+    label: {
+      type: String
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SortField.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SortField.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    value: {
+      type: String
+    },
+    label: {
+      type: String
     }
   }
 });
@@ -26215,7 +26275,7 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("v-text-field", {
+      _c("SortField", {
         attrs: { label: "Sort" },
         model: {
           value: _vm.value.sort,
@@ -26226,7 +26286,7 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("v-text-field", {
+      _c("QueryField", {
         attrs: { label: "Query" },
         model: {
           value: _vm.value.query,
@@ -26239,6 +26299,68 @@ var render = function() {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/QueryField.vue?vue&type=template&id=5e2cae86&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/QueryField.vue?vue&type=template&id=5e2cae86& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("v-text-field", {
+    attrs: { value: _vm.value, label: _vm.label },
+    on: {
+      input: function($event) {
+        return _vm.$emit("input", $event)
+      }
+    }
+  })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SortField.vue?vue&type=template&id=6a97da21&":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/SortField.vue?vue&type=template&id=6a97da21& ***!
+  \************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("v-text-field", {
+    attrs: { value: _vm.value, label: _vm.label },
+    on: {
+      input: function($event) {
+        return _vm.$emit("input", $event)
+      }
+    }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -86817,6 +86939,144 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/QueryField.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/QueryField.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _QueryField_vue_vue_type_template_id_5e2cae86___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./QueryField.vue?vue&type=template&id=5e2cae86& */ "./resources/js/components/QueryField.vue?vue&type=template&id=5e2cae86&");
+/* harmony import */ var _QueryField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./QueryField.vue?vue&type=script&lang=js& */ "./resources/js/components/QueryField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _QueryField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _QueryField_vue_vue_type_template_id_5e2cae86___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _QueryField_vue_vue_type_template_id_5e2cae86___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/QueryField.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/QueryField.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/QueryField.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_QueryField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./QueryField.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/QueryField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_QueryField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/QueryField.vue?vue&type=template&id=5e2cae86&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/QueryField.vue?vue&type=template&id=5e2cae86& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_QueryField_vue_vue_type_template_id_5e2cae86___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./QueryField.vue?vue&type=template&id=5e2cae86& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/QueryField.vue?vue&type=template&id=5e2cae86&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_QueryField_vue_vue_type_template_id_5e2cae86___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_QueryField_vue_vue_type_template_id_5e2cae86___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/SortField.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/SortField.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _SortField_vue_vue_type_template_id_6a97da21___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./SortField.vue?vue&type=template&id=6a97da21& */ "./resources/js/components/SortField.vue?vue&type=template&id=6a97da21&");
+/* harmony import */ var _SortField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./SortField.vue?vue&type=script&lang=js& */ "./resources/js/components/SortField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _SortField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _SortField_vue_vue_type_template_id_6a97da21___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _SortField_vue_vue_type_template_id_6a97da21___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/SortField.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/SortField.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/SortField.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SortField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./SortField.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SortField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_SortField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/SortField.vue?vue&type=template&id=6a97da21&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/SortField.vue?vue&type=template&id=6a97da21& ***!
+  \******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SortField_vue_vue_type_template_id_6a97da21___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./SortField.vue?vue&type=template&id=6a97da21& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/SortField.vue?vue&type=template&id=6a97da21&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SortField_vue_vue_type_template_id_6a97da21___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_SortField_vue_vue_type_template_id_6a97da21___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/TagForm.vue":
 /*!*********************************************!*\
   !*** ./resources/js/components/TagForm.vue ***!
@@ -86952,7 +87212,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Index_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Index.vue */ "./resources/js/components/Index.vue");
 /* harmony import */ var _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Crud.vue */ "./resources/js/components/Crud.vue");
 /* harmony import */ var _components_TagForm_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/TagForm.vue */ "./resources/js/components/TagForm.vue");
-/* harmony import */ var _components_Preset_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Preset.vue */ "./resources/js/components/Preset.vue");
+/* harmony import */ var _components_PresetForm_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/PresetForm.vue */ "./resources/js/components/PresetForm.vue");
+/* harmony import */ var _components_Preset_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Preset.vue */ "./resources/js/components/Preset.vue");
+
 
 
 
@@ -87073,6 +87335,7 @@ __webpack_require__.r(__webpack_exports__);
   path: '/presets',
   component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
   props: {
+    form: _components_PresetForm_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     title: 'Presets',
     resource: '/api/v1/presets',
     defaultItem: {},
@@ -87103,7 +87366,7 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   path: '/presets/:name',
   name: 'preset',
-  component: _components_Preset_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  component: _components_Preset_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
   props: {
     resource: '/api/v1/entities'
   }
