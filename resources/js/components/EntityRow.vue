@@ -18,6 +18,9 @@
                         {{ tag.name }}
                         <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
                     </v-chip>
+                    <v-chip v-if="invisibleTags.length" small outlined class="grey--text">
+                        +{{ invisibleTags.length }}
+                    </v-chip>
                 </v-chip-group>
             </template>
             <template v-else-if="header.value === 'created_at'">
@@ -71,6 +74,9 @@
         computed: {
             visibleTags() {
                 return this.item.tags.filter(tag => !this.query.tags.includes(tag.name));
+            },
+            invisibleTags() {
+                return this.item.tags.filter(tag => this.query.tags.includes(tag.name));
             },
         },
     }

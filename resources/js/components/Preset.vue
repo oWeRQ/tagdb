@@ -167,6 +167,8 @@
                 };
 
                 this.loading = true;
+                this.items = [];
+                this.total = 0;
                 axios.get(this.resource, { params }).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;

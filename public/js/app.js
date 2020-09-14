@@ -2532,6 +2532,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -2569,6 +2572,13 @@ __webpack_require__.r(__webpack_exports__);
 
       return this.item.tags.filter(function (tag) {
         return !_this.query.tags.includes(tag.name);
+      });
+    },
+    invisibleTags: function invisibleTags() {
+      var _this2 = this;
+
+      return this.item.tags.filter(function (tag) {
+        return _this2.query.tags.includes(tag.name);
       });
     }
   }
@@ -3288,6 +3298,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         per_page: this.options.itemsPerPage
       };
       this.loading = true;
+      this.items = [];
+      this.total = 0;
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource, {
         params: params
       }).then(function (response) {
@@ -25308,36 +25320,55 @@ var render = function() {
             ? [
                 _c(
                   "v-chip-group",
-                  _vm._l(_vm.visibleTags, function(tag) {
-                    return _c(
-                      "v-chip",
-                      {
-                        key: tag.name,
-                        staticClass: "lighten-2",
-                        attrs: {
-                          color: tag.color,
-                          dark: !!tag.color,
-                          small: ""
-                        },
-                        on: {
-                          click: function($event) {
-                            return _vm.query.tags.push(tag.name)
+                  [
+                    _vm._l(_vm.visibleTags, function(tag) {
+                      return _c(
+                        "v-chip",
+                        {
+                          key: tag.name,
+                          staticClass: "lighten-2",
+                          attrs: {
+                            color: tag.color,
+                            dark: !!tag.color,
+                            small: ""
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.query.tags.push(tag.name)
+                            }
                           }
-                        }
-                      },
-                      [
-                        _vm._v(
-                          "\n                    " +
-                            _vm._s(tag.name) +
-                            "\n                    "
-                        ),
-                        tag.fields.length
-                          ? _c("sup", [_vm._v(_vm._s(tag.fields.length))])
-                          : _vm._e()
-                      ]
-                    )
-                  }),
-                  1
+                        },
+                        [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(tag.name) +
+                              "\n                    "
+                          ),
+                          tag.fields.length
+                            ? _c("sup", [_vm._v(_vm._s(tag.fields.length))])
+                            : _vm._e()
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _vm.invisibleTags.length
+                      ? _c(
+                          "v-chip",
+                          {
+                            staticClass: "grey--text",
+                            attrs: { small: "", outlined: "" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                    +" +
+                                _vm._s(_vm.invisibleTags.length) +
+                                "\n                "
+                            )
+                          ]
+                        )
+                      : _vm._e()
+                  ],
+                  2
                 )
               ]
             : header.value === "created_at"
