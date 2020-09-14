@@ -25,11 +25,13 @@ const app = new Vue({
         return {
             tags: [],
             presets: [],
+            fields: [],
         };
     },
     mounted() {
         this.getTags();
         this.getPresets();
+        this.getFields();
     },
     methods: {
         getTags() {
@@ -40,6 +42,11 @@ const app = new Vue({
         getPresets() {
             return axios.get('/api/v1/presets').then(response => {
                 this.presets = response.data.data;
+            });
+        },
+        getFields() {
+            return axios.get('/api/v1/fields').then(response => {
+                this.fields = response.data.data;
             });
         },
     },

@@ -3615,10 +3615,46 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _functions_parseSort__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions/parseSort */ "./resources/js/functions/parseSort.js");
+/* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -3626,6 +3662,52 @@ __webpack_require__.r(__webpack_exports__);
     },
     label: {
       type: String
+    }
+  },
+  data: function data() {
+    return {
+      sort: {
+        sortBy: [],
+        sortDesc: []
+      }
+    };
+  },
+  computed: {
+    fields: function fields() {
+      return this.$root.fields;
+    },
+    items: function items() {
+      return [{
+        name: 'Name',
+        value: 'name'
+      }, {
+        name: 'Created At',
+        value: 'created_at'
+      }].concat(_toConsumableArray(this.fields.map(function (field) {
+        return {
+          name: field.name,
+          value: 'contents.' + field.id
+        };
+      })));
+    }
+  },
+  watch: {
+    value: {
+      handler: function handler() {
+        this.sort = Object(_functions_parseSort__WEBPACK_IMPORTED_MODULE_1__["default"])(this.value);
+      },
+      immediate: true
+    },
+    sort: {
+      handler: function handler() {
+        this.$emit('input', Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.sort.sortBy, this.sort.sortDesc));
+      },
+      deep: true
+    }
+  },
+  methods: {
+    reverse: function reverse(index) {
+      this.sort.sortDesc[index] = !this.sort.sortDesc[index];
     }
   }
 });
@@ -26359,12 +26441,57 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-text-field", {
-    attrs: { value: _vm.value, label: _vm.label },
-    on: {
-      input: function($event) {
-        return _vm.$emit("input", $event)
+  return _c("v-select", {
+    attrs: {
+      label: _vm.label,
+      items: _vm.items,
+      "item-text": "name",
+      "item-value": "value",
+      multiple: "",
+      menuProps: { closeOnContentClick: true }
+    },
+    scopedSlots: _vm._u([
+      {
+        key: "selection",
+        fn: function(ref) {
+          var item = ref.item
+          var index = ref.index
+          return [
+            _c(
+              "v-chip",
+              {
+                on: {
+                  click: function($event) {
+                    return _vm.reverse(index)
+                  }
+                }
+              },
+              [
+                _vm._v("\n            " + _vm._s(item.name) + "\n            "),
+                _c(
+                  "v-icon",
+                  { attrs: { color: "grey darken-1", size: "18" } },
+                  [
+                    _vm._v(
+                      "\n                mdi-arrow-" +
+                        _vm._s(_vm.sort.sortDesc[index] ? "down" : "up") +
+                        "\n            "
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ]
+        }
       }
+    ]),
+    model: {
+      value: _vm.sort.sortBy,
+      callback: function($$v) {
+        _vm.$set(_vm.sort, "sortBy", $$v)
+      },
+      expression: "sort.sortBy"
     }
   })
 }
@@ -86040,12 +86167,14 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   data: function data() {
     return {
       tags: [],
-      presets: []
+      presets: [],
+      fields: []
     };
   },
   mounted: function mounted() {
     this.getTags();
     this.getPresets();
+    this.getFields();
   },
   methods: {
     getTags: function getTags() {
@@ -86060,6 +86189,13 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/presets').then(function (response) {
         _this2.presets = response.data.data;
+      });
+    },
+    getFields: function getFields() {
+      var _this3 = this;
+
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/fields').then(function (response) {
+        _this3.fields = response.data.data;
       });
     }
   }
@@ -87166,6 +87302,48 @@ __webpack_require__.r(__webpack_exports__);
   return new Date(str).toISOString().substr(0, 10);
 });
 ;
+
+/***/ }),
+
+/***/ "./resources/js/functions/parseSort.js":
+/*!*********************************************!*\
+  !*** ./resources/js/functions/parseSort.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+/* harmony default export */ __webpack_exports__["default"] = (function (value) {
+  var sortBy = [];
+  var sortDesc = [];
+
+  var _iterator = _createForOfIteratorHelper(value.split(',')),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var part = _step.value;
+      sortBy.push(part.replace(/^-/, ''));
+      sortDesc.push(part[0] === '-');
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  return {
+    sortBy: sortBy,
+    sortDesc: sortDesc
+  };
+});
 
 /***/ }),
 
