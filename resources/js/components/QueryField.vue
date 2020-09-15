@@ -43,7 +43,7 @@
                 return this.$root.tags;
             },
             query() {
-                return Vue.observable(JSON.parse(this.value));
+                return Vue.observable(this.value ? JSON.parse(this.value) : {tags: [], search: ''});
             },
         },
         watch: {

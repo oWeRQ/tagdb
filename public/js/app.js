@@ -3733,7 +3733,10 @@ __webpack_require__.r(__webpack_exports__);
       return this.$root.tags;
     },
     query: function query() {
-      return vue__WEBPACK_IMPORTED_MODULE_0___default.a.observable(JSON.parse(this.value));
+      return vue__WEBPACK_IMPORTED_MODULE_0___default.a.observable(this.value ? JSON.parse(this.value) : {
+        tags: [],
+        search: ''
+      });
     }
   },
   watch: {
