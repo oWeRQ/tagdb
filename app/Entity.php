@@ -76,7 +76,17 @@ class Entity extends Model
         if (!is_array($tags))
             return;
 
-        $this->tags()->sync(array_column($tags, 'id'));
+        $tagIds = array_map(function($tag) {
+            if (empty($tag['id'])) {
+                return Tag::firstOrCreate([
+                    'name' => $tag['name'],
+                ], $tag)->id;
+            }
+
+            return $tag['id'];
+        }, $tags);
+
+        $this->tags()->sync($tagIds);
     }
 
     public function updateContents(array $contents = null)
