@@ -7,6 +7,7 @@ import Preset from './components/Preset.vue';
 export default [
     {
         path: '',
+        name: 'index',
         component: Index,
         props: {
             title: 'Entities',

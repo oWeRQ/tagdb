@@ -33,6 +33,20 @@
                     <v-icon left>mdi-plus</v-icon>
                     Add
                 </v-btn>
+                <v-menu offset-y left>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on">
+                            <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                    </template>
+                    <v-list>
+                        <v-list-item @click="deletePreset">
+                            <v-icon left>mdi-delete</v-icon>
+                            <v-list-item-title>Delete Preset</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+                </v-menu>
+
                 <CrudDialog
                     ref="entityDialog"
                     :form="form"
@@ -236,6 +250,14 @@
                 }
 
                 this.$root.getPresets();
+            },
+            deletePreset() {
+                if (confirm('Are you sure you want to delete this preset?')) {
+                    axios.delete(this.presetResource + '/' + this.preset.id).then(response => {
+                        this.$root.getPresets();
+                        this.$router.push({ name: 'index' });
+                    });
+                }
             },
         },
     }

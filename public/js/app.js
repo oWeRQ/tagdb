@@ -3221,6 +3221,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3468,6 +3482,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
 
       this.$root.getPresets();
+    },
+    deletePreset: function deletePreset() {
+      var _this4 = this;
+
+      if (confirm('Are you sure you want to delete this preset?')) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.presetResource + '/' + this.preset.id).then(function (response) {
+          _this4.$root.getPresets();
+
+          _this4.$router.push({
+            name: 'index'
+          });
+        });
+      }
     }
   }
 });
@@ -26026,6 +26053,60 @@ var render = function() {
                   [
                     _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
                     _vm._v("\n                Add\n            ")
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "v-menu",
+                  {
+                    attrs: { "offset-y": "", left: "" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  { attrs: { icon: "" } },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [_c("v-icon", [_vm._v("mdi-dots-vertical")])],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ])
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "v-list",
+                      [
+                        _c(
+                          "v-list-item",
+                          { on: { click: _vm.deletePreset } },
+                          [
+                            _c("v-icon", { attrs: { left: "" } }, [
+                              _vm._v("mdi-delete")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-list-item-title", [_vm._v("Delete Preset")])
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
                   ],
                   1
                 ),
@@ -87170,6 +87251,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ([{
   path: '',
+  name: 'index',
   component: _components_Index_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
     title: 'Entities',
