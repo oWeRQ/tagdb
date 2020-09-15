@@ -1,21 +1,11 @@
 <template>
     <div>
-        <v-autocomplete v-if="tags"
+        <TagsField
+            return-object
             v-model="value.tags"
             :rules="rules.tags"
-            :items="tags"
-            color="blue darken-1"
-            label="Tags"
-            item-text="name"
-            item-value="name"
-            chips
-            multiple
-            return-object
-            hide-selected
-            hide-no-data
-            deletable-chips
             :autofocus="!value.tags.length"
-        ></v-autocomplete>
+        ></TagsField>
 
         <v-text-field v-model="value.name" :rules="rules.name" label="Name" :autofocus="!!value.tags.length"></v-text-field>
 
@@ -44,7 +34,12 @@
 </template>
 
 <script>
+    import TagsField from './TagsField';
+
     export default {
+        components: {
+            TagsField,
+        },
         props: {
             value: {
                 type: Object,

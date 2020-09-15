@@ -24,25 +24,11 @@
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-divider class="mx-4" inset vertical></v-divider>
-                <v-autocomplete
+                <TagsField
                     v-model="query.tags"
-                    :items="tags"
-                    color="blue-grey lighten-2"
-                    label="Tags"
-                    item-text="name"
-                    item-value="name"
-                    chips
-                    multiple
-                    clearable
-                    dense
                     solo
-                    single-line
-                    hide-details
-                    hide-selected
-                    hide-no-data
-                    deletable-chips
                     class="shrink mr-3"
-                ></v-autocomplete>
+                ></TagsField>
                 <v-text-field
                     v-model="query.search"
                     label="Search"
@@ -105,6 +91,7 @@
     import stringifySort from '../functions/stringifySort';
     import ucwords from '../functions/ucwords';
     import CrudDialog from './CrudDialog';
+    import TagsField from './TagsField';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
     import EntityForm from './EntityForm';
@@ -113,6 +100,7 @@
     export default {
         components: {
             CrudDialog,
+            TagsField,
             EntitySelectionToolbar,
             EntityRow,
         },

@@ -2400,6 +2400,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
 //
 //
 //
@@ -2435,17 +2436,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   props: {
     value: {
       type: Object
@@ -2704,10 +2699,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
 /* harmony import */ var _functions_ucwords__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/ucwords */ "./resources/js/functions/ucwords.js");
 /* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
-/* harmony import */ var _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntitySelectionToolbar */ "./resources/js/components/EntitySelectionToolbar.vue");
-/* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
-/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
-/* harmony import */ var _PresetForm__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./PresetForm */ "./resources/js/components/PresetForm.vue");
+/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
+/* harmony import */ var _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EntitySelectionToolbar */ "./resources/js/components/EntitySelectionToolbar.vue");
+/* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
+/* harmony import */ var _EntityForm__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./EntityForm */ "./resources/js/components/EntityForm.vue");
+/* harmony import */ var _PresetForm__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./PresetForm */ "./resources/js/components/PresetForm.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2815,20 +2811,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -2841,8 +2824,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_4__["default"],
-    EntitySelectionToolbar: _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_5__["default"],
-    EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_6__["default"]
+    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_5__["default"],
+    EntitySelectionToolbar: _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_6__["default"],
+    EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   props: {
     title: {
@@ -2852,7 +2836,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     form: {
       type: Object,
       "default": function _default() {
-        return _EntityForm__WEBPACK_IMPORTED_MODULE_7__["default"];
+        return _EntityForm__WEBPACK_IMPORTED_MODULE_8__["default"];
       }
     },
     resource: {
@@ -2862,7 +2846,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     presetForm: {
       type: Object,
       "default": function _default() {
-        return _PresetForm__WEBPACK_IMPORTED_MODULE_8__["default"];
+        return _PresetForm__WEBPACK_IMPORTED_MODULE_9__["default"];
       }
     },
     presetResource: {
@@ -3552,16 +3536,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
 //
 //
 //
@@ -3574,7 +3549,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   props: {
     value: {
       type: String
@@ -3834,6 +3813,71 @@ __webpack_require__.r(__webpack_exports__);
       this.value.fields = this.value.fields.filter(function (item) {
         return item !== field;
       });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TagsField.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TagsField.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    value: {
+      type: Array
+    },
+    rules: {
+      type: Array
+    },
+    label: {
+      type: String,
+      "default": 'Tags'
+    },
+    returnObject: {
+      type: Boolean,
+      "default": false
+    },
+    autofocus: {
+      type: Boolean,
+      "default": false
+    },
+    solo: {
+      type: Boolean,
+      "default": false
+    }
+  },
+  computed: {
+    tags: function tags() {
+      return this.$root.tags;
     }
   }
 });
@@ -25172,32 +25216,20 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.tags
-        ? _c("v-autocomplete", {
-            attrs: {
-              rules: _vm.rules.tags,
-              items: _vm.tags,
-              color: "blue darken-1",
-              label: "Tags",
-              "item-text": "name",
-              "item-value": "name",
-              chips: "",
-              multiple: "",
-              "return-object": "",
-              "hide-selected": "",
-              "hide-no-data": "",
-              "deletable-chips": "",
-              autofocus: !_vm.value.tags.length
-            },
-            model: {
-              value: _vm.value.tags,
-              callback: function($$v) {
-                _vm.$set(_vm.value, "tags", $$v)
-              },
-              expression: "value.tags"
-            }
-          })
-        : _vm._e(),
+      _c("TagsField", {
+        attrs: {
+          "return-object": "",
+          rules: _vm.rules.tags,
+          autofocus: !_vm.value.tags.length
+        },
+        model: {
+          value: _vm.value.tags,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "tags", $$v)
+          },
+          expression: "value.tags"
+        }
+      }),
       _vm._v(" "),
       _c("v-text-field", {
         attrs: {
@@ -25781,25 +25813,9 @@ var render = function() {
                   attrs: { inset: "", vertical: "" }
                 }),
                 _vm._v(" "),
-                _c("v-autocomplete", {
+                _c("TagsField", {
                   staticClass: "shrink mr-3",
-                  attrs: {
-                    items: _vm.tags,
-                    color: "blue-grey lighten-2",
-                    label: "Tags",
-                    "item-text": "name",
-                    "item-value": "name",
-                    chips: "",
-                    multiple: "",
-                    clearable: "",
-                    dense: "",
-                    solo: "",
-                    "single-line": "",
-                    "hide-details": "",
-                    "hide-selected": "",
-                    "hide-no-data": "",
-                    "deletable-chips": ""
-                  },
+                  attrs: { solo: "" },
                   model: {
                     value: _vm.query.tags,
                     callback: function($$v) {
@@ -26276,31 +26292,16 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm.tags
-        ? _c("v-autocomplete", {
-            attrs: {
-              rules: _vm.rules.tags,
-              items: _vm.tags,
-              color: "blue darken-1",
-              label: "Tags",
-              "item-text": "name",
-              "item-value": "name",
-              chips: "",
-              multiple: "",
-              "hide-selected": "",
-              "hide-no-data": "",
-              "deletable-chips": "",
-              autofocus: !_vm.query.tags.length
-            },
-            model: {
-              value: _vm.query.tags,
-              callback: function($$v) {
-                _vm.$set(_vm.query, "tags", $$v)
-              },
-              expression: "query.tags"
-            }
-          })
-        : _vm._e(),
+      _c("TagsField", {
+        attrs: { rules: _vm.rules.tags, autofocus: !_vm.query.tags.length },
+        model: {
+          value: _vm.query.tags,
+          callback: function($$v) {
+            _vm.$set(_vm.query, "tags", $$v)
+          },
+          expression: "query.tags"
+        }
+      }),
       _vm._v(" "),
       _c("v-text-field", {
         attrs: { label: "Search" },
@@ -26571,6 +26572,50 @@ var render = function() {
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TagsField.vue?vue&type=template&id=d97293f4&":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TagsField.vue?vue&type=template&id=d97293f4& ***!
+  \************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("v-autocomplete", {
+    attrs: {
+      value: _vm.value,
+      items: _vm.tags,
+      label: _vm.label,
+      "item-text": "name",
+      "item-value": "name",
+      chips: "",
+      multiple: "",
+      clearable: "",
+      dense: "",
+      "hide-selected": "",
+      "hide-no-data": "",
+      "deletable-chips": "",
+      solo: _vm.solo,
+      "hide-details": _vm.solo,
+      "return-object": _vm.returnObject,
+      autofocus: _vm.autofocus
+    },
+    on: { input: _vm.$listeners.input }
+  })
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -87112,6 +87157,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TagForm_vue_vue_type_template_id_b2ddc43a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TagForm_vue_vue_type_template_id_b2ddc43a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/TagsField.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/TagsField.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TagsField_vue_vue_type_template_id_d97293f4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TagsField.vue?vue&type=template&id=d97293f4& */ "./resources/js/components/TagsField.vue?vue&type=template&id=d97293f4&");
+/* harmony import */ var _TagsField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TagsField.vue?vue&type=script&lang=js& */ "./resources/js/components/TagsField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TagsField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TagsField_vue_vue_type_template_id_d97293f4___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TagsField_vue_vue_type_template_id_d97293f4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/TagsField.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/TagsField.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/TagsField.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TagsField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./TagsField.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TagsField.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TagsField_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/TagsField.vue?vue&type=template&id=d97293f4&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/TagsField.vue?vue&type=template&id=d97293f4& ***!
+  \******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TagsField_vue_vue_type_template_id_d97293f4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./TagsField.vue?vue&type=template&id=d97293f4& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TagsField.vue?vue&type=template&id=d97293f4&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TagsField_vue_vue_type_template_id_d97293f4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TagsField_vue_vue_type_template_id_d97293f4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

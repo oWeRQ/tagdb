@@ -1,28 +1,22 @@
 <template>
     <div>
-        <v-autocomplete v-if="tags"
+        <TagsField
             v-model="query.tags"
             :rules="rules.tags"
-            :items="tags"
-            color="blue darken-1"
-            label="Tags"
-            item-text="name"
-            item-value="name"
-            chips
-            multiple
-            hide-selected
-            hide-no-data
-            deletable-chips
             :autofocus="!query.tags.length"
-        ></v-autocomplete>
+        ></TagsField>
         <v-text-field v-model="query.search" label="Search"></v-text-field>
     </div>
 </template>
 
 <script>
     import Vue from 'vue';
+    import TagsField from './TagsField';
 
     export default {
+        components: {
+            TagsField,
+        },
         props: {
             value: {
                 type: String,
