@@ -2828,6 +2828,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -25862,31 +25863,31 @@ var render = function() {
                     _vm._v("\n                Add\n            ")
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c("CrudDialog", {
-                  ref: "entityDialog",
-                  attrs: {
-                    form: _vm.form,
-                    resource: _vm.resource,
-                    processValue: _vm.processItem,
-                    value: _vm.editedItem
-                  },
-                  on: { input: _vm.saveItem }
-                }),
-                _vm._v(" "),
-                _c("CrudDialog", {
-                  ref: "presetDialog",
-                  attrs: {
-                    form: _vm.presetForm,
-                    resource: _vm.presetResource,
-                    value: _vm.editedPreset
-                  },
-                  on: { input: _vm.savePreset }
-                })
+                )
               ],
               1
-            )
+            ),
+            _vm._v(" "),
+            _c("CrudDialog", {
+              ref: "entityDialog",
+              attrs: {
+                form: _vm.form,
+                resource: _vm.resource,
+                processValue: _vm.processItem,
+                value: _vm.editedItem
+              },
+              on: { input: _vm.saveItem }
+            }),
+            _vm._v(" "),
+            _c("CrudDialog", {
+              ref: "presetDialog",
+              attrs: {
+                form: _vm.presetForm,
+                resource: _vm.presetResource,
+                value: _vm.editedPreset
+              },
+              on: { input: _vm.savePreset }
+            })
           ]
         },
         proxy: true
@@ -26109,31 +26110,31 @@ var render = function() {
                     )
                   ],
                   1
-                ),
-                _vm._v(" "),
-                _c("CrudDialog", {
-                  ref: "entityDialog",
-                  attrs: {
-                    form: _vm.form,
-                    resource: _vm.resource,
-                    processValue: _vm.processItem,
-                    value: _vm.editedItem
-                  },
-                  on: { input: _vm.saveItem }
-                }),
-                _vm._v(" "),
-                _c("CrudDialog", {
-                  ref: "presetDialog",
-                  attrs: {
-                    form: _vm.presetForm,
-                    resource: _vm.presetResource,
-                    value: _vm.editedPreset
-                  },
-                  on: { input: _vm.savePreset }
-                })
+                )
               ],
               1
-            )
+            ),
+            _vm._v(" "),
+            _c("CrudDialog", {
+              ref: "entityDialog",
+              attrs: {
+                form: _vm.form,
+                resource: _vm.resource,
+                processValue: _vm.processItem,
+                value: _vm.editedItem
+              },
+              on: { input: _vm.saveItem }
+            }),
+            _vm._v(" "),
+            _c("CrudDialog", {
+              ref: "presetDialog",
+              attrs: {
+                form: _vm.presetForm,
+                resource: _vm.presetResource,
+                value: _vm.editedPreset
+              },
+              on: { input: _vm.savePreset }
+            })
           ]
         },
         proxy: true

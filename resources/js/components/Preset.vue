@@ -46,23 +46,23 @@
                         </v-list-item>
                     </v-list>
                 </v-menu>
-
-                <CrudDialog
-                    ref="entityDialog"
-                    :form="form"
-                    :resource="resource"
-                    :processValue="processItem"
-                    :value="editedItem"
-                    @input="saveItem"
-                ></CrudDialog>
-                <CrudDialog
-                    ref="presetDialog"
-                    :form="presetForm"
-                    :resource="presetResource"
-                    :value="editedPreset"
-                    @input="savePreset"
-                ></CrudDialog>
             </v-toolbar>
+
+            <CrudDialog
+                ref="entityDialog"
+                :form="form"
+                :resource="resource"
+                :processValue="processItem"
+                :value="editedItem"
+                @input="saveItem"
+            ></CrudDialog>
+            <CrudDialog
+                ref="presetDialog"
+                :form="presetForm"
+                :resource="presetResource"
+                :value="editedPreset"
+                @input="savePreset"
+            ></CrudDialog>
         </template>
         <template v-slot:item="{ item, headers, isSelected, select }">
             <EntityRow
