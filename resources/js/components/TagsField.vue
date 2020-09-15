@@ -65,7 +65,7 @@
                 if (!tag) {
                     tag = {
                         name,
-                        fields: {},
+                        fields: [],
                     };
                     this.tags.push(tag);
                 }

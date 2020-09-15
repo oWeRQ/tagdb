@@ -3899,7 +3899,7 @@ __webpack_require__.r(__webpack_exports__);
       if (!tag) {
         tag = {
           name: name,
-          fields: {}
+          fields: []
         };
         this.tags.push(tag);
       }
