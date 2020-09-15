@@ -2701,10 +2701,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
-/* harmony import */ var _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./EntitySelectionToolbar */ "./resources/js/components/EntitySelectionToolbar.vue");
-/* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
-/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
-/* harmony import */ var _PresetDialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./PresetDialog */ "./resources/js/components/PresetDialog.vue");
+/* harmony import */ var _functions_ucwords__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/ucwords */ "./resources/js/functions/ucwords.js");
+/* harmony import */ var _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./EntitySelectionToolbar */ "./resources/js/components/EntitySelectionToolbar.vue");
+/* harmony import */ var _EntityRow__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./EntityRow */ "./resources/js/components/EntityRow.vue");
+/* harmony import */ var _EntityDialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./EntityDialog */ "./resources/js/components/EntityDialog.vue");
+/* harmony import */ var _PresetDialog__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./PresetDialog */ "./resources/js/components/PresetDialog.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -2829,12 +2830,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    EntitySelectionToolbar: _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_3__["default"],
-    EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_4__["default"],
-    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_5__["default"],
-    PresetDialog: _PresetDialog__WEBPACK_IMPORTED_MODULE_6__["default"]
+    EntitySelectionToolbar: _EntitySelectionToolbar__WEBPACK_IMPORTED_MODULE_4__["default"],
+    EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_5__["default"],
+    EntityDialog: _EntityDialog__WEBPACK_IMPORTED_MODULE_6__["default"],
+    PresetDialog: _PresetDialog__WEBPACK_IMPORTED_MODULE_7__["default"]
   },
   props: {
     title: {
@@ -3076,8 +3078,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     addPreset: function addPreset() {
       this.editedPreset = {
-        name: this.query.tags.join(' '),
-        sort: this.sort,
+        name: Object(_functions_ucwords__WEBPACK_IMPORTED_MODULE_3__["default"])(this.query.tags.join(' ')),
+        sort: this.sort || '-created_at',
         query: JSON.stringify(this.query)
       };
       this.$refs.presetDialog.show();
@@ -87459,6 +87461,24 @@ __webpack_require__.r(__webpack_exports__);
   var clamp = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '...';
   if (str.length > len) return str.substr(0, len) + clamp;
   return str;
+});
+;
+
+/***/ }),
+
+/***/ "./resources/js/functions/ucwords.js":
+/*!*******************************************!*\
+  !*** ./resources/js/functions/ucwords.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (str) {
+  return str.replace(/\b\w/g, function (chr) {
+    return chr.toUpperCase();
+  });
 });
 ;
 

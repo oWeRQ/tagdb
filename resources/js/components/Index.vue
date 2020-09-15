@@ -99,6 +99,7 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
+    import ucwords from '../functions/ucwords';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
     import EntityDialog from './EntityDialog';
@@ -265,8 +266,8 @@
             },
             addPreset() {
                 this.editedPreset = {
-                    name: this.query.tags.join(' '),
-                    sort: this.sort,
+                    name: ucwords(this.query.tags.join(' ')),
+                    sort: this.sort || '-created_at',
                     query: JSON.stringify(this.query),
                 };
                 this.$refs.presetDialog.show();
