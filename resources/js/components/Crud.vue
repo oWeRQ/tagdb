@@ -16,27 +16,19 @@
             <v-toolbar flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn text large color="grey darken-2" @click="editItem(defaultItem)">
+                <v-btn text large color="grey darken-2" @click="addItem">
                     <v-icon left>mdi-plus</v-icon>
                     Add
                 </v-btn>
-                <v-dialog v-model="editedDialog" max-width="500px">
-                    <v-form ref="form" v-model="editedValid" @submit.prevent="saveEdited">
-                        <v-card>
-                            <v-card-title>
-                                <span class="headline">{{ editedIndex > -1 ? 'Update' : 'Create' }}</span>
-                            </v-card-title>
-                            <v-card-text>
-                                <component :is="form" :editable="editable" v-model="editedItem"></component>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="blue darken-1" text @click="closeEdited">Cancel</v-btn>
-                                <v-btn color="blue darken-1" text type="submit" :disabled="!editedValid">Save</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-form>
-                </v-dialog>
+                <CrudDialog
+                    ref="crudDialog"
+                    :form="form"
+                    :resource="resource"
+                    :editable="editable"
+                    :processValue="processItem"
+                    :value="editedItem"
+                    @input="saveItem"
+                ></CrudDialog>
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
@@ -57,9 +49,13 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
+    import CrudDialog from './CrudDialog';
     import CrudForm from './CrudForm';
 
     export default {
+        components: {
+            CrudDialog,
+        },
         props: {
             form: {
                 type: Object,
@@ -90,6 +86,10 @@
                     { text: 'Name', value: 'name' },
                 ],
             },
+            processItem: {
+                type: Function,
+                default: value => value,
+            },
         },
         data() {
             return {
@@ -97,8 +97,6 @@
                 total: 0,
                 items: [],
                 options: {},
-                editedDialog: false,
-                editedValid: false,
                 editedIndex: -1,
                 editedItem: {},
             }
@@ -136,28 +134,10 @@
                 this.items = [];
                 this.total = 0;
                 axios.get(this.resource, { params }).then(response => {
-                    this.items = response.data.data;
+                    this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
                 });
-            },
-            saveEdited() {
-                if (!this.editedValid)
-                    return;
-
-                if (this.editedIndex > -1) {
-                    axios.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(response => {
-                        console.log('response', response);
-                        Object.assign(this.items[this.editedIndex], this.editedItem);
-                        this.closeEdited();
-                    });
-                } else {
-                    axios.post(this.resource, this.editedItem).then(response => {
-                        console.log('response', response);
-                        this.items.push(response.data.data);
-                        this.closeEdited();
-                    });
-                }
             },
             deleteItem(item) {
                 const index = this.items.indexOf(item);
@@ -168,14 +148,20 @@
                     });
                 }
             },
+            addItem() {
+                this.editItem(this.defaultItem);
+            },
             editItem(item) {
-                this.$refs.form && this.$refs.form.resetValidation();
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
-                this.editedDialog = true;
+                this.$refs.crudDialog.show();
             },
-            closeEdited() {
-                this.editedDialog = false;
+            saveItem(rawItem) {
+                if (this.editedIndex > -1) {
+                    Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
+                } else {
+                    this.items.unshift(this.processItem(rawItem));
+                }
             },
         },
     };

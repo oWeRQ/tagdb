@@ -2048,7 +2048,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/stringifySort */ "./resources/js/functions/stringifySort.js");
-/* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
+/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
+/* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2108,24 +2109,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_3__["default"]
+  },
   props: {
     form: {
       type: Object,
       "default": function _default() {
-        return _CrudForm__WEBPACK_IMPORTED_MODULE_3__["default"];
+        return _CrudForm__WEBPACK_IMPORTED_MODULE_4__["default"];
       }
     },
     defaultItem: {
@@ -2160,6 +2157,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           value: 'name'
         }];
       }
+    },
+    processItem: {
+      type: Function,
+      "default": function _default(value) {
+        return value;
+      }
     }
   },
   data: function data() {
@@ -2168,8 +2171,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       total: 0,
       items: [],
       options: {},
-      editedDialog: false,
-      editedValid: false,
       editedIndex: -1,
       editedItem: {}
     };
@@ -2213,35 +2214,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get(this.resource, {
         params: params
       }).then(function (response) {
-        _this.items = response.data.data;
+        _this.items = response.data.data.map(_this.processItem);
         _this.total = response.data.meta.total;
         _this.loading = false;
       });
     },
-    saveEdited: function saveEdited() {
-      var _this2 = this;
-
-      if (!this.editedValid) return;
-
-      if (this.editedIndex > -1) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.editedItem.id, this.editedItem).then(function (response) {
-          console.log('response', response);
-          Object.assign(_this2.items[_this2.editedIndex], _this2.editedItem);
-
-          _this2.closeEdited();
-        });
-      } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.editedItem).then(function (response) {
-          console.log('response', response);
-
-          _this2.items.push(response.data.data);
-
-          _this2.closeEdited();
-        });
-      }
-    },
     deleteItem: function deleteItem(item) {
-      var _this3 = this;
+      var _this2 = this;
 
       var index = this.items.indexOf(item);
 
@@ -2249,18 +2228,136 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
-          _this3.items.splice(index, 1);
+          _this2.items.splice(index, 1);
         });
       }
     },
+    addItem: function addItem() {
+      this.editItem(this.defaultItem);
+    },
     editItem: function editItem(item) {
-      this.$refs.form && this.$refs.form.resetValidation();
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = clone_deep__WEBPACK_IMPORTED_MODULE_1___default()(item);
-      this.editedDialog = true;
+      this.$refs.crudDialog.show();
     },
-    closeEdited: function closeEdited() {
-      this.editedDialog = false;
+    saveItem: function saveItem(rawItem) {
+      if (this.editedIndex > -1) {
+        Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
+      } else {
+        this.items.unshift(this.processItem(rawItem));
+      }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CrudDialog.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CrudDialog.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    form: {
+      type: Object,
+      "default": function _default() {
+        return _CrudForm__WEBPACK_IMPORTED_MODULE_1__["default"];
+      }
+    },
+    resource: {
+      type: String,
+      required: true
+    },
+    editable: {
+      type: Array
+    },
+    value: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
+    },
+    processValue: {
+      type: Function,
+      "default": function _default(value) {
+        return value;
+      }
+    },
+    maxWidth: {
+      type: String,
+      "default": '500px'
+    }
+  },
+  computed: {
+    headline: function headline() {
+      return this.value.id ? 'Update' : 'Create';
+    }
+  },
+  data: function data() {
+    return {
+      visible: false,
+      isValid: false
+    };
+  },
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      if (!this.isValid) return;
+
+      if (this.value.id) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.value.id, this.value).then(function (response) {
+          _this.$emit('input', _this.processValue(response.data.data));
+
+          _this.close();
+        });
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(this.resource, this.value).then(function (response) {
+          _this.$emit('input', _this.processValue(response.data.data));
+
+          _this.close();
+        });
+      }
+    },
+    show: function show() {
+      this.resetValidation();
+      this.visible = true;
+    },
+    close: function close() {
+      this.visible = false;
+    },
+    resetValidation: function resetValidation() {
+      this.$refs.form && this.$refs.form.resetValidation();
     }
   }
 });
@@ -24943,11 +25040,7 @@ var render = function() {
                   "v-btn",
                   {
                     attrs: { text: "", large: "", color: "grey darken-2" },
-                    on: {
-                      click: function($event) {
-                        return _vm.editItem(_vm.defaultItem)
-                      }
-                    }
+                    on: { click: _vm.addItem }
                   },
                   [
                     _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
@@ -24956,107 +25049,17 @@ var render = function() {
                   1
                 ),
                 _vm._v(" "),
-                _c(
-                  "v-dialog",
-                  {
-                    attrs: { "max-width": "500px" },
-                    model: {
-                      value: _vm.editedDialog,
-                      callback: function($$v) {
-                        _vm.editedDialog = $$v
-                      },
-                      expression: "editedDialog"
-                    }
+                _c("CrudDialog", {
+                  ref: "crudDialog",
+                  attrs: {
+                    form: _vm.form,
+                    resource: _vm.resource,
+                    editable: _vm.editable,
+                    processValue: _vm.processItem,
+                    value: _vm.editedItem
                   },
-                  [
-                    _c(
-                      "v-form",
-                      {
-                        ref: "form",
-                        on: {
-                          submit: function($event) {
-                            $event.preventDefault()
-                            return _vm.saveEdited($event)
-                          }
-                        },
-                        model: {
-                          value: _vm.editedValid,
-                          callback: function($$v) {
-                            _vm.editedValid = $$v
-                          },
-                          expression: "editedValid"
-                        }
-                      },
-                      [
-                        _c(
-                          "v-card",
-                          [
-                            _c("v-card-title", [
-                              _c("span", { staticClass: "headline" }, [
-                                _vm._v(
-                                  _vm._s(
-                                    _vm.editedIndex > -1 ? "Update" : "Create"
-                                  )
-                                )
-                              ])
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "v-card-text",
-                              [
-                                _c(_vm.form, {
-                                  tag: "component",
-                                  attrs: { editable: _vm.editable },
-                                  model: {
-                                    value: _vm.editedItem,
-                                    callback: function($$v) {
-                                      _vm.editedItem = $$v
-                                    },
-                                    expression: "editedItem"
-                                  }
-                                })
-                              ],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-card-actions",
-                              [
-                                _c("v-spacer"),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: { color: "blue darken-1", text: "" },
-                                    on: { click: _vm.closeEdited }
-                                  },
-                                  [_vm._v("Cancel")]
-                                ),
-                                _vm._v(" "),
-                                _c(
-                                  "v-btn",
-                                  {
-                                    attrs: {
-                                      color: "blue darken-1",
-                                      text: "",
-                                      type: "submit",
-                                      disabled: !_vm.editedValid
-                                    }
-                                  },
-                                  [_vm._v("Save")]
-                                )
-                              ],
-                              1
-                            )
-                          ],
-                          1
-                        )
-                      ],
-                      1
-                    )
-                  ],
-                  1
-                )
+                  on: { input: _vm.saveItem }
+                })
               ],
               1
             )
@@ -25113,6 +25116,128 @@ var render = function() {
       }
     ])
   })
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CrudDialog.vue?vue&type=template&id=26ec305e&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CrudDialog.vue?vue&type=template&id=26ec305e& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.value
+    ? _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": _vm.maxWidth },
+          model: {
+            value: _vm.visible,
+            callback: function($$v) {
+              _vm.visible = $$v
+            },
+            expression: "visible"
+          }
+        },
+        [
+          _c(
+            "v-form",
+            {
+              ref: "form",
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.submit($event)
+                }
+              },
+              model: {
+                value: _vm.isValid,
+                callback: function($$v) {
+                  _vm.isValid = $$v
+                },
+                expression: "isValid"
+              }
+            },
+            [
+              _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v(_vm._s(_vm.headline))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c(_vm.form, {
+                        tag: "component",
+                        attrs: { editable: _vm.editable },
+                        model: {
+                          value: _vm.value,
+                          callback: function($$v) {
+                            _vm.value = $$v
+                          },
+                          expression: "value"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-actions",
+                    [
+                      _c("v-spacer"),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { color: "blue darken-1", text: "" },
+                          on: { click: _vm.close }
+                        },
+                        [_vm._v("Cancel")]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: {
+                            color: "blue darken-1",
+                            text: "",
+                            type: "submit",
+                            disabled: !_vm.isValid
+                          }
+                        },
+                        [_vm._v("Save")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -86537,6 +86662,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Crud_vue_vue_type_template_id_2b8a6329___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Crud_vue_vue_type_template_id_2b8a6329___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/CrudDialog.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/CrudDialog.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CrudDialog_vue_vue_type_template_id_26ec305e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CrudDialog.vue?vue&type=template&id=26ec305e& */ "./resources/js/components/CrudDialog.vue?vue&type=template&id=26ec305e&");
+/* harmony import */ var _CrudDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudDialog.vue?vue&type=script&lang=js& */ "./resources/js/components/CrudDialog.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CrudDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CrudDialog_vue_vue_type_template_id_26ec305e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CrudDialog_vue_vue_type_template_id_26ec305e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/CrudDialog.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/CrudDialog.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/CrudDialog.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CrudDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./CrudDialog.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CrudDialog.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CrudDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/CrudDialog.vue?vue&type=template&id=26ec305e&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/CrudDialog.vue?vue&type=template&id=26ec305e& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CrudDialog_vue_vue_type_template_id_26ec305e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./CrudDialog.vue?vue&type=template&id=26ec305e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CrudDialog.vue?vue&type=template&id=26ec305e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CrudDialog_vue_vue_type_template_id_26ec305e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CrudDialog_vue_vue_type_template_id_26ec305e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
