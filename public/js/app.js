@@ -3839,7 +3839,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   watch: {
     value: {
       handler: function handler() {
-        this.sort = Object(_functions_parseSort__WEBPACK_IMPORTED_MODULE_1__["default"])(this.value);
+        this.sort = this.value ? Object(_functions_parseSort__WEBPACK_IMPORTED_MODULE_1__["default"])(this.value) : {
+          sortBy: [],
+          sortDesc: []
+        };
       },
       immediate: true
     },

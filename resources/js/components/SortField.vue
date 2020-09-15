@@ -59,7 +59,10 @@
         watch: {
             value: {
                 handler() {
-                    this.sort = parseSort(this.value);
+                    this.sort = this.value ? parseSort(this.value) : {
+                        sortBy: [],
+                        sortDesc: [],
+                    };
                 },
                 immediate: true,
             },
