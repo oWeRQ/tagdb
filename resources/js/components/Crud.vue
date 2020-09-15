@@ -156,11 +156,11 @@
                 this.editedItem = cloneDeep(item);
                 this.$refs.crudDialog.show();
             },
-            saveItem(rawItem) {
+            saveItem(item) {
                 if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
+                    Object.assign(this.items[this.editedIndex], item);
                 } else {
-                    this.items.unshift(this.processItem(rawItem));
+                    this.items.unshift(item);
                 }
             },
         },

@@ -33,19 +33,21 @@
                     <v-icon left>mdi-plus</v-icon>
                     Add
                 </v-btn>
-                <EntityDialog
+                <CrudDialog
                     ref="entityDialog"
+                    :form="form"
                     :resource="resource"
-                    :isUpdate="editedIndex > -1"
-                    :editedItem="editedItem"
-                    @save="saveItem"
-                ></EntityDialog>
-                <PresetDialog
+                    :processValue="processItem"
+                    :value="editedItem"
+                    @input="saveItem"
+                ></CrudDialog>
+                <CrudDialog
                     ref="presetDialog"
-                    :isUpdate="true"
+                    :form="presetForm"
+                    :resource="presetResource"
                     :value="editedPreset"
-                    @save="savePreset"
-                ></PresetDialog>
+                    @input="savePreset"
+                ></CrudDialog>
             </v-toolbar>
         </template>
         <template v-slot:item="{ item, headers, isSelected, select }">
@@ -69,22 +71,34 @@
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
+    import CrudDialog from './CrudDialog';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
-    import EntityDialog from './EntityDialog';
-    import PresetDialog from './PresetDialog';
+    import EntityForm from './EntityForm';
+    import PresetForm from './PresetForm';
 
     export default {
         components: {
+            CrudDialog,
             EntitySelectionToolbar,
             EntityRow,
-            EntityDialog,
-            PresetDialog,
         },
         props: {
+            form: {
+                type: Object,
+                default: () => EntityForm,
+            },
             resource: {
                 type: String,
-                required: true,
+                default: '/api/v1/entities',
+            },
+            presetForm: {
+                type: Object,
+                default: () => PresetForm,
+            },
+            presetResource: {
+                type: String,
+                default: '/api/v1/presets',
             },
         },
         data() {
@@ -205,11 +219,11 @@
                 this.editedItem = cloneDeep(item);
                 this.$refs.entityDialog.show();
             },
-            saveItem(rawItem) {
+            saveItem(item) {
                 if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], this.processItem(rawItem));
+                    Object.assign(this.items[this.editedIndex], item);
                 } else {
-                    this.items.unshift(this.processItem(rawItem));
+                    this.items.unshift(item);
                 }
             },
             editPreset() {

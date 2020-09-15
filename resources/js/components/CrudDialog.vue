@@ -65,16 +65,14 @@
                     return;
 
                 if (this.value.id) {
-                    axios.put(this.resource + '/' + this.value.id, this.value).then(response => {
-                        this.$emit('input', this.processValue(response.data.data));
-                        this.close();
-                    });
+                    axios.put(this.resource + '/' + this.value.id, this.value).then(this.success);
                 } else {
-                    axios.post(this.resource, this.value).then(response => {
-                        this.$emit('input', this.processValue(response.data.data));
-                        this.close();
-                    });
+                    axios.post(this.resource, this.value).then(this.success);
                 }
+            },
+            success(response) {
+                this.$emit('input', this.processValue(response.data.data));
+                this.close();
             },
             show() {
                 this.resetValidation();
