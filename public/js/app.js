@@ -3589,10 +3589,30 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -3600,6 +3620,29 @@ __webpack_require__.r(__webpack_exports__);
     },
     label: {
       type: String
+    }
+  },
+  computed: {
+    rules: function rules() {
+      return {
+        tags: [function (v) {
+          return !!v.length || 'Required';
+        }]
+      };
+    },
+    tags: function tags() {
+      return this.$root.tags;
+    },
+    query: function query() {
+      return vue__WEBPACK_IMPORTED_MODULE_0___default.a.observable(JSON.parse(this.value));
+    }
+  },
+  watch: {
+    query: {
+      deep: true,
+      handler: function handler(value) {
+        this.$emit('input', JSON.stringify(value));
+      }
     }
   }
 });
@@ -26412,14 +26455,48 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-text-field", {
-    attrs: { value: _vm.value, label: _vm.label },
-    on: {
-      input: function($event) {
-        return _vm.$emit("input", $event)
-      }
-    }
-  })
+  return _c(
+    "div",
+    [
+      _vm.tags
+        ? _c("v-autocomplete", {
+            attrs: {
+              rules: _vm.rules.tags,
+              items: _vm.tags,
+              color: "blue darken-1",
+              label: "Tags",
+              "item-text": "name",
+              "item-value": "name",
+              chips: "",
+              multiple: "",
+              "hide-selected": "",
+              "hide-no-data": "",
+              "deletable-chips": "",
+              autofocus: !_vm.query.tags.length
+            },
+            model: {
+              value: _vm.query.tags,
+              callback: function($$v) {
+                _vm.$set(_vm.query, "tags", $$v)
+              },
+              expression: "query.tags"
+            }
+          })
+        : _vm._e(),
+      _vm._v(" "),
+      _c("v-text-field", {
+        attrs: { label: "Search" },
+        model: {
+          value: _vm.query.search,
+          callback: function($$v) {
+            _vm.$set(_vm.query, "search", $$v)
+          },
+          expression: "query.search"
+        }
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
