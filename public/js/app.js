@@ -3850,6 +3850,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -3878,6 +3879,32 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     tags: function tags() {
       return this.$root.tags;
+    }
+  },
+  methods: {
+    input: function input(value) {
+      var _this = this;
+
+      this.$emit('input', value.map(function (v) {
+        var tag = _this.getOrCreateTag(typeof v === 'string' ? v : v.name);
+
+        return _this.returnObject ? tag : tag.name;
+      }));
+    },
+    getOrCreateTag: function getOrCreateTag(name) {
+      var tag = this.tags.find(function (tag) {
+        return tag.name === name;
+      });
+
+      if (!tag) {
+        tag = {
+          name: name,
+          fields: {}
+        };
+        this.tags.push(tag);
+      }
+
+      return tag;
     }
   }
 });
@@ -26595,9 +26622,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("v-autocomplete", {
+  return _c("v-combobox", {
     attrs: {
       value: _vm.value,
+      rules: _vm.rules,
       items: _vm.tags,
       label: _vm.label,
       "item-text": "name",
@@ -26614,7 +26642,7 @@ var render = function() {
       "return-object": _vm.returnObject,
       autofocus: _vm.autofocus
     },
-    on: { input: _vm.$listeners.input }
+    on: { input: _vm.input }
   })
 }
 var staticRenderFns = []

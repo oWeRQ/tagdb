@@ -1,7 +1,8 @@
 <template>
-    <v-autocomplete
-        @input="$listeners.input"
+    <v-combobox
+        @input="input"
         :value="value"
+        :rules="rules"
         :items="tags"
         :label="label"
         item-text="name"
@@ -17,7 +18,7 @@
         :hide-details="solo"
         :return-object="returnObject"
         :autofocus="autofocus"
-    ></v-autocomplete>
+    ></v-combobox>
 </template>
 
 <script>
@@ -49,6 +50,27 @@
         computed: {
             tags() {
                 return this.$root.tags;
+            },
+        },
+        methods: {
+            input(value) {
+                this.$emit('input', value.map(v => {
+                    const tag = this.getOrCreateTag(typeof v === 'string' ? v : v.name);
+                    return this.returnObject ? tag : tag.name;
+                }));
+            },
+            getOrCreateTag(name) {
+                let tag = this.tags.find(tag => tag.name === name);
+
+                if (!tag) {
+                    tag = {
+                        name,
+                        fields: {},
+                    };
+                    this.tags.push(tag);
+                }
+
+                return tag;
             },
         },
     }
