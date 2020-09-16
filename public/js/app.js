@@ -87422,7 +87422,11 @@ __webpack_require__.r(__webpack_exports__);
       value: 'color'
     }, {
       text: 'Fields',
-      value: 'fields.length'
+      value: 'fields.length',
+      sortable: false
+    }, {
+      text: 'Entities Count',
+      value: 'entities_count'
     }]
   }
 }, {

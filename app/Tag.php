@@ -21,9 +21,21 @@ class Tag extends Model
         return $this->hasMany('App\Field');
     }
 
-    public function scopeOrderByEntities($query)
+    public function scopeSort($query, $sort = null)
     {
-        $query->withCount('entities')->orderBy('entities_count', 'desc');
+        $query->withCount('entities');
+
+        if (!$sort)
+            return $query->orderBy('entities_count', 'desc');
+
+        foreach (explode(',', $sort) as $i => $part) {
+            $column = explode('.', trim($part, '+-'));
+            $direction = $part[0] === '-' ? 'desc' : 'asc';
+
+            $query->orderBy($column[0], $direction);
+        }
+
+        return $query;
     }
 
     public function updateFields(array $fields = null)

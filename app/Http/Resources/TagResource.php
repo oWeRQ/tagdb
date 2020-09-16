@@ -20,6 +20,7 @@ class TagResource extends JsonResource
             'color' => $this->color,
             // 'entities' => EntityResource::collection($this->entities),
             'fields' => FieldResource::collection($this->fields),
+            'entities_count' => $this->entities_count,
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at,
         ];
