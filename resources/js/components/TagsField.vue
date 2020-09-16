@@ -22,6 +22,8 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         props: {
             value: {
@@ -47,12 +49,26 @@
                 default: false,
             },
         },
-        computed: {
-            tags() {
-                return this.$root.tags;
-            },
+        data() {
+            return {
+                tags: [],
+            };
+        },
+        watch: {
+            value: 'getTags',
+        },
+        mounted() {
+            this.getTags();
         },
         methods: {
+            getTags() {
+                const params = {
+                    with_tags: this.returnObject ? this.value.map(tag => tag.name) : this.value,
+                };
+                axios.get('/api/v1/tags', { params }).then(response => {
+                    this.tags = response.data.data;
+                });
+            },
             input(value) {
                 this.$emit('input', value.map(v => {
                     const tag = this.getOrCreateTag(typeof v === 'string' ? v : v.name);

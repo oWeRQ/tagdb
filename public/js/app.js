@@ -3828,6 +3828,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -3851,6 +3853,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -3876,19 +3879,39 @@ __webpack_require__.r(__webpack_exports__);
       "default": false
     }
   },
-  computed: {
-    tags: function tags() {
-      return this.$root.tags;
-    }
+  data: function data() {
+    return {
+      tags: []
+    };
+  },
+  watch: {
+    value: 'getTags'
+  },
+  mounted: function mounted() {
+    this.getTags();
   },
   methods: {
-    input: function input(value) {
+    getTags: function getTags() {
       var _this = this;
 
-      this.$emit('input', value.map(function (v) {
-        var tag = _this.getOrCreateTag(typeof v === 'string' ? v : v.name);
+      var params = {
+        with_tags: this.returnObject ? this.value.map(function (tag) {
+          return tag.name;
+        }) : this.value
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags', {
+        params: params
+      }).then(function (response) {
+        _this.tags = response.data.data;
+      });
+    },
+    input: function input(value) {
+      var _this2 = this;
 
-        return _this.returnObject ? tag : tag.name;
+      this.$emit('input', value.map(function (v) {
+        var tag = _this2.getOrCreateTag(typeof v === 'string' ? v : v.name);
+
+        return _this2.returnObject ? tag : tag.name;
       }));
     },
     getOrCreateTag: function getOrCreateTag(name) {
