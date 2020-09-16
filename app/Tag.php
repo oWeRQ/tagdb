@@ -23,8 +23,6 @@ class Tag extends Model
 
     public function scopeSort($query, $sort = null)
     {
-        $query->withCount('entities');
-
         if (!$sort)
             return $query->orderBy('entities_count', 'desc');
 

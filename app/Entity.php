@@ -24,19 +24,17 @@ class Entity extends Model
     {
         $queryData = json_decode($json, true);
 
-        if ($tags = $queryData['tags'] ?? null) {
-            $query->havingTags($tags);
-        }
-
-        if ($search = $queryData['search'] ?? null) {
-            $query->search($search);
-        }
+        $query->havingTags($queryData['tags'] ?? null);
+        $query->search($queryData['search'] ?? null);
 
         return $query;
     }
 
     public function scopeHavingTags($query, array $tags = null)
     {
+        if (!$tags)
+            return $query;
+
         return $query->whereHas('tags', function($query) use($tags) {
             $query->whereIn('name', $tags)
                 ->groupBy('entity_id')
@@ -44,8 +42,11 @@ class Entity extends Model
         });
     }
 
-    public function scopeSearch($query, $search)
+    public function scopeSearch($query, $search = null)
     {
+        if (!$search)
+            return $query;
+
         return $query->where('name', 'like', '%'.$search.'%');
     }
 

@@ -13,6 +13,12 @@ class TagController extends Controller
     {
         $query = Tag::query();
 
+        $with_tags = $request->get('with_tags');
+
+        $query->withCount(['entities' => function($query) use($with_tags) {
+            $query->havingTags($with_tags);
+        }]);
+
         $query->sort($request->get('sort'));
 
         $perPage = $request->get('per_page', 100);
