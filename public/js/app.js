@@ -3220,6 +3220,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3265,7 +3294,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       selected: [],
       editedIndex: null,
       editedItem: null,
-      editedPreset: null
+      editedPreset: null,
+      exportDialog: false,
+      exportColumns: []
     };
   },
   computed: {
@@ -3369,6 +3400,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         };
       });
       return [].concat(before, _toConsumableArray(fields), after);
+    },
+    exportHeaders: function exportHeaders() {
+      return this.headers.slice(0, -1);
     },
     sort: function sort() {
       return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.options.sortBy, this.options.sortDesc);
@@ -3480,6 +3514,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
           });
         });
       }
+    },
+    openExport: function openExport() {
+      this.exportColumns = this.exportHeaders.map(function (header) {
+        return header.value;
+      });
+      this.exportDialog = true;
+    },
+    downloadExport: function downloadExport() {
+      var params = {
+        preset: this.preset.name,
+        sort: this.sort,
+        "export": this.preset.name + '.csv',
+        columns: this.exportColumns
+      };
+      console.log(params);
+      window.open(this.resource + '?' + new URLSearchParams(params));
     }
   }
 });
@@ -26161,6 +26211,25 @@ var render = function() {
                       [
                         _c(
                           "v-list-item",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.openExport()
+                              }
+                            }
+                          },
+                          [
+                            _c("v-icon", { attrs: { left: "" } }, [
+                              _vm._v("mdi-export")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-list-item-title", [_vm._v("Export")])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-list-item",
                           { on: { click: _vm.deletePreset } },
                           [
                             _c("v-icon", { attrs: { left: "" } }, [
@@ -26200,7 +26269,104 @@ var render = function() {
                 value: _vm.editedPreset
               },
               on: { input: _vm.savePreset }
-            })
+            }),
+            _vm._v(" "),
+            _c(
+              "v-dialog",
+              {
+                attrs: { "max-width": "500px" },
+                model: {
+                  value: _vm.exportDialog,
+                  callback: function($$v) {
+                    _vm.exportDialog = $$v
+                  },
+                  expression: "exportDialog"
+                }
+              },
+              [
+                _c(
+                  "v-form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.downloadExport($event)
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "v-card",
+                      [
+                        _c("v-card-title", [
+                          _c("span", { staticClass: "headline" }, [
+                            _vm._v("Export")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-text",
+                          _vm._l(_vm.exportHeaders, function(header) {
+                            return _c("v-switch", {
+                              key: header.value,
+                              attrs: {
+                                value: header.value,
+                                label: header.text,
+                                "hide-details": ""
+                              },
+                              model: {
+                                value: _vm.exportColumns,
+                                callback: function($$v) {
+                                  _vm.exportColumns = $$v
+                                },
+                                expression: "exportColumns"
+                              }
+                            })
+                          }),
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.exportDialog = false
+                                  }
+                                }
+                              },
+                              [_vm._v("Cancel")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: "blue darken-1",
+                                  text: "",
+                                  type: "submit"
+                                }
+                              },
+                              [_vm._v("Download")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
           ]
         },
         proxy: true

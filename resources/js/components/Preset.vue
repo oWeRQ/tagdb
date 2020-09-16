@@ -40,6 +40,10 @@
                         </v-btn>
                     </template>
                     <v-list>
+                        <v-list-item @click="openExport()">
+                            <v-icon left>mdi-export</v-icon>
+                            <v-list-item-title>Export</v-list-item-title>
+                        </v-list-item>
                         <v-list-item @click="deletePreset">
                             <v-icon left>mdi-delete</v-icon>
                             <v-list-item-title>Delete Preset</v-list-item-title>
@@ -63,6 +67,31 @@
                 :value="editedPreset"
                 @input="savePreset"
             ></CrudDialog>
+
+            <v-dialog v-model="exportDialog" max-width="500px">
+                <v-form @submit.prevent="downloadExport">
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">Export</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-switch
+                                v-for="header in exportHeaders"
+                                :key="header.value"
+                                v-model="exportColumns"
+                                :value="header.value"
+                                :label="header.text"
+                                hide-details
+                            ></v-switch>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="exportDialog = false">Cancel</v-btn>
+                            <v-btn color="blue darken-1" text type="submit">Download</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-form>
+            </v-dialog>
         </template>
         <template v-slot:item="{ item, headers, isSelected, select }">
             <EntityRow
@@ -125,6 +154,8 @@
                 editedIndex: null,
                 editedItem: null,
                 editedPreset: null,
+                exportDialog: false,
+                exportColumns: [],
             };
         },
         computed: {
@@ -176,6 +207,9 @@
                 });
 
                 return [...before, ...fields, ...after];
+            },
+            exportHeaders() {
+                return this.headers.slice(0, -1);
             },
             sort() {
                 return stringifySort(this.options.sortBy, this.options.sortDesc);
@@ -258,6 +292,20 @@
                         this.$router.push({ name: 'index' });
                     });
                 }
+            },
+            openExport() {
+                this.exportColumns = this.exportHeaders.map(header => header.value);
+                this.exportDialog = true;
+            },
+            downloadExport() {
+                const params = {
+                    preset: this.preset.name,
+                    sort: this.sort,
+                    export: this.preset.name + '.csv',
+                    columns: this.exportColumns,
+                };
+                console.log(params);
+                window.open(this.resource + '?' + new URLSearchParams(params));
             },
         },
     }
