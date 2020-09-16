@@ -24,7 +24,7 @@ class Tag extends Model
     public function scopeSort($query, $sort = null)
     {
         if (!$sort)
-            return $query->orderBy('entities_count', 'desc');
+            return $query->orderBy('entities_count', 'desc')->orderBy('name', 'asc');
 
         foreach (explode(',', $sort) as $i => $part) {
             $column = explode('.', trim($part, '+-'));
