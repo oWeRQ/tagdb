@@ -47,7 +47,9 @@ class Entity extends Model
         if (!$search)
             return $query;
 
-        return $query->where('name', 'like', '%'.$search.'%');
+        return $query->where('name', 'like', '%'.$search.'%')->orWhereHas('values', function($query) use($search) {
+            $query->where('content', 'like', '%'.$search.'%');
+        });
     }
 
     public function scopeSort($query, $sort = null)
