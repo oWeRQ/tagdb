@@ -52,8 +52,22 @@ class Entity extends Model
         });
     }
 
+    public function scopeSelectContents($query, $field_id = null)
+    {
+        $column = "values_$field_id.content as contents.$field_id";
+
+        if (!in_array($column, $query->getQuery()->columns)) {
+            $query->leftJoin("values as values_$field_id", function($join) use($field_id) {
+                $join->on("values_$field_id.entity_id", '=', 'entities.id');
+                $join->where("values_$field_id.field_id", '=', $field_id);
+            })->addSelect($column);
+        }
+    }
+
     public function scopeSort($query, $sort = null)
     {
+        $query->select('entities.*');
+
         if (!$sort)
             return $query->orderBy('created_at', 'desc');
 
@@ -62,16 +76,14 @@ class Entity extends Model
             $direction = $part[0] === '-' ? 'desc' : 'asc';
 
             if ($column[0] === 'contents') {
-                $query->leftJoin("values as values$i", function($join) use($i, $column) {
-                    $join->on("values$i.entity_id", '=', 'entities.id');
-                    $join->where("values$i.field_id", '=', $column[1]);
-                })->orderBy("values$i.content", $direction);
+                $field_id = $column[1];
+                $query->selectContents($field_id)->orderBy("values_$field_id.content", $direction);
             } else {
                 $query->orderBy($column[0], $direction);
             }
         }
 
-        return $query->select('entities.*');
+        return $query;
     }
 
     public function updateTags(array $tags = null)
