@@ -3249,6 +3249,27 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3296,7 +3317,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       editedItem: null,
       editedPreset: null,
       exportDialog: false,
-      exportColumns: []
+      exportColumns: [],
+      importDialog: false,
+      importFile: null
     };
   },
   computed: {
@@ -3528,8 +3551,28 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         "export": this.preset.name + '.csv',
         columns: this.exportColumns
       };
-      console.log(params);
       window.open(this.resource + '?' + new URLSearchParams(params));
+      this.exportDialog = false;
+    },
+    openImport: function openImport() {
+      this.importDialog = true;
+    },
+    runImport: function runImport() {
+      var _this5 = this;
+
+      var formData = new FormData();
+      formData.append('importFile', this.importFile);
+      var headers = {
+        'Content-Type': 'multipart/form-data'
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/import', formData, {
+        headers: headers
+      }).then(function (response) {
+        console.log('import response', response);
+
+        _this5.getItems(); // this.importDialog = false;
+
+      });
     }
   }
 });
@@ -26230,6 +26273,25 @@ var render = function() {
                         _vm._v(" "),
                         _c(
                           "v-list-item",
+                          {
+                            on: {
+                              click: function($event) {
+                                return _vm.openImport()
+                              }
+                            }
+                          },
+                          [
+                            _c("v-icon", { attrs: { left: "" } }, [
+                              _vm._v("mdi-import")
+                            ]),
+                            _vm._v(" "),
+                            _c("v-list-item-title", [_vm._v("Import")])
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-list-item",
                           { on: { click: _vm.deletePreset } },
                           [
                             _c("v-icon", { attrs: { left: "" } }, [
@@ -26274,7 +26336,7 @@ var render = function() {
             _c(
               "v-dialog",
               {
-                attrs: { "max-width": "500px" },
+                attrs: { "max-width": "250px" },
                 model: {
                   value: _vm.exportDialog,
                   callback: function($$v) {
@@ -26354,6 +26416,98 @@ var render = function() {
                                 }
                               },
                               [_vm._v("Download")]
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-dialog",
+              {
+                attrs: { "max-width": "500px" },
+                model: {
+                  value: _vm.importDialog,
+                  callback: function($$v) {
+                    _vm.importDialog = $$v
+                  },
+                  expression: "importDialog"
+                }
+              },
+              [
+                _c(
+                  "v-form",
+                  {
+                    on: {
+                      submit: function($event) {
+                        $event.preventDefault()
+                        return _vm.runImport($event)
+                      }
+                    }
+                  },
+                  [
+                    _c(
+                      "v-card",
+                      [
+                        _c("v-card-title", [
+                          _c("span", { staticClass: "headline" }, [
+                            _vm._v("Import")
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-text",
+                          [
+                            _c("v-file-input", {
+                              attrs: { label: "Import File" },
+                              model: {
+                                value: _vm.importFile,
+                                callback: function($$v) {
+                                  _vm.importFile = $$v
+                                },
+                                expression: "importFile"
+                              }
+                            })
+                          ],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-card-actions",
+                          [
+                            _c("v-spacer"),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: { color: "blue darken-1", text: "" },
+                                on: {
+                                  click: function($event) {
+                                    _vm.importDialog = false
+                                  }
+                                }
+                              },
+                              [_vm._v("Cancel")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              {
+                                attrs: {
+                                  color: "blue darken-1",
+                                  text: "",
+                                  type: "submit"
+                                }
+                              },
+                              [_vm._v("Run")]
                             )
                           ],
                           1

@@ -44,6 +44,10 @@
                             <v-icon left>mdi-export</v-icon>
                             <v-list-item-title>Export</v-list-item-title>
                         </v-list-item>
+                        <v-list-item @click="openImport()">
+                            <v-icon left>mdi-import</v-icon>
+                            <v-list-item-title>Import</v-list-item-title>
+                        </v-list-item>
                         <v-list-item @click="deletePreset">
                             <v-icon left>mdi-delete</v-icon>
                             <v-list-item-title>Delete Preset</v-list-item-title>
@@ -68,7 +72,7 @@
                 @input="savePreset"
             ></CrudDialog>
 
-            <v-dialog v-model="exportDialog" max-width="500px">
+            <v-dialog v-model="exportDialog" max-width="250px">
                 <v-form @submit.prevent="downloadExport">
                     <v-card>
                         <v-card-title>
@@ -88,6 +92,23 @@
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="exportDialog = false">Cancel</v-btn>
                             <v-btn color="blue darken-1" text type="submit">Download</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-form>
+            </v-dialog>
+            <v-dialog v-model="importDialog" max-width="500px">
+                <v-form @submit.prevent="runImport">
+                    <v-card>
+                        <v-card-title>
+                            <span class="headline">Import</span>
+                        </v-card-title>
+                        <v-card-text>
+                            <v-file-input v-model="importFile" label="Import File"></v-file-input>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" text @click="importDialog = false">Cancel</v-btn>
+                            <v-btn color="blue darken-1" text type="submit">Run</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-form>
@@ -156,6 +177,8 @@
                 editedPreset: null,
                 exportDialog: false,
                 exportColumns: [],
+                importDialog: false,
+                importFile: null,
             };
         },
         computed: {
@@ -304,8 +327,25 @@
                     export: this.preset.name + '.csv',
                     columns: this.exportColumns,
                 };
-                console.log(params);
                 window.open(this.resource + '?' + new URLSearchParams(params));
+                this.exportDialog = false;
+            },
+            openImport() {
+                this.importDialog = true;
+            },
+            runImport() {
+                const formData = new FormData;
+                formData.append('importFile', this.importFile);
+
+                const headers = {
+                    'Content-Type': 'multipart/form-data',
+                };
+
+                axios.post('/api/v1/import', formData, { headers }).then(response => {
+                    console.log('import response', response);
+                    this.getItems();
+                    // this.importDialog = false;
+                });
             },
         },
     }
