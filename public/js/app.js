@@ -3562,6 +3562,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       var formData = new FormData();
       formData.append('importFile', this.importFile);
+      formData.append('preset', this.preset.name);
       var headers = {
         'Content-Type': 'multipart/form-data'
       };
@@ -3570,8 +3571,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }).then(function (response) {
         console.log('import response', response);
 
-        _this5.getItems(); // this.importDialog = false;
+        _this5.getItems();
 
+        _this5.importDialog = false;
       });
     }
   }

@@ -336,6 +336,7 @@
             runImport() {
                 const formData = new FormData;
                 formData.append('importFile', this.importFile);
+                formData.append('preset', this.preset.name);
 
                 const headers = {
                     'Content-Type': 'multipart/form-data',
@@ -344,7 +345,7 @@
                 axios.post('/api/v1/import', formData, { headers }).then(response => {
                     console.log('import response', response);
                     this.getItems();
-                    // this.importDialog = false;
+                    this.importDialog = false;
                 });
             },
         },

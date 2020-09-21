@@ -13,6 +13,12 @@ class ImportController extends Controller
 {
     public function store(Request $request)
     {
-        Excel::import(new EntityImport, $request->file('importFile'));
+        if (!$request->has('preset')) {
+            return 400;
+        }
+
+        $preset = Preset::firstWhere('name', $request->get('preset'));
+
+        Excel::import(new EntityImport($preset->tags), $request->file('importFile'));
     }
 }
