@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class Preset extends Model
 {
@@ -15,6 +14,6 @@ class Preset extends Model
 
     public function getTagsAttribute()
     {
-        return Tag::whereIn(DB::raw('LOWER(name)'), json_decode($this->query)->tags)->get();
+        return Tag::whereIn('name', json_decode($this->query)->tags)->get();
     }
 }
