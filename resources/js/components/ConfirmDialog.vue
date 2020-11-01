@@ -21,7 +21,7 @@
         props: {
             maxWidth: {
                 type: String,
-                default: '290px',
+                default: '400px',
             },
         },
         data() {

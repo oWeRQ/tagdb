@@ -2066,7 +2066,7 @@ __webpack_require__.r(__webpack_exports__);
   props: {
     maxWidth: {
       type: String,
-      "default": '290px'
+      "default": '400px'
     }
   },
   data: function data() {
@@ -2289,14 +2289,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var _this2 = this;
 
       var index = this.items.indexOf(item);
-
-      if (confirm('Are you sure you want to delete this item?')) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
+      this.$root.confirm('Delete item?').then(function () {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
           _this2.items.splice(index, 1);
         });
-      }
+      });
     },
     addItem: function addItem() {
       this.editItem(this.defaultItem);
@@ -3158,14 +3157,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var _this4 = this;
 
       var index = this.items.indexOf(item);
-
-      if (confirm('Are you sure you want to delete this item?')) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
+      this.$root.confirm('Delete item?').then(function () {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this4.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
           _this4.items.splice(index, 1);
         });
-      }
+      });
     },
     addItem: function addItem() {
       this.editItem({
@@ -3589,14 +3587,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var _this3 = this;
 
       var index = this.items.indexOf(item);
-
-      if (confirm('Are you sure you want to delete this item?')) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.resource + '/' + item.id).then(function (response) {
+      this.$root.confirm('Delete item?').then(function () {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this3.resource + '/' + item.id).then(function (response) {
           console.log('response', response);
 
           _this3.items.splice(index, 1);
         });
-      }
+      });
     },
     addItem: function addItem() {
       this.editItem({
@@ -3635,15 +3632,15 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     deletePreset: function deletePreset() {
       var _this4 = this;
 
-      if (confirm('Are you sure you want to delete this preset?')) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](this.presetResource + '/' + this.preset.id).then(function (response) {
+      this.$root.confirm('Delete preset?').then(function () {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this4.presetResource + '/' + _this4.preset.id).then(function (response) {
           _this4.$root.getPresets();
 
           _this4.$router.push({
             name: 'index'
           });
         });
-      }
+      });
     },
     openExport: function openExport() {
       this.exportColumns = this.exportHeaders.map(function (header) {

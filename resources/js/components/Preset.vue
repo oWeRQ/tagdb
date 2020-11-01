@@ -272,12 +272,12 @@
             },
             deleteItem(item) {
                 const index = this.items.indexOf(item);
-                if (confirm('Are you sure you want to delete this item?')) {
+                this.$root.confirm('Delete item?').then(() => {
                     axios.delete(this.resource + '/' + item.id).then(response => {
                         console.log('response', response);
                         this.items.splice(index, 1);
                     });
-                }
+                });
             },
             addItem() {
                 this.editItem({
@@ -309,12 +309,12 @@
                 this.$root.getPresets();
             },
             deletePreset() {
-                if (confirm('Are you sure you want to delete this preset?')) {
+                this.$root.confirm('Delete preset?').then(() => {
                     axios.delete(this.presetResource + '/' + this.preset.id).then(response => {
                         this.$root.getPresets();
                         this.$router.push({ name: 'index' });
                     });
-                }
+                });
             },
             openExport() {
                 this.exportColumns = this.exportHeaders.map(header => header.value);

@@ -141,12 +141,12 @@
             },
             deleteItem(item) {
                 const index = this.items.indexOf(item);
-                if (confirm('Are you sure you want to delete this item?')) {
+                this.$root.confirm('Delete item?').then(() => {
                     axios.delete(this.resource + '/' + item.id).then(response => {
                         console.log('response', response);
                         this.items.splice(index, 1);
                     });
-                }
+                });
             },
             addItem() {
                 this.editItem(this.defaultItem);
