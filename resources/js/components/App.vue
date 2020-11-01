@@ -64,6 +64,7 @@
         </v-app-bar>
 
         <v-main>
+            <slot></slot>
             <router-view></router-view>
         </v-main>
     </v-app>

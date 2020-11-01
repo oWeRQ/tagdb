@@ -7,19 +7,21 @@ import 'vuetify/dist/vuetify.min.css'
 import axios from 'axios';
 
 import App from './components/App.vue';
+import ConfirmDialog from './components/ConfirmDialog.vue';
 import routes from './routes';
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
 
 const app = new Vue({
-    template: '<App></App>',
+    template: '<App><ConfirmDialog ref="confirm"></ConfirmDialog></App>',
     vuetify: new Vuetify({}),
     router: new VueRouter({
         routes,
     }),
     components: {
         App,
+        ConfirmDialog,
     },
     data() {
         return {
@@ -49,13 +51,8 @@ const app = new Vue({
                 this.fields = response.data.data;
             });
         },
-        confirm(message) {
-            return new Promise((resolve, reject) => {
-                if (confirm(message))
-                    resolve();
-                else
-                    reject();
-            });
+        confirm(title, text = null) {
+            return this.$refs.confirm.show(title, text);
         },
     },
 }).$mount('#app');
