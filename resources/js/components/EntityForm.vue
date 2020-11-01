@@ -25,13 +25,16 @@
                     <v-time-picker v-model="value.contents[field.id]" @click:minute="menu[field.id] = false" format="24hr"></v-time-picker>
                 </v-menu>
 
-                <v-rating v-else-if="field.type === 'rating'"
-                    v-model="value.contents[field.id]"
-                    hover
-                    half-increments
-                    color="orange"
-                    background-color="orange"
-                ></v-rating>
+                <template v-else-if="field.type === 'rating'">
+                    <div class="text-caption">{{ field.name }}</div>
+                    <v-rating
+                        v-model="value.contents[field.id]"
+                        hover
+                        half-increments
+                        color="orange"
+                        background-color="orange"
+                    ></v-rating>
+                </template>
 
                 <v-textarea v-else-if="field.type === 'text'" v-model="value.contents[field.id]" :type="field.type" :label="field.name" filled></v-textarea>
 

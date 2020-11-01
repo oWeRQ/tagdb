@@ -2444,6 +2444,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -25601,21 +25604,27 @@ var render = function() {
                     1
                   )
                 : field.type === "rating"
-                ? _c("v-rating", {
-                    attrs: {
-                      hover: "",
-                      "half-increments": "",
-                      color: "orange",
-                      "background-color": "orange"
-                    },
-                    model: {
-                      value: _vm.value.contents[field.id],
-                      callback: function($$v) {
-                        _vm.$set(_vm.value.contents, field.id, $$v)
+                ? [
+                    _c("div", { staticClass: "text-caption" }, [
+                      _vm._v(_vm._s(field.name))
+                    ]),
+                    _vm._v(" "),
+                    _c("v-rating", {
+                      attrs: {
+                        hover: "",
+                        "half-increments": "",
+                        color: "orange",
+                        "background-color": "orange"
                       },
-                      expression: "value.contents[field.id]"
-                    }
-                  })
+                      model: {
+                        value: _vm.value.contents[field.id],
+                        callback: function($$v) {
+                          _vm.$set(_vm.value.contents, field.id, $$v)
+                        },
+                        expression: "value.contents[field.id]"
+                      }
+                    })
+                  ]
                 : field.type === "text"
                 ? _c("v-textarea", {
                     attrs: { type: field.type, label: field.name, filled: "" },
@@ -25638,7 +25647,7 @@ var render = function() {
                     }
                   })
             ],
-            1
+            2
           )
         ]
       })
