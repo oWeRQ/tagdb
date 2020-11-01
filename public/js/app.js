@@ -2623,6 +2623,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2647,7 +2651,7 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
-    selectedToggleTag: function selectedToggleTag(state) {
+    toggleTag: function toggleTag(state) {
       var _this = this;
 
       var tag = this.tags.find(function (tag) {
@@ -2676,7 +2680,21 @@ __webpack_require__.r(__webpack_exports__);
           tags: item.tags
         });
       });
-      this.$emit('input', []); // Promise.all(requests).then(this.getItems);
+      this.$emit('input', []);
+      Promise.all(requests).then(this.$emit('update'));
+    },
+    deleteItems: function deleteItems() {
+      var _this2 = this;
+
+      this.$root.confirm('Delete selected items?').then(function () {
+        var requests = _this2.value.map(function (item) {
+          return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + item.id);
+        });
+
+        _this2.$emit('input', []);
+
+        Promise.all(requests).then(_this2.$emit('update'));
+      });
     }
   }
 });
@@ -2724,6 +2742,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
 //
 //
 //
@@ -25849,7 +25868,7 @@ var render = function() {
           attrs: { icon: "" },
           on: {
             click: function($event) {
-              return _vm.selectedToggleTag(true)
+              return _vm.toggleTag(true)
             }
           }
         },
@@ -25863,11 +25882,18 @@ var render = function() {
           attrs: { icon: "" },
           on: {
             click: function($event) {
-              return _vm.selectedToggleTag(false)
+              return _vm.toggleTag(false)
             }
           }
         },
         [_c("v-icon", [_vm._v("mdi-tag-minus")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        { attrs: { icon: "" }, on: { click: _vm.deleteItems } },
+        [_c("v-icon", [_vm._v("mdi-delete")])],
         1
       )
     ],
@@ -25926,6 +25952,7 @@ var render = function() {
               ? _c("EntitySelectionToolbar", {
                   staticClass: "flex-grow-0",
                   attrs: { resource: _vm.resource },
+                  on: { update: _vm.getItems },
                   model: {
                     value: _vm.selected,
                     callback: function($$v) {
@@ -86513,7 +86540,22 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/fields').then(function (response) {
         _this3.fields = response.data.data;
       });
-    }
+    },
+    confirm: function (_confirm) {
+      function confirm(_x) {
+        return _confirm.apply(this, arguments);
+      }
+
+      confirm.toString = function () {
+        return _confirm.toString();
+      };
+
+      return confirm;
+    }(function (message) {
+      return new Promise(function (resolve, reject) {
+        if (confirm(message)) resolve();else reject();
+      });
+    })
   }
 }).$mount('#app');
 

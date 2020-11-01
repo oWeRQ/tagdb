@@ -49,5 +49,13 @@ const app = new Vue({
                 this.fields = response.data.data;
             });
         },
+        confirm(message) {
+            return new Promise((resolve, reject) => {
+                if (confirm(message))
+                    resolve();
+                else
+                    reject();
+            });
+        },
     },
 }).$mount('#app');

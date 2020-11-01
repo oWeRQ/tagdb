@@ -18,6 +18,7 @@
         <template v-slot:top>
             <EntitySelectionToolbar v-if="selected.length"
                 v-model="selected"
+                @update="getItems"
                 :resource="resource"
                 class="flex-grow-0"
             ></EntitySelectionToolbar>

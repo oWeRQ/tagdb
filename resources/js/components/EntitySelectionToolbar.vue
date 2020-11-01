@@ -18,12 +18,16 @@
             :style="{maxWidth: '240px'}"
         ></v-autocomplete>
 
-        <v-btn icon @click="selectedToggleTag(true)">
+        <v-btn icon @click="toggleTag(true)">
             <v-icon>mdi-tag-plus</v-icon>
         </v-btn>
 
-        <v-btn icon @click="selectedToggleTag(false)">
+        <v-btn icon @click="toggleTag(false)">
             <v-icon>mdi-tag-minus</v-icon>
+        </v-btn>
+
+        <v-btn icon @click="deleteItems">
+            <v-icon>mdi-delete</v-icon>
         </v-btn>
     </v-toolbar>
 </template>
@@ -52,7 +56,7 @@
             },
         },
         methods: {
-            selectedToggleTag(state) {
+            toggleTag(state) {
                 const tag = this.tags.find(tag => tag.name === this.selectedTag);
                 if (!tag)
                     return;
@@ -70,12 +74,16 @@
                     return false;
                 });
 
-                const requests = items.map(item => {
-                    return axios.put(this.resource + '/' + item.id, {tags: item.tags});
-                });
-
+                const requests = items.map(item => axios.put(this.resource + '/' + item.id, {tags: item.tags}));
                 this.$emit('input', []);
-                // Promise.all(requests).then(this.getItems);
+                Promise.all(requests).then(this.$emit('update'));
+            },
+            deleteItems() {
+                this.$root.confirm('Delete selected items?').then(() => {
+                    const requests = this.value.map(item => axios.delete(this.resource + '/' + item.id));
+                    this.$emit('input', []);
+                    Promise.all(requests).then(this.$emit('update'));
+                });
             },
         },
     }
