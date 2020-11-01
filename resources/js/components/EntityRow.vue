@@ -5,10 +5,10 @@
                 <v-simple-checkbox :value="isSelected" @input="select" class="v-data-table__checkbox"></v-simple-checkbox>
             </template>
             <template v-else-if="header.value === 'actions'">
-                <v-icon @click="$emit('edit')" color="grey darken-1" class="mr-2" :title="'ID: ' + item.id">
+                <v-icon @click="$emit('edit')" color="grey" class="mr-2" :title="'ID: ' + item.id">
                     mdi-pencil
                 </v-icon>
-                <v-icon @click="$emit('delete')" color="grey darken-1">
+                <v-icon @click="$emit('delete')" color="grey">
                     mdi-delete
                 </v-icon>
             </template>
@@ -34,6 +34,17 @@
                     <v-avatar left :color="item | value(header.value)"></v-avatar>
                     {{ item | value(header.value) }}
                 </v-chip>
+            </template>
+            <template v-else-if="header.type === 'rating'">
+                <v-rating
+                    :value="item | value(header.value)"
+                    readonly
+                    half-increments
+                    color="orange"
+                    background-color="orange"
+                    size="18"
+                    class="d-inline-block"
+                ></v-rating>
             </template>
             <template v-else>
                 {{ item | value(header.value) | truncate }}

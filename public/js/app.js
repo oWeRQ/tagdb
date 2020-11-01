@@ -2436,6 +2436,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -2487,6 +2495,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify/lib/util/helpers */ "./node_modules/vuetify/lib/util/helpers.js");
 /* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
 /* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3905,6 +3924,9 @@ __webpack_require__.r(__webpack_exports__);
       }, {
         text: 'Time',
         value: 'time'
+      }, {
+        text: 'Rating',
+        value: 'rating'
       }];
     },
     rules: function rules() {
@@ -25578,6 +25600,22 @@ var render = function() {
                     ],
                     1
                   )
+                : field.type === "rating"
+                ? _c("v-rating", {
+                    attrs: {
+                      hover: "",
+                      "half-increments": "",
+                      color: "orange",
+                      "background-color": "orange"
+                    },
+                    model: {
+                      value: _vm.value.contents[field.id],
+                      callback: function($$v) {
+                        _vm.$set(_vm.value.contents, field.id, $$v)
+                      },
+                      expression: "value.contents[field.id]"
+                    }
+                  })
                 : field.type === "text"
                 ? _c("v-textarea", {
                     attrs: { type: field.type, label: field.name, filled: "" },
@@ -25651,10 +25689,7 @@ var render = function() {
                   "v-icon",
                   {
                     staticClass: "mr-2",
-                    attrs: {
-                      color: "grey darken-1",
-                      title: "ID: " + _vm.item.id
-                    },
+                    attrs: { color: "grey", title: "ID: " + _vm.item.id },
                     on: {
                       click: function($event) {
                         return _vm.$emit("edit")
@@ -25667,7 +25702,7 @@ var render = function() {
                 _c(
                   "v-icon",
                   {
-                    attrs: { color: "grey darken-1" },
+                    attrs: { color: "grey" },
                     on: {
                       click: function($event) {
                         return _vm.$emit("delete")
@@ -25781,6 +25816,20 @@ var render = function() {
                   ],
                   1
                 )
+              ]
+            : header.type === "rating"
+            ? [
+                _c("v-rating", {
+                  staticClass: "d-inline-block",
+                  attrs: {
+                    value: _vm._f("value")(_vm.item, header.value),
+                    readonly: "",
+                    "half-increments": "",
+                    color: "orange",
+                    "background-color": "orange",
+                    size: "18"
+                  }
+                })
               ]
             : [
                 _vm._v(

@@ -62,6 +62,7 @@
                 { text: 'Color', value: 'color' },
                 { text: 'Date', value: 'date' },
                 { text: 'Time', value: 'time' },
+                { text: 'Rating', value: 'rating' },
             ],
             rules() {
                 return {
