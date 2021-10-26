@@ -19,6 +19,12 @@ class TagController extends Controller
             $query->havingTags($with_tags);
         }]);
 
+        if ($with_tags) {
+            $query->whereNotIn('name', array_map(function ($value) {
+                return trim($value, '+-');
+            }, $with_tags));
+        }
+
         $query->sort($request->get('sort'));
 
         $perPage = $request->get('per_page', 100);
