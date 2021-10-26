@@ -24,6 +24,11 @@
                 {{ returnObject ? item.name : item }}
             </v-chip>
         </template>
+        <template v-slot:item="{ item }">
+            {{ item.name }}
+            <v-spacer></v-spacer>
+            <span class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+        </template>
     </v-combobox>
 </template>
 

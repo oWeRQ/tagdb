@@ -4073,6 +4073,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 function toggleHyphen(value) {
@@ -27300,6 +27305,20 @@ var render = function() {
                 )
               ]
             )
+          ]
+        }
+      },
+      {
+        key: "item",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _vm._v("\n        " + _vm._s(item.name) + "\n        "),
+            _c("v-spacer"),
+            _vm._v(" "),
+            _c("span", { staticClass: "caption grey--text text--darken-1" }, [
+              _vm._v(_vm._s(item.entities_count))
+            ])
           ]
         }
       }
