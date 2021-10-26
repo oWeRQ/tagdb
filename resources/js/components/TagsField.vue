@@ -21,7 +21,9 @@
     >
         <template v-slot:selection="{ item, index }">
             <v-chip close @click="click(index, item)" @click:close="remove(index)">
-                {{ returnObject ? item.name : item }}
+                <span :style="{'text-decoration': isHyphen(item) ? 'line-through' : 'none'}">
+                    {{ itemText(item) }}
+                </span>
             </v-chip>
         </template>
         <template v-slot:item="{ item }">
@@ -84,6 +86,12 @@
             this.getTags();
         },
         methods: {
+            isHyphen(item) {
+                return (this.returnObject ? item.name : item)[0] === '-';
+            },
+            itemText(item) {
+                return (this.returnObject ? item.name : item).replace(/^[+-]/, '');
+            },
             click(index, item) {
                 this.$emit('click:tag', item);
 

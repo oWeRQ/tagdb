@@ -4078,6 +4078,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
 
 
 function toggleHyphen(value) {
@@ -4129,6 +4131,12 @@ function toggleHyphen(value) {
     this.getTags();
   },
   methods: {
+    isHyphen: function isHyphen(item) {
+      return (this.returnObject ? item.name : item)[0] === '-';
+    },
+    itemText: function itemText(item) {
+      return (this.returnObject ? item.name : item).replace(/^[+-]/, '');
+    },
     click: function click(index, item) {
       var _this = this;
 
@@ -27298,10 +27306,22 @@ var render = function() {
                 }
               },
               [
-                _vm._v(
-                  "\n            " +
-                    _vm._s(_vm.returnObject ? item.name : item) +
-                    "\n        "
+                _c(
+                  "span",
+                  {
+                    style: {
+                      "text-decoration": _vm.isHyphen(item)
+                        ? "line-through"
+                        : "none"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.itemText(item)) +
+                        "\n            "
+                    )
+                  ]
                 )
               ]
             )
