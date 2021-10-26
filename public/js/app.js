@@ -3764,7 +3764,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -26975,11 +26974,7 @@ var render = function() {
     "div",
     [
       _c("TagsField", {
-        attrs: {
-          rules: _vm.rules.tags,
-          autofocus: !_vm.query.tags.length,
-          hyphen: ""
-        },
+        attrs: { rules: _vm.rules.tags, hyphen: "" },
         model: {
           value: _vm.query.tags,
           callback: function($$v) {
