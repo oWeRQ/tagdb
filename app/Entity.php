@@ -35,10 +35,20 @@ class Entity extends Model
         if (!$tags)
             return $query;
 
-        return $query->whereHas('tags', function($query) use($tags) {
-            $query->whereIn('name', $tags)
+        $includeTags = [];
+        $excludeTags = [];
+        foreach ($tags as $tag) {
+            if ($tag[0] === '-') {
+                $excludeTags[] = trim($tag, '+-');
+            } else {
+                $includeTags[] = trim($tag, '+-');
+            }
+        }
+
+        return $query->whereHas('tags', function($query) use($includeTags, $excludeTags) {
+            $query->whereIn('name', array_merge($includeTags, $excludeTags))
                 ->groupBy('entity_id')
-                ->havingRaw('count(*) = ?', [count($tags)]);
+                ->havingRaw('count(*) = ?', [count($includeTags)]);
         });
     }
 
