@@ -18,11 +18,25 @@
         :hide-details="solo"
         :return-object="returnObject"
         :autofocus="autofocus"
-    ></v-combobox>
+    >
+        <template v-slot:selection="{ item, index }">
+            <v-chip close @click="click(index, item)" @click:close="remove(index)">
+                {{ returnObject ? item.name : item }}
+            </v-chip>
+        </template>
+    </v-combobox>
 </template>
 
 <script>
     import axios from 'axios';
+
+    function toggleHyphen(value) {
+        if (value[0] === '-') {
+            return value.slice(1);
+        } else {
+            return '-' + value;
+        }
+    }
 
     export default {
         props: {
@@ -48,6 +62,10 @@
                 type: Boolean,
                 default: false,
             },
+            hyphen: {
+                type: Boolean,
+                default: false,
+            },
         },
         data() {
             return {
@@ -61,6 +79,21 @@
             this.getTags();
         },
         methods: {
+            click(index, item) {
+                this.$emit('click:tag', item);
+
+                if (this.hyphen) {
+                    this.$emit('input', this.value.map((v, i) => {
+                        if (i === index)
+                            return this.returnObject ? { ...v, name: toggleHyphen(v.name) } : toggleHyphen(v);
+
+                        return v;
+                    }));
+                }
+            },
+            remove(index) {
+                this.$emit('input', this.value.filter((v, i) => i !== index));
+            },
             getTags() {
                 const params = {
                     with_tags: this.returnObject ? this.value.map(tag => tag.name) : this.value,

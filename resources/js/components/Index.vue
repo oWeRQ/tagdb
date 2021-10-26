@@ -28,6 +28,7 @@
                 <TagsField
                     v-model="query.tags"
                     solo
+                    hyphen
                     class="shrink mr-3"
                 ></TagsField>
                 <v-text-field
