@@ -47,10 +47,8 @@ class Entity extends Model
 
         if ($includeTags) {
             $query->whereHas('tags', function($query) use($includeTags) {
-                $query->whereIn('name', $includeTags)
-                    ->groupBy('entity_id')
-                    ->havingRaw('count(*) = ?', [count($includeTags)]);
-            });
+                $query->whereIn('name', $includeTags);
+            }, '=', count($includeTags));
         }
 
         if ($excludeTags) {
