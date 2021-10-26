@@ -45,11 +45,21 @@ class Entity extends Model
             }
         }
 
-        return $query->whereHas('tags', function($query) use($includeTags, $excludeTags) {
-            $query->whereIn('name', array_merge($includeTags, $excludeTags))
-                ->groupBy('entity_id')
-                ->havingRaw('count(*) = ?', [count($includeTags)]);
-        });
+        if ($includeTags) {
+            $query->whereHas('tags', function($query) use($includeTags) {
+                $query->whereIn('name', $includeTags)
+                    ->groupBy('entity_id')
+                    ->havingRaw('count(*) = ?', [count($includeTags)]);
+            });
+        }
+
+        if ($excludeTags) {
+            $query->whereDoesntHave('tags', function($query) use($excludeTags) {
+                $query->whereIn('name', $excludeTags);
+            });
+        }
+
+        return $query;
     }
 
     public function scopeSearch($query, $search = null)
