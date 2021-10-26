@@ -2175,6 +2175,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -2242,6 +2243,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   computed: {
+    singularTitle: function singularTitle() {
+      return this.title.replace(/ies$/, 'y').replace(/s$/, '');
+    },
     headers: function headers() {
       return [].concat(_toConsumableArray(this.columns), [{
         text: 'Actions',
@@ -2353,6 +2357,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    title: {
+      type: String,
+      "default": ''
+    },
     form: {
       type: Object,
       "default": function _default() {
@@ -2385,7 +2393,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     headline: function headline() {
-      return this.value.id ? 'Update' : 'Create';
+      return (this.value.id ? 'Update' : 'Create') + ' ' + this.title;
     }
   },
   data: function data() {
@@ -2922,6 +2930,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 
 
 
@@ -3247,6 +3257,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
+//
 //
 //
 //
@@ -25361,6 +25373,7 @@ var render = function() {
                 _c("CrudDialog", {
                   ref: "crudDialog",
                   attrs: {
+                    title: _vm.singularTitle,
                     form: _vm.form,
                     resource: _vm.resource,
                     editable: _vm.editable,
@@ -26325,6 +26338,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "entityDialog",
               attrs: {
+                title: "Entity",
                 form: _vm.form,
                 resource: _vm.resource,
                 processValue: _vm.processItem,
@@ -26336,6 +26350,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "presetDialog",
               attrs: {
+                title: "Preset",
                 form: _vm.presetForm,
                 resource: _vm.presetResource,
                 value: _vm.editedPreset
@@ -26610,6 +26625,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "entityDialog",
               attrs: {
+                title: "Entity",
                 form: _vm.form,
                 resource: _vm.resource,
                 processValue: _vm.processItem,
@@ -26621,6 +26637,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "presetDialog",
               attrs: {
+                title: "Preset",
                 form: _vm.presetForm,
                 resource: _vm.presetResource,
                 value: _vm.editedPreset

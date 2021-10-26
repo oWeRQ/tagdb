@@ -58,6 +58,7 @@
 
             <CrudDialog
                 ref="entityDialog"
+                title="Entity"
                 :form="form"
                 :resource="resource"
                 :processValue="processItem"
@@ -66,6 +67,7 @@
             ></CrudDialog>
             <CrudDialog
                 ref="presetDialog"
+                title="Preset"
                 :form="presetForm"
                 :resource="presetResource"
                 :value="editedPreset"

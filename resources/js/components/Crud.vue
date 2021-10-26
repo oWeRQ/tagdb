@@ -22,6 +22,7 @@
                 </v-btn>
                 <CrudDialog
                     ref="crudDialog"
+                    :title="singularTitle"
                     :form="form"
                     :resource="resource"
                     :editable="editable"
@@ -102,6 +103,9 @@
             }
         },
         computed: {
+            singularTitle() {
+                return this.title.replace(/ies$/, 'y').replace(/s$/, '');
+            },
             headers() {
                 return [
                     ...this.columns,
