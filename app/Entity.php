@@ -20,6 +20,12 @@ class Entity extends Model
         return $this->hasMany('App\Value');
     }
 
+    public function valuesAssoc() {
+        return $this->values->mapWithKeys(function($value) {
+            return [$value->field->code => $value->content];
+        })->all();
+    }
+
     public function scopeQueryJson($query, $json)
     {
         $queryData = json_decode($json, true);
