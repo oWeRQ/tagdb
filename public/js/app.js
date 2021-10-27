@@ -26923,17 +26923,6 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("SortField", {
-        attrs: { label: "Sort" },
-        model: {
-          value: _vm.value.sort,
-          callback: function($$v) {
-            _vm.$set(_vm.value, "sort", $$v)
-          },
-          expression: "value.sort"
-        }
-      }),
-      _vm._v(" "),
       _c("QueryField", {
         attrs: { label: "Query" },
         model: {
@@ -26942,6 +26931,17 @@ var render = function() {
             _vm.$set(_vm.value, "query", $$v)
           },
           expression: "value.query"
+        }
+      }),
+      _vm._v(" "),
+      _c("SortField", {
+        attrs: { label: "Sort" },
+        model: {
+          value: _vm.value.sort,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "sort", $$v)
+          },
+          expression: "value.sort"
         }
       })
     ],
