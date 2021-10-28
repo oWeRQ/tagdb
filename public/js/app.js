@@ -4189,25 +4189,19 @@ function toggleHyphen(value) {
     input: function input(value) {
       var _this3 = this;
 
-      this.$emit('input', value.map(function (tag) {
-        return _this3.returnObject && typeof tag === 'string' ? _this3.getOrCreateTag(tag) : tag;
+      this.$emit('input', value.map(function (item) {
+        if (_this3.returnObject && typeof item === 'string') {
+          return _this3.tags.find(function (tag) {
+            return tag.name === item;
+          }) || {
+            name: item,
+            fields: []
+          };
+        }
+
+        return item;
       }));
       this.search = '';
-    },
-    getOrCreateTag: function getOrCreateTag(name) {
-      var tag = this.tags.find(function (tag) {
-        return tag.name === name;
-      });
-
-      if (!tag) {
-        tag = {
-          name: name,
-          fields: []
-        };
-        this.tags.push(tag);
-      }
-
-      return tag;
     }
   }
 });

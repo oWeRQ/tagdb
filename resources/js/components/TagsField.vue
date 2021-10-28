@@ -118,23 +118,15 @@
                 });
             },
             input(value) {
-                this.$emit('input', value.map(tag => {
-                    return (this.returnObject && typeof tag === 'string' ? this.getOrCreateTag(tag) : tag);
+                this.$emit('input', value.map(item => {
+                    if (this.returnObject && typeof item === 'string') {
+                        return this.tags.find(tag => tag.name === item) || { name: item, fields: [] };
+                    }
+
+                    return item;
                 }));
+
                 this.search = '';
-            },
-            getOrCreateTag(name) {
-                let tag = this.tags.find(tag => tag.name === name);
-
-                if (!tag) {
-                    tag = {
-                        name,
-                        fields: [],
-                    };
-                    this.tags.push(tag);
-                }
-
-                return tag;
             },
         },
     }
