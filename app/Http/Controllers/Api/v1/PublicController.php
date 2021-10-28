@@ -64,7 +64,7 @@ class PublicController extends Controller
         $values = Arr::except($request->all(), $entity->getVisible());
         $entity->updateValues($values);
 
-        return 204;
+        return response('', 204);
     }
 
     public function destroy(Request $request, $presetName, $entityId)
@@ -73,6 +73,6 @@ class PublicController extends Controller
         $entity = $query->with(['tags', 'values.field'])->findOrFail($entityId);
         $entity->delete();
 
-        return 204;
+        return response('', 204);
     }
 }
