@@ -2473,7 +2473,21 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
+/* harmony import */ var _TagForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TagForm */ "./resources/js/components/TagForm.vue");
+/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2522,9 +2536,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_0__["default"]
+    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_1__["default"],
+    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: {
     value: {
@@ -2533,7 +2551,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      menu: {}
+      menu: {},
+      editedTag: null,
+      tagForm: _TagForm__WEBPACK_IMPORTED_MODULE_2__["default"],
+      tagResource: '/api/v1/tags'
     };
   },
   computed: {
@@ -2554,6 +2575,16 @@ __webpack_require__.r(__webpack_exports__);
       return this.value.tags.flatMap(function (item) {
         return item.fields;
       });
+    }
+  },
+  methods: {
+    showTag: function showTag(tag) {
+      this.originalTag = tag;
+      this.editedTag = clone_deep__WEBPACK_IMPORTED_MODULE_0___default()(tag);
+      this.$refs.tagDialog.show();
+    },
+    saveTag: function saveTag(tag) {
+      Object.assign(this.originalTag, tag);
     }
   }
 });
@@ -25623,11 +25654,27 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("CrudDialog", {
+        ref: "tagDialog",
+        attrs: {
+          title: "Tag",
+          form: _vm.tagForm,
+          resource: _vm.tagResource,
+          value: _vm.editedTag
+        },
+        on: { input: _vm.saveTag }
+      }),
+      _vm._v(" "),
       _c("TagsField", {
         attrs: {
           "return-object": "",
           rules: _vm.rules.tags,
           autofocus: !_vm.value.tags.length
+        },
+        on: {
+          "click:tag": function($event) {
+            return _vm.showTag($event)
+          }
         },
         model: {
           value: _vm.value.tags,
@@ -27321,6 +27368,7 @@ var render = function() {
                 attrs: { close: "" },
                 on: {
                   click: function($event) {
+                    $event.stopPropagation()
                     return _vm.click(index, item)
                   },
                   "click:close": function($event) {

@@ -1,10 +1,20 @@
 <template>
     <div>
+        <CrudDialog
+            ref="tagDialog"
+            title="Tag"
+            :form="tagForm"
+            :resource="tagResource"
+            :value="editedTag"
+            @input="saveTag"
+        ></CrudDialog>
+
         <TagsField
             return-object
             v-model="value.tags"
             :rules="rules.tags"
             :autofocus="!value.tags.length"
+            @click:tag="showTag($event)"
         ></TagsField>
 
         <v-text-field v-model="value.name" :rules="rules.name" label="Name" :autofocus="!!value.tags.length"></v-text-field>
@@ -46,10 +56,14 @@
 </template>
 
 <script>
+    import cloneDeep from 'clone-deep';
+    import CrudDialog from './CrudDialog';
+    import TagForm from './TagForm';
     import TagsField from './TagsField';
 
     export default {
         components: {
+            CrudDialog,
             TagsField,
         },
         props: {
@@ -60,6 +74,9 @@
         data() {
             return {
                 menu: {},
+                editedTag: null,
+                tagForm: TagForm,
+                tagResource: '/api/v1/tags',
             };
         },
         computed: {
@@ -78,6 +95,16 @@
             },
             editedFields() {
                 return this.value.tags.flatMap(item => item.fields);
+            },
+        },
+        methods: {
+            showTag(tag) {
+                this.originalTag = tag;
+                this.editedTag = cloneDeep(tag);
+                this.$refs.tagDialog.show();
+            },
+            saveTag(tag) {
+                Object.assign(this.originalTag, tag);
             },
         },
     };

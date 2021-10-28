@@ -21,7 +21,7 @@
         :autofocus="autofocus"
     >
         <template v-slot:selection="{ item, index }">
-            <v-chip close @click="click(index, item)" @click:close="remove(index)">
+            <v-chip close @click.stop="click(index, item)" @click:close="remove(index)">
                 <span :style="{'text-decoration': isHyphen(item) ? 'line-through' : 'none'}">
                     {{ itemText(item) }}
                 </span>
