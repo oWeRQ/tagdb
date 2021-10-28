@@ -4184,10 +4184,8 @@ function toggleHyphen(value) {
     input: function input(value) {
       var _this3 = this;
 
-      this.$emit('input', value.map(function (v) {
-        var tag = _this3.getOrCreateTag(typeof v === 'string' ? v : v.name);
-
-        return _this3.returnObject ? tag : tag.name;
+      this.$emit('input', value.map(function (tag) {
+        return _this3.returnObject && typeof tag === 'string' ? _this3.getOrCreateTag(tag) : tag;
       }));
     },
     getOrCreateTag: function getOrCreateTag(name) {

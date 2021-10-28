@@ -116,9 +116,8 @@
                 });
             },
             input(value) {
-                this.$emit('input', value.map(v => {
-                    const tag = this.getOrCreateTag(typeof v === 'string' ? v : v.name);
-                    return this.returnObject ? tag : tag.name;
+                this.$emit('input', value.map(tag => {
+                    return (this.returnObject && typeof tag === 'string' ? this.getOrCreateTag(tag) : tag);
                 }));
             },
             getOrCreateTag(name) {
