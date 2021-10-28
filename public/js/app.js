@@ -2634,7 +2634,8 @@ __webpack_require__.r(__webpack_exports__);
   filters: {
     date: _functions_date__WEBPACK_IMPORTED_MODULE_1__["default"],
     truncate: _functions_truncate__WEBPACK_IMPORTED_MODULE_2__["default"],
-    value: vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__["getObjectValueByPath"]
+    value: vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__["getObjectValueByPath"],
+    number: Number
   },
   props: {
     query: {
@@ -26052,7 +26053,9 @@ var render = function() {
                 _c("v-rating", {
                   staticClass: "d-inline-block",
                   attrs: {
-                    value: _vm._f("value")(_vm.item, header.value),
+                    value: _vm._f("number")(
+                      _vm._f("value")(_vm.item, header.value)
+                    ),
                     readonly: "",
                     "half-increments": "",
                     color: "orange",

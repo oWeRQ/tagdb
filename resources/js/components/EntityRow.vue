@@ -37,7 +37,7 @@
             </template>
             <template v-else-if="header.type === 'rating'">
                 <v-rating
-                    :value="item | value(header.value)"
+                    :value="item | value(header.value) | number"
                     readonly
                     half-increments
                     color="orange"
@@ -63,6 +63,7 @@
             date,
             truncate,
             value: getObjectValueByPath,
+            number: Number,
         },
         props: {
             query: {
