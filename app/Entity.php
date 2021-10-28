@@ -10,6 +10,15 @@ class Entity extends Model
         'name',
     ];
 
+    protected $visible = [
+        'id',
+        'name',
+        'created_at',
+        'updated_at',
+        'tags',
+        'values',
+    ];
+
     public function tags()
     {
         return $this->belongsToMany('App\Tag', 'entities_tags');
@@ -141,5 +150,16 @@ class Entity extends Model
                 'content' => (string)$content,
             ]);
         }
+    }
+
+    public function updateValues($values) {
+        $fields = $this->tags()->with('fields')->get()->pluck('fields')->collapse();
+
+        $fieldIds = $fields->pluck('id', 'code')->all();
+        $contents = collect($values)->only(array_keys($fieldIds))->keyBy(function($content, $key) use($fieldIds) {
+            return $fieldIds[$key];
+        })->all();
+
+        return $this->updateContents($contents);
     }
 }
