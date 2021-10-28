@@ -28,7 +28,8 @@
                 <template v-else-if="field.type === 'rating'">
                     <div class="text-caption">{{ field.name }}</div>
                     <v-rating
-                        v-model="value.contents[field.id]"
+                        :value="+value.contents[field.id]"
+                        @input="value.contents[field.id] = $event"
                         hover
                         half-increments
                         color="orange"

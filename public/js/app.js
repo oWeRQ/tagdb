@@ -2520,6 +2520,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -4091,6 +4092,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 function toggleHyphen(value) {
@@ -4132,7 +4134,8 @@ function toggleHyphen(value) {
   },
   data: function data() {
     return {
-      tags: []
+      tags: [],
+      search: ''
     };
   },
   watch: {
@@ -4187,6 +4190,7 @@ function toggleHyphen(value) {
       this.$emit('input', value.map(function (tag) {
         return _this3.returnObject && typeof tag === 'string' ? _this3.getOrCreateTag(tag) : tag;
       }));
+      this.search = '';
     },
     getOrCreateTag: function getOrCreateTag(name) {
       var tag = this.tags.find(function (tag) {
@@ -25829,17 +25833,16 @@ var render = function() {
                     _vm._v(" "),
                     _c("v-rating", {
                       attrs: {
+                        value: +_vm.value.contents[field.id],
                         hover: "",
                         "half-increments": "",
                         color: "orange",
                         "background-color": "orange"
                       },
-                      model: {
-                        value: _vm.value.contents[field.id],
-                        callback: function($$v) {
-                          _vm.$set(_vm.value.contents, field.id, $$v)
-                        },
-                        expression: "value.contents[field.id]"
+                      on: {
+                        input: function($event) {
+                          _vm.value.contents[field.id] = $event
+                        }
                       }
                     })
                   ]
@@ -27276,6 +27279,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("v-combobox", {
     attrs: {
+      "search-input": _vm.search,
       value: _vm.value,
       rules: _vm.rules,
       items: _vm.tags,
@@ -27294,7 +27298,15 @@ var render = function() {
       "return-object": _vm.returnObject,
       autofocus: _vm.autofocus
     },
-    on: { input: _vm.input },
+    on: {
+      input: _vm.input,
+      "update:searchInput": function($event) {
+        _vm.search = $event
+      },
+      "update:search-input": function($event) {
+        _vm.search = $event
+      }
+    },
     scopedSlots: _vm._u([
       {
         key: "selection",

@@ -1,6 +1,7 @@
 <template>
     <v-combobox
         @input="input"
+        :search-input.sync="search"
         :value="value"
         :rules="rules"
         :items="tags"
@@ -77,6 +78,7 @@
         data() {
             return {
                 tags: [],
+                search: '',
             };
         },
         watch: {
@@ -119,6 +121,7 @@
                 this.$emit('input', value.map(tag => {
                     return (this.returnObject && typeof tag === 'string' ? this.getOrCreateTag(tag) : tag);
                 }));
+                this.search = '';
             },
             getOrCreateTag(name) {
                 let tag = this.tags.find(tag => tag.name === name);
