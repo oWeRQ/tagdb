@@ -3555,7 +3555,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     headers: function headers() {
       var before = [{
         text: 'Tags',
-        value: 'tags'
+        value: 'tags',
+        sortable: false,
+        width: '1%'
       }, {
         text: 'Name',
         value: 'name'

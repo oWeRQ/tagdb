@@ -220,7 +220,7 @@
             },
             headers() {
                 const before = [
-                    { text: 'Tags', value: 'tags' },
+                    { text: 'Tags', value: 'tags', sortable: false, width: '1%' },
                     { text: 'Name', value: 'name' },
                 ];
                 const after = [
