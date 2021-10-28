@@ -2934,6 +2934,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -25978,7 +25979,7 @@ var render = function() {
                           },
                           on: {
                             click: function($event) {
-                              return _vm.query.tags.push(tag.name)
+                              return _vm.$emit("click:tag", tag)
                             }
                           }
                         },
@@ -26381,6 +26382,9 @@ var render = function() {
                 select: select
               },
               on: {
+                "click:tag": function($event) {
+                  return _vm.query.tags.push($event.name)
+                },
                 edit: function($event) {
                   return _vm.editItem(item)
                 },

@@ -75,6 +75,7 @@
         <template v-slot:item="{ item, headers, isSelected, select }">
             <EntityRow
                 :query="query"
+                @click:tag="query.tags.push($event.name)"
                 :item="item"
                 :headers="headers"
                 :isSelected="isSelected"
