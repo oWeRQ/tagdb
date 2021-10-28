@@ -12,11 +12,11 @@ class Preset extends Model
         'query',
     ];
 
-    public function entityQuery()
+    public function entityQuery($sort = null)
     {
         $query = Entity::query();
         $query->queryJson($this->query);
-        $query->sort($this->sort);
+        $query->sort($sort ?: $this->sort);
         return $query;
     }
 
