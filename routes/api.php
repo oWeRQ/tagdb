@@ -18,12 +18,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('v1')->group(function ($route) {
-    $route->resource('entities', 'Api\v1\EntityController');
-    $route->resource('tags', 'Api\v1\TagController');
-    $route->resource('fields', 'Api\v1\FieldController');
-    $route->resource('values', 'Api\v1\ValueController');
-    $route->resource('presets', 'Api\v1\PresetController');
-    $route->resource('import', 'Api\v1\ImportController', ['only' => ['store']]);
-    $route->resource('public/{preset}', 'Api\v1\PublicController', ['parameters' => ['{preset}' => 'entity']]);
+Route::prefix('v1')->group(function() {
+    Route::apiResource('entities', 'Api\v1\EntityController');
+    Route::apiResource('tags', 'Api\v1\TagController');
+    Route::apiResource('fields', 'Api\v1\FieldController');
+    Route::apiResource('values', 'Api\v1\ValueController');
+    Route::apiResource('presets', 'Api\v1\PresetController');
+    Route::apiResource('import', 'Api\v1\ImportController', ['only' => ['store']]);
+    Route::apiResource('public/{preset}', 'Api\v1\PublicController', ['parameters' => ['{preset}' => 'entity']]);
 });
