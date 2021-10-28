@@ -27358,12 +27358,21 @@ var render = function() {
         fn: function(ref) {
           var item = ref.item
           return [
-            _vm._v("\n        " + _vm._s(item.name) + "\n        "),
+            _c(
+              "span",
+              { class: { "grey--text text--darken-2": !item.entities_count } },
+              [_vm._v(_vm._s(item.name))]
+            ),
+            _vm._v(" "),
             _c("v-spacer"),
             _vm._v(" "),
-            _c("span", { staticClass: "caption grey--text text--darken-1" }, [
-              _vm._v(_vm._s(item.entities_count))
-            ])
+            item.entities_count
+              ? _c(
+                  "span",
+                  { staticClass: "caption grey--text text--darken-1" },
+                  [_vm._v(_vm._s(item.entities_count))]
+                )
+              : _vm._e()
           ]
         }
       }

@@ -28,9 +28,9 @@
             </v-chip>
         </template>
         <template v-slot:item="{ item }">
-            {{ item.name }}
+            <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
             <v-spacer></v-spacer>
-            <span class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+            <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
         </template>
     </v-combobox>
 </template>
