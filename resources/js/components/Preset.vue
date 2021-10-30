@@ -78,18 +78,21 @@
                 <v-form @submit.prevent="downloadExport">
                     <v-card>
                         <v-card-title>
-                            <span class="headline">Export</span>
+                            Export
                         </v-card-title>
+                        <v-divider></v-divider>
                         <v-card-text>
-                            <v-switch
+                            <div>Columns</div>
+                            <v-checkbox
                                 v-for="header in exportHeaders"
                                 :key="header.value"
                                 v-model="exportColumns"
                                 :value="header.value"
                                 :label="header.text"
                                 hide-details
-                            ></v-switch>
+                            ></v-checkbox>
                         </v-card-text>
+                        <v-divider></v-divider>
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" text @click="exportDialog = false">Cancel</v-btn>

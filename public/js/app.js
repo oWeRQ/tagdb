@@ -3426,6 +3426,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
 
 
 
@@ -26723,32 +26726,40 @@ var render = function() {
                       "v-card",
                       [
                         _c("v-card-title", [
-                          _c("span", { staticClass: "headline" }, [
-                            _vm._v("Export")
-                          ])
+                          _vm._v(
+                            "\n                        Export\n                    "
+                          )
                         ]),
+                        _vm._v(" "),
+                        _c("v-divider"),
                         _vm._v(" "),
                         _c(
                           "v-card-text",
-                          _vm._l(_vm.exportHeaders, function(header) {
-                            return _c("v-switch", {
-                              key: header.value,
-                              attrs: {
-                                value: header.value,
-                                label: header.text,
-                                "hide-details": ""
-                              },
-                              model: {
-                                value: _vm.exportColumns,
-                                callback: function($$v) {
-                                  _vm.exportColumns = $$v
+                          [
+                            _c("div", [_vm._v("Columns")]),
+                            _vm._v(" "),
+                            _vm._l(_vm.exportHeaders, function(header) {
+                              return _c("v-checkbox", {
+                                key: header.value,
+                                attrs: {
+                                  value: header.value,
+                                  label: header.text,
+                                  "hide-details": ""
                                 },
-                                expression: "exportColumns"
-                              }
+                                model: {
+                                  value: _vm.exportColumns,
+                                  callback: function($$v) {
+                                    _vm.exportColumns = $$v
+                                  },
+                                  expression: "exportColumns"
+                                }
+                              })
                             })
-                          }),
-                          1
+                          ],
+                          2
                         ),
+                        _vm._v(" "),
+                        _c("v-divider"),
                         _vm._v(" "),
                         _c(
                           "v-card-actions",
