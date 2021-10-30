@@ -41,7 +41,7 @@
                     readonly
                     half-increments
                     color="orange"
-                    background-color="orange"
+                    background-color="grey lighten-1"
                     size="18"
                     class="d-inline-block"
                 ></v-rating>

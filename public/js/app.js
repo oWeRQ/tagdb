@@ -25882,7 +25882,7 @@ var render = function() {
                         hover: "",
                         "half-increments": "",
                         color: "orange",
-                        "background-color": "orange"
+                        "background-color": "grey lighten-1"
                       },
                       on: {
                         input: function($event) {
@@ -26103,7 +26103,7 @@ var render = function() {
                     readonly: "",
                     "half-increments": "",
                     color: "orange",
-                    "background-color": "orange",
+                    "background-color": "grey lighten-1",
                     size: "18"
                   }
                 })

@@ -43,7 +43,7 @@
                         hover
                         half-increments
                         color="orange"
-                        background-color="orange"
+                        background-color="grey lighten-1"
                     ></v-rating>
                 </template>
 
