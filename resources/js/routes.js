@@ -102,6 +102,22 @@ export default [
         },
     },
     {
+        path: '/projects',
+        component: Crud,
+        props: {
+            title: 'Projects',
+            resource: '/api/v1/projects',
+            defaultItem: {},
+            columns: [
+                { text: 'ID', value: 'id' },
+                { text: 'Name', value: 'name' },
+            ],
+            editable: [
+                { text: 'Name', value: 'name' },
+            ],
+        },
+    },
+    {
         path: '/presets/:name',
         name: 'preset',
         component: Preset,

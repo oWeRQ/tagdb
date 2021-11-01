@@ -24,6 +24,7 @@ Route::prefix('v1')->group(function() {
     Route::apiResource('fields', 'Api\v1\FieldController');
     Route::apiResource('values', 'Api\v1\ValueController');
     Route::apiResource('presets', 'Api\v1\PresetController');
+    Route::apiResource('projects', 'Api\v1\ProjectController');
     Route::apiResource('import', 'Api\v1\ImportController', ['only' => ['store']]);
     Route::apiResource('public/{preset}', 'Api\v1\PublicController', ['parameters' => ['{preset}' => 'entity']]);
 });

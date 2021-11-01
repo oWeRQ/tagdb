@@ -43,6 +43,14 @@
                             <v-list-item-title>Values</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
+                    <v-list-item link to="/projects">
+                        <v-list-item-action>
+                            <v-icon>mdi-folder-multiple</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title>Projects</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
                 </v-list-item-group>
                 <v-list-item-group color="primary" v-if="presets.length">
                     <v-subheader>Presets</v-subheader>
@@ -71,8 +79,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
-
     export default {
         data: () => ({
             drawer: null,

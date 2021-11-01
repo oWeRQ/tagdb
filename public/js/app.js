@@ -1908,8 +1908,6 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1982,7 +1980,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -25117,6 +25122,25 @@ var render = function() {
                       _c(
                         "v-list-item-content",
                         [_c("v-list-item-title", [_vm._v("Values")])],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-list-item",
+                    { attrs: { link: "", to: "/projects" } },
+                    [
+                      _c(
+                        "v-list-item-action",
+                        [_c("v-icon", [_vm._v("mdi-folder-multiple")])],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item-content",
+                        [_c("v-list-item-title", [_vm._v("Projects")])],
                         1
                       )
                     ],
@@ -88409,6 +88433,25 @@ __webpack_require__.r(__webpack_exports__);
     }, {
       text: 'Query',
       value: 'query'
+    }]
+  }
+}, {
+  path: '/projects',
+  component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+  props: {
+    title: 'Projects',
+    resource: '/api/v1/projects',
+    defaultItem: {},
+    columns: [{
+      text: 'ID',
+      value: 'id'
+    }, {
+      text: 'Name',
+      value: 'name'
+    }],
+    editable: [{
+      text: 'Name',
+      value: 'name'
     }]
   }
 }, {
