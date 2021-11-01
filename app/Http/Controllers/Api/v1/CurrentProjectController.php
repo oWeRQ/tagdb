@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 
 class CurrentProjectController extends Controller {
     public function get() {
-        return new ProjectResource(Project::getCurrent());
+        return new ProjectResource(Project::current());
     }
 
     public function set(Request $request) {
-        Project::setCurrent($request->get('id'));
+        Project::setCurrentId($request->get('id'));
         return response('', 204);
     }
 }

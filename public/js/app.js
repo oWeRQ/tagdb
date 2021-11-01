@@ -2015,6 +2015,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2171,9 +2173,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-//
-//
-//
 //
 //
 //
@@ -3334,9 +3333,6 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-//
-//
-//
 //
 //
 //
@@ -25254,78 +25250,103 @@ var render = function() {
           _vm._v(" "),
           _c("v-toolbar-title", [_vm._v("TagDB")]),
           _vm._v(" "),
-          _c(
-            "v-menu",
-            {
-              attrs: { bottom: "", left: "" },
-              scopedSlots: _vm._u([
+          _vm.currentProject
+            ? _c(
+                "v-menu",
                 {
-                  key: "activator",
-                  fn: function(ref) {
-                    var on = ref.on
-                    var attrs = ref.attrs
-                    return [
-                      _c(
-                        "v-btn",
-                        _vm._g(
-                          _vm._b(
-                            {
-                              staticClass: "ml-4 text-capitalize",
-                              attrs: { text: "" }
-                            },
-                            "v-btn",
-                            attrs,
-                            false
-                          ),
-                          on
-                        ),
+                  attrs: { bottom: "", left: "" },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "ml-4 text-capitalize",
+                                    attrs: { text: "" }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _c("v-icon", { staticClass: "mr-1" }, [
+                                  _vm._v("mdi-folder-outline")
+                                ]),
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(_vm.currentProject.name) +
+                                    "\n                    "
+                                ),
+                                _c("v-icon", { attrs: { size: "14" } }, [
+                                  _vm._v("mdi-chevron-down")
+                                ])
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ],
+                    null,
+                    false,
+                    167856731
+                  )
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    _vm._l(_vm.projects, function(project) {
+                      return _c(
+                        "v-list-item",
+                        {
+                          key: project.id,
+                          class: {
+                            "v-list-item--active":
+                              project.id === _vm.currentProject.id
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.setCurrentProject(project)
+                            }
+                          }
+                        },
                         [
-                          _vm._v(
-                            "\n                    " +
-                              _vm._s(_vm.currentProject.name) +
-                              "\n                    "
-                          ),
-                          _c("v-icon", { attrs: { size: "14" } }, [
-                            _vm._v("mdi-chevron-down")
+                          _c("v-list-item-title", [
+                            _vm._v(_vm._s(project.name))
                           ])
                         ],
                         1
                       )
-                    ]
-                  }
-                }
-              ])
-            },
-            [
-              _vm._v(" "),
-              _c(
-                "v-list",
-                _vm._l(_vm.projects, function(project) {
-                  return _c(
-                    "v-list-item",
-                    {
-                      key: project.id,
-                      class: { active: project.id === _vm.currentProject.id },
-                      on: {
-                        click: function($event) {
-                          return _vm.setCurrentProject(project)
-                        }
-                      }
-                    },
-                    [_c("v-list-item-title", [_vm._v(_vm._s(project.name))])],
+                    }),
                     1
                   )
-                }),
+                ],
                 1
               )
-            ],
-            1
-          )
+            : _vm._e()
         ],
         1
       ),
       _vm._v(" "),
-      _c("v-main", [_vm._t("default"), _vm._v(" "), _c("router-view")], 2)
+      _c(
+        "v-main",
+        [
+          _vm._t("default"),
+          _vm._v(" "),
+          _vm.currentProject ? _c("router-view") : _vm._e()
+        ],
+        2
+      )
     ],
     1
   )
@@ -25585,19 +25606,6 @@ var render = function() {
             )
           ]
         }
-      },
-      {
-        key: "no-data",
-        fn: function() {
-          return [
-            _c(
-              "v-btn",
-              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
-              [_vm._v("Reset")]
-            )
-          ]
-        },
-        proxy: true
       }
     ])
   })
@@ -26480,9 +26488,9 @@ var render = function() {
                   {
                     staticClass: "mr-2",
                     attrs: { icon: "" },
-                    on: { click: _vm.getItems }
+                    on: { click: _vm.addPreset }
                   },
-                  [_c("v-icon", [_vm._v("mdi-magnify")])],
+                  [_c("v-icon", [_vm._v("mdi-database-plus")])],
                   1
                 ),
                 _vm._v(" "),
@@ -26491,9 +26499,9 @@ var render = function() {
                   {
                     staticClass: "mr-2",
                     attrs: { icon: "" },
-                    on: { click: _vm.addPreset }
+                    on: { click: _vm.getItems }
                   },
-                  [_c("v-icon", [_vm._v("mdi-database-plus")])],
+                  [_c("v-icon", [_vm._v("mdi-refresh")])],
                   1
                 ),
                 _vm._v(" "),
@@ -27055,19 +27063,6 @@ var render = function() {
             })
           ]
         }
-      },
-      {
-        key: "no-data",
-        fn: function() {
-          return [
-            _c(
-              "v-btn",
-              { attrs: { color: "primary" }, on: { click: _vm.initialize } },
-              [_vm._v("Reset")]
-            )
-          ]
-        },
-        proxy: true
       }
     ]),
     model: {
@@ -87063,7 +87058,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   },
   data: function data() {
     return {
-      currentProject: {},
+      currentProject: null,
       projects: [],
       tags: [],
       presets: [],
@@ -87072,17 +87067,17 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   },
   mounted: function mounted() {
     this.getCurrentProject();
-    this.getProjects();
-    this.getTags();
-    this.getPresets();
-    this.getFields();
+    this.getAll();
   },
   methods: {
     setCurrentProject: function setCurrentProject(project) {
       var _this = this;
 
+      this.currentProject = null;
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.put('/api/v1/current-project', project).then(function (response) {
         _this.currentProject = project;
+
+        _this.getAll();
       });
     },
     getCurrentProject: function getCurrentProject() {
@@ -87091,6 +87086,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/current-project').then(function (response) {
         _this2.currentProject = response.data.data;
       });
+    },
+    getAll: function getAll() {
+      this.getProjects();
+      this.getTags();
+      this.getPresets();
+      this.getFields();
     },
     getProjects: function getProjects() {
       var _this3 = this;

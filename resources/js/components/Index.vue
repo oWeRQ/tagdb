@@ -41,11 +41,11 @@
                     clearable
                     class="shrink mr-2"
                 ></v-text-field>
-                <v-btn icon @click="getItems" class="mr-2">
-                    <v-icon>mdi-magnify</v-icon>
-                </v-btn>
                 <v-btn icon @click="addPreset" class="mr-2">
                     <v-icon>mdi-database-plus</v-icon>
+                </v-btn>
+                <v-btn icon @click="getItems" class="mr-2">
+                    <v-icon>mdi-refresh</v-icon>
                 </v-btn>
                 <v-spacer></v-spacer>
                 <v-btn text large color="grey darken-2" @click="addItem">

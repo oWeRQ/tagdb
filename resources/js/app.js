@@ -25,7 +25,7 @@ const app = new Vue({
     },
     data() {
         return {
-            currentProject: {},
+            currentProject: null,
             projects: [],
             tags: [],
             presets: [],
@@ -34,21 +34,26 @@ const app = new Vue({
     },
     mounted() {
         this.getCurrentProject();
-        this.getProjects();
-        this.getTags();
-        this.getPresets();
-        this.getFields();
+        this.getAll();
     },
     methods: {
         setCurrentProject(project) {
+            this.currentProject = null;
             return axios.put('/api/v1/current-project', project).then(response => {
                 this.currentProject = project;
+                this.getAll();
             });
-            },
+        },
         getCurrentProject() {
             return axios.get('/api/v1/current-project').then(response => {
                 this.currentProject = response.data.data;
             });
+        },
+        getAll() {
+            this.getProjects();
+            this.getTags();
+            this.getPresets();
+            this.getFields();
         },
         getProjects() {
             return axios.get('/api/v1/projects').then(response => {

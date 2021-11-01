@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\ProjectScope;
 
 class Tag extends Model
 {
@@ -10,6 +11,20 @@ class Tag extends Model
         'name',
         'color',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        $this->setRawAttributes(array(
+            'project_id' => Project::getCurrentId(),
+        ), true);
+        parent::__construct($attributes);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new ProjectScope);
+    }
 
     public function entities()
     {

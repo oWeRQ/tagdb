@@ -10,13 +10,32 @@ class Project extends Model
         'name',
     ];
 
-    public static function getCurrent()
+    public static function current()
     {
-        return static::find(session('currentProject', 1));
+        return static::find(static::getCurrentId());
     }
 
-    public static function setCurrent($project_id)
+    public static function getCurrentId() {
+        return session('currentProject', 1);
+    }
+
+    public static function setCurrentId($project_id)
     {
         session(['currentProject' => $project_id]);
+    }
+
+    public function entities()
+    {
+        return $this->belongsToMany('App\Entity');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany('App\Tag');
+    }
+
+    public function presets()
+    {
+        return $this->belongsToMany('App\Preset');
     }
 }

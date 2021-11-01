@@ -70,6 +70,7 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>TagDB</v-toolbar-title>
             <v-menu
+                v-if="currentProject"
                 bottom
                 left
             >
@@ -80,6 +81,7 @@
                         v-on="on"
                         class="ml-4 text-capitalize"
                     >
+                        <v-icon class="mr-1">mdi-folder-outline</v-icon>
                         {{ currentProject.name }}
                         <v-icon size="14">mdi-chevron-down</v-icon>
                     </v-btn>
@@ -89,7 +91,7 @@
                     <v-list-item
                         v-for="project in projects"
                         :key="project.id"
-                        :class="{active: project.id === currentProject.id}"
+                        :class="{'v-list-item--active': project.id === currentProject.id}"
                         @click="setCurrentProject(project)"
                     >
                         <v-list-item-title>{{ project.name }}</v-list-item-title>
@@ -100,7 +102,7 @@
 
         <v-main>
             <slot></slot>
-            <router-view></router-view>
+            <router-view v-if="currentProject"></router-view>
         </v-main>
     </v-app>
 </template>
