@@ -3811,8 +3811,34 @@ __webpack_require__.r(__webpack_exports__);
       type: Array
     },
     value: {
-      type: Object,
-      "default": function _default() {}
+      type: Object
+    }
+  },
+  computed: {
+    rules: function rules() {
+      return {
+        name: [function (v) {
+          return !!v || 'Required';
+        }],
+        sort: [function (v) {
+          return !!v || 'Required';
+        }]
+      };
+    },
+    tags: function tags() {
+      try {
+        var tags = JSON.parse(this.value.query).tags;
+        return this.$root.tags.filter(function (tag) {
+          return tags.includes(tag.name);
+        });
+      } catch (ex) {
+        return [];
+      }
+    },
+    fields: function fields() {
+      return this.tags.flatMap(function (item) {
+        return item.fields;
+      });
     }
   }
 });
@@ -3942,6 +3968,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     label: {
       type: String
+    },
+    fields: {
+      type: Array
     }
   },
   data: function data() {
@@ -3953,9 +3982,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   computed: {
-    fields: function fields() {
-      return this.$root.fields;
-    },
     items: function items() {
       return [{
         name: 'Name',
@@ -27100,7 +27126,7 @@ var render = function() {
     "div",
     [
       _c("v-text-field", {
-        attrs: { label: "Name", autofocus: "" },
+        attrs: { rules: _vm.rules.name, label: "Name", autofocus: "" },
         model: {
           value: _vm.value.name,
           callback: function($$v) {
@@ -27122,7 +27148,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("SortField", {
-        attrs: { label: "Sort" },
+        attrs: { fields: _vm.fields, rules: _vm.rules.sort, label: "Sort" },
         model: {
           value: _vm.value.sort,
           callback: function($$v) {

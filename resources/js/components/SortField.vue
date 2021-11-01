@@ -32,6 +32,9 @@
             label: {
                 type: String,
             },
+            fields: {
+                type: Array,
+            },
         },
         data() {
             return {
@@ -42,9 +45,6 @@
             };
         },
         computed: {
-            fields() {
-                return this.$root.fields;
-            },
             items() {
                 return [
                     { name: 'Name', value: 'name' },
