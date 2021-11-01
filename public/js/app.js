@@ -1908,6 +1908,9 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
 //
 //
 //
@@ -2017,10 +2020,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_1__["default"]
+  },
   data: function data() {
     return {
-      drawer: null
+      drawer: null,
+      projectResource: '/api/v1/projects',
+      projectEditable: [{
+        text: 'Name',
+        value: 'name'
+      }],
+      projectEdited: {}
     };
   },
   computed: {
@@ -2037,6 +2083,20 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     setCurrentProject: function setCurrentProject(project) {
       this.$root.setCurrentProject(project);
+    },
+    updateProject: function updateProject() {
+      this.projectEdited = clone_deep__WEBPACK_IMPORTED_MODULE_0___default()(this.currentProject);
+      this.$refs.projectDialog.show();
+    },
+    createProject: function createProject() {
+      this.projectEdited = {
+        name: ''
+      };
+      this.$refs.projectDialog.show();
+    },
+    saveProject: function saveProject(project) {
+      this.setCurrentProject(project);
+      this.$root.getProjects();
     }
   }
 });
@@ -25276,6 +25336,17 @@ var render = function() {
           _vm._v(" "),
           _c("v-toolbar-title", [_vm._v("TagDB")]),
           _vm._v(" "),
+          _c("CrudDialog", {
+            ref: "projectDialog",
+            attrs: {
+              title: "Project",
+              resource: _vm.projectResource,
+              editable: _vm.projectEditable,
+              value: _vm.projectEdited
+            },
+            on: { input: _vm.saveProject }
+          }),
+          _vm._v(" "),
           _vm.currentProject
             ? _c(
                 "v-menu",
@@ -25336,30 +25407,92 @@ var render = function() {
                   _vm._v(" "),
                   _c(
                     "v-list",
-                    _vm._l(_vm.projects, function(project) {
-                      return _c(
-                        "v-list-item",
-                        {
-                          key: project.id,
-                          class: {
-                            "v-list-item--active":
-                              project.id === _vm.currentProject.id
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.setCurrentProject(project)
+                    { attrs: { dense: "" } },
+                    [
+                      _vm._l(_vm.projects, function(project) {
+                        return _c(
+                          "v-list-item",
+                          {
+                            key: project.id,
+                            class: {
+                              "v-list-item--active primary--text":
+                                project.id === _vm.currentProject.id
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.setCurrentProject(project)
+                              }
                             }
-                          }
-                        },
+                          },
+                          [
+                            _c(
+                              "v-list-item-icon",
+                              { staticClass: "mr-4" },
+                              [
+                                project.id === _vm.currentProject.id
+                                  ? _c("v-icon", [_vm._v("mdi-check")])
+                                  : _vm._e()
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-item-content",
+                              [
+                                _c("v-list-item-title", [
+                                  _vm._v(_vm._s(project.name))
+                                ])
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      }),
+                      _vm._v(" "),
+                      _c("v-divider"),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.updateProject } },
                         [
-                          _c("v-list-item-title", [
-                            _vm._v(_vm._s(project.name))
-                          ])
+                          _c(
+                            "v-list-item-icon",
+                            { staticClass: "mr-4" },
+                            [_c("v-icon", [_vm._v("mdi-pencil")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [_c("v-list-item-title", [_vm._v("Edit Project")])],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.createProject } },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            { staticClass: "mr-4" },
+                            [_c("v-icon", [_vm._v("mdi-plus")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [_c("v-list-item-title", [_vm._v("New Project")])],
+                            1
+                          )
                         ],
                         1
                       )
-                    }),
-                    1
+                    ],
+                    2
                   )
                 ],
                 1

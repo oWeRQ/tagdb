@@ -69,6 +69,16 @@
         <v-app-bar app clipped-left color="indigo" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>TagDB</v-toolbar-title>
+
+            <CrudDialog
+                ref="projectDialog"
+                title="Project"
+                :resource="projectResource"
+                :editable="projectEditable"
+                :value="projectEdited"
+                @input="saveProject"
+            ></CrudDialog>
+
             <v-menu
                 v-if="currentProject"
                 bottom
@@ -87,14 +97,36 @@
                     </v-btn>
                 </template>
 
-                <v-list>
+                <v-list dense>
                     <v-list-item
                         v-for="project in projects"
                         :key="project.id"
-                        :class="{'v-list-item--active': project.id === currentProject.id}"
+                        :class="{'v-list-item--active primary--text': project.id === currentProject.id}"
                         @click="setCurrentProject(project)"
                     >
-                        <v-list-item-title>{{ project.name }}</v-list-item-title>
+                        <v-list-item-icon class="mr-4">
+                            <v-icon v-if="project.id === currentProject.id">mdi-check</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title>{{ project.name }}</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-divider></v-divider>
+                    <v-list-item @click="updateProject">
+                        <v-list-item-icon class="mr-4">
+                            <v-icon>mdi-pencil</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title>Edit Project</v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item @click="createProject">
+                        <v-list-item-icon class="mr-4">
+                            <v-icon>mdi-plus</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                            <v-list-item-title>New Project</v-list-item-title>
+                        </v-list-item-content>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -108,9 +140,20 @@
 </template>
 
 <script>
+    import cloneDeep from 'clone-deep';
+    import CrudDialog from './CrudDialog';
+
     export default {
+        components: {
+            CrudDialog,
+        },
         data: () => ({
             drawer: null,
+            projectResource: '/api/v1/projects',
+            projectEditable: [
+                { text: 'Name', value: 'name' },
+            ],
+            projectEdited: {},
         }),
         computed: {
             currentProject() {
@@ -126,6 +169,18 @@
         methods: {
             setCurrentProject(project) {
                 this.$root.setCurrentProject(project);
+            },
+            updateProject() {
+                this.projectEdited = cloneDeep(this.currentProject);
+                this.$refs.projectDialog.show();
+            },
+            createProject() {
+                this.projectEdited = {name: ''};
+                this.$refs.projectDialog.show();
+            },
+            saveProject(project) {
+                this.setCurrentProject(project);
+                this.$root.getProjects();
             },
         },
     }
