@@ -3,7 +3,7 @@
         <TagsField
             v-model="query.tags"
             :rules="rules.tags"
-            :autofocus="!query.tags.length"
+            hyphen
         ></TagsField>
         <v-text-field v-model="query.search" label="Search"></v-text-field>
     </div>

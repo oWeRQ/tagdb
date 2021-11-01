@@ -28,6 +28,7 @@
                 <TagsField
                     v-model="query.tags"
                     solo
+                    hyphen
                     class="shrink mr-3"
                 ></TagsField>
                 <v-text-field
@@ -55,6 +56,7 @@
 
             <CrudDialog
                 ref="entityDialog"
+                title="Entity"
                 :form="form"
                 :resource="resource"
                 :processValue="processItem"
@@ -63,6 +65,7 @@
             ></CrudDialog>
             <CrudDialog
                 ref="presetDialog"
+                title="Preset"
                 :form="presetForm"
                 :resource="presetResource"
                 :value="editedPreset"
@@ -72,6 +75,7 @@
         <template v-slot:item="{ item, headers, isSelected, select }">
             <EntityRow
                 :query="query"
+                @click:tag="query.tags.push($event.name)"
                 :item="item"
                 :headers="headers"
                 :isSelected="isSelected"

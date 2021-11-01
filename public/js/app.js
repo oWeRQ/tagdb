@@ -2175,6 +2175,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -2242,6 +2243,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   computed: {
+    singularTitle: function singularTitle() {
+      return this.title.replace(/ies$/, 'y').replace(/s$/, '');
+    },
     headers: function headers() {
       return [].concat(_toConsumableArray(this.columns), [{
         text: 'Actions',
@@ -2353,6 +2357,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
+    title: {
+      type: String,
+      "default": ''
+    },
     form: {
       type: Object,
       "default": function _default() {
@@ -2385,7 +2393,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     headline: function headline() {
-      return this.value.id ? 'Update' : 'Create';
+      return (this.value.id ? 'Update' : 'Create') + ' ' + this.title;
     }
   },
   data: function data() {
@@ -2465,7 +2473,22 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
+/* harmony import */ var _TagForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TagForm */ "./resources/js/components/TagForm.vue");
+/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2513,9 +2536,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_0__["default"]
+    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_1__["default"],
+    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: {
     value: {
@@ -2524,7 +2551,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      menu: {}
+      menu: {},
+      editedTag: null,
+      tagForm: _TagForm__WEBPACK_IMPORTED_MODULE_2__["default"],
+      tagResource: '/api/v1/tags'
     };
   },
   computed: {
@@ -2545,6 +2575,16 @@ __webpack_require__.r(__webpack_exports__);
       return this.value.tags.flatMap(function (item) {
         return item.fields;
       });
+    }
+  },
+  methods: {
+    showTag: function showTag(tag) {
+      this.originalTag = tag;
+      this.editedTag = clone_deep__WEBPACK_IMPORTED_MODULE_0___default()(tag);
+      this.$refs.tagDialog.show();
+    },
+    saveTag: function saveTag(tag) {
+      Object.assign(this.originalTag, tag);
     }
   }
 });
@@ -2625,7 +2665,8 @@ __webpack_require__.r(__webpack_exports__);
   filters: {
     date: _functions_date__WEBPACK_IMPORTED_MODULE_1__["default"],
     truncate: _functions_truncate__WEBPACK_IMPORTED_MODULE_2__["default"],
-    value: vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__["getObjectValueByPath"]
+    value: vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__["getObjectValueByPath"],
+    number: Number
   },
   props: {
     query: {
@@ -2768,7 +2809,9 @@ __webpack_require__.r(__webpack_exports__);
         });
       });
       this.$emit('input', []);
-      Promise.all(requests).then(this.$emit('update'));
+      Promise.all(requests).then(function () {
+        return _this.$emit('update');
+      });
     },
     deleteItems: function deleteItems() {
       var _this2 = this;
@@ -2780,7 +2823,9 @@ __webpack_require__.r(__webpack_exports__);
 
         _this2.$emit('input', []);
 
-        Promise.all(requests).then(_this2.$emit('update'));
+        Promise.all(requests).then(function () {
+          return _this2.$emit('update');
+        });
       });
     }
   }
@@ -2829,6 +2874,10 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
+//
+//
+//
 //
 //
 //
@@ -3375,6 +3424,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -3504,7 +3558,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     headers: function headers() {
       var before = [{
         text: 'Tags',
-        value: 'tags'
+        value: 'tags',
+        sortable: false,
+        width: '1%'
       }, {
         text: 'Name',
         value: 'name'
@@ -4032,6 +4088,12 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -4055,6 +4117,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+function toggleHyphen(value) {
+  if (value[0] === '-') {
+    return value.slice(1);
+  } else {
+    return '-' + value;
+  }
+}
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -4079,11 +4164,16 @@ __webpack_require__.r(__webpack_exports__);
     solo: {
       type: Boolean,
       "default": false
+    },
+    hyphen: {
+      type: Boolean,
+      "default": false
     }
   },
   data: function data() {
     return {
-      tags: []
+      tags: [],
+      search: ''
     };
   },
   watch: {
@@ -4093,8 +4183,33 @@ __webpack_require__.r(__webpack_exports__);
     this.getTags();
   },
   methods: {
-    getTags: function getTags() {
+    isHyphen: function isHyphen(item) {
+      return (this.returnObject ? item.name : item)[0] === '-';
+    },
+    itemText: function itemText(item) {
+      return (this.returnObject ? item.name : item).replace(/^[+-]/, '');
+    },
+    click: function click(index, item) {
       var _this = this;
+
+      this.$emit('click:tag', item);
+
+      if (this.hyphen) {
+        this.$emit('input', this.value.map(function (v, i) {
+          if (i === index) return _this.returnObject ? _objectSpread(_objectSpread({}, v), {}, {
+            name: toggleHyphen(v.name)
+          }) : toggleHyphen(v);
+          return v;
+        }));
+      }
+    },
+    remove: function remove(index) {
+      this.$emit('input', this.value.filter(function (v, i) {
+        return i !== index;
+      }));
+    },
+    getTags: function getTags() {
+      var _this2 = this;
 
       var params = {
         with_tags: this.returnObject ? this.value.map(function (tag) {
@@ -4104,32 +4219,25 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags', {
         params: params
       }).then(function (response) {
-        _this.tags = response.data.data;
+        _this2.tags = response.data.data;
       });
     },
     input: function input(value) {
-      var _this2 = this;
+      var _this3 = this;
 
-      this.$emit('input', value.map(function (v) {
-        var tag = _this2.getOrCreateTag(typeof v === 'string' ? v : v.name);
+      this.$emit('input', value.map(function (item) {
+        if (_this3.returnObject && typeof item === 'string') {
+          return _this3.tags.find(function (tag) {
+            return tag.name === item;
+          }) || {
+            name: item,
+            fields: []
+          };
+        }
 
-        return _this2.returnObject ? tag : tag.name;
+        return item;
       }));
-    },
-    getOrCreateTag: function getOrCreateTag(name) {
-      var tag = this.tags.find(function (tag) {
-        return tag.name === name;
-      });
-
-      if (!tag) {
-        tag = {
-          name: name,
-          fields: []
-        };
-        this.tags.push(tag);
-      }
-
-      return tag;
+      this.search = '';
     }
   }
 });
@@ -25298,6 +25406,7 @@ var render = function() {
                 _c("CrudDialog", {
                   ref: "crudDialog",
                   attrs: {
+                    title: _vm.singularTitle,
                     form: _vm.form,
                     resource: _vm.resource,
                     editable: _vm.editable,
@@ -25550,11 +25659,27 @@ var render = function() {
   return _c(
     "div",
     [
+      _c("CrudDialog", {
+        ref: "tagDialog",
+        attrs: {
+          title: "Tag",
+          form: _vm.tagForm,
+          resource: _vm.tagResource,
+          value: _vm.editedTag
+        },
+        on: { input: _vm.saveTag }
+      }),
+      _vm._v(" "),
       _c("TagsField", {
         attrs: {
           "return-object": "",
           rules: _vm.rules.tags,
           autofocus: !_vm.value.tags.length
+        },
+        on: {
+          "click:tag": function($event) {
+            return _vm.showTag($event)
+          }
         },
         model: {
           value: _vm.value.tags,
@@ -25756,17 +25881,16 @@ var render = function() {
                     _vm._v(" "),
                     _c("v-rating", {
                       attrs: {
+                        value: +_vm.value.contents[field.id],
                         hover: "",
                         "half-increments": "",
                         color: "orange",
-                        "background-color": "orange"
+                        "background-color": "grey lighten-1"
                       },
-                      model: {
-                        value: _vm.value.contents[field.id],
-                        callback: function($$v) {
-                          _vm.$set(_vm.value.contents, field.id, $$v)
-                        },
-                        expression: "value.contents[field.id]"
+                      on: {
+                        input: function($event) {
+                          _vm.value.contents[field.id] = $event
+                        }
                       }
                     })
                   ]
@@ -25901,7 +26025,7 @@ var render = function() {
                           },
                           on: {
                             click: function($event) {
-                              return _vm.query.tags.push(tag.name)
+                              return _vm.$emit("click:tag", tag)
                             }
                           }
                         },
@@ -25976,11 +26100,13 @@ var render = function() {
                 _c("v-rating", {
                   staticClass: "d-inline-block",
                   attrs: {
-                    value: _vm._f("value")(_vm.item, header.value),
+                    value: _vm._f("number")(
+                      _vm._f("value")(_vm.item, header.value)
+                    ),
                     readonly: "",
                     "half-increments": "",
                     color: "orange",
-                    "background-color": "orange",
+                    "background-color": "grey lighten-1",
                     size: "18"
                   }
                 })
@@ -26190,7 +26316,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("TagsField", {
                   staticClass: "shrink mr-3",
-                  attrs: { solo: "" },
+                  attrs: { solo: "", hyphen: "" },
                   model: {
                     value: _vm.query.tags,
                     callback: function($$v) {
@@ -26262,6 +26388,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "entityDialog",
               attrs: {
+                title: "Entity",
                 form: _vm.form,
                 resource: _vm.resource,
                 processValue: _vm.processItem,
@@ -26273,6 +26400,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "presetDialog",
               attrs: {
+                title: "Preset",
                 form: _vm.presetForm,
                 resource: _vm.presetResource,
                 value: _vm.editedPreset
@@ -26300,6 +26428,9 @@ var render = function() {
                 select: select
               },
               on: {
+                "click:tag": function($event) {
+                  return _vm.query.tags.push($event.name)
+                },
                 edit: function($event) {
                   return _vm.editItem(item)
                 },
@@ -26547,6 +26678,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "entityDialog",
               attrs: {
+                title: "Entity",
                 form: _vm.form,
                 resource: _vm.resource,
                 processValue: _vm.processItem,
@@ -26558,6 +26690,7 @@ var render = function() {
             _c("CrudDialog", {
               ref: "presetDialog",
               attrs: {
+                title: "Preset",
                 form: _vm.presetForm,
                 resource: _vm.presetResource,
                 value: _vm.editedPreset
@@ -26593,32 +26726,40 @@ var render = function() {
                       "v-card",
                       [
                         _c("v-card-title", [
-                          _c("span", { staticClass: "headline" }, [
-                            _vm._v("Export")
-                          ])
+                          _vm._v(
+                            "\n                        Export\n                    "
+                          )
                         ]),
+                        _vm._v(" "),
+                        _c("v-divider"),
                         _vm._v(" "),
                         _c(
                           "v-card-text",
-                          _vm._l(_vm.exportHeaders, function(header) {
-                            return _c("v-switch", {
-                              key: header.value,
-                              attrs: {
-                                value: header.value,
-                                label: header.text,
-                                "hide-details": ""
-                              },
-                              model: {
-                                value: _vm.exportColumns,
-                                callback: function($$v) {
-                                  _vm.exportColumns = $$v
+                          [
+                            _c("div", [_vm._v("Columns")]),
+                            _vm._v(" "),
+                            _vm._l(_vm.exportHeaders, function(header) {
+                              return _c("v-checkbox", {
+                                key: header.value,
+                                attrs: {
+                                  value: header.value,
+                                  label: header.text,
+                                  "hide-details": ""
                                 },
-                                expression: "exportColumns"
-                              }
+                                model: {
+                                  value: _vm.exportColumns,
+                                  callback: function($$v) {
+                                    _vm.exportColumns = $$v
+                                  },
+                                  expression: "exportColumns"
+                                }
+                              })
                             })
-                          }),
-                          1
+                          ],
+                          2
                         ),
+                        _vm._v(" "),
+                        _c("v-divider"),
                         _vm._v(" "),
                         _c(
                           "v-card-actions",
@@ -26844,17 +26985,6 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("SortField", {
-        attrs: { label: "Sort" },
-        model: {
-          value: _vm.value.sort,
-          callback: function($$v) {
-            _vm.$set(_vm.value, "sort", $$v)
-          },
-          expression: "value.sort"
-        }
-      }),
-      _vm._v(" "),
       _c("QueryField", {
         attrs: { label: "Query" },
         model: {
@@ -26863,6 +26993,17 @@ var render = function() {
             _vm.$set(_vm.value, "query", $$v)
           },
           expression: "value.query"
+        }
+      }),
+      _vm._v(" "),
+      _c("SortField", {
+        attrs: { label: "Sort" },
+        model: {
+          value: _vm.value.sort,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "sort", $$v)
+          },
+          expression: "value.sort"
         }
       })
     ],
@@ -26895,7 +27036,7 @@ var render = function() {
     "div",
     [
       _c("TagsField", {
-        attrs: { rules: _vm.rules.tags, autofocus: !_vm.query.tags.length },
+        attrs: { rules: _vm.rules.tags, hyphen: "" },
         model: {
           value: _vm.query.tags,
           callback: function($$v) {
@@ -27199,6 +27340,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("v-combobox", {
     attrs: {
+      "search-input": _vm.search,
       value: _vm.value,
       rules: _vm.rules,
       items: _vm.tags,
@@ -27217,7 +27359,83 @@ var render = function() {
       "return-object": _vm.returnObject,
       autofocus: _vm.autofocus
     },
-    on: { input: _vm.input }
+    on: {
+      input: _vm.input,
+      "update:searchInput": function($event) {
+        _vm.search = $event
+      },
+      "update:search-input": function($event) {
+        _vm.search = $event
+      }
+    },
+    scopedSlots: _vm._u([
+      {
+        key: "selection",
+        fn: function(ref) {
+          var item = ref.item
+          var index = ref.index
+          return [
+            _c(
+              "v-chip",
+              {
+                attrs: { close: "" },
+                on: {
+                  click: function($event) {
+                    $event.stopPropagation()
+                    return _vm.click(index, item)
+                  },
+                  "click:close": function($event) {
+                    return _vm.remove(index)
+                  }
+                }
+              },
+              [
+                _c(
+                  "span",
+                  {
+                    style: {
+                      "text-decoration": _vm.isHyphen(item)
+                        ? "line-through"
+                        : "none"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.itemText(item)) +
+                        "\n            "
+                    )
+                  ]
+                )
+              ]
+            )
+          ]
+        }
+      },
+      {
+        key: "item",
+        fn: function(ref) {
+          var item = ref.item
+          return [
+            _c(
+              "span",
+              { class: { "grey--text text--darken-2": !item.entities_count } },
+              [_vm._v(_vm._s(item.name))]
+            ),
+            _vm._v(" "),
+            _c("v-spacer"),
+            _vm._v(" "),
+            item.entities_count
+              ? _c(
+                  "span",
+                  { staticClass: "caption grey--text text--darken-1" },
+                  [_vm._v(_vm._s(item.entities_count))]
+                )
+              : _vm._e()
+          ]
+        }
+      }
+    ])
   })
 }
 var staticRenderFns = []
@@ -86771,6 +86989,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
  */
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+window.axios.defaults.withCredentials = true;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

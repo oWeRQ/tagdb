@@ -1,8 +1,8 @@
 <template>
     <div>
         <v-text-field v-model="value.name" label="Name" autofocus></v-text-field>
-        <SortField v-model="value.sort" label="Sort"></SortField>
         <QueryField v-model="value.query" label="Query"></QueryField>
+        <SortField v-model="value.sort" label="Sort"></SortField>
     </div>
 </template>
 

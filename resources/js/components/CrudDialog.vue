@@ -24,6 +24,10 @@
 
     export default {
         props: {
+            title: {
+                type: String,
+                default: '',
+            },
             form: {
                 type: Object,
                 default: () => CrudForm,
@@ -50,7 +54,7 @@
         },
         computed: {
             headline() {
-                return this.value.id ? 'Update' : 'Create';
+                return (this.value.id ? 'Update' : 'Create') + ' ' + this.title;
             },
         },
         data() {

@@ -17,7 +17,7 @@
                     <v-chip v-if="invisibleTags.length" small outlined class="grey--text">
                         {{ invisibleTags.length }}
                     </v-chip>
-                    <v-chip v-for="tag in visibleTags" :key="tag.name" @click="query.tags.push(tag.name)" :color="tag.color" :dark="!!tag.color" small class="lighten-2">
+                    <v-chip v-for="tag in visibleTags" :key="tag.name" @click="$emit('click:tag', tag)" :color="tag.color" :dark="!!tag.color" small class="lighten-2">
                         {{ tag.name }}
                         <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
                     </v-chip>
@@ -37,11 +37,11 @@
             </template>
             <template v-else-if="header.type === 'rating'">
                 <v-rating
-                    :value="item | value(header.value)"
+                    :value="item | value(header.value) | number"
                     readonly
                     half-increments
                     color="orange"
-                    background-color="orange"
+                    background-color="grey lighten-1"
                     size="18"
                     class="d-inline-block"
                 ></v-rating>
@@ -63,6 +63,7 @@
             date,
             truncate,
             value: getObjectValueByPath,
+            number: Number,
         },
         props: {
             query: {

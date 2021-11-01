@@ -1,6 +1,7 @@
 <template>
     <v-combobox
         @input="input"
+        :search-input.sync="search"
         :value="value"
         :rules="rules"
         :items="tags"
@@ -18,11 +19,32 @@
         :hide-details="solo"
         :return-object="returnObject"
         :autofocus="autofocus"
-    ></v-combobox>
+    >
+        <template v-slot:selection="{ item, index }">
+            <v-chip close @click.stop="click(index, item)" @click:close="remove(index)">
+                <span :style="{'text-decoration': isHyphen(item) ? 'line-through' : 'none'}">
+                    {{ itemText(item) }}
+                </span>
+            </v-chip>
+        </template>
+        <template v-slot:item="{ item }">
+            <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
+            <v-spacer></v-spacer>
+            <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+        </template>
+    </v-combobox>
 </template>
 
 <script>
     import axios from 'axios';
+
+    function toggleHyphen(value) {
+        if (value[0] === '-') {
+            return value.slice(1);
+        } else {
+            return '-' + value;
+        }
+    }
 
     export default {
         props: {
@@ -48,10 +70,15 @@
                 type: Boolean,
                 default: false,
             },
+            hyphen: {
+                type: Boolean,
+                default: false,
+            },
         },
         data() {
             return {
                 tags: [],
+                search: '',
             };
         },
         watch: {
@@ -61,6 +88,27 @@
             this.getTags();
         },
         methods: {
+            isHyphen(item) {
+                return (this.returnObject ? item.name : item)[0] === '-';
+            },
+            itemText(item) {
+                return (this.returnObject ? item.name : item).replace(/^[+-]/, '');
+            },
+            click(index, item) {
+                this.$emit('click:tag', item);
+
+                if (this.hyphen) {
+                    this.$emit('input', this.value.map((v, i) => {
+                        if (i === index)
+                            return this.returnObject ? { ...v, name: toggleHyphen(v.name) } : toggleHyphen(v);
+
+                        return v;
+                    }));
+                }
+            },
+            remove(index) {
+                this.$emit('input', this.value.filter((v, i) => i !== index));
+            },
             getTags() {
                 const params = {
                     with_tags: this.returnObject ? this.value.map(tag => tag.name) : this.value,
@@ -70,23 +118,15 @@
                 });
             },
             input(value) {
-                this.$emit('input', value.map(v => {
-                    const tag = this.getOrCreateTag(typeof v === 'string' ? v : v.name);
-                    return this.returnObject ? tag : tag.name;
+                this.$emit('input', value.map(item => {
+                    if (this.returnObject && typeof item === 'string') {
+                        return this.tags.find(tag => tag.name === item) || { name: item, fields: [] };
+                    }
+
+                    return item;
                 }));
-            },
-            getOrCreateTag(name) {
-                let tag = this.tags.find(tag => tag.name === name);
 
-                if (!tag) {
-                    tag = {
-                        name,
-                        fields: [],
-                    };
-                    this.tags.push(tag);
-                }
-
-                return tag;
+                this.search = '';
             },
         },
     }

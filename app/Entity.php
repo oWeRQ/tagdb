@@ -10,6 +10,15 @@ class Entity extends Model
         'name',
     ];
 
+    protected $visible = [
+        'id',
+        'name',
+        'created_at',
+        'updated_at',
+        'tags',
+        'values',
+    ];
+
     public function tags()
     {
         return $this->belongsToMany('App\Tag', 'entities_tags');
@@ -18,6 +27,12 @@ class Entity extends Model
     public function values()
     {
         return $this->hasMany('App\Value');
+    }
+
+    public function valuesAssoc() {
+        return $this->values->mapWithKeys(function($value) {
+            return [$value->field->code => $value->content];
+        })->all();
     }
 
     public function scopeQueryJson($query, $json)
@@ -35,11 +50,29 @@ class Entity extends Model
         if (!$tags)
             return $query;
 
-        return $query->whereHas('tags', function($query) use($tags) {
-            $query->whereIn('name', $tags)
-                ->groupBy('entity_id')
-                ->havingRaw('count(*) = ?', [count($tags)]);
-        });
+        $includeTags = [];
+        $excludeTags = [];
+        foreach ($tags as $tag) {
+            if ($tag[0] === '-') {
+                $excludeTags[] = trim($tag, '+-');
+            } else {
+                $includeTags[] = trim($tag, '+-');
+            }
+        }
+
+        if ($includeTags) {
+            $query->whereHas('tags', function($query) use($includeTags) {
+                $query->whereIn('name', $includeTags);
+            }, '=', count($includeTags));
+        }
+
+        if ($excludeTags) {
+            $query->whereDoesntHave('tags', function($query) use($excludeTags) {
+                $query->whereIn('name', $excludeTags);
+            });
+        }
+
+        return $query;
     }
 
     public function scopeSearch($query, $search = null)
@@ -117,5 +150,16 @@ class Entity extends Model
                 'content' => (string)$content,
             ]);
         }
+    }
+
+    public function updateValues($values) {
+        $fields = $this->tags()->with('fields')->get()->pluck('fields')->collapse();
+
+        $fieldIds = $fields->pluck('id', 'code')->all();
+        $contents = collect($values)->only(array_keys($fieldIds))->keyBy(function($content, $key) use($fieldIds) {
+            return $fieldIds[$key];
+        })->all();
+
+        return $this->updateContents($contents);
     }
 }
