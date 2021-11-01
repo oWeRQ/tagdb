@@ -11,46 +11,31 @@
                             <v-list-item-title>Entities</v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-list-item link to="/tags">
-                        <v-list-item-action>
-                            <v-icon>mdi-tag</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                            <v-list-item-title>Tags</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/presets" exact>
-                        <v-list-item-action>
-                            <v-icon>mdi-database-settings</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                            <v-list-item-title>Presets</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/fields">
-                        <v-list-item-action>
-                            <v-icon>mdi-pencil-box-multiple</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                            <v-list-item-title>Fields</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/values">
-                        <v-list-item-action>
-                            <v-icon>mdi-pencil</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
-                            <v-list-item-title>Values</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/projects">
-                        <v-list-item-action>
-                            <v-icon>mdi-folder-multiple</v-icon>
-                        </v-list-item-action>
-                        <v-list-item-content>
+
+                    <v-list-group
+                        prepend-icon="mdi-cog"
+                        no-action
+                    >
+                        <template v-slot:activator>
+                            <v-list-item-title>Admin</v-list-item-title>
+                        </template>
+
+                        <v-list-item link to="/projects">
                             <v-list-item-title>Projects</v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+                        </v-list-item>
+                        <v-list-item link to="/tags">
+                            <v-list-item-title>Tags</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item link to="/presets" exact>
+                            <v-list-item-title>Presets</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item link to="/fields">
+                            <v-list-item-title>Fields</v-list-item-title>
+                        </v-list-item>
+                        <v-list-item link to="/values">
+                            <v-list-item-title>Values</v-list-item-title>
+                        </v-list-item>
+                    </v-list-group>
                 </v-list-item-group>
                 <v-list-item-group color="primary" v-if="presets.length">
                     <v-subheader>Presets</v-subheader>

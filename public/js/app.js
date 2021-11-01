@@ -2037,21 +2037,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -25173,94 +25158,53 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c(
-                    "v-list-item",
-                    { attrs: { link: "", to: "/tags" } },
+                    "v-list-group",
+                    {
+                      attrs: { "prepend-icon": "mdi-cog", "no-action": "" },
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function() {
+                            return [_c("v-list-item-title", [_vm._v("Admin")])]
+                          },
+                          proxy: true
+                        }
+                      ])
+                    },
                     [
+                      _vm._v(" "),
                       _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-tag")])],
+                        "v-list-item",
+                        { attrs: { link: "", to: "/projects" } },
+                        [_c("v-list-item-title", [_vm._v("Projects")])],
                         1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-list-item-content",
+                        "v-list-item",
+                        { attrs: { link: "", to: "/tags" } },
                         [_c("v-list-item-title", [_vm._v("Tags")])],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { link: "", to: "/presets", exact: "" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-database-settings")])],
-                        1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-list-item-content",
+                        "v-list-item",
+                        { attrs: { link: "", to: "/presets", exact: "" } },
                         [_c("v-list-item-title", [_vm._v("Presets")])],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { link: "", to: "/fields" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-pencil-box-multiple")])],
-                        1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-list-item-content",
+                        "v-list-item",
+                        { attrs: { link: "", to: "/fields" } },
                         [_c("v-list-item-title", [_vm._v("Fields")])],
                         1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { link: "", to: "/values" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-pencil")])],
-                        1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-list-item-content",
+                        "v-list-item",
+                        { attrs: { link: "", to: "/values" } },
                         [_c("v-list-item-title", [_vm._v("Values")])],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list-item",
-                    { attrs: { link: "", to: "/projects" } },
-                    [
-                      _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-folder-multiple")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item-content",
-                        [_c("v-list-item-title", [_vm._v("Projects")])],
                         1
                       )
                     ],
