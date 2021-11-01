@@ -1988,6 +1988,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1995,8 +2022,19 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    currentProject: function currentProject() {
+      return this.$root.currentProject;
+    },
+    projects: function projects() {
+      return this.$root.projects;
+    },
     presets: function presets() {
       return this.$root.presets;
+    }
+  },
+  methods: {
+    setCurrentProject: function setCurrentProject(project) {
+      this.$root.setCurrentProject(project);
     }
   }
 });
@@ -25214,7 +25252,75 @@ var render = function() {
             }
           }),
           _vm._v(" "),
-          _c("v-toolbar-title", [_vm._v("TagDB")])
+          _c("v-toolbar-title", [_vm._v("TagDB")]),
+          _vm._v(" "),
+          _c(
+            "v-menu",
+            {
+              attrs: { bottom: "", left: "" },
+              scopedSlots: _vm._u([
+                {
+                  key: "activator",
+                  fn: function(ref) {
+                    var on = ref.on
+                    var attrs = ref.attrs
+                    return [
+                      _c(
+                        "v-btn",
+                        _vm._g(
+                          _vm._b(
+                            {
+                              staticClass: "ml-4 text-capitalize",
+                              attrs: { text: "" }
+                            },
+                            "v-btn",
+                            attrs,
+                            false
+                          ),
+                          on
+                        ),
+                        [
+                          _vm._v(
+                            "\n                    " +
+                              _vm._s(_vm.currentProject.name) +
+                              "\n                    "
+                          ),
+                          _c("v-icon", { attrs: { size: "14" } }, [
+                            _vm._v("mdi-chevron-down")
+                          ])
+                        ],
+                        1
+                      )
+                    ]
+                  }
+                }
+              ])
+            },
+            [
+              _vm._v(" "),
+              _c(
+                "v-list",
+                _vm._l(_vm.projects, function(project) {
+                  return _c(
+                    "v-list-item",
+                    {
+                      key: project.id,
+                      class: { active: project.id === _vm.currentProject.id },
+                      on: {
+                        click: function($event) {
+                          return _vm.setCurrentProject(project)
+                        }
+                      }
+                    },
+                    [_c("v-list-item-title", [_vm._v(_vm._s(project.name))])],
+                    1
+                  )
+                }),
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
@@ -86957,36 +87063,61 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   },
   data: function data() {
     return {
+      currentProject: {},
+      projects: [],
       tags: [],
       presets: [],
       fields: []
     };
   },
   mounted: function mounted() {
+    this.getCurrentProject();
+    this.getProjects();
     this.getTags();
     this.getPresets();
     this.getFields();
   },
   methods: {
-    getTags: function getTags() {
+    setCurrentProject: function setCurrentProject(project) {
       var _this = this;
 
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.put('/api/v1/current-project', project).then(function (response) {
+        _this.currentProject = project;
+      });
+    },
+    getCurrentProject: function getCurrentProject() {
+      var _this2 = this;
+
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/current-project').then(function (response) {
+        _this2.currentProject = response.data.data;
+      });
+    },
+    getProjects: function getProjects() {
+      var _this3 = this;
+
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/projects').then(function (response) {
+        _this3.projects = response.data.data;
+      });
+    },
+    getTags: function getTags() {
+      var _this4 = this;
+
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/tags').then(function (response) {
-        _this.tags = response.data.data;
+        _this4.tags = response.data.data;
       });
     },
     getPresets: function getPresets() {
-      var _this2 = this;
+      var _this5 = this;
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/presets').then(function (response) {
-        _this2.presets = response.data.data;
+        _this5.presets = response.data.data;
       });
     },
     getFields: function getFields() {
-      var _this3 = this;
+      var _this6 = this;
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/fields').then(function (response) {
-        _this3.fields = response.data.data;
+        _this6.fields = response.data.data;
       });
     },
     confirm: function confirm(title) {

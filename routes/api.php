@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\v1 as ApiV1;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::prefix('v1')->group(function() {
+    Route::get('current-project', [ApiV1\CurrentProjectController::class, 'get']);
+    Route::put('current-project', [ApiV1\CurrentProjectController::class, 'set']);
     Route::apiResource('entities', 'Api\v1\EntityController');
     Route::apiResource('tags', 'Api\v1\TagController');
     Route::apiResource('fields', 'Api\v1\FieldController');

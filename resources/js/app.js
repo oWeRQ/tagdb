@@ -25,17 +25,36 @@ const app = new Vue({
     },
     data() {
         return {
+            currentProject: {},
+            projects: [],
             tags: [],
             presets: [],
             fields: [],
         };
     },
     mounted() {
+        this.getCurrentProject();
+        this.getProjects();
         this.getTags();
         this.getPresets();
         this.getFields();
     },
     methods: {
+        setCurrentProject(project) {
+            return axios.put('/api/v1/current-project', project).then(response => {
+                this.currentProject = project;
+            });
+            },
+        getCurrentProject() {
+            return axios.get('/api/v1/current-project').then(response => {
+                this.currentProject = response.data.data;
+            });
+        },
+        getProjects() {
+            return axios.get('/api/v1/projects').then(response => {
+                this.projects = response.data.data;
+            });
+        },
         getTags() {
             return axios.get('/api/v1/tags').then(response => {
                 this.tags = response.data.data;

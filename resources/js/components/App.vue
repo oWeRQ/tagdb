@@ -69,6 +69,33 @@
         <v-app-bar app clipped-left color="indigo" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>TagDB</v-toolbar-title>
+            <v-menu
+                bottom
+                left
+            >
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                        text
+                        v-bind="attrs"
+                        v-on="on"
+                        class="ml-4 text-capitalize"
+                    >
+                        {{ currentProject.name }}
+                        <v-icon size="14">mdi-chevron-down</v-icon>
+                    </v-btn>
+                </template>
+
+                <v-list>
+                    <v-list-item
+                        v-for="project in projects"
+                        :key="project.id"
+                        :class="{active: project.id === currentProject.id}"
+                        @click="setCurrentProject(project)"
+                    >
+                        <v-list-item-title>{{ project.name }}</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-app-bar>
 
         <v-main>
@@ -84,8 +111,19 @@
             drawer: null,
         }),
         computed: {
+            currentProject() {
+                return this.$root.currentProject;
+            },
+            projects() {
+                return this.$root.projects;
+            },
             presets() {
                 return this.$root.presets;
+            },
+        },
+        methods: {
+            setCurrentProject(project) {
+                this.$root.setCurrentProject(project);
             },
         },
     }
