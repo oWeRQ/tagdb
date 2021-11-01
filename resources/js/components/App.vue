@@ -83,7 +83,7 @@
                     >
                         <v-icon class="mr-1">mdi-folder-outline</v-icon>
                         {{ currentProject.name }}
-                        <v-icon size="14">mdi-chevron-down</v-icon>
+                        <v-icon class="ml-1" size="20">mdi-chevron-down</v-icon>
                     </v-btn>
                 </template>
 

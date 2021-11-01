@@ -25312,9 +25312,14 @@ var render = function() {
                                     _vm._s(_vm.currentProject.name) +
                                     "\n                    "
                                 ),
-                                _c("v-icon", { attrs: { size: "14" } }, [
-                                  _vm._v("mdi-chevron-down")
-                                ])
+                                _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "ml-1",
+                                    attrs: { size: "20" }
+                                  },
+                                  [_vm._v("mdi-chevron-down")]
+                                )
                               ],
                               1
                             )
@@ -25324,7 +25329,7 @@ var render = function() {
                     ],
                     null,
                     false,
-                    167856731
+                    1224781249
                   )
                 },
                 [
