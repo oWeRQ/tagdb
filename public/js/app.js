@@ -3050,9 +3050,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
-//
 
 
 
@@ -26687,19 +26684,6 @@ var render = function() {
             })
           ]
         }
-      },
-      {
-        key: "no-data",
-        fn: function() {
-          return [
-            _c(
-              "v-btn",
-              { attrs: { color: "primary" }, on: { click: _vm.resetQuery } },
-              [_vm._v("Reset")]
-            )
-          ]
-        },
-        proxy: true
       }
     ]),
     model: {
