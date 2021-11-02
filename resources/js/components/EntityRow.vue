@@ -5,11 +5,8 @@
                 <v-simple-checkbox :value="isSelected" @input="select" class="v-data-table__checkbox"></v-simple-checkbox>
             </template>
             <template v-else-if="header.value === 'actions'">
-                <v-icon @click="$emit('edit')" color="grey" class="mr-2" :title="'ID: ' + item.id">
+                <v-icon @click="$emit('edit')" color="grey" :title="'ID: ' + item.id">
                     mdi-pencil
-                </v-icon>
-                <v-icon @click="$emit('delete')" color="grey">
-                    mdi-delete
                 </v-icon>
             </template>
             <template v-else-if="header.value === 'tags'">

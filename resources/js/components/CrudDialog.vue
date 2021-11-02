@@ -9,6 +9,7 @@
                     <component :is="form" :editable="editable" v-model="value"></component>
                 </v-card-text>
                 <v-card-actions>
+                    <v-btn v-if="!isNew" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
                     <v-btn color="blue darken-1" text type="submit" :disabled="!isValid">Save</v-btn>
@@ -53,8 +54,11 @@
             },
         },
         computed: {
+            isNew() {
+                return !this.value.id;
+            },
             headline() {
-                return (this.value.id ? 'Update' : 'Create') + ' ' + this.title;
+                return (this.isNew ? 'Create' : 'Update') + ' ' + this.title;
             },
         },
         data() {
@@ -64,6 +68,14 @@
             };
         },
         methods: {
+            remove() {
+                this.$root.confirm(`Delete ${this.title}?`).then(() => {
+                    axios.delete(this.resource + '/' + this.value.id).then(response => {
+                        this.$emit('delete', this.value);
+                        this.close();
+                    });
+                });
+            },
             submit() {
                 if (!this.isValid)
                     return;

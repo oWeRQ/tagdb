@@ -72,6 +72,7 @@
                 :resource="presetResource"
                 :value="editedPreset"
                 @input="savePreset"
+                @delete="deleteItem"
             ></CrudDialog>
 
             <v-dialog v-model="exportDialog" max-width="250px">
@@ -127,7 +128,6 @@
                 :isSelected="isSelected"
                 :select="select"
                 @edit="editItem(item)"
-                @delete="deleteItem(item)"
             ></EntityRow>
         </template>
     </v-data-table>
@@ -273,13 +273,9 @@
                 });
             },
             deleteItem(item) {
-                const index = this.items.indexOf(item);
-                this.$root.confirm('Delete item?').then(() => {
-                    axios.delete(this.resource + '/' + item.id).then(response => {
-                        console.log('response', response);
-                        this.items.splice(index, 1);
-                    });
-                });
+                if (this.editedIndex > -1) {
+                    this.items.splice(this.editedIndex, 1);
+                }
             },
             addItem() {
                 this.editItem({

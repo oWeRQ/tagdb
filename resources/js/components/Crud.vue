@@ -29,15 +29,13 @@
                     :processValue="processItem"
                     :value="editedItem"
                     @input="saveItem"
+                    @delete="deleteItem"
                 ></CrudDialog>
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon @click="editItem(item)" color="grey darken-1" class="mr-2">
+            <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
-            </v-icon>
-            <v-icon @click="deleteItem(item)" color="grey darken-1">
-                mdi-delete
             </v-icon>
         </template>
     </v-data-table>
@@ -141,13 +139,9 @@
                 });
             },
             deleteItem(item) {
-                const index = this.items.indexOf(item);
-                this.$root.confirm('Delete item?').then(() => {
-                    axios.delete(this.resource + '/' + item.id).then(response => {
-                        console.log('response', response);
-                        this.items.splice(index, 1);
-                    });
-                });
+                if (this.editedIndex > -1) {
+                    this.items.splice(this.editedIndex, 1);
+                }
             },
             addItem() {
                 this.editItem(this.defaultItem);

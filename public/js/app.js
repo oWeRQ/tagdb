@@ -2261,8 +2261,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
-//
 
 
 
@@ -2377,16 +2375,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     deleteItem: function deleteItem(item) {
-      var _this2 = this;
-
-      var index = this.items.indexOf(item);
-      this.$root.confirm('Delete item?').then(function () {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + item.id).then(function (response) {
-          console.log('response', response);
-
-          _this2.items.splice(index, 1);
-        });
-      });
+      if (this.editedIndex > -1) {
+        this.items.splice(this.editedIndex, 1);
+      }
     },
     addItem: function addItem() {
       this.editItem(this.defaultItem);
@@ -2420,6 +2411,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _CrudForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudForm */ "./resources/js/components/CrudForm.vue");
+//
 //
 //
 //
@@ -2479,8 +2471,11 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   computed: {
+    isNew: function isNew() {
+      return !this.value.id;
+    },
     headline: function headline() {
-      return (this.value.id ? 'Update' : 'Create') + ' ' + this.title;
+      return (this.isNew ? 'Create' : 'Update') + ' ' + this.title;
     }
   },
   data: function data() {
@@ -2490,6 +2485,17 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    remove: function remove() {
+      var _this = this;
+
+      this.$root.confirm("Delete ".concat(this.title, "?")).then(function () {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this.resource + '/' + _this.value.id).then(function (response) {
+          _this.$emit('delete', _this.value);
+
+          _this.close();
+        });
+      });
+    },
     submit: function submit() {
       if (!this.isValid) return;
 
@@ -2690,9 +2696,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify/lib/util/helpers */ "./node_modules/vuetify/lib/util/helpers.js");
 /* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
 /* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
-//
-//
-//
 //
 //
 //
@@ -3287,16 +3290,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     deleteItem: function deleteItem(item) {
-      var _this4 = this;
-
-      var index = this.items.indexOf(item);
-      this.$root.confirm('Delete item?').then(function () {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this4.resource + '/' + item.id).then(function (response) {
-          console.log('response', response);
-
-          _this4.items.splice(index, 1);
-        });
-      });
+      if (this.editedIndex > -1) {
+        this.items.splice(this.editedIndex, 1);
+      }
     },
     addItem: function addItem() {
       this.editItem({
@@ -3721,16 +3717,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       });
     },
     deleteItem: function deleteItem(item) {
-      var _this3 = this;
-
-      var index = this.items.indexOf(item);
-      this.$root.confirm('Delete item?').then(function () {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this3.resource + '/' + item.id).then(function (response) {
-          console.log('response', response);
-
-          _this3.items.splice(index, 1);
-        });
-      });
+      if (this.editedIndex > -1) {
+        this.items.splice(this.editedIndex, 1);
+      }
     },
     addItem: function addItem() {
       this.editItem({
@@ -3767,13 +3756,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.$root.getPresets();
     },
     deletePreset: function deletePreset() {
-      var _this4 = this;
+      var _this3 = this;
 
       this.$root.confirm('Delete preset?').then(function () {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this4.presetResource + '/' + _this4.preset.id).then(function (response) {
-          _this4.$root.getPresets();
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this3.presetResource + '/' + _this3.preset.id).then(function (response) {
+          _this3.$root.getPresets();
 
-          _this4.$router.push({
+          _this3.$router.push({
             name: 'index'
           });
         });
@@ -3799,7 +3788,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.importDialog = true;
     },
     runImport: function runImport() {
-      var _this5 = this;
+      var _this4 = this;
 
       var formData = new FormData();
       formData.append('importFile', this.importFile);
@@ -3812,9 +3801,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }).then(function (response) {
         console.log('import response', response);
 
-        _this5.getItems();
+        _this4.getItems();
 
-        _this5.importDialog = false;
+        _this4.importDialog = false;
       });
     }
   }
@@ -25669,7 +25658,7 @@ var render = function() {
                     processValue: _vm.processItem,
                     value: _vm.editedItem
                   },
-                  on: { input: _vm.saveItem }
+                  on: { input: _vm.saveItem, delete: _vm.deleteItem }
                 })
               ],
               1
@@ -25686,8 +25675,7 @@ var render = function() {
             _c(
               "v-icon",
               {
-                staticClass: "mr-2",
-                attrs: { color: "grey darken-1" },
+                attrs: { color: "grey" },
                 on: {
                   click: function($event) {
                     return _vm.editItem(item)
@@ -25695,19 +25683,6 @@ var render = function() {
                 }
               },
               [_vm._v("\n            mdi-pencil\n        ")]
-            ),
-            _vm._v(" "),
-            _c(
-              "v-icon",
-              {
-                attrs: { color: "grey darken-1" },
-                on: {
-                  click: function($event) {
-                    return _vm.deleteItem(item)
-                  }
-                }
-              },
-              [_vm._v("\n            mdi-delete\n        ")]
             )
           ]
         }
@@ -25800,6 +25775,18 @@ var render = function() {
                   _c(
                     "v-card-actions",
                     [
+                      !_vm.isNew
+                        ? _c(
+                            "v-btn",
+                            {
+                              attrs: { color: "grey", icon: "" },
+                              on: { click: _vm.remove }
+                            },
+                            [_c("v-icon", [_vm._v("mdi-delete")])],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("v-spacer"),
                       _vm._v(" "),
                       _c(
@@ -26209,7 +26196,6 @@ var render = function() {
                 _c(
                   "v-icon",
                   {
-                    staticClass: "mr-2",
                     attrs: { color: "grey", title: "ID: " + _vm.item.id },
                     on: {
                       click: function($event) {
@@ -26218,19 +26204,6 @@ var render = function() {
                     }
                   },
                   [_vm._v("\n                mdi-pencil\n            ")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-icon",
-                  {
-                    attrs: { color: "grey" },
-                    on: {
-                      click: function($event) {
-                        return _vm.$emit("delete")
-                      }
-                    }
-                  },
-                  [_vm._v("\n                mdi-delete\n            ")]
                 )
               ]
             : header.value === "tags"
@@ -26637,7 +26610,7 @@ var render = function() {
                 processValue: _vm.processItem,
                 value: _vm.editedItem
               },
-              on: { input: _vm.saveItem }
+              on: { input: _vm.saveItem, delete: _vm.deleteItem }
             }),
             _vm._v(" "),
             _c("CrudDialog", {
@@ -26676,9 +26649,6 @@ var render = function() {
                 },
                 edit: function($event) {
                   return _vm.editItem(item)
-                },
-                delete: function($event) {
-                  return _vm.deleteItem(item)
                 }
               }
             })
@@ -26925,7 +26895,7 @@ var render = function() {
                 resource: _vm.presetResource,
                 value: _vm.editedPreset
               },
-              on: { input: _vm.savePreset }
+              on: { input: _vm.savePreset, delete: _vm.deleteItem }
             }),
             _vm._v(" "),
             _c(
@@ -27147,9 +27117,6 @@ var render = function() {
               on: {
                 edit: function($event) {
                   return _vm.editItem(item)
-                },
-                delete: function($event) {
-                  return _vm.deleteItem(item)
                 }
               }
             })
