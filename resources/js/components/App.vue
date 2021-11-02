@@ -25,6 +25,9 @@
                             <v-list-item-title>Admin</v-list-item-title>
                         </template>
 
+                        <v-list-item link to="/users">
+                            <v-list-item-title>Users</v-list-item-title>
+                        </v-list-item>
                         <v-list-item link to="/projects">
                             <v-list-item-title>Projects</v-list-item-title>
                         </v-list-item>

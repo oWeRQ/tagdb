@@ -118,6 +118,22 @@ export default [
         },
     },
     {
+        path: '/users',
+        component: Crud,
+        props: {
+            title: 'Users',
+            resource: '/api/v1/users',
+            defaultItem: {},
+            columns: [
+                { text: 'ID', value: 'id' },
+                { text: 'Email', value: 'email' },
+            ],
+            editable: [
+                { text: 'Email', value: 'email' },
+            ],
+        },
+    },
+    {
         path: '/presets/:name',
         name: 'preset',
         component: Preset,

@@ -12,7 +12,7 @@
                             <v-text-field
                                 v-model="email"
                                 name="email"
-                                label="E-mail"
+                                label="Email"
                                 required
                             ></v-text-field>
                             <v-text-field
@@ -35,7 +35,7 @@
                             <v-text-field
                                 v-model="email"
                                 name="email"
-                                label="E-mail"
+                                label="Email"
                                 required
                             ></v-text-field>
                             <v-text-field

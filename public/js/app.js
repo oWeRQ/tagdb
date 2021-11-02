@@ -2045,6 +2045,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -25294,6 +25297,13 @@ var render = function() {
                           _vm._v(" "),
                           _c(
                             "v-list-item",
+                            { attrs: { link: "", to: "/users" } },
+                            [_c("v-list-item-title", [_vm._v("Users")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
                             { attrs: { link: "", to: "/projects" } },
                             [_c("v-list-item-title", [_vm._v("Projects")])],
                             1
@@ -25661,7 +25671,7 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               name: "email",
-                              label: "E-mail",
+                              label: "Email",
                               required: ""
                             },
                             model: {
@@ -25738,7 +25748,7 @@ var render = function() {
                           _c("v-text-field", {
                             attrs: {
                               name: "email",
-                              label: "E-mail",
+                              label: "Email",
                               required: ""
                             },
                             model: {
@@ -89073,6 +89083,25 @@ __webpack_require__.r(__webpack_exports__);
     editable: [{
       text: 'Name',
       value: 'name'
+    }]
+  }
+}, {
+  path: '/users',
+  component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
+  props: {
+    title: 'Users',
+    resource: '/api/v1/users',
+    defaultItem: {},
+    columns: [{
+      text: 'ID',
+      value: 'id'
+    }, {
+      text: 'Email',
+      value: 'email'
+    }],
+    editable: [{
+      text: 'Email',
+      value: 'email'
     }]
   }
 }, {
