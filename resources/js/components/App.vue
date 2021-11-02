@@ -1,6 +1,11 @@
 <template>
     <v-app>
-        <v-navigation-drawer v-model="drawer" app clipped class="elevation-2">
+        <AuthDialog
+            :visible="isGuest"
+            @success="authSuccess"
+        />
+
+        <v-navigation-drawer v-if="!isGuest" v-model="drawer" app clipped class="elevation-2">
             <v-list nav dense>
                 <v-list-item-group color="primary">
                     <v-list-item link to="/">
@@ -128,10 +133,12 @@
 
 <script>
     import cloneDeep from 'clone-deep';
+    import AuthDialog from './AuthDialog';
     import CrudDialog from './CrudDialog';
 
     export default {
         components: {
+            AuthDialog,
             CrudDialog,
         },
         data: () => ({
@@ -143,6 +150,9 @@
             projectEdited: {},
         }),
         computed: {
+            isGuest() {
+                return this.$root.isGuest;
+            },
             currentProject() {
                 return this.$root.currentProject;
             },
@@ -157,6 +167,9 @@
             },
         },
         methods: {
+            authSuccess() {
+                this.$root.authSuccess();
+            },
             setCurrentProject(project) {
                 this.$root.setCurrentProject(project);
             },

@@ -25,6 +25,7 @@ const app = new Vue({
     },
     data() {
         return {
+            isGuest: true,
             currentProject: null,
             projects: [],
             tags: [],
@@ -32,11 +33,12 @@ const app = new Vue({
             fields: [],
         };
     },
-    mounted() {
-        this.getCurrentProject();
-        this.getAll();
-    },
     methods: {
+        authSuccess() {
+            this.isGuest = false;
+            this.getCurrentProject();
+            this.getAll();
+        },
         setCurrentProject(project) {
             this.currentProject = null;
             return axios.put('/api/v1/current-project', project).then(response => {

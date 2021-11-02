@@ -1910,7 +1910,8 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
+/* harmony import */ var _AuthDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AuthDialog */ "./resources/js/components/AuthDialog.vue");
+/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
 //
 //
 //
@@ -2039,11 +2040,18 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_1__["default"]
+    AuthDialog: _AuthDialog__WEBPACK_IMPORTED_MODULE_1__["default"],
+    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   data: function data() {
     return {
@@ -2057,6 +2065,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    isGuest: function isGuest() {
+      return this.$root.isGuest;
+    },
     currentProject: function currentProject() {
       return this.$root.currentProject;
     },
@@ -2071,6 +2082,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    authSuccess: function authSuccess() {
+      this.$root.authSuccess();
+    },
     setCurrentProject: function setCurrentProject(project) {
       this.$root.setCurrentProject(project);
     },
@@ -2093,6 +2107,97 @@ __webpack_require__.r(__webpack_exports__);
       this.setCurrentProject(this.projects.find(function (project) {
         return project.id != id;
       }));
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AuthDialog.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AuthDialog.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    visible: Boolean
+  },
+  data: function data() {
+    return {
+      tab: null,
+      email: null,
+      password: null
+    };
+  },
+  methods: {
+    submitLogin: function submitLogin() {
+      this.$emit('success');
+    },
+    submitRegister: function submitRegister() {
+      this.$emit('success');
     }
   }
 });
@@ -25117,154 +25222,168 @@ var render = function() {
   return _c(
     "v-app",
     [
-      _c(
-        "v-navigation-drawer",
-        {
-          staticClass: "elevation-2",
-          attrs: { app: "", clipped: "" },
-          model: {
-            value: _vm.drawer,
-            callback: function($$v) {
-              _vm.drawer = $$v
+      _c("AuthDialog", {
+        attrs: { visible: _vm.isGuest },
+        on: { success: _vm.authSuccess }
+      }),
+      _vm._v(" "),
+      !_vm.isGuest
+        ? _c(
+            "v-navigation-drawer",
+            {
+              staticClass: "elevation-2",
+              attrs: { app: "", clipped: "" },
+              model: {
+                value: _vm.drawer,
+                callback: function($$v) {
+                  _vm.drawer = $$v
+                },
+                expression: "drawer"
+              }
             },
-            expression: "drawer"
-          }
-        },
-        [
-          _c(
-            "v-list",
-            { attrs: { nav: "", dense: "" } },
             [
               _c(
-                "v-list-item-group",
-                { attrs: { color: "primary" } },
+                "v-list",
+                { attrs: { nav: "", dense: "" } },
                 [
                   _c(
-                    "v-list-item",
-                    { attrs: { link: "", to: "/" } },
+                    "v-list-item-group",
+                    { attrs: { color: "primary" } },
                     [
                       _c(
-                        "v-list-item-action",
-                        [_c("v-icon", [_vm._v("mdi-home")])],
+                        "v-list-item",
+                        { attrs: { link: "", to: "/" } },
+                        [
+                          _c(
+                            "v-list-item-action",
+                            [_c("v-icon", [_vm._v("mdi-home")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [_c("v-list-item-title", [_vm._v("Entities")])],
+                            1
+                          )
+                        ],
                         1
                       ),
                       _vm._v(" "),
                       _c(
-                        "v-list-item-content",
-                        [_c("v-list-item-title", [_vm._v("Entities")])],
+                        "v-list-group",
+                        {
+                          attrs: { "prepend-icon": "mdi-cog", "no-action": "" },
+                          scopedSlots: _vm._u(
+                            [
+                              {
+                                key: "activator",
+                                fn: function() {
+                                  return [
+                                    _c("v-list-item-title", [_vm._v("Admin")])
+                                  ]
+                                },
+                                proxy: true
+                              }
+                            ],
+                            null,
+                            false,
+                            3509839752
+                          )
+                        },
+                        [
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            { attrs: { link: "", to: "/projects" } },
+                            [_c("v-list-item-title", [_vm._v("Projects")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            { attrs: { link: "", to: "/tags" } },
+                            [_c("v-list-item-title", [_vm._v("Tags")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            { attrs: { link: "", to: "/presets", exact: "" } },
+                            [_c("v-list-item-title", [_vm._v("Presets")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            { attrs: { link: "", to: "/fields" } },
+                            [_c("v-list-item-title", [_vm._v("Fields")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            { attrs: { link: "", to: "/values" } },
+                            [_c("v-list-item-title", [_vm._v("Values")])],
+                            1
+                          )
+                        ],
                         1
                       )
                     ],
                     1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "v-list-group",
-                    {
-                      attrs: { "prepend-icon": "mdi-cog", "no-action": "" },
-                      scopedSlots: _vm._u([
-                        {
-                          key: "activator",
-                          fn: function() {
-                            return [_c("v-list-item-title", [_vm._v("Admin")])]
-                          },
-                          proxy: true
-                        }
-                      ])
-                    },
-                    [
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { attrs: { link: "", to: "/projects" } },
-                        [_c("v-list-item-title", [_vm._v("Projects")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { attrs: { link: "", to: "/tags" } },
-                        [_c("v-list-item-title", [_vm._v("Tags")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { attrs: { link: "", to: "/presets", exact: "" } },
-                        [_c("v-list-item-title", [_vm._v("Presets")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { attrs: { link: "", to: "/fields" } },
-                        [_c("v-list-item-title", [_vm._v("Fields")])],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-item",
-                        { attrs: { link: "", to: "/values" } },
-                        [_c("v-list-item-title", [_vm._v("Values")])],
-                        1
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              ),
-              _vm._v(" "),
-              _vm.presets.length
-                ? _c(
-                    "v-list-item-group",
-                    { attrs: { color: "primary" } },
-                    [
-                      _c("v-subheader", [_vm._v("Presets")]),
-                      _vm._v(" "),
-                      _vm._l(_vm.presets, function(preset) {
-                        return _c(
-                          "v-list-item",
-                          {
-                            key: preset.id,
-                            attrs: {
-                              link: "",
-                              to: {
-                                name: "preset",
-                                params: { name: preset.name }
-                              }
-                            }
-                          },
-                          [
-                            _c(
-                              "v-list-item-action",
-                              [_c("v-icon", [_vm._v("mdi-database")])],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-list-item-content",
+                  _vm.presets.length
+                    ? _c(
+                        "v-list-item-group",
+                        { attrs: { color: "primary" } },
+                        [
+                          _c("v-subheader", [_vm._v("Presets")]),
+                          _vm._v(" "),
+                          _vm._l(_vm.presets, function(preset) {
+                            return _c(
+                              "v-list-item",
+                              {
+                                key: preset.id,
+                                attrs: {
+                                  link: "",
+                                  to: {
+                                    name: "preset",
+                                    params: { name: preset.name }
+                                  }
+                                }
+                              },
                               [
-                                _c("v-list-item-title", [
-                                  _vm._v(_vm._s(preset.name))
-                                ])
+                                _c(
+                                  "v-list-item-action",
+                                  [_c("v-icon", [_vm._v("mdi-database")])],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-list-item-content",
+                                  [
+                                    _c("v-list-item-title", [
+                                      _vm._v(_vm._s(preset.name))
+                                    ])
+                                  ],
+                                  1
+                                )
                               ],
                               1
                             )
-                          ],
-                          1
-                        )
-                      })
-                    ],
-                    2
-                  )
-                : _vm._e()
+                          })
+                        ],
+                        2
+                      )
+                    : _vm._e()
+                ],
+                1
+              )
             ],
             1
           )
-        ],
-        1
-      ),
+        : _vm._e(),
       _vm._v(" "),
       _c(
         "v-app-bar",
@@ -25456,6 +25575,230 @@ var render = function() {
           _vm.currentProject ? _c("router-view") : _vm._e()
         ],
         2
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AuthDialog.vue?vue&type=template&id=40388dbb&":
+/*!*************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/AuthDialog.vue?vue&type=template&id=40388dbb& ***!
+  \*************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-dialog",
+    { attrs: { value: _vm.visible, persistent: "", "max-width": "400px" } },
+    [
+      _c(
+        "v-card",
+        [
+          _c(
+            "v-tabs",
+            {
+              attrs: { grow: "", "background-color": "blue lighten-5" },
+              model: {
+                value: _vm.tab,
+                callback: function($$v) {
+                  _vm.tab = $$v
+                },
+                expression: "tab"
+              }
+            },
+            [
+              _c("v-tab", [_vm._v("Login")]),
+              _vm._v(" "),
+              _c("v-tab", [_vm._v("Register")])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-tabs-items",
+            {
+              model: {
+                value: _vm.tab,
+                callback: function($$v) {
+                  _vm.tab = $$v
+                },
+                expression: "tab"
+              }
+            },
+            [
+              _c(
+                "v-tab-item",
+                [
+                  _c(
+                    "v-form",
+                    {
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.submitLogin($event)
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              name: "email",
+                              label: "E-mail",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              name: "password",
+                              label: "Password",
+                              type: "password",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.password,
+                              callback: function($$v) {
+                                _vm.password = $$v
+                              },
+                              expression: "password"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                color: "blue darken-1",
+                                text: "",
+                                type: "submit"
+                              }
+                            },
+                            [_vm._v("Login")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-tab-item",
+                [
+                  _c(
+                    "v-form",
+                    {
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.submitRegister($event)
+                        }
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card-text",
+                        [
+                          _c("v-text-field", {
+                            attrs: {
+                              name: "email",
+                              label: "E-mail",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.email,
+                              callback: function($$v) {
+                                _vm.email = $$v
+                              },
+                              expression: "email"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              name: "email",
+                              label: "Password",
+                              type: "password",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.password,
+                              callback: function($$v) {
+                                _vm.password = $$v
+                              },
+                              expression: "password"
+                            }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-card-actions",
+                        [
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          _c(
+                            "v-btn",
+                            {
+                              attrs: {
+                                color: "blue darken-1",
+                                text: "",
+                                type: "submit"
+                              }
+                            },
+                            [_vm._v("Register")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
       )
     ],
     1
@@ -87133,6 +87476,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   },
   data: function data() {
     return {
+      isGuest: true,
       currentProject: null,
       projects: [],
       tags: [],
@@ -87140,11 +87484,12 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       fields: []
     };
   },
-  mounted: function mounted() {
-    this.getCurrentProject();
-    this.getAll();
-  },
   methods: {
+    authSuccess: function authSuccess() {
+      this.isGuest = false;
+      this.getCurrentProject();
+      this.getAll();
+    },
     setCurrentProject: function setCurrentProject(project) {
       var _this = this;
 
@@ -87320,6 +87665,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_332fccf4___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_332fccf4___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/AuthDialog.vue":
+/*!************************************************!*\
+  !*** ./resources/js/components/AuthDialog.vue ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _AuthDialog_vue_vue_type_template_id_40388dbb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./AuthDialog.vue?vue&type=template&id=40388dbb& */ "./resources/js/components/AuthDialog.vue?vue&type=template&id=40388dbb&");
+/* harmony import */ var _AuthDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AuthDialog.vue?vue&type=script&lang=js& */ "./resources/js/components/AuthDialog.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _AuthDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _AuthDialog_vue_vue_type_template_id_40388dbb___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _AuthDialog_vue_vue_type_template_id_40388dbb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/AuthDialog.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/AuthDialog.vue?vue&type=script&lang=js&":
+/*!*************************************************************************!*\
+  !*** ./resources/js/components/AuthDialog.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AuthDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./AuthDialog.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AuthDialog.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_AuthDialog_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/AuthDialog.vue?vue&type=template&id=40388dbb&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/AuthDialog.vue?vue&type=template&id=40388dbb& ***!
+  \*******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AuthDialog_vue_vue_type_template_id_40388dbb___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./AuthDialog.vue?vue&type=template&id=40388dbb& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/AuthDialog.vue?vue&type=template&id=40388dbb&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AuthDialog_vue_vue_type_template_id_40388dbb___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_AuthDialog_vue_vue_type_template_id_40388dbb___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
