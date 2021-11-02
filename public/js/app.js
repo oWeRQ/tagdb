@@ -2037,6 +2037,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2063,6 +2065,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     presets: function presets() {
       return this.$root.presets;
+    },
+    projectDeletable: function projectDeletable() {
+      return this.projects.length > 1;
     }
   },
   methods: {
@@ -2082,6 +2087,12 @@ __webpack_require__.r(__webpack_exports__);
     saveProject: function saveProject(project) {
       this.setCurrentProject(project);
       this.$root.getProjects();
+    },
+    deleteProject: function deleteProject(_ref) {
+      var id = _ref.id;
+      this.setCurrentProject(this.projects.find(function (project) {
+        return project.id != id;
+      }));
     }
   }
 });
@@ -2449,6 +2460,10 @@ __webpack_require__.r(__webpack_exports__);
     resource: {
       type: String,
       required: true
+    },
+    deletable: {
+      type: Boolean,
+      "default": true
     },
     editable: {
       type: Array
@@ -25272,9 +25287,10 @@ var render = function() {
               title: "Project",
               resource: _vm.projectResource,
               editable: _vm.projectEditable,
+              deletable: _vm.projectDeletable,
               value: _vm.projectEdited
             },
-            on: { input: _vm.saveProject }
+            on: { input: _vm.saveProject, delete: _vm.deleteProject }
           }),
           _vm._v(" "),
           _vm.currentProject
@@ -25775,7 +25791,7 @@ var render = function() {
                   _c(
                     "v-card-actions",
                     [
-                      !_vm.isNew
+                      !_vm.isNew && _vm.deletable
                         ? _c(
                             "v-btn",
                             {

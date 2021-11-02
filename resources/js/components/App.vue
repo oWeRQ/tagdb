@@ -60,8 +60,10 @@
                 title="Project"
                 :resource="projectResource"
                 :editable="projectEditable"
+                :deletable="projectDeletable"
                 :value="projectEdited"
                 @input="saveProject"
+                @delete="deleteProject"
             ></CrudDialog>
 
             <v-menu
@@ -150,6 +152,9 @@
             presets() {
                 return this.$root.presets;
             },
+            projectDeletable() {
+                return this.projects.length > 1;
+            },
         },
         methods: {
             setCurrentProject(project) {
@@ -166,6 +171,9 @@
             saveProject(project) {
                 this.setCurrentProject(project);
                 this.$root.getProjects();
+            },
+            deleteProject({id}) {
+                this.setCurrentProject(this.projects.find(project => project.id != id));
             },
         },
     }
