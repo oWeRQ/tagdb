@@ -14,6 +14,7 @@
                                 name="email"
                                 label="Email"
                                 required
+                                :error-messages="loginErrors.email"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password"
@@ -21,6 +22,7 @@
                                 label="Password"
                                 type="password"
                                 required
+                                :error-messages="loginErrors.password"
                             ></v-text-field>
                         </v-card-text>
                         <v-card-actions>
@@ -33,15 +35,31 @@
                     <v-form @submit.prevent="submitRegister">
                         <v-card-text>
                             <v-text-field
+                                v-model="name"
+                                name="name"
+                                label="Name"
+                                required
+                                :error-messages="registerErrors.name"
+                            ></v-text-field>
+                            <v-text-field
                                 v-model="email"
                                 name="email"
                                 label="Email"
                                 required
+                                :error-messages="registerErrors.email"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password"
-                                name="email"
+                                name="password"
                                 label="Password"
+                                type="password"
+                                required
+                                :error-messages="registerErrors.password"
+                            ></v-text-field>
+                            <v-text-field
+                                v-model="password_confirmation"
+                                name="password"
+                                label="Confirmation"
                                 type="password"
                                 required
                             ></v-text-field>
@@ -58,6 +76,8 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         props: {
             visible: Boolean,
@@ -65,16 +85,40 @@
         data() {
             return {
                 tab: null,
+                name: null,
                 email: null,
                 password: null,
+                password_confirmation: null,
+                loginErrors: {},
+                registerErrors: {},
             };
         },
         methods: {
             submitLogin() {
-                this.$emit('success');
+                axios.post('/login', {
+                    email: this.email,
+                    password: this.password,
+                }, {
+                    headers: {'Accept': 'application/json'},
+                }).then(() => {
+                    this.$emit('success');
+                }).catch((error) => {
+                    this.loginErrors = error.response.data.errors || {};
+                });
             },
             submitRegister() {
-                this.$emit('success');
+                axios.post('/register', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password,
+                    password_confirmation: this.password_confirmation,
+                }, {
+                    headers: {'Accept': 'application/json'},
+                }).then(() => {
+                    this.$emit('success');
+                }).catch((error) => {
+                    this.registerErrors = error.response.data.errors || {};
+                });
             },
         },
     };

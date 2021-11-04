@@ -1910,8 +1910,7 @@ module.exports = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AuthDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AuthDialog */ "./resources/js/components/AuthDialog.vue");
-/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
+/* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
 //
 //
 //
@@ -2048,13 +2047,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    AuthDialog: _AuthDialog__WEBPACK_IMPORTED_MODULE_1__["default"],
-    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_2__["default"]
+    CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   data: function data() {
     return {
@@ -2069,7 +2091,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isGuest: function isGuest() {
-      return this.$root.isGuest;
+      return !this.account;
+    },
+    account: function account() {
+      return this.$root.account;
     },
     currentProject: function currentProject() {
       return this.$root.currentProject;
@@ -2085,6 +2110,9 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    logout: function logout() {
+      this.$root.logout();
+    },
     authSuccess: function authSuccess() {
       this.$root.authSuccess();
     },
@@ -2125,6 +2153,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2184,6 +2214,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     visible: Boolean
@@ -2191,16 +2240,48 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       tab: null,
+      name: null,
       email: null,
-      password: null
+      password: null,
+      password_confirmation: null,
+      loginErrors: {},
+      registerErrors: {}
     };
   },
   methods: {
     submitLogin: function submitLogin() {
-      this.$emit('success');
+      var _this = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/login', {
+        email: this.email,
+        password: this.password
+      }, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function () {
+        _this.$emit('success');
+      })["catch"](function (error) {
+        _this.loginErrors = error.response.data.errors || {};
+      });
     },
     submitRegister: function submitRegister() {
-      this.$emit('success');
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/register', {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+        password_confirmation: this.password_confirmation
+      }, {
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(function () {
+        _this2.$emit('success');
+      })["catch"](function (error) {
+        _this2.registerErrors = error.response.data.errors || {};
+      });
     }
   }
 });
@@ -25225,11 +25306,6 @@ var render = function() {
   return _c(
     "v-app",
     [
-      _c("AuthDialog", {
-        attrs: { visible: _vm.isGuest },
-        on: { success: _vm.authSuccess }
-      }),
-      _vm._v(" "),
       !_vm.isGuest
         ? _c(
             "v-navigation-drawer",
@@ -25426,7 +25502,7 @@ var render = function() {
             ? _c(
                 "v-menu",
                 {
-                  attrs: { bottom: "", left: "" },
+                  attrs: { "offset-y": "" },
                   scopedSlots: _vm._u(
                     [
                       {
@@ -25572,6 +25648,97 @@ var render = function() {
                 ],
                 1
               )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _vm.account
+            ? _c(
+                "v-menu",
+                {
+                  attrs: { "offset-y": "" },
+                  scopedSlots: _vm._u(
+                    [
+                      {
+                        key: "activator",
+                        fn: function(ref) {
+                          var on = ref.on
+                          var attrs = ref.attrs
+                          return [
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                _vm._b(
+                                  {
+                                    staticClass: "ml-4 text-capitalize",
+                                    attrs: { text: "" }
+                                  },
+                                  "v-btn",
+                                  attrs,
+                                  false
+                                ),
+                                on
+                              ),
+                              [
+                                _c("v-icon", { staticClass: "mr-1" }, [
+                                  _vm._v("mdi-account")
+                                ]),
+                                _vm._v(
+                                  "\n                    " +
+                                    _vm._s(_vm.account.name) +
+                                    "\n                    "
+                                ),
+                                _c(
+                                  "v-icon",
+                                  {
+                                    staticClass: "ml-1",
+                                    attrs: { size: "20" }
+                                  },
+                                  [_vm._v("mdi-chevron-down")]
+                                )
+                              ],
+                              1
+                            )
+                          ]
+                        }
+                      }
+                    ],
+                    null,
+                    false,
+                    624230662
+                  )
+                },
+                [
+                  _vm._v(" "),
+                  _c(
+                    "v-list",
+                    { attrs: { dense: "" } },
+                    [
+                      _c(
+                        "v-list-item",
+                        { on: { click: _vm.logout } },
+                        [
+                          _c(
+                            "v-list-item-icon",
+                            { staticClass: "mr-4" },
+                            [_c("v-icon", [_vm._v("mdi-logout")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [_c("v-list-item-title", [_vm._v("Logout")])],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
             : _vm._e()
         ],
         1
@@ -25672,7 +25839,8 @@ var render = function() {
                             attrs: {
                               name: "email",
                               label: "Email",
-                              required: ""
+                              required: "",
+                              "error-messages": _vm.loginErrors.email
                             },
                             model: {
                               value: _vm.email,
@@ -25688,7 +25856,8 @@ var render = function() {
                               name: "password",
                               label: "Password",
                               type: "password",
-                              required: ""
+                              required: "",
+                              "error-messages": _vm.loginErrors.password
                             },
                             model: {
                               value: _vm.password,
@@ -25747,9 +25916,26 @@ var render = function() {
                         [
                           _c("v-text-field", {
                             attrs: {
+                              name: "name",
+                              label: "Name",
+                              required: "",
+                              "error-messages": _vm.registerErrors.name
+                            },
+                            model: {
+                              value: _vm.name,
+                              callback: function($$v) {
+                                _vm.name = $$v
+                              },
+                              expression: "name"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
                               name: "email",
                               label: "Email",
-                              required: ""
+                              required: "",
+                              "error-messages": _vm.registerErrors.email
                             },
                             model: {
                               value: _vm.email,
@@ -25762,10 +25948,11 @@ var render = function() {
                           _vm._v(" "),
                           _c("v-text-field", {
                             attrs: {
-                              name: "email",
+                              name: "password",
                               label: "Password",
                               type: "password",
-                              required: ""
+                              required: "",
+                              "error-messages": _vm.registerErrors.password
                             },
                             model: {
                               value: _vm.password,
@@ -25773,6 +25960,22 @@ var render = function() {
                                 _vm.password = $$v
                               },
                               expression: "password"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-text-field", {
+                            attrs: {
+                              name: "password",
+                              label: "Confirmation",
+                              type: "password",
+                              required: ""
+                            },
+                            model: {
+                              value: _vm.password_confirmation,
+                              callback: function($$v) {
+                                _vm.password_confirmation = $$v
+                              },
+                              expression: "password_confirmation"
                             }
                           })
                         ],
@@ -87461,8 +87664,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _components_App_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/App.vue */ "./resources/js/components/App.vue");
-/* harmony import */ var _components_ConfirmDialog_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/ConfirmDialog.vue */ "./resources/js/components/ConfirmDialog.vue");
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var _components_AuthDialog_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/AuthDialog.vue */ "./resources/js/components/AuthDialog.vue");
+/* harmony import */ var _components_ConfirmDialog_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/ConfirmDialog.vue */ "./resources/js/components/ConfirmDialog.vue");
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+
 
 
 
@@ -87475,18 +87680,20 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuetify__WEBPACK_IMPORTED_MODULE_3___default.a);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
-  template: '<App><ConfirmDialog ref="confirm"></ConfirmDialog></App>',
+  template: "<App>\n        <AuthDialog\n            :visible=\"isAuth\"\n            @success=\"authSuccess\"\n        />\n        <ConfirmDialog ref=\"confirm\"></ConfirmDialog>\n    </App>",
   vuetify: new vuetify__WEBPACK_IMPORTED_MODULE_3___default.a({}),
   router: new vue_router__WEBPACK_IMPORTED_MODULE_2__["default"]({
-    routes: _routes__WEBPACK_IMPORTED_MODULE_8__["default"]
+    routes: _routes__WEBPACK_IMPORTED_MODULE_9__["default"]
   }),
   components: {
     App: _components_App_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-    ConfirmDialog: _components_ConfirmDialog_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
+    AuthDialog: _components_AuthDialog_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
+    ConfirmDialog: _components_ConfirmDialog_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
   },
   data: function data() {
     return {
-      isGuest: true,
+      isAuth: false,
+      account: null,
       currentProject: null,
       projects: [],
       tags: [],
@@ -87494,27 +87701,63 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       fields: []
     };
   },
+  mounted: function mounted() {
+    var _this = this;
+
+    this.getAccount().then(function () {
+      _this.authSuccess();
+    })["catch"](function (error) {
+      if (error.response.status === 401) {
+        _this.isAuth = true;
+      } else {
+        console.error('account', error.response);
+      }
+    });
+  },
   methods: {
     authSuccess: function authSuccess() {
-      this.isGuest = false;
+      this.isAuth = false;
+
+      if (!this.account) {
+        this.getAccount();
+      }
+
       this.getCurrentProject();
       this.getAll();
     },
+    logout: function logout() {
+      var _this2 = this;
+
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.post('/logout').then(function (response) {
+        _this2.isAuth = true;
+        _this2.account = null;
+        _this2.currentProject = null;
+      })["catch"](function (error) {
+        console.error('logout', error.response);
+      });
+    },
+    getAccount: function getAccount() {
+      var _this3 = this;
+
+      return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/account').then(function (response) {
+        _this3.account = response.data;
+      });
+    },
     setCurrentProject: function setCurrentProject(project) {
-      var _this = this;
+      var _this4 = this;
 
       this.currentProject = null;
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.put('/api/v1/current-project', project).then(function (response) {
-        _this.currentProject = project;
+        _this4.currentProject = project;
 
-        _this.getAll();
+        _this4.getAll();
       });
     },
     getCurrentProject: function getCurrentProject() {
-      var _this2 = this;
+      var _this5 = this;
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/current-project').then(function (response) {
-        _this2.currentProject = response.data.data;
+        _this5.currentProject = response.data.data;
       });
     },
     getAll: function getAll() {
@@ -87524,31 +87767,31 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       this.getFields();
     },
     getProjects: function getProjects() {
-      var _this3 = this;
+      var _this6 = this;
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/projects').then(function (response) {
-        _this3.projects = response.data.data;
+        _this6.projects = response.data.data;
       });
     },
     getTags: function getTags() {
-      var _this4 = this;
+      var _this7 = this;
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/tags').then(function (response) {
-        _this4.tags = response.data.data;
+        _this7.tags = response.data.data;
       });
     },
     getPresets: function getPresets() {
-      var _this5 = this;
+      var _this8 = this;
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/presets').then(function (response) {
-        _this5.presets = response.data.data;
+        _this8.presets = response.data.data;
       });
     },
     getFields: function getFields() {
-      var _this6 = this;
+      var _this9 = this;
 
       return axios__WEBPACK_IMPORTED_MODULE_5___default.a.get('/api/v1/fields').then(function (response) {
-        _this6.fields = response.data.data;
+        _this9.fields = response.data.data;
       });
     },
     confirm: function confirm(title) {
@@ -89096,10 +89339,16 @@ __webpack_require__.r(__webpack_exports__);
       text: 'ID',
       value: 'id'
     }, {
+      text: 'Name',
+      value: 'name'
+    }, {
       text: 'Email',
       value: 'email'
     }],
     editable: [{
+      text: 'Name',
+      value: 'name'
+    }, {
       text: 'Email',
       value: 'email'
     }]

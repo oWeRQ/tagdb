@@ -15,11 +15,10 @@ use App\Http\Controllers\Api\v1 as ApiV1;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::prefix('v1')->group(function() {
+Route::prefix('v1')->middleware('auth')->group(function() {
+    Route::get('/account', function (Request $request) {
+        return $request->user();
+    });
     Route::get('current-project', [ApiV1\CurrentProjectController::class, 'get']);
     Route::put('current-project', [ApiV1\CurrentProjectController::class, 'set']);
     Route::apiResource('entities', 'Api\v1\EntityController');

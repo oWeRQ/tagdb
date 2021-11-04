@@ -126,9 +126,11 @@ export default [
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
+                { text: 'Name', value: 'name' },
                 { text: 'Email', value: 'email' },
             ],
             editable: [
+                { text: 'Name', value: 'name' },
                 { text: 'Email', value: 'email' },
             ],
         },
