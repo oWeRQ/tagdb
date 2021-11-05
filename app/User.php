@@ -51,7 +51,12 @@ class User extends Authenticatable
     }
 
     public function switchProject($project) {
+        if (!$this->belongsToProject($project)) {
+            return false;
+        }
+
         session(['currentProject' => $project->id]);
+
         return true;
     }
 
@@ -71,5 +76,21 @@ class User extends Authenticatable
             ->withPivot('role')
             ->withTimestamps()
             ->as('membership');
+    }
+
+    public function ownsProject($project)
+    {
+        if (is_null($project)) {
+            return false;
+        }
+
+        return $this->id == $project->user_id;
+    }
+
+    public function belongsToProject($project)
+    {
+        return $this->projects->contains(function ($t) use ($project) {
+            return $t->id === $project->id;
+        }) || $this->ownsProject($project);
     }
 }
