@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\UserScope;
 
 class Project extends Model
 {
@@ -13,10 +14,16 @@ class Project extends Model
     public function __construct(array $attributes = [])
     {
         $this->setRawAttributes(array(
-            'user_id' => auth()->user()->id,
+            'user_id' => optional(auth()->user())->id,
         ), true);
         parent::__construct($attributes);
     }
+
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     static::addGlobalScope(new UserScope);
+    // }
 
     public function entities()
     {

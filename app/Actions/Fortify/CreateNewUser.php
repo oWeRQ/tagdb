@@ -3,6 +3,8 @@
 namespace App\Actions\Fortify;
 
 use App\User;
+use App\Project;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -32,10 +34,28 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ])->validate();
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-        ]);
+        return DB::transaction(function () use ($input) {
+            return tap(User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+            ]), function (User $user) {
+                $this->createProject($user);
+            });
+        });
+    }
+
+    /**
+     * Create a personal project for the user.
+     *
+     * @param  \App\User  $user
+     * @return void
+     */
+    protected function createProject(User $user)
+    {
+        $user->ownedProjects()->save(Project::forceCreate([
+            'user_id' => $user->id,
+            'name' => explode(' ', $user->name, 2)[0]."'s Project",
+        ]));
     }
 }
