@@ -16,7 +16,7 @@ class Preset extends Model
     public function __construct(array $attributes = [])
     {
         $this->setRawAttributes(array(
-            'project_id' => Project::getCurrentId(),
+            'project_id' => auth()->user()->currentProject->id,
         ), true);
         parent::__construct($attributes);
     }

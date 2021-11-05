@@ -38,4 +38,38 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $_currentProject = null;
+
+    public function getCurrentProjectAttribute()
+    {
+        if (!$this->_currentProject) {
+            $this->_currentProject = Project::find(session('currentProject', $this->allProjects()->first()->id));
+        }
+
+        return $this->_currentProject;
+    }
+
+    public function switchProject($project) {
+        session(['currentProject' => $project->id]);
+        return true;
+    }
+
+    public function allProjects()
+    {
+        return $this->ownedProjects->merge($this->projects)->sortBy('name');
+    }
+
+    public function ownedProjects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class, Membership::class)
+            ->withPivot('role')
+            ->withTimestamps()
+            ->as('membership');
+    }
 }

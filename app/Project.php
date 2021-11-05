@@ -10,18 +10,12 @@ class Project extends Model
         'name',
     ];
 
-    public static function current()
+    public function __construct(array $attributes = [])
     {
-        return static::find(static::getCurrentId());
-    }
-
-    public static function getCurrentId() {
-        return session('currentProject', 1);
-    }
-
-    public static function setCurrentId($project_id)
-    {
-        session(['currentProject' => $project_id]);
+        $this->setRawAttributes(array(
+            'user_id' => auth()->user()->id,
+        ), true);
+        parent::__construct($attributes);
     }
 
     public function entities()

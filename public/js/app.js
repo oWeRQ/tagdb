@@ -88164,7 +88164,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       var _this4 = this;
 
       this.currentProject = null;
-      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.put('/api/v1/current-project', project).then(function (response) {
+      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/api/v1/account/switch-project', project).then(function (response) {
         _this4.currentProject = project;
 
         _this4.getAll();
@@ -88173,7 +88173,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     getCurrentProject: function getCurrentProject() {
       var _this5 = this;
 
-      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/current-project').then(function (response) {
+      this.currentProject = null;
+      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/account/current-project').then(function (response) {
         _this5.currentProject = response.data.data;
       });
     },
@@ -88186,13 +88187,15 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     getProjects: function getProjects() {
       var _this6 = this;
 
-      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/projects').then(function (response) {
+      this.projects = [];
+      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/account/projects').then(function (response) {
         _this6.projects = response.data.data;
       });
     },
     getTags: function getTags() {
       var _this7 = this;
 
+      this.tags = [];
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/tags').then(function (response) {
         _this7.tags = response.data.data;
       });
@@ -88200,6 +88203,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     getPresets: function getPresets() {
       var _this8 = this;
 
+      this.presets = [];
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/presets').then(function (response) {
         _this8.presets = response.data.data;
       });
@@ -88207,6 +88211,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     getFields: function getFields() {
       var _this9 = this;
 
+      this.fields = [];
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/fields').then(function (response) {
         _this9.fields = response.data.data;
       });

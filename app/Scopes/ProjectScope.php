@@ -11,6 +11,6 @@ class ProjectScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $builder->where('project_id', '=', Project::getCurrentId());
+        $builder->where('project_id', '=', auth()->user()->currentProject->id);
     }
 }

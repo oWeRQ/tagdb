@@ -16,11 +16,10 @@ use App\Http\Controllers\Api\v1 as ApiV1;
 */
 
 Route::prefix('v1')->middleware('auth')->group(function() {
-    Route::get('/account', function (Request $request) {
-        return $request->user();
-    });
-    Route::get('current-project', [ApiV1\CurrentProjectController::class, 'get']);
-    Route::put('current-project', [ApiV1\CurrentProjectController::class, 'set']);
+    Route::get('account', [ApiV1\AccountController::class, 'index']);
+    Route::get('account/projects', [ApiV1\AccountController::class, 'projects']);
+    Route::get('account/current-project', [ApiV1\AccountController::class, 'currentProject']);
+    Route::post('account/switch-project', [ApiV1\AccountController::class, 'switchProject']);
     Route::apiResource('entities', 'Api\v1\EntityController');
     Route::apiResource('tags', 'Api\v1\TagController');
     Route::apiResource('fields', 'Api\v1\FieldController');

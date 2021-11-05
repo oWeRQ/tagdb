@@ -81,13 +81,14 @@ const app = new Vue({
         },
         setCurrentProject(project) {
             this.currentProject = null;
-            return axios.put('/api/v1/current-project', project).then(response => {
+            return axios.post('/api/v1/account/switch-project', project).then(response => {
                 this.currentProject = project;
                 this.getAll();
             });
         },
         getCurrentProject() {
-            return axios.get('/api/v1/current-project').then(response => {
+            this.currentProject = null;
+            return axios.get('/api/v1/account/current-project').then(response => {
                 this.currentProject = response.data.data;
             });
         },
@@ -98,21 +99,25 @@ const app = new Vue({
             this.getFields();
         },
         getProjects() {
-            return axios.get('/api/v1/projects').then(response => {
+            this.projects = [];
+            return axios.get('/api/v1/account/projects').then(response => {
                 this.projects = response.data.data;
             });
         },
         getTags() {
+            this.tags = [];
             return axios.get('/api/v1/tags').then(response => {
                 this.tags = response.data.data;
             });
         },
         getPresets() {
+            this.presets = [];
             return axios.get('/api/v1/presets').then(response => {
                 this.presets = response.data.data;
             });
         },
         getFields() {
+            this.fields = [];
             return axios.get('/api/v1/fields').then(response => {
                 this.fields = response.data.data;
             });
