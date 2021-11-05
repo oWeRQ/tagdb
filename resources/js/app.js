@@ -2,8 +2,11 @@ import './bootstrap';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+import Vuetify from 'vuetify';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@mdi/font/css/materialdesignicons.css';
+import 'vuetify/dist/vuetify.min.css';
 import axios from 'axios';
 
 import App from './components/App.vue';
