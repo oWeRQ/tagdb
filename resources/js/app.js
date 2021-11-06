@@ -36,6 +36,7 @@ const app = new Vue({
     },
     data() {
         return {
+            isReady: false,
             isAuth: false,
             account: null,
             currentProject: null,
@@ -56,33 +57,50 @@ const app = new Vue({
         });
     },
     methods: {
+        reloadContent() {
+            this.isReady = false;
+            this.$nextTick(() => {
+                this.isReady = true;
+            });
+        },
         authSuccess() {
+            this.isReady = true;
             this.isAuth = false;
             if (!this.account) {
                 this.getAccount();
             }
             this.getCurrentProject();
-            this.getAll();
+            this.getProjects();
+            this.getProjectData();
+        },
+        logoutSuccess() {
+            this.isReady = false;
+            this.isAuth = true;
+            this.account = null;
+            this.currentProject = null;
         },
         logout() {
-            return axios.post('/logout').then(response => {
-                this.isAuth = true;
-                this.account = null;
-                this.currentProject = null;
-            }).catch(error => {
-                console.error('logout', error.response);
+            return axios.post('/logout').then(() => {
+                this.logoutSuccess();
+            });
+        },
+        getProjectData() {
+            return Promise.all([
+                this.getTags(),
+                this.getPresets(),
+            ]);
+        },
+        switchProject(project) {
+            this.currentProject = project;
+            return axios.post('/api/v1/account/switch-project', project).then(response => {
+                this.getProjectData();
+                this.reloadContent();
             });
         },
         getAccount() {
+            this.account = null;
             return axios.get('/api/v1/account').then(response => {
                 this.account = response.data;
-            });
-        },
-        setCurrentProject(project) {
-            this.currentProject = null;
-            return axios.post('/api/v1/account/switch-project', project).then(response => {
-                this.currentProject = project;
-                this.getAll();
             });
         },
         getCurrentProject() {
@@ -90,11 +108,6 @@ const app = new Vue({
             return axios.get('/api/v1/account/current-project').then(response => {
                 this.currentProject = response.data.data;
             });
-        },
-        getAll() {
-            this.getProjects();
-            this.getTags();
-            this.getPresets();
         },
         getProjects() {
             this.projects = [];

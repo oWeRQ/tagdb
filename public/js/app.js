@@ -2411,8 +2411,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
-    isGuest: function isGuest() {
-      return !this.account;
+    isReady: function isReady() {
+      return this.$root.isReady;
     },
     account: function account() {
       return this.$root.account;
@@ -2437,8 +2437,8 @@ __webpack_require__.r(__webpack_exports__);
     authSuccess: function authSuccess() {
       this.$root.authSuccess();
     },
-    setCurrentProject: function setCurrentProject(project) {
-      this.$root.setCurrentProject(project);
+    switchProject: function switchProject(project) {
+      this.$root.switchProject(project);
     },
     updateProject: function updateProject() {
       this.projectEdited = clone_deep__WEBPACK_IMPORTED_MODULE_0___default()(this.currentProject);
@@ -25711,7 +25711,7 @@ var render = function() {
   return _c(
     "v-app",
     [
-      !_vm.isGuest
+      _vm.isReady
         ? _c(
             "v-navigation-drawer",
             {
@@ -25903,7 +25903,7 @@ var render = function() {
             on: { input: _vm.saveProject, delete: _vm.deleteProject }
           }),
           _vm._v(" "),
-          _vm.currentProject
+          _vm.account
             ? _c(
                 "v-menu",
                 {
@@ -25936,7 +25936,10 @@ var render = function() {
                                 ]),
                                 _vm._v(
                                   "\n                    " +
-                                    _vm._s(_vm.currentProject.name) +
+                                    _vm._s(
+                                      _vm.currentProject &&
+                                        _vm.currentProject.name
+                                    ) +
                                     "\n                    "
                                 ),
                                 _c(
@@ -25956,7 +25959,7 @@ var render = function() {
                     ],
                     null,
                     false,
-                    1224781249
+                    2874016669
                   )
                 },
                 [
@@ -25972,11 +25975,12 @@ var render = function() {
                             key: project.id,
                             class: {
                               "v-list-item--active primary--text":
-                                project.id === _vm.currentProject.id
+                                _vm.currentProject &&
+                                _vm.currentProject.id === project.id
                             },
                             on: {
                               click: function($event) {
-                                return _vm.setCurrentProject(project)
+                                return _vm.switchProject(project)
                               }
                             }
                           },
@@ -25985,7 +25989,8 @@ var render = function() {
                               "v-list-item-icon",
                               { staticClass: "mr-4" },
                               [
-                                project.id === _vm.currentProject.id
+                                _vm.currentProject &&
+                                _vm.currentProject.id === project.id
                                   ? _c("v-icon", [_vm._v("mdi-check")])
                                   : _vm._e()
                               ],
@@ -26154,7 +26159,7 @@ var render = function() {
         [
           _vm._t("default"),
           _vm._v(" "),
-          _vm.currentProject ? _c("router-view") : _vm._e()
+          _vm.isReady ? _c("router-view") : _vm._e()
         ],
         2
       )
@@ -88106,6 +88111,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   },
   data: function data() {
     return {
+      isReady: false,
       isAuth: false,
       account: null,
       currentProject: null,
@@ -88128,7 +88134,16 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
     });
   },
   methods: {
+    reloadContent: function reloadContent() {
+      var _this2 = this;
+
+      this.isReady = false;
+      this.$nextTick(function () {
+        _this2.isReady = true;
+      });
+    },
     authSuccess: function authSuccess() {
+      this.isReady = true;
       this.isAuth = false;
 
       if (!this.account) {
@@ -88136,71 +88151,73 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       }
 
       this.getCurrentProject();
-      this.getAll();
+      this.getProjects();
+      this.getProjectData();
+    },
+    logoutSuccess: function logoutSuccess() {
+      this.isReady = false;
+      this.isAuth = true;
+      this.account = null;
+      this.currentProject = null;
     },
     logout: function logout() {
-      var _this2 = this;
+      var _this3 = this;
 
-      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/logout').then(function (response) {
-        _this2.isAuth = true;
-        _this2.account = null;
-        _this2.currentProject = null;
-      })["catch"](function (error) {
-        console.error('logout', error.response);
+      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/logout').then(function () {
+        _this3.logoutSuccess();
+      });
+    },
+    getProjectData: function getProjectData() {
+      return Promise.all([this.getTags(), this.getPresets()]);
+    },
+    switchProject: function switchProject(project) {
+      var _this4 = this;
+
+      this.currentProject = project;
+      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/api/v1/account/switch-project', project).then(function (response) {
+        _this4.getProjectData();
+
+        _this4.reloadContent();
       });
     },
     getAccount: function getAccount() {
-      var _this3 = this;
+      var _this5 = this;
 
+      this.account = null;
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/account').then(function (response) {
-        _this3.account = response.data;
-      });
-    },
-    setCurrentProject: function setCurrentProject(project) {
-      var _this4 = this;
-
-      this.currentProject = null;
-      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.post('/api/v1/account/switch-project', project).then(function (response) {
-        _this4.currentProject = project;
-
-        _this4.getAll();
+        _this5.account = response.data;
       });
     },
     getCurrentProject: function getCurrentProject() {
-      var _this5 = this;
+      var _this6 = this;
 
       this.currentProject = null;
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/account/current-project').then(function (response) {
-        _this5.currentProject = response.data.data;
+        _this6.currentProject = response.data.data;
       });
     },
-    getAll: function getAll() {
-      this.getProjects();
-      this.getTags();
-      this.getPresets();
-    },
     getProjects: function getProjects() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.projects = [];
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/account/projects').then(function (response) {
-        _this6.projects = response.data.data;
+        _this7.projects = response.data.data;
       });
     },
     getTags: function getTags() {
-      var _this7 = this;
+      var _this8 = this;
 
       this.tags = [];
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/tags').then(function (response) {
-        _this7.tags = response.data.data;
+        _this8.tags = response.data.data;
       });
     },
     getPresets: function getPresets() {
-      var _this8 = this;
+      var _this9 = this;
 
       this.presets = [];
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/presets').then(function (response) {
-        _this8.presets = response.data.data;
+        _this9.presets = response.data.data;
       });
     },
     confirm: function confirm(title) {

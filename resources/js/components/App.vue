@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <v-navigation-drawer v-if="!isGuest" v-model="drawer" app clipped class="elevation-2">
+        <v-navigation-drawer v-if="isReady" v-model="drawer" app clipped class="elevation-2">
             <v-list nav dense>
                 <v-list-item-group color="primary">
                     <v-list-item link to="/">
@@ -70,7 +70,7 @@
             ></CrudDialog>
 
             <v-menu
-                v-if="currentProject"
+                v-if="account"
                 offset-y
             >
                 <template v-slot:activator="{ on, attrs }">
@@ -81,7 +81,7 @@
                         class="ml-4 text-capitalize"
                     >
                         <v-icon class="mr-1">mdi-folder-outline</v-icon>
-                        {{ currentProject.name }}
+                        {{ currentProject && currentProject.name }}
                         <v-icon class="ml-1" size="20">mdi-chevron-down</v-icon>
                     </v-btn>
                 </template>
@@ -90,11 +90,11 @@
                     <v-list-item
                         v-for="project in projects"
                         :key="project.id"
-                        :class="{'v-list-item--active primary--text': project.id === currentProject.id}"
-                        @click="setCurrentProject(project)"
+                        :class="{'v-list-item--active primary--text': currentProject && currentProject.id === project.id}"
+                        @click="switchProject(project)"
                     >
                         <v-list-item-icon class="mr-4">
-                            <v-icon v-if="project.id === currentProject.id">mdi-check</v-icon>
+                            <v-icon v-if="currentProject && currentProject.id === project.id">mdi-check</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
                             <v-list-item-title>{{ project.name }}</v-list-item-title>
@@ -154,7 +154,7 @@
 
         <v-main>
             <slot></slot>
-            <router-view v-if="currentProject"></router-view>
+            <router-view v-if="isReady"></router-view>
         </v-main>
     </v-app>
 </template>
@@ -176,8 +176,8 @@
             projectEdited: {},
         }),
         computed: {
-            isGuest() {
-                return !this.account;
+            isReady() {
+                return this.$root.isReady;
             },
             account() {
                 return this.$root.account;
@@ -202,8 +202,8 @@
             authSuccess() {
                 this.$root.authSuccess();
             },
-            setCurrentProject(project) {
-                this.$root.setCurrentProject(project);
+            switchProject(project) {
+                this.$root.switchProject(project);
             },
             updateProject() {
                 this.projectEdited = cloneDeep(this.currentProject);
