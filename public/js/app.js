@@ -2365,34 +2365,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3606,7 +3578,6 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-//
 //
 //
 //
@@ -25849,74 +25820,6 @@ var render = function() {
                           )
                         ],
                         1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-list-group",
-                        {
-                          attrs: { "prepend-icon": "mdi-cog", "no-action": "" },
-                          scopedSlots: _vm._u(
-                            [
-                              {
-                                key: "activator",
-                                fn: function() {
-                                  return [
-                                    _c("v-list-item-title", [_vm._v("Admin")])
-                                  ]
-                                },
-                                proxy: true
-                              }
-                            ],
-                            null,
-                            false,
-                            3509839752
-                          )
-                        },
-                        [
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            { attrs: { link: "", to: "/users" } },
-                            [_c("v-list-item-title", [_vm._v("Users")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            { attrs: { link: "", to: "/projects" } },
-                            [_c("v-list-item-title", [_vm._v("Projects")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            { attrs: { link: "", to: "/tags" } },
-                            [_c("v-list-item-title", [_vm._v("Tags")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            { attrs: { link: "", to: "/presets", exact: "" } },
-                            [_c("v-list-item-title", [_vm._v("Presets")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            { attrs: { link: "", to: "/fields" } },
-                            [_c("v-list-item-title", [_vm._v("Fields")])],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-list-item",
-                            { attrs: { link: "", to: "/values" } },
-                            [_c("v-list-item-title", [_vm._v("Values")])],
-                            1
-                          )
-                        ],
-                        1
                       )
                     ],
                     1
@@ -27718,12 +27621,9 @@ var render = function() {
                 attrs: { flat: "", color: "white" }
               },
               [
-                _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
-                _vm._v(" "),
-                _c("v-divider", {
-                  staticClass: "mx-4",
-                  attrs: { inset: "", vertical: "" }
-                }),
+                _c("v-toolbar-title", { staticClass: "mr-4" }, [
+                  _vm._v(_vm._s(_vm.title))
+                ]),
                 _vm._v(" "),
                 _c("TagsField", {
                   staticClass: "shrink mr-3",
@@ -27738,7 +27638,7 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _c("v-text-field", {
-                  staticClass: "shrink mr-2",
+                  staticClass: "shrink mr-3",
                   attrs: {
                     label: "Search",
                     dense: "",
@@ -27758,22 +27658,14 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "v-btn",
-                  {
-                    staticClass: "mr-2",
-                    attrs: { icon: "" },
-                    on: { click: _vm.addPreset }
-                  },
+                  { attrs: { icon: "" }, on: { click: _vm.addPreset } },
                   [_c("v-icon", [_vm._v("mdi-database-plus")])],
                   1
                 ),
                 _vm._v(" "),
                 _c(
                   "v-btn",
-                  {
-                    staticClass: "mr-2",
-                    attrs: { icon: "" },
-                    on: { click: _vm.getItems }
-                  },
+                  { attrs: { icon: "" }, on: { click: _vm.getItems } },
                   [_c("v-icon", [_vm._v("mdi-refresh")])],
                   1
                 )
@@ -27941,57 +27833,21 @@ var render = function() {
                 attrs: { flat: "", color: "white" }
               },
               [
-                _c("v-toolbar-title", [_vm._v(_vm._s(_vm.title))]),
+                _c("v-toolbar-title", { staticClass: "mr-2" }, [
+                  _vm._v(_vm._s(_vm.title))
+                ]),
                 _vm._v(" "),
                 _c(
                   "v-btn",
-                  {
-                    staticClass: "ml-2",
-                    attrs: { icon: "" },
-                    on: { click: _vm.editPreset }
-                  },
+                  { attrs: { icon: "" }, on: { click: _vm.editPreset } },
                   [_c("v-icon", [_vm._v("mdi-pencil")])],
                   1
                 ),
                 _vm._v(" "),
                 _c(
                   "v-btn",
-                  {
-                    staticClass: "mr-2",
-                    attrs: { icon: "" },
-                    on: { click: _vm.getItems }
-                  },
+                  { attrs: { icon: "" }, on: { click: _vm.getItems } },
                   [_c("v-icon", [_vm._v("mdi-refresh")])],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-btn",
-                  {
-                    attrs: { text: "", large: "", color: "grey darken-2" },
-                    on: { click: _vm.openExport }
-                  },
-                  [
-                    _c("v-icon", { attrs: { left: "" } }, [
-                      _vm._v("mdi-export")
-                    ]),
-                    _vm._v("\n                Export\n            ")
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-btn",
-                  {
-                    attrs: { text: "", large: "", color: "grey darken-2" },
-                    on: { click: _vm.openImport }
-                  },
-                  [
-                    _c("v-icon", { attrs: { left: "" } }, [
-                      _vm._v("mdi-import")
-                    ]),
-                    _vm._v("\n                Import\n            ")
-                  ],
                   1
                 )
               ],
@@ -28247,6 +28103,32 @@ var render = function() {
               [
                 _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
                 _vm._v("\n            Add Entity\n        ")
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-btn",
+              {
+                attrs: { text: "", large: "", color: "blue darken-3" },
+                on: { click: _vm.openExport }
+              },
+              [
+                _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-export")]),
+                _vm._v("\n            Export\n        ")
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-btn",
+              {
+                attrs: { text: "", large: "", color: "blue darken-3" },
+                on: { click: _vm.openImport }
+              },
+              [
+                _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-import")]),
+                _vm._v("\n            Import\n        ")
               ],
               1
             ),

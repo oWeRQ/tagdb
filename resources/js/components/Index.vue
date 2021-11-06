@@ -23,8 +23,7 @@
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
-                <v-toolbar-title>{{ title }}</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
+                <v-toolbar-title class="mr-4">{{ title }}</v-toolbar-title>
                 <TagsField
                     v-model="query.tags"
                     solo
@@ -39,12 +38,12 @@
                     single-line
                     hide-details
                     clearable
-                    class="shrink mr-2"
+                    class="shrink mr-3"
                 ></v-text-field>
-                <v-btn icon @click="addPreset" class="mr-2">
+                <v-btn icon @click="addPreset">
                     <v-icon>mdi-database-plus</v-icon>
                 </v-btn>
-                <v-btn icon @click="getItems" class="mr-2">
+                <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
             </v-toolbar>

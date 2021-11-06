@@ -21,20 +21,12 @@
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
-                <v-toolbar-title>{{ title }}</v-toolbar-title>
-                <v-btn icon @click="editPreset" class="ml-2">
+                <v-toolbar-title class="mr-2">{{ title }}</v-toolbar-title>
+                <v-btn icon @click="editPreset">
                     <v-icon>mdi-pencil</v-icon>
                 </v-btn>
-                <v-btn icon @click="getItems" class="mr-2">
+                <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
-                </v-btn>
-                <v-btn text large color="grey darken-2" @click="openExport">
-                    <v-icon left>mdi-export</v-icon>
-                    Export
-                </v-btn>
-                <v-btn text large color="grey darken-2" @click="openImport">
-                    <v-icon left>mdi-import</v-icon>
-                    Import
                 </v-btn>
             </v-toolbar>
 
@@ -107,6 +99,14 @@
             <v-btn text large color="blue darken-3" @click="addItem">
                 <v-icon left>mdi-plus</v-icon>
                 Add Entity
+            </v-btn>
+            <v-btn text large color="blue darken-3" @click="openExport">
+                <v-icon left>mdi-export</v-icon>
+                Export
+            </v-btn>
+            <v-btn text large color="blue darken-3" @click="openImport">
+                <v-icon left>mdi-import</v-icon>
+                Import
             </v-btn>
 
             <CrudDialog
