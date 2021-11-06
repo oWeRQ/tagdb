@@ -3186,9 +3186,6 @@ __webpack_require__.r(__webpack_exports__);
         }]
       };
     },
-    tags: function tags() {
-      return this.$root.tags;
-    },
     editedFields: function editedFields() {
       return this.value.tags.flatMap(function (item) {
         return item.fields;
@@ -88114,8 +88111,7 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       currentProject: null,
       projects: [],
       tags: [],
-      presets: [],
-      fields: []
+      presets: []
     };
   },
   mounted: function mounted() {
@@ -88182,7 +88178,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       this.getProjects();
       this.getTags();
       this.getPresets();
-      this.getFields();
     },
     getProjects: function getProjects() {
       var _this6 = this;
@@ -88206,14 +88201,6 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
       this.presets = [];
       return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/presets').then(function (response) {
         _this8.presets = response.data.data;
-      });
-    },
-    getFields: function getFields() {
-      var _this9 = this;
-
-      this.fields = [];
-      return axios__WEBPACK_IMPORTED_MODULE_8___default.a.get('/api/v1/fields').then(function (response) {
-        _this9.fields = response.data.data;
       });
     },
     confirm: function confirm(title) {

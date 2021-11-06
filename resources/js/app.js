@@ -42,7 +42,6 @@ const app = new Vue({
             projects: [],
             tags: [],
             presets: [],
-            fields: [],
         };
     },
     mounted() {
@@ -96,7 +95,6 @@ const app = new Vue({
             this.getProjects();
             this.getTags();
             this.getPresets();
-            this.getFields();
         },
         getProjects() {
             this.projects = [];
@@ -114,12 +112,6 @@ const app = new Vue({
             this.presets = [];
             return axios.get('/api/v1/presets').then(response => {
                 this.presets = response.data.data;
-            });
-        },
-        getFields() {
-            this.fields = [];
-            return axios.get('/api/v1/fields').then(response => {
-                this.fields = response.data.data;
             });
         },
         confirm(title, text = null) {

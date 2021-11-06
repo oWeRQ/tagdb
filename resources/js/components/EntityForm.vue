@@ -90,9 +90,6 @@
                     ],
                 };
             },
-            tags() {
-                return this.$root.tags;
-            },
             editedFields() {
                 return this.value.tags.flatMap(item => item.fields);
             },
