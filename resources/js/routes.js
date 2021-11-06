@@ -1,6 +1,7 @@
 import Index from './components/Index.vue';
 import Crud from './components/Crud.vue';
 import TagForm from './components/TagForm.vue';
+import FieldForm from './components/FieldForm.vue';
 import PresetForm from './components/PresetForm.vue';
 import Preset from './components/Preset.vue';
 
@@ -38,17 +39,12 @@ export default [
         path: '/fields',
         component: Crud,
         props: {
+            form: FieldForm,
             title: 'Fields',
             resource: '/api/v1/fields',
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
-                { text: 'Tag ID', value: 'tag_id' },
-                { text: 'Type', value: 'type' },
-                { text: 'Name', value: 'name' },
-                { text: 'Code', value: 'code' },
-            ],
-            editable: [
                 { text: 'Tag ID', value: 'tag_id' },
                 { text: 'Type', value: 'type' },
                 { text: 'Name', value: 'name' },

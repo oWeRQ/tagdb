@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-text-field v-model="value.name" :rules="rules.name" label="Tag" autofocus></v-text-field>
+        <v-text-field v-model="value.name" :rules="rules.required" label="Tag" autofocus></v-text-field>
 
         <ColorSwitcher v-model="value.color" label="Color"></ColorSwitcher>
 
@@ -13,13 +13,13 @@
                     <v-list-item-content>
                         <v-row no-gutters>
                             <v-col>
-                                <v-select :items="types" v-model="field.type" label="Type" hide-details class="mr-4"></v-select>
+                                <v-select :items="types" v-model="field.type" :rules="rules.required" label="Type" hide-details class="mr-4"></v-select>
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="field.name" label="Name" hide-details class="mr-4"></v-text-field>
+                                <v-text-field v-model="field.name" :rules="rules.required" label="Name" hide-details class="mr-4"></v-text-field>
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="field.code" label="Code" hide-details></v-text-field>
+                                <v-text-field v-model="field.code" :rules="rules.required" label="Code" hide-details></v-text-field>
                             </v-col>
                         </v-row>
                     </v-list-item-content>
@@ -65,11 +65,11 @@
                 { text: 'Rating', value: 'rating' },
             ],
             rules() {
-                return {
-                    name: [
+                return ({
+                    required: [
                         v => !!v || 'Required',
                     ],
-                };
+                });
             },
         },
         methods: {

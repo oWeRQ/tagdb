@@ -3022,7 +3022,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     submit: function submit() {
-      if (!this.isValid) return;
+      if (!this.isValid) {
+        this.$refs.form.validate();
+        return;
+      }
 
       if (this.value.id) {
         axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(this.resource + '/' + this.value.id, this.value).then(this.success);
@@ -3095,7 +3098,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _CrudDialog__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CrudDialog */ "./resources/js/components/CrudDialog.vue");
 /* harmony import */ var _TagForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TagForm */ "./resources/js/components/TagForm.vue");
-/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
+/* harmony import */ var _FieldForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./FieldForm */ "./resources/js/components/FieldForm.vue");
+/* harmony import */ var _TagsField__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TagsField */ "./resources/js/components/TagsField.vue");
 //
 //
 //
@@ -3153,6 +3157,21 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -3160,7 +3179,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
     CrudDialog: _CrudDialog__WEBPACK_IMPORTED_MODULE_1__["default"],
-    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_3__["default"]
+    TagsField: _TagsField__WEBPACK_IMPORTED_MODULE_4__["default"]
   },
   props: {
     value: {
@@ -3172,7 +3191,10 @@ __webpack_require__.r(__webpack_exports__);
       menu: {},
       editedTag: null,
       tagForm: _TagForm__WEBPACK_IMPORTED_MODULE_2__["default"],
-      tagResource: '/api/v1/tags'
+      tagResource: '/api/v1/tags',
+      editedField: null,
+      fieldForm: _FieldForm__WEBPACK_IMPORTED_MODULE_3__["default"],
+      fieldResource: '/api/v1/fields'
     };
   },
   computed: {
@@ -3190,6 +3212,11 @@ __webpack_require__.r(__webpack_exports__);
       return this.value.tags.flatMap(function (item) {
         return item.fields;
       });
+    },
+    firstSavedTag: function firstSavedTag() {
+      return this.value.tags.find(function (tag) {
+        return tag.id;
+      });
     }
   },
   methods: {
@@ -3200,6 +3227,24 @@ __webpack_require__.r(__webpack_exports__);
     },
     saveTag: function saveTag(tag) {
       Object.assign(this.originalTag, tag);
+    },
+    addField: function addField() {
+      var _this$firstSavedTag;
+
+      this.editedField = {
+        tag_id: (_this$firstSavedTag = this.firstSavedTag) === null || _this$firstSavedTag === void 0 ? void 0 : _this$firstSavedTag.id,
+        type: 'string'
+      };
+      this.$refs.fieldDialog.show();
+    },
+    saveField: function saveField(field) {
+      var tag = this.value.tags.find(function (tag) {
+        return tag.id == field.tag_id;
+      });
+
+      if (tag) {
+        tag.fields.push(field);
+      }
     }
   }
 });
@@ -3439,6 +3484,79 @@ __webpack_require__.r(__webpack_exports__);
           return _this2.$emit('update');
         });
       });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldForm.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldForm.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    value: {
+      type: Object,
+      "default": function _default() {}
+    }
+  },
+  computed: {
+    tags: function tags() {
+      return this.$root.tags;
+    },
+    types: function types() {
+      return [{
+        text: 'String',
+        value: 'string'
+      }, {
+        text: 'Text',
+        value: 'text'
+      }, {
+        text: 'Url',
+        value: 'url'
+      }, {
+        text: 'Email',
+        value: 'email'
+      }, {
+        text: 'Color',
+        value: 'color'
+      }, {
+        text: 'Date',
+        value: 'date'
+      }, {
+        text: 'Time',
+        value: 'time'
+      }, {
+        text: 'Rating',
+        value: 'rating'
+      }];
+    },
+    rules: function rules() {
+      return {
+        required: [function (v) {
+          return !!v || 'Required';
+        }]
+      };
+    }
+  },
+  watch: {
+    'value.name': function valueName(value) {
+      this.value.code = value.toLowerCase().replace(/\W+/g, '_');
     }
   }
 });
@@ -4671,7 +4789,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     rules: function rules() {
       return {
-        name: [function (v) {
+        required: [function (v) {
           return !!v || 'Required';
         }]
       };
@@ -26786,11 +26904,10 @@ var render = function() {
                           attrs: {
                             color: "blue darken-1",
                             text: "",
-                            type: "submit",
-                            disabled: !_vm.isValid
+                            type: "submit"
                           }
                         },
-                        [_vm._v("Save")]
+                        [_vm._v(_vm._s(_vm.isNew ? "Create" : "Update"))]
                       )
                     ],
                     1
@@ -27131,6 +27248,36 @@ var render = function() {
             2
           )
         ]
+      }),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        {
+          staticClass: "mt-4 ml-n1",
+          attrs: {
+            disabled: !_vm.firstSavedTag,
+            text: "",
+            "x-small": "",
+            color: "blue darken-1"
+          },
+          on: { click: _vm.addField }
+        },
+        [
+          _c("v-icon", { attrs: { left: "" } }, [_vm._v("mdi-plus")]),
+          _vm._v("\n        Add Field\n    ")
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("CrudDialog", {
+        ref: "fieldDialog",
+        attrs: {
+          title: "Field",
+          form: _vm.fieldForm,
+          resource: _vm.fieldResource,
+          value: _vm.editedField
+        },
+        on: { input: _vm.saveField }
       })
     ],
     2
@@ -27423,6 +27570,85 @@ var render = function() {
         [_c("v-icon", [_vm._v("mdi-delete")])],
         1
       )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldForm.vue?vue&type=template&id=35d42003&":
+/*!************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/FieldForm.vue?vue&type=template&id=35d42003& ***!
+  \************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c("v-text-field", {
+        attrs: { rules: _vm.rules.required, label: "Name", autofocus: "" },
+        model: {
+          value: _vm.value.name,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "name", $$v)
+          },
+          expression: "value.name"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-text-field", {
+        attrs: { rules: _vm.rules.required, label: "Code" },
+        model: {
+          value: _vm.value.code,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "code", $$v)
+          },
+          expression: "value.code"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-autocomplete", {
+        attrs: { items: _vm.types, rules: _vm.rules.required, label: "Type" },
+        model: {
+          value: _vm.value.type,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "type", $$v)
+          },
+          expression: "value.type"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-autocomplete", {
+        attrs: {
+          items: _vm.tags,
+          "item-value": "id",
+          "item-text": "name",
+          rules: _vm.rules.required,
+          label: "Tag",
+          chips: ""
+        },
+        model: {
+          value: _vm.value.tag_id,
+          callback: function($$v) {
+            _vm.$set(_vm.value, "tag_id", $$v)
+          },
+          expression: "value.tag_id"
+        }
+      })
     ],
     1
   )
@@ -28329,7 +28555,7 @@ var render = function() {
     "div",
     [
       _c("v-text-field", {
-        attrs: { rules: _vm.rules.name, label: "Tag", autofocus: "" },
+        attrs: { rules: _vm.rules.required, label: "Tag", autofocus: "" },
         model: {
           value: _vm.value.name,
           callback: function($$v) {
@@ -28394,6 +28620,7 @@ var render = function() {
                                   staticClass: "mr-4",
                                   attrs: {
                                     items: _vm.types,
+                                    rules: _vm.rules.required,
                                     label: "Type",
                                     "hide-details": ""
                                   },
@@ -28414,7 +28641,11 @@ var render = function() {
                               [
                                 _c("v-text-field", {
                                   staticClass: "mr-4",
-                                  attrs: { label: "Name", "hide-details": "" },
+                                  attrs: {
+                                    rules: _vm.rules.required,
+                                    label: "Name",
+                                    "hide-details": ""
+                                  },
                                   model: {
                                     value: field.name,
                                     callback: function($$v) {
@@ -28431,7 +28662,11 @@ var render = function() {
                               "v-col",
                               [
                                 _c("v-text-field", {
-                                  attrs: { label: "Code", "hide-details": "" },
+                                  attrs: {
+                                    rules: _vm.rules.required,
+                                    label: "Code",
+                                    "hide-details": ""
+                                  },
                                   model: {
                                     value: field.code,
                                     callback: function($$v) {
@@ -88970,6 +89205,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/FieldForm.vue":
+/*!***********************************************!*\
+  !*** ./resources/js/components/FieldForm.vue ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _FieldForm_vue_vue_type_template_id_35d42003___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./FieldForm.vue?vue&type=template&id=35d42003& */ "./resources/js/components/FieldForm.vue?vue&type=template&id=35d42003&");
+/* harmony import */ var _FieldForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./FieldForm.vue?vue&type=script&lang=js& */ "./resources/js/components/FieldForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _FieldForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _FieldForm_vue_vue_type_template_id_35d42003___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _FieldForm_vue_vue_type_template_id_35d42003___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/FieldForm.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/FieldForm.vue?vue&type=script&lang=js&":
+/*!************************************************************************!*\
+  !*** ./resources/js/components/FieldForm.vue?vue&type=script&lang=js& ***!
+  \************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FieldForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./FieldForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_FieldForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/FieldForm.vue?vue&type=template&id=35d42003&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/FieldForm.vue?vue&type=template&id=35d42003& ***!
+  \******************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FieldForm_vue_vue_type_template_id_35d42003___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./FieldForm.vue?vue&type=template&id=35d42003& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/FieldForm.vue?vue&type=template&id=35d42003&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FieldForm_vue_vue_type_template_id_35d42003___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FieldForm_vue_vue_type_template_id_35d42003___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Index.vue":
 /*!*******************************************!*\
   !*** ./resources/js/components/Index.vue ***!
@@ -89579,8 +89883,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Index_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Index.vue */ "./resources/js/components/Index.vue");
 /* harmony import */ var _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/Crud.vue */ "./resources/js/components/Crud.vue");
 /* harmony import */ var _components_TagForm_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/TagForm.vue */ "./resources/js/components/TagForm.vue");
-/* harmony import */ var _components_PresetForm_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/PresetForm.vue */ "./resources/js/components/PresetForm.vue");
-/* harmony import */ var _components_Preset_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Preset.vue */ "./resources/js/components/Preset.vue");
+/* harmony import */ var _components_FieldForm_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/FieldForm.vue */ "./resources/js/components/FieldForm.vue");
+/* harmony import */ var _components_PresetForm_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/PresetForm.vue */ "./resources/js/components/PresetForm.vue");
+/* harmony import */ var _components_Preset_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/Preset.vue */ "./resources/js/components/Preset.vue");
+
 
 
 
@@ -89627,6 +89933,7 @@ __webpack_require__.r(__webpack_exports__);
   path: '/fields',
   component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
   props: {
+    form: _components_FieldForm_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
     title: 'Fields',
     resource: '/api/v1/fields',
     defaultItem: {},
@@ -89634,19 +89941,6 @@ __webpack_require__.r(__webpack_exports__);
       text: 'ID',
       value: 'id'
     }, {
-      text: 'Tag ID',
-      value: 'tag_id'
-    }, {
-      text: 'Type',
-      value: 'type'
-    }, {
-      text: 'Name',
-      value: 'name'
-    }, {
-      text: 'Code',
-      value: 'code'
-    }],
-    editable: [{
       text: 'Tag ID',
       value: 'tag_id'
     }, {
@@ -89707,7 +90001,7 @@ __webpack_require__.r(__webpack_exports__);
   path: '/presets',
   component: _components_Crud_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
   props: {
-    form: _components_PresetForm_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    form: _components_PresetForm_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
     title: 'Presets',
     resource: '/api/v1/presets',
     defaultItem: {},
@@ -89782,7 +90076,7 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   path: '/presets/:name',
   name: 'preset',
-  component: _components_Preset_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+  component: _components_Preset_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
   props: {
     resource: '/api/v1/entities'
   }
