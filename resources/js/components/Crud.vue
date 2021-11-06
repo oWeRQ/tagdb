@@ -15,28 +15,30 @@
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-btn text large color="grey darken-2" @click="addItem">
-                    <v-icon left>mdi-plus</v-icon>
-                    Add
-                </v-btn>
-                <CrudDialog
-                    ref="crudDialog"
-                    :title="singularTitle"
-                    :form="form"
-                    :resource="resource"
-                    :editable="editable"
-                    :processValue="processItem"
-                    :value="editedItem"
-                    @input="saveItem"
-                    @delete="deleteItem"
-                ></CrudDialog>
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
             <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
             </v-icon>
+        </template>
+        <template v-slot:footer.prepend>
+            <v-btn text large color="blue darken-3" @click="addItem">
+                <v-icon left>mdi-plus</v-icon>
+                Add {{ singularTitle }}
+            </v-btn>
+
+            <CrudDialog
+                ref="crudDialog"
+                :title="singularTitle"
+                :form="form"
+                :resource="resource"
+                :editable="editable"
+                :processValue="processItem"
+                :value="editedItem"
+                @input="saveItem"
+                @delete="deleteItem"
+            ></CrudDialog>
         </template>
     </v-data-table>
 </template>

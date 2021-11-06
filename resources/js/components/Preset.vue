@@ -23,48 +23,21 @@
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title>{{ title }}</v-toolbar-title>
                 <v-btn icon @click="editPreset" class="ml-2">
-                    <v-icon>mdi-cog</v-icon>
+                    <v-icon>mdi-pencil</v-icon>
                 </v-btn>
                 <v-btn icon @click="getItems" class="mr-2">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn text large color="grey darken-2" @click="addItem">
-                    <v-icon left>mdi-plus</v-icon>
-                    Add
+                <v-btn text large color="grey darken-2" @click="openExport">
+                    <v-icon left>mdi-export</v-icon>
+                    Export
                 </v-btn>
-                <v-menu offset-y left>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn icon v-bind="attrs" v-on="on">
-                            <v-icon>mdi-dots-vertical</v-icon>
-                        </v-btn>
-                    </template>
-                    <v-list>
-                        <v-list-item @click="openExport()">
-                            <v-icon left>mdi-export</v-icon>
-                            <v-list-item-title>Export</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="openImport()">
-                            <v-icon left>mdi-import</v-icon>
-                            <v-list-item-title>Import</v-list-item-title>
-                        </v-list-item>
-                        <v-list-item @click="deletePreset">
-                            <v-icon left>mdi-delete</v-icon>
-                            <v-list-item-title>Delete Preset</v-list-item-title>
-                        </v-list-item>
-                    </v-list>
-                </v-menu>
+                <v-btn text large color="grey darken-2" @click="openImport">
+                    <v-icon left>mdi-import</v-icon>
+                    Import
+                </v-btn>
             </v-toolbar>
 
-            <CrudDialog
-                ref="entityDialog"
-                title="Entity"
-                :form="form"
-                :resource="resource"
-                :processValue="processItem"
-                :value="editedItem"
-                @input="saveItem"
-            ></CrudDialog>
             <CrudDialog
                 ref="presetDialog"
                 title="Preset"
@@ -129,6 +102,22 @@
                 :select="select"
                 @edit="editItem(item)"
             ></EntityRow>
+        </template>
+        <template v-slot:footer.prepend>
+            <v-btn text large color="blue darken-3" @click="addItem">
+                <v-icon left>mdi-plus</v-icon>
+                Add Entity
+            </v-btn>
+
+            <CrudDialog
+                ref="entityDialog"
+                title="Entity"
+                :form="form"
+                :resource="resource"
+                :processValue="processItem"
+                :value="editedItem"
+                @input="saveItem"
+            ></CrudDialog>
         </template>
     </v-data-table>
 </template>
@@ -305,14 +294,6 @@
                 }
 
                 this.$root.getPresets();
-            },
-            deletePreset() {
-                this.$root.confirm('Delete preset?').then(() => {
-                    axios.delete(this.presetResource + '/' + this.preset.id).then(response => {
-                        this.$root.getPresets();
-                        this.$router.push({ name: 'index' });
-                    });
-                });
             },
             openExport() {
                 this.exportColumns = this.exportHeaders.map(header => header.value);

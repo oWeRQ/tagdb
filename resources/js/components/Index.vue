@@ -47,23 +47,8 @@
                 <v-btn icon @click="getItems" class="mr-2">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn text large color="grey darken-2" @click="addItem">
-                    <v-icon left>mdi-plus</v-icon>
-                    Add
-                </v-btn>
             </v-toolbar>
 
-            <CrudDialog
-                ref="entityDialog"
-                title="Entity"
-                :form="form"
-                :resource="resource"
-                :processValue="processItem"
-                :value="editedItem"
-                @input="saveItem"
-                @delete="deleteItem"
-            ></CrudDialog>
             <CrudDialog
                 ref="presetDialog"
                 title="Preset"
@@ -83,6 +68,23 @@
                 :select="select"
                 @edit="editItem(item)"
             ></EntityRow>
+        </template>
+        <template v-slot:footer.prepend>
+            <v-btn text large color="blue darken-3" @click="addItem">
+                <v-icon left>mdi-plus</v-icon>
+                Add Entity
+            </v-btn>
+
+            <CrudDialog
+                ref="entityDialog"
+                title="Entity"
+                :form="form"
+                :resource="resource"
+                :processValue="processItem"
+                :value="editedItem"
+                @input="saveItem"
+                @delete="deleteItem"
+            ></CrudDialog>
         </template>
     </v-data-table>
 </template>
