@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-text-field v-model="value.name" :rules="rules.required" label="Name" autofocus />
+        <v-text-field v-model="value.name" @change="nameChanged(value)" :rules="rules.required" label="Name" autofocus />
         <v-text-field v-model="value.code" :rules="rules.required" label="Code" />
         <v-autocomplete :items="types" v-model="value.type" :rules="rules.required" label="Type" />
         <v-autocomplete :items="tags" item-value="id" item-text="name" v-model="value.tag_id" :rules="rules.required" label="Tag" chips />
@@ -8,6 +8,8 @@
 </template>
 
 <script>
+    import makeCode from '../functions/makeCode';
+
     export default {
         props: {
             value: {
@@ -37,9 +39,11 @@
                 });
             },
         },
-        watch: {
-            'value.name'(value) {
-                this.value.code = value.toLowerCase().replace(/\W+/g, '_');
+        methods: {
+            nameChanged(field) {
+                if (!field.code) {
+                    field.code = makeCode(field.name);
+                }
             },
         },
     }

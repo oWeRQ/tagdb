@@ -3213,7 +3213,9 @@ __webpack_require__.r(__webpack_exports__);
 
       this.editedField = {
         tag_id: (_this$firstSavedTag = this.firstSavedTag) === null || _this$firstSavedTag === void 0 ? void 0 : _this$firstSavedTag.id,
-        type: 'string'
+        type: 'string',
+        name: '',
+        code: ''
       };
       this.$refs.fieldDialog.show();
     },
@@ -3479,6 +3481,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _functions_makeCode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../functions/makeCode */ "./resources/js/functions/makeCode.js");
 //
 //
 //
@@ -3488,6 +3491,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     value: {
@@ -3534,9 +3538,11 @@ __webpack_require__.r(__webpack_exports__);
       };
     }
   },
-  watch: {
-    'value.name': function valueName(value) {
-      this.value.code = value.toLowerCase().replace(/\W+/g, '_');
+  methods: {
+    nameChanged: function nameChanged(field) {
+      if (!field.code) {
+        field.code = Object(_functions_makeCode__WEBPACK_IMPORTED_MODULE_0__["default"])(field.name);
+      }
     }
   }
 });
@@ -4663,7 +4669,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _ColorSwitcher__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ColorSwitcher */ "./resources/js/components/ColorSwitcher.vue");
+/* harmony import */ var _functions_makeCode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../functions/makeCode */ "./resources/js/functions/makeCode.js");
+/* harmony import */ var _ColorSwitcher__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ColorSwitcher */ "./resources/js/components/ColorSwitcher.vue");
 //
 //
 //
@@ -4705,9 +4712,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    ColorSwitcher: _ColorSwitcher__WEBPACK_IMPORTED_MODULE_0__["default"]
+    ColorSwitcher: _ColorSwitcher__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   props: {
     editable: {
@@ -4765,6 +4773,11 @@ __webpack_require__.r(__webpack_exports__);
       this.value.fields = this.value.fields.filter(function (item) {
         return item !== field;
       });
+    },
+    nameChanged: function nameChanged(field) {
+      if (!field.code) {
+        field.code = Object(_functions_makeCode__WEBPACK_IMPORTED_MODULE_0__["default"])(field.name);
+      }
     }
   }
 });
@@ -27499,6 +27512,11 @@ var render = function() {
     [
       _c("v-text-field", {
         attrs: { rules: _vm.rules.required, label: "Name", autofocus: "" },
+        on: {
+          change: function($event) {
+            return _vm.nameChanged(_vm.value)
+          }
+        },
         model: {
           value: _vm.value.name,
           callback: function($$v) {
@@ -28470,6 +28488,11 @@ var render = function() {
                                     rules: _vm.rules.required,
                                     label: "Name",
                                     "hide-details": ""
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      return _vm.nameChanged(field)
+                                    }
                                   },
                                   model: {
                                     value: field.name,
@@ -91511,6 +91534,21 @@ __webpack_require__.r(__webpack_exports__);
   return new Date(str).toISOString().substr(0, 10);
 });
 ;
+
+/***/ }),
+
+/***/ "./resources/js/functions/makeCode.js":
+/*!********************************************!*\
+  !*** ./resources/js/functions/makeCode.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function (value) {
+  return value.toLowerCase().replace(/\W+/g, '_');
+});
 
 /***/ }),
 

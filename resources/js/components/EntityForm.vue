@@ -129,7 +129,12 @@
                 this.value.tags = this.value.tags.filter(item => item.id !== tag.id);
             },
             addField() {
-                this.editedField = {tag_id: this.firstSavedTag?.id, type: 'string'};
+                this.editedField = {
+                    tag_id: this.firstSavedTag?.id,
+                    type: 'string',
+                    name: '',
+                    code: '',
+                };
                 this.$refs.fieldDialog.show();
             },
             saveField(field) {

@@ -16,7 +16,7 @@
                                 <v-select :items="types" v-model="field.type" :rules="rules.required" label="Type" hide-details class="mr-4"></v-select>
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="field.name" :rules="rules.required" label="Name" hide-details class="mr-4"></v-text-field>
+                                <v-text-field v-model="field.name" @change="nameChanged(field)" :rules="rules.required" label="Name" hide-details class="mr-4"></v-text-field>
                             </v-col>
                             <v-col>
                                 <v-text-field v-model="field.code" :rules="rules.required" label="Code" hide-details></v-text-field>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+    import makeCode from '../functions/makeCode';
     import ColorSwitcher from './ColorSwitcher';
 
     export default {
@@ -82,6 +83,11 @@
             },
             remove(field) {
                 this.value.fields = this.value.fields.filter(item => item !== field);
+            },
+            nameChanged(field) {
+                if (!field.code) {
+                    field.code = makeCode(field.name);
+                }
             },
         },
     }
