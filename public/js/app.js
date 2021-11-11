@@ -90080,14 +90080,19 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1___default.a({
   mounted: function mounted() {
     var _this = this;
 
+    axios__WEBPACK_IMPORTED_MODULE_8___default.a.interceptors.response.use(function (response) {
+      return response;
+    }, function (error) {
+      if (error.response.status === 401) {
+        _this.logoutSuccess();
+
+        return new Promise(function () {});
+      }
+
+      return Promise.reject(error);
+    });
     this.getAccount().then(function () {
       _this.authSuccess();
-    })["catch"](function (error) {
-      if (error.response.status === 401) {
-        _this.isAuth = true;
-      } else {
-        console.error('account', error.response);
-      }
     });
   },
   methods: {

@@ -46,14 +46,18 @@ const app = new Vue({
         };
     },
     mounted() {
+        axios.interceptors.response.use(response => {
+            return response;
+        }, error => {
+            if (error.response.status === 401) {
+                this.logoutSuccess();
+                return new Promise(() => {});
+            }
+            return Promise.reject(error);
+        });
+
         this.getAccount().then(() => {
             this.authSuccess();
-        }).catch(error => {
-            if (error.response.status === 401) {
-                this.isAuth = true;
-            } else {
-                console.error('account', error.response);
-            }
         });
     },
     methods: {
