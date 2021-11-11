@@ -28627,6 +28627,7 @@ var render = function() {
             _c(
               "v-chip",
               {
+                staticClass: "lighten-2",
                 attrs: { close: "", color: item.color, dark: !!item.color },
                 on: {
                   click: function($event) {
