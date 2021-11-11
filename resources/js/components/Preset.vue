@@ -197,10 +197,11 @@
                 return tags;
             },
             queryTags() {
-                return this.tags.filter(tag => this.query.tags.includes(tag.name));
+                return (this.query ? this.tags.filter(tag => this.query.tags.includes(tag.name)) : []);
             },
             displayFields() {
-                return this.availableTags.flatMap(item => item.fields);
+                // return this.availableTags.flatMap(item => item.fields);
+                return this.queryTags.flatMap(item => item.fields);
             },
             displaySlots() {
                 return this.displayFields.map((field) => {

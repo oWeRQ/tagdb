@@ -4219,12 +4219,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     queryTags: function queryTags() {
       var _this = this;
 
-      return this.tags.filter(function (tag) {
+      return this.query ? this.tags.filter(function (tag) {
         return _this.query.tags.includes(tag.name);
-      });
+      }) : [];
     },
     displayFields: function displayFields() {
-      return this.availableTags.flatMap(function (item) {
+      // return this.availableTags.flatMap(item => item.fields);
+      return this.queryTags.flatMap(function (item) {
         return item.fields;
       });
     },
