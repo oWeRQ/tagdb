@@ -4825,6 +4825,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 function toggleHyphen(value) {
@@ -28642,6 +28643,11 @@ var render = function() {
         fn: function(ref) {
           var item = ref.item
           return [
+            _c("v-avatar", {
+              staticClass: "mr-2",
+              attrs: { color: item.color, size: "8" }
+            }),
+            _vm._v(" "),
             _c(
               "span",
               { class: { "grey--text text--darken-2": !item.entities_count } },

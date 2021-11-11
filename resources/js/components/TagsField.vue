@@ -28,6 +28,7 @@
             </v-chip>
         </template>
         <template v-slot:item="{ item }">
+            <v-avatar :color="item.color" size="8" class="mr-2"></v-avatar>
             <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
             <v-spacer></v-spacer>
             <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
