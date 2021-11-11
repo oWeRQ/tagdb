@@ -7,6 +7,7 @@
             :resource="tagResource"
             :value="editedTag"
             @input="saveTag"
+            @delete="deleteTag"
         ></CrudDialog>
 
         <TagsField
@@ -123,6 +124,9 @@
             },
             saveTag(tag) {
                 Object.assign(this.originalTag, tag);
+            },
+            deleteTag(tag) {
+                this.value.tags = this.value.tags.filter(item => item.id !== tag.id);
             },
             addField() {
                 this.editedField = {tag_id: this.firstSavedTag?.id, type: 'string'};

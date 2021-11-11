@@ -3145,6 +3145,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -3201,6 +3202,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     saveTag: function saveTag(tag) {
       Object.assign(this.originalTag, tag);
+    },
+    deleteTag: function deleteTag(tag) {
+      this.value.tags = this.value.tags.filter(function (item) {
+        return item.id !== tag.id;
+      });
     },
     addField: function addField() {
       var _this$firstSavedTag;
@@ -26887,7 +26893,7 @@ var render = function() {
           resource: _vm.tagResource,
           value: _vm.editedTag
         },
-        on: { input: _vm.saveTag }
+        on: { input: _vm.saveTag, delete: _vm.deleteTag }
       }),
       _vm._v(" "),
       _c("TagsField", {
@@ -28597,7 +28603,7 @@ var render = function() {
             _c(
               "v-chip",
               {
-                attrs: { close: "" },
+                attrs: { close: "", color: item.color, dark: !!item.color },
                 on: {
                   click: function($event) {
                     $event.stopPropagation()
