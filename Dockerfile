@@ -1,7 +1,7 @@
 FROM node:14-alpine AS asset
 WORKDIR /build
 COPY package.json package-lock.json webpack.mix.js ./
-RUN npm install
+RUN npm install && npx browserslist@latest --update-db
 COPY resources resources
 RUN npm run production
 

@@ -282,7 +282,7 @@
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], item);
                 } else {
-                    this.items.unshift(item);
+                    this.items = [item, ...this.items];
                 }
             },
             editPreset() {
