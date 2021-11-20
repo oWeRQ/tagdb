@@ -15,9 +15,17 @@ RUN apk add --update --no-cache \
     && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 WORKDIR /var/www/html
 USER www-data
-COPY --chown=www-data . .
-RUN mkdir -p storage/logs storage/framework/cache/data storage/framework/sessions storage/framework/testing storage/framework/views \
+COPY --chown=www-data composer.json composer.lock ./
+RUN mkdir -p \
+    database/seeds \
+    database/factories \
+    storage/logs \
+    storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/testing \
+    storage/framework/views \
     && composer install
+COPY --chown=www-data . .
 USER root
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["./docker/init.sh"]
