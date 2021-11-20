@@ -3,7 +3,7 @@
         :headers="headers"
         :items="items"
         :options.sync="options"
-        :server-items-length="total"
+        :server-items-length="serverItemsLength"
         :loading="loading"
         :items-per-page="100"
         :footer-props="{
@@ -100,6 +100,9 @@
             }
         },
         computed: {
+            serverItemsLength() {
+                return Math.max(this.items.length, this.total);
+            },
             singularTitle() {
                 return this.title.replace(/ies$/, 'y').replace(/s$/, '');
             },
@@ -157,7 +160,7 @@
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], item);
                 } else {
-                    this.items = [item, ...this.items];
+                    this.items.unshift(item);
                 }
             },
         },
