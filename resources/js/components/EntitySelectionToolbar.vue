@@ -75,14 +75,18 @@
                 });
 
                 const requests = items.map(item => axios.put(this.resource + '/' + item.id, {tags: item.tags}));
-                this.$emit('input', []);
-                Promise.all(requests).then(() => this.$emit('update'));
+                Promise.all(requests).then(() => {
+                    this.$emit('update');
+                    this.$emit('input', []);
+                });
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {
                     const requests = this.value.map(item => axios.delete(this.resource + '/' + item.id));
-                    this.$emit('input', []);
-                    Promise.all(requests).then(() => this.$emit('update'));
+                    Promise.all(requests).then(() => {
+                        this.$emit('update');
+                        this.$emit('input', []);
+                    });
                 });
             },
         },
