@@ -1,3 +1,10 @@
+FROM node:14-alpine AS asset
+WORKDIR /build
+COPY package.json package-lock.json webpack.mix.js ./
+RUN npm install
+COPY resources resources
+RUN npm run production
+
 FROM php:8.0-fpm-alpine
 RUN apk add --update --no-cache \
     dumb-init \
@@ -26,6 +33,7 @@ RUN mkdir -p \
     storage/framework/views \
     && composer install
 COPY --chown=www-data . .
+COPY --chown=www-data --from=asset /build/public public
 USER root
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["./docker/init.sh"]
