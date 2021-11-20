@@ -186,11 +186,11 @@
                 this.$refs.projectDialog.show();
             },
             saveProject(project) {
-                this.setCurrentProject(project);
+                this.switchProject(project);
                 this.$root.getProjects();
             },
             deleteProject({id}) {
-                this.setCurrentProject(this.projects.find(project => project.id != id));
+                this.switchProject(this.projects.find(project => project.id != id));
             },
         },
     }
