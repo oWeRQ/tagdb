@@ -1,0 +1,34 @@
+version: '3'
+
+volumes:
+  db:
+
+networks:
+  db:
+  proxy:
+    external: true
+
+services:
+  app:
+    build: .
+    restart: on-failure:3
+    networks:
+      - db
+      - proxy
+    depends_on:
+      - db
+  db:
+    image: mariadb
+    restart: on-failure:3
+    networks:
+      - db
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_PASSWORD: '${DB_PASSWORD}'
+      MYSQL_DATABASE: '${DB_DATABASE}'
+      MYSQL_USER: '${DB_USERNAME}'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping"]
