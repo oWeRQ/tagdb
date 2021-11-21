@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Field;
+use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -16,10 +17,10 @@ class EntitiesExport implements FromQuery, WithHeadings, WithMapping
     protected $columns;
     protected $headings;
 
-    public function __construct($query, $columns)
+    public function __construct(Builder $query, array $columns)
     {
         $this->query = $query;
-        $this->columns = explode(',', $columns);
+        $this->columns = $columns;
         $this->headings = [];
 
         foreach ($this->columns as $column) {

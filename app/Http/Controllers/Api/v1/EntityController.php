@@ -25,7 +25,8 @@ class EntityController extends Controller
         }
 
         if ($export = $request->get('export')) {
-            return (new EntitiesExport($query, $request->get('columns')))->download($export);
+            $columns = explode(',', $request->get('columns'));
+            return (new EntitiesExport($query, $columns))->download($export);
         }
 
         $perPage = $request->get('per_page', 100);
