@@ -1,6 +1,7 @@
 version: '3'
 
 volumes:
+  storage:
   db:
 
 networks:
@@ -15,6 +16,8 @@ services:
     networks:
       - db
       - proxy
+    volumes:
+      - storage:/var/www/html/storage
     depends_on:
       - db
   db:
