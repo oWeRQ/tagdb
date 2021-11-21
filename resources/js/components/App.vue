@@ -201,6 +201,10 @@
         overflow-y: auto;
     }
 
+    .v-application--wrap {
+        min-height: -webkit-fill-available;
+    }
+
     .v-data-table__wrapper {
         flex: 1 1 0;
     }
