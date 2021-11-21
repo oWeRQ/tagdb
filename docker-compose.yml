@@ -18,6 +18,8 @@ services:
       - proxy
     volumes:
       - storage:/var/www/html/storage
+    environment:
+      APP_URL: '${APP_URL}'
     depends_on:
       - db
   db:
