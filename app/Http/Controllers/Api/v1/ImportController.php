@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Entity;
+use App\Tag;
 use App\Preset;
 use App\Imports\EntityImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -13,12 +13,14 @@ class ImportController extends Controller
 {
     public function store(Request $request)
     {
-        if (!$request->has('preset')) {
-            return 400;
+        if ($request->has('preset')) {
+            $tags = Preset::firstWhere('name', $request->get('preset'))->tags;
+        } elseif ($request->has('tags')) {
+            $tags = Tag::whereIn('name', preg_split('/\s*,\s*/', $request->get('tags')))->get();
+        } else {
+            abort(400);
         }
 
-        $preset = Preset::firstWhere('name', $request->get('preset'));
-
-        Excel::import(new EntityImport($preset->tags), $request->file('importFile'));
+        Excel::import(new EntityImport($tags), $request->file('importFile'));
     }
 }

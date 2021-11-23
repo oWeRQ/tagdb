@@ -73,6 +73,14 @@
                 <v-icon left>mdi-plus</v-icon>
                 Add Entity
             </v-btn>
+            <v-btn text large color="blue darken-3" @click="$refs.exportDialog.show()">
+                <v-icon left>mdi-export</v-icon>
+                Export
+            </v-btn>
+            <v-btn text large color="blue darken-3" @click="$refs.importDialog.show()">
+                <v-icon left>mdi-import</v-icon>
+                Import
+            </v-btn>
 
             <CrudDialog
                 ref="entityDialog"
@@ -84,6 +92,20 @@
                 @input="saveItem"
                 @delete="deleteItem"
             ></CrudDialog>
+
+            <ExportDialog
+                ref="exportDialog"
+                :resource="resource"
+                :filename="exportFilename"
+                :headers="exportHeaders"
+                :params="exportParams"
+            ></ExportDialog>
+
+            <ImportDialog
+                ref="importDialog"
+                :params="importParams"
+                @done="getItems"
+            ></ImportDialog>
         </template>
     </v-data-table>
 </template>
@@ -94,6 +116,8 @@
     import stringifySort from '../functions/stringifySort';
     import ucwords from '../functions/ucwords';
     import CrudDialog from './CrudDialog';
+    import ExportDialog from './ExportDialog';
+    import ImportDialog from './ImportDialog';
     import TagsField from './TagsField';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
@@ -103,6 +127,8 @@
     export default {
         components: {
             CrudDialog,
+            ExportDialog,
+            ImportDialog,
             TagsField,
             EntitySelectionToolbar,
             EntityRow,
@@ -194,6 +220,23 @@
             },
             sort() {
                 return stringifySort(this.options.sortBy, this.options.sortDesc);
+            },
+            exportHeaders() {
+                return this.headers.slice(0, -1);
+            },
+            exportFilename() {
+                return (this.query.tags.join('_') || 'export') + '.csv';
+            },
+            exportParams() {
+                return {
+                    query: this.query,
+                    sort: this.sort,
+                };
+            },
+            importParams() {
+                return {
+                    tags: this.query.tags,
+                };
             },
         },
         watch: {

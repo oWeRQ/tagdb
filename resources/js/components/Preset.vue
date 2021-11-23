@@ -39,51 +39,6 @@
                 @input="savePreset"
                 @delete="deleteItem"
             ></CrudDialog>
-
-            <v-dialog v-model="exportDialog" max-width="250px">
-                <v-form @submit.prevent="downloadExport">
-                    <v-card>
-                        <v-card-title>
-                            Export
-                        </v-card-title>
-                        <v-divider></v-divider>
-                        <v-card-text>
-                            <div>Columns</div>
-                            <v-checkbox
-                                v-for="header in exportHeaders"
-                                :key="header.value"
-                                v-model="exportColumns"
-                                :value="header.value"
-                                :label="header.text"
-                                hide-details
-                            ></v-checkbox>
-                        </v-card-text>
-                        <v-divider></v-divider>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="exportDialog = false">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text type="submit">Download</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-form>
-            </v-dialog>
-            <v-dialog v-model="importDialog" max-width="500px">
-                <v-form @submit.prevent="runImport">
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline">Import</span>
-                        </v-card-title>
-                        <v-card-text>
-                            <v-file-input v-model="importFile" label="Import File"></v-file-input>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text @click="importDialog = false">Cancel</v-btn>
-                            <v-btn color="blue darken-1" text type="submit">Run</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-form>
-            </v-dialog>
         </template>
         <template v-slot:item="{ item, headers, isSelected, select }">
             <EntityRow
@@ -100,11 +55,11 @@
                 <v-icon left>mdi-plus</v-icon>
                 Add Entity
             </v-btn>
-            <v-btn text large color="blue darken-3" @click="openExport">
+            <v-btn text large color="blue darken-3" @click="$refs.exportDialog.show()">
                 <v-icon left>mdi-export</v-icon>
                 Export
             </v-btn>
-            <v-btn text large color="blue darken-3" @click="openImport">
+            <v-btn text large color="blue darken-3" @click="$refs.importDialog.show()">
                 <v-icon left>mdi-import</v-icon>
                 Import
             </v-btn>
@@ -118,6 +73,20 @@
                 :value="editedItem"
                 @input="saveItem"
             ></CrudDialog>
+
+            <ExportDialog
+                ref="exportDialog"
+                :resource="resource"
+                :filename="exportFilename"
+                :headers="exportHeaders"
+                :params="exportParams"
+            ></ExportDialog>
+
+            <ImportDialog
+                ref="importDialog"
+                :params="importParams"
+                @done="getItems"
+            ></ImportDialog>
         </template>
     </v-data-table>
 </template>
@@ -127,6 +96,8 @@
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
     import CrudDialog from './CrudDialog';
+    import ExportDialog from './ExportDialog';
+    import ImportDialog from './ImportDialog';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
     import EntityForm from './EntityForm';
@@ -135,6 +106,8 @@
     export default {
         components: {
             CrudDialog,
+            ExportDialog,
+            ImportDialog,
             EntitySelectionToolbar,
             EntityRow,
         },
@@ -166,10 +139,6 @@
                 editedIndex: null,
                 editedItem: null,
                 editedPreset: null,
-                exportDialog: false,
-                exportColumns: [],
-                importDialog: false,
-                importFile: null,
             };
         },
         computed: {
@@ -226,11 +195,25 @@
 
                 return [...before, ...fields, ...after];
             },
+            sort() {
+                return stringifySort(this.options.sortBy, this.options.sortDesc);
+            },
             exportHeaders() {
                 return this.headers.slice(0, -1);
             },
-            sort() {
-                return stringifySort(this.options.sortBy, this.options.sortDesc);
+            exportFilename() {
+                return this.preset?.name + '.csv';
+            },
+            exportParams() {
+                return {
+                    preset: this.preset?.name,
+                    sort: this.sort,
+                };
+            },
+            importParams() {
+                return {
+                    preset: this.preset?.name,
+                };
             },
         },
         watch: {
@@ -298,38 +281,6 @@
                 }
 
                 this.$root.getPresets();
-            },
-            openExport() {
-                this.exportColumns = this.exportHeaders.map(header => header.value);
-                this.exportDialog = true;
-            },
-            downloadExport() {
-                const params = {
-                    preset: this.preset.name,
-                    sort: this.sort,
-                    export: this.preset.name + '.csv',
-                    columns: this.exportColumns,
-                };
-                window.open(this.resource + '?' + new URLSearchParams(params));
-                this.exportDialog = false;
-            },
-            openImport() {
-                this.importDialog = true;
-            },
-            runImport() {
-                const formData = new FormData;
-                formData.append('importFile', this.importFile);
-                formData.append('preset', this.preset.name);
-
-                const headers = {
-                    'Content-Type': 'multipart/form-data',
-                };
-
-                axios.post('/api/v1/import', formData, { headers }).then(response => {
-                    console.log('import response', response);
-                    this.getItems();
-                    this.importDialog = false;
-                });
             },
         },
     }
