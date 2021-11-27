@@ -9,28 +9,30 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class EntityImport implements ToCollection, WithHeadingRow
 {
+    /** @var Collection */
     protected $tags;
 
-    public function __construct($tags)
+    /** @var Collection */
+    protected $fields;
+
+    public function __construct(Collection $tags, Collection $fields)
     {
         $this->tags = $tags;
+        $this->fields = $fields;
     }
 
     public function collection(Collection $rows)
     {
-        /** @var Collection */
-        $fields = $this->tags->pluck('fields')->flatten()->keyBy('name');
-
         foreach ($rows as $row) {
             $entity = Entity::create([
-                'name' => $row['name'],
+                'name' => $row['Name'],
             ]);
 
             $entity->updateTags($this->tags->all());
 
             $contents = [];
             foreach ($row as $key => $content) {
-                if ($field = $fields->get($key)) {
+                if ($field = $this->fields->get($key)) {
                     $contents[$field->id] = $content;
                 }
             }

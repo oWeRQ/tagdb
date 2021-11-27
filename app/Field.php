@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\TagScope;
 
 class Field extends Model
 {
@@ -12,6 +13,12 @@ class Field extends Model
         'name',
         'code',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new TagScope);
+    }
 
     public function tag()
     {
