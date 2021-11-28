@@ -3791,7 +3791,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       previewData: null,
       previewTags: [],
       fieldsMap: {},
-      fields: []
+      fields: [],
+      tags: []
     };
   },
   computed: {
@@ -3818,14 +3819,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         });
       })));
     },
-    tags: function tags() {
-      return this.$root.tags;
-    },
     submitText: function submitText() {
       if (!this.previewData) return 'Preview';else return 'Import';
     }
   },
   mounted: function mounted() {
+    this.fetchTags();
     this.fetchFields();
   },
   methods: {
@@ -3850,12 +3849,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     saveTag: function saveTag(tag) {
       Object.assign(this.originalTag, tag);
+      this.fetchTags();
       this.fetchFields();
     },
     deleteTag: function deleteTag() {
       delete this.originalTag.id;
       delete this.originalTag.color;
       this.originalTag.fields = [];
+      this.fetchTags();
       this.fetchFields();
     },
     fieldChange: function fieldChange(header) {
@@ -3891,20 +3892,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     },
     fetchTags: function fetchTags() {
-      this.$root.getTags();
-    },
-    fetchFields: function fetchFields() {
       var _this4 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/v1/fields').then(function (response) {
-        _this4.fields = response.data.data;
+      return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/v1/tags').then(function (response) {
+        _this4.tags = response.data.data;
+      });
+    },
+    fetchFields: function fetchFields() {
+      var _this5 = this;
+
+      return axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/v1/fields').then(function (response) {
+        _this5.fields = response.data.data;
       });
     },
     submit: function submit() {
       if (!this.previewData) this.preview();else this["import"]();
     },
     preview: function preview() {
-      var _this5 = this;
+      var _this6 = this;
 
       var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_2__["default"])({
         importFile: this.importFile,
@@ -3912,36 +3917,34 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         preview: 0
       });
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/v1/import', data).then(function (response) {
-        _this5.previewData = response.data;
+        _this6.previewData = response.data;
 
-        _this5.autoFieldsMap();
+        _this6.autoFieldsMap();
 
-        _this5.updatePreviewTags();
+        _this6.updatePreviewTags();
       });
     },
     "import": function _import() {
-      var _this6 = this;
+      var _this7 = this;
 
       var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_2__["default"])(_objectSpread({
         importFile: this.importFile,
         fields: this.fieldsMap
       }, this.params));
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/v1/import', data).then(function (response) {
-        _this6.$emit('done');
+        _this7.$emit('done');
 
-        _this6.close();
+        _this7.close();
       });
     },
     show: function show() {
-      var _this7 = this;
+      var _this8 = this;
 
       this.visible = true;
       this.previewData = null;
       this.fieldsMap = {};
       this.$nextTick(function () {
-        console.log('importFile', _this7.$refs.importFile);
-
-        _this7.$refs.importFile.$refs.input.click();
+        _this8.$refs.importFile.$refs.input.click();
       });
     },
     close: function close() {
@@ -5088,7 +5091,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    tag: Object
+    tag: Object,
+    small: {
+      type: Boolean,
+      "default": false
+    }
   }
 });
 
@@ -28202,7 +28209,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { "max-width": "600px", scrollable: "" },
+      attrs: { "max-width": "720px", scrollable: "" },
       model: {
         value: _vm.visible,
         callback: function($$v) {
@@ -28300,7 +28307,10 @@ var render = function() {
                                                   item.tag
                                                     ? _c("TagChip", {
                                                         staticClass: "mr-2",
-                                                        attrs: { tag: item.tag }
+                                                        attrs: {
+                                                          tag: item.tag,
+                                                          small: ""
+                                                        }
                                                       })
                                                     : _vm._e(),
                                                   _vm._v(
@@ -28319,7 +28329,10 @@ var render = function() {
                                                   item.tag
                                                     ? _c("TagChip", {
                                                         staticClass: "mr-2",
-                                                        attrs: { tag: item.tag }
+                                                        attrs: {
+                                                          tag: item.tag,
+                                                          small: ""
+                                                        }
                                                       })
                                                     : _vm._e(),
                                                   _vm._v(
@@ -28362,7 +28375,7 @@ var render = function() {
                                 _vm._l(_vm.previewTags, function(tag) {
                                   return _c("TagChip", {
                                     key: tag.name,
-                                    staticClass: "mr-1 mb-1",
+                                    staticClass: "mr-2 mb-2",
                                     attrs: { tag: tag },
                                     on: {
                                       click: function($event) {
@@ -28466,7 +28479,7 @@ var render = function() {
       "multi-sort": _vm.multiSort,
       "items-per-page": 100,
       "footer-props": {
-        itemsPerPageOptions: [10, 20, 50, 100]
+        itemsPerPageOptions: [10, 20, 50, 100, 500]
       },
       "fixed-header": true
     },
@@ -29138,7 +29151,7 @@ var render = function() {
     "v-chip",
     {
       staticClass: "lighten-2",
-      attrs: { color: _vm.tag.color, dark: !!_vm.tag.color, small: "" },
+      attrs: { color: _vm.tag.color, dark: !!_vm.tag.color, small: _vm.small },
       on: {
         click: function($event) {
           return _vm.$emit("click")

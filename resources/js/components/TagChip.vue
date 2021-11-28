@@ -1,5 +1,5 @@
 <template>
-    <v-chip @click="$emit('click')" :color="tag.color" :dark="!!tag.color" small class="lighten-2">
+    <v-chip @click="$emit('click')" :color="tag.color" :dark="!!tag.color" :small="small" class="lighten-2">
         <v-icon left v-if="!tag.id">
             mdi-plus
         </v-icon>
@@ -12,6 +12,10 @@
 export default {
     props: {
         tag: Object,
+        small: {
+            type: Boolean,
+            default: false,
+        },
     },
 };
 </script>

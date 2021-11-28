@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="600px" scrollable>
+    <v-dialog v-model="visible" max-width="720px" scrollable>
         <v-form @submit.prevent="submit">
             <v-card>
                 <v-card-title>
@@ -26,11 +26,11 @@
                                         dense
                                     >
                                         <template v-slot:selection="{ item }">
-                                            <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
+                                            <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2"></TagChip>
                                             {{ item.name }}
                                         </template>
                                         <template v-slot:item="{ item }">
-                                            <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
+                                            <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2"></TagChip>
                                             {{ item.name }}
                                         </template>
                                     </v-autocomplete>
@@ -42,7 +42,7 @@
                                     v-for="tag in previewTags"
                                     :key="tag.name"
                                     :tag="tag"
-                                    class="mr-1 mb-1"
+                                    class="mr-2 mb-2"
                                     @click="showTag(tag)"
                                 ></TagChip>
                             </v-col>
@@ -95,6 +95,7 @@ export default {
             previewTags: [],
             fieldsMap: {},
             fields: [],
+            tags: [],
         };
     },
     computed: {
@@ -110,9 +111,6 @@ export default {
                 })),
             ];
         },
-        tags() {
-            return this.$root.tags;
-        },
         submitText() {
             if (!this.previewData)
                 return 'Preview';
@@ -121,6 +119,7 @@ export default {
         },
     },
     mounted() {
+        this.fetchTags();
         this.fetchFields();
     },
     methods: {
@@ -134,12 +133,14 @@ export default {
         },
         saveTag(tag) {
             Object.assign(this.originalTag, tag);
+            this.fetchTags();
             this.fetchFields();
         },
         deleteTag() {
             delete this.originalTag.id;
             delete this.originalTag.color;
             this.originalTag.fields = [];
+            this.fetchTags();
             this.fetchFields();
         },
         fieldChange(header) {
@@ -154,10 +155,12 @@ export default {
             }
         },
         fetchTags() {
-            this.$root.getTags();
+            return axios.get('/api/v1/tags').then(response => {
+                this.tags = response.data.data;
+            });
         },
         fetchFields() {
-            axios.get('/api/v1/fields').then(response => {
+            return axios.get('/api/v1/fields').then(response => {
                 this.fields = response.data.data;
             });
         },
@@ -197,7 +200,6 @@ export default {
             this.previewData = null;
             this.fieldsMap = {};
             this.$nextTick(() => {
-                console.log('importFile', this.$refs.importFile);
                 this.$refs.importFile.$refs.input.click();
             });
         },
