@@ -12,8 +12,9 @@
                     <div v-if="previewData">
                         <div v-for="(header, i) in previewData.headers" :key="i">
                             <v-autocomplete
-                                :label="header"
+                                :label='"Import \"" + header + "\" as"'
                                 v-model="fieldsMap[header]"
+                                @change="fieldChange(header)"
                                 :items="fieldItems"
                                 item-text="name"
                                 item-value="id"
@@ -29,6 +30,9 @@
                                     {{ item.name }}
                                 </template>
                             </v-autocomplete>
+                        </div>
+                        <div class="mt-4">
+                            <TagChip v-for="tag in previewTags" :key="tag.name" :tag="tag" class="mr-2"></TagChip>
                         </div>
                     </div>
                 </v-card-text>
@@ -76,6 +80,9 @@ export default {
         tags() {
             return this.$root.tags;
         },
+        previewTags() {
+            return this.previewData.tags.map(name => (this.tags.find(tag => tag.name === name) || { name, fields: [] }));
+        },
         submitText() {
             if (!this.previewData)
                 return 'Preview';
@@ -87,6 +94,12 @@ export default {
         this.fetchFields();
     },
     methods: {
+        fieldChange(header) {
+            const field = this.fieldsMap[header];
+            if (field === 'tags') {
+                this.preview();
+            }
+        },
         autoFieldsMap() {
             for (const header of this.previewData.headers) {
                 this.fieldsMap[header] = this.fieldItems.find(field => field.name === header)?.id;
@@ -107,9 +120,9 @@ export default {
                 this.import();
         },
         preview() {
-            console.log('this.params', this.params);
             const data = toFormData({
                 importFile: this.importFile,
+                fields: this.fieldsMap,
                 preview: 0,
             });
 

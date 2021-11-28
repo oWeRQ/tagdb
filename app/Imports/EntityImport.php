@@ -24,7 +24,7 @@ class EntityImport implements ToCollection, WithHeadingRow
 
     protected function getTags($tagsString)
     {
-        $tagNames = preg_split('/\s*,\s*/', $tagsString, -1, PREG_SPLIT_NO_EMPTY);
+        $tagNames = preg_split('/\s*,\s*/', trim($tagsString), -1, PREG_SPLIT_NO_EMPTY);
         return array_map(function($name) {
             return [
                 'name' => $name,

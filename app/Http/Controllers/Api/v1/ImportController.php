@@ -20,14 +20,19 @@ class ImportController extends Controller
         $fields = collect($request->get('fields'))->map(function($field_id) {
             return is_numeric($field_id) ? Field::find($field_id) : $field_id;
         });
+        $tagsField = $fields->filter(fn($field) => is_string($field))->flip()->get('tags', 'Tags');
 
         if ($request->has('preview')) {
             $preview = $request->get('preview');
             $headings = (new HeadingRowImport)->toArray($importFile);
             $rows = Excel::toCollection(new EntityImport($tags, $fields), $importFile);
+            $tags = $rows->first()->flatMap(function($row) use($tagsField) {
+                return preg_split('/\s*,\s*/', trim($row->get($tagsField)), -1, PREG_SPLIT_NO_EMPTY);
+            })->unique()->sort()->values();
             return response([
                 'headers' => $headings[0][0],
-                'rows' => ($preview ? $rows->take($preview)->all() : []),
+                'rows' => ($preview ? $rows->first()->take($preview)->all() : []),
+                'tags' => $tags->all(),
             ]);
         }
 
