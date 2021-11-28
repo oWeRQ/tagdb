@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import toQueryString from '../functions/toQueryString';
+
 export default {
     props: {
         resource: String,
@@ -50,7 +52,7 @@ export default {
                 columns: this.columns,
                 ...this.params,
             };
-            window.open(this.resource + '?' + new URLSearchParams(params));
+            window.open(this.resource + '?' + toQueryString(params));
             this.close();
         },
         show() {

@@ -229,7 +229,7 @@
             },
             exportParams() {
                 return {
-                    query: this.query,
+                    query: JSON.stringify(this.query),
                     sort: this.sort,
                 };
             },
