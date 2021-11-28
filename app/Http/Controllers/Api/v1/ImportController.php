@@ -18,7 +18,7 @@ class ImportController extends Controller
         $importFile = $request->file('importFile');
         $tags = collect();
         $fields = collect($request->get('fields'))->map(function($field_id) {
-            return Field::find($field_id);
+            return is_numeric($field_id) ? Field::find($field_id) : $field_id;
         });
 
         if ($request->has('preview')) {
@@ -32,11 +32,11 @@ class ImportController extends Controller
         }
 
         if ($request->has('preset')) {
-            $tags = Preset::firstWhere('name', $request->get('preset'))->tags;
-        } elseif ($request->has('tags')) {
-            $tags = Tag::whereIn('name', preg_split('/\s*,\s*/', $request->get('tags')))->get();
-        } else {
-            abort(400);
+            $tags = $tags->concat(Preset::firstWhere('name', $request->get('preset'))->tags);
+        }
+
+        if ($request->has('tags')) {
+            $tags = $tags->concat(Tag::whereIn('name', $request->get('tags'))->get());
         }
 
         Excel::import(new EntityImport($tags, $fields), $importFile);

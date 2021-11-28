@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Entity;
+use App\Field;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -21,22 +22,42 @@ class EntityImport implements ToCollection, WithHeadingRow
         $this->fields = $fields;
     }
 
+    protected function getTags($tagsString)
+    {
+        $tagNames = preg_split('/\s*,\s*/', $tagsString, -1, PREG_SPLIT_NO_EMPTY);
+        return array_map(function($name) {
+            return [
+                'name' => $name,
+            ];
+        }, $tagNames);
+    }
+
     public function collection(Collection $rows)
     {
         foreach ($rows as $row) {
-            $entity = Entity::create([
-                'name' => $row['Name'],
-            ]);
-
-            $entity->updateTags($this->tags->all());
+            $entity = new Entity;
 
             $contents = [];
+            $fieldsTags = collect();
+            $columnTags = collect();
+
             foreach ($row as $key => $content) {
                 if ($field = $this->fields->get($key)) {
-                    $contents[$field->id] = $content;
+                    if (in_array($field, ['name', 'created_at', 'updated_at'])) {
+                        $entity->{$field} = $content;
+                    } elseif ($field === 'tags') {
+                        $columnTags = $this->getTags($content);
+                    } elseif ($content && $field instanceof Field) {
+                        $fieldsTags->push($field->tag);
+                        $contents[$field->id] = $content;
+                    }
                 }
             }
 
+            $mergedTags = $this->tags->concat($fieldsTags)->concat($columnTags)->unique('name')->all();
+
+            $entity->save();
+            $entity->updateTags($mergedTags);
             $entity->updateContents($contents);
         }
     }

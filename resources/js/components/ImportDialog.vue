@@ -14,18 +14,18 @@
                             <v-autocomplete
                                 :label="header"
                                 v-model="fieldsMap[header]"
-                                :items="fields"
+                                :items="fieldItems"
                                 item-text="name"
                                 item-value="id"
                                 clearable
                                 hide-details
                             >
                                 <template v-slot:selection="{ item }">
-                                    <TagChip :tag="item.tag" class="mr-2"></TagChip>
+                                    <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
                                     {{ item.name }}
                                 </template>
                                 <template v-slot:item="{ item }">
-                                    <TagChip :tag="item.tag" class="mr-2"></TagChip>
+                                    <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
                                     {{ item.name }}
                                 </template>
                             </v-autocomplete>
@@ -64,6 +64,15 @@ export default {
         };
     },
     computed: {
+        fieldItems() {
+            return [
+                { id: 'tags', name: 'Tags' },
+                { id: 'name', name: 'Name' },
+                { id: 'created_at', name: 'Created At' },
+                { id: 'updated_at', name: 'Updated At' },
+                ...this.fields,
+            ];
+        },
         tags() {
             return this.$root.tags;
         },
@@ -78,6 +87,11 @@ export default {
         this.fetchFields();
     },
     methods: {
+        autoFieldsMap() {
+            for (const header of this.previewData.headers) {
+                this.fieldsMap[header] = this.fieldItems.find(field => field.name === header)?.id;
+            }
+        },
         fetchFields() {
             axios.get('/api/v1/fields').then(response => {
                 this.fields = response.data.data.map(field => ({
@@ -93,14 +107,15 @@ export default {
                 this.import();
         },
         preview() {
+            console.log('this.params', this.params);
             const data = toFormData({
                 importFile: this.importFile,
                 preview: 0,
             });
 
             axios.post('/api/v1/import', data).then(response => {
-                console.log('preview response', response);
                 this.previewData = response.data;
+                this.autoFieldsMap();
             });
         },
         import() {
@@ -111,7 +126,6 @@ export default {
             });
 
             axios.post('/api/v1/import', data).then(response => {
-                console.log('import response', response);
                 this.$emit('done');
                 this.close();
             });

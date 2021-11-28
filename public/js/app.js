@@ -2365,6 +2365,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3655,6 +3671,20 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -3719,6 +3749,21 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     };
   },
   computed: {
+    fieldItems: function fieldItems() {
+      return [{
+        id: 'tags',
+        name: 'Tags'
+      }, {
+        id: 'name',
+        name: 'Name'
+      }, {
+        id: 'created_at',
+        name: 'Created At'
+      }, {
+        id: 'updated_at',
+        name: 'Updated At'
+      }].concat(_toConsumableArray(this.fields));
+    },
     tags: function tags() {
       return this.$root.tags;
     },
@@ -3730,13 +3775,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.fetchFields();
   },
   methods: {
-    fetchFields: function fetchFields() {
+    autoFieldsMap: function autoFieldsMap() {
       var _this = this;
 
+      var _iterator = _createForOfIteratorHelper(this.previewData.headers),
+          _step;
+
+      try {
+        var _loop = function _loop() {
+          var _this$fieldItems$find;
+
+          var header = _step.value;
+          _this.fieldsMap[header] = (_this$fieldItems$find = _this.fieldItems.find(function (field) {
+            return field.name === header;
+          })) === null || _this$fieldItems$find === void 0 ? void 0 : _this$fieldItems$find.id;
+        };
+
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          _loop();
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+    },
+    fetchFields: function fetchFields() {
+      var _this2 = this;
+
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/fields').then(function (response) {
-        _this.fields = response.data.data.map(function (field) {
+        _this2.fields = response.data.data.map(function (field) {
           return _objectSpread(_objectSpread({}, field), {}, {
-            tag: _this.tags.find(function (tag) {
+            tag: _this2.tags.find(function (tag) {
               return tag.id == field.tag_id;
             })
           });
@@ -3747,30 +3817,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (!this.previewData) this.preview();else this["import"]();
     },
     preview: function preview() {
-      var _this2 = this;
+      var _this3 = this;
 
+      console.log('this.params', this.params);
       var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_1__["default"])({
         importFile: this.importFile,
         preview: 0
       });
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/import', data).then(function (response) {
-        console.log('preview response', response);
-        _this2.previewData = response.data;
+        _this3.previewData = response.data;
+
+        _this3.autoFieldsMap();
       });
     },
     "import": function _import() {
-      var _this3 = this;
+      var _this4 = this;
 
       var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_1__["default"])(_objectSpread({
         importFile: this.importFile,
         fields: this.fieldsMap
       }, this.params));
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/import', data).then(function (response) {
-        console.log('import response', response);
+        _this4.$emit('done');
 
-        _this3.$emit('done');
-
-        _this3.close();
+        _this4.close();
       });
     },
     show: function show() {
@@ -26106,6 +26176,44 @@ var render = function() {
                           )
                         ],
                         1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { attrs: { link: "", to: "/tags" } },
+                        [
+                          _c(
+                            "v-list-item-action",
+                            [_c("v-icon", [_vm._v("mdi-tag")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [_c("v-list-item-title", [_vm._v("Tags")])],
+                            1
+                          )
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "v-list-item",
+                        { attrs: { link: "", to: "/fields" } },
+                        [
+                          _c(
+                            "v-list-item-action",
+                            [_c("v-icon", [_vm._v("mdi-pencil-box-multiple")])],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item-content",
+                            [_c("v-list-item-title", [_vm._v("Fields")])],
+                            1
+                          )
+                        ],
+                        1
                       )
                     ],
                     1
@@ -28039,7 +28147,7 @@ var render = function() {
                             _c("v-autocomplete", {
                               attrs: {
                                 label: header,
-                                items: _vm.fields,
+                                items: _vm.fieldItems,
                                 "item-text": "name",
                                 "item-value": "id",
                                 clearable: "",
@@ -28052,10 +28160,12 @@ var render = function() {
                                     fn: function(ref) {
                                       var item = ref.item
                                       return [
-                                        _c("TagChip", {
-                                          staticClass: "mr-2",
-                                          attrs: { tag: item.tag }
-                                        }),
+                                        item.tag
+                                          ? _c("TagChip", {
+                                              staticClass: "mr-2",
+                                              attrs: { tag: item.tag }
+                                            })
+                                          : _vm._e(),
                                         _vm._v(
                                           "\n                                " +
                                             _vm._s(item.name) +
@@ -28069,10 +28179,12 @@ var render = function() {
                                     fn: function(ref) {
                                       var item = ref.item
                                       return [
-                                        _c("TagChip", {
-                                          staticClass: "mr-2",
-                                          attrs: { tag: item.tag }
-                                        }),
+                                        item.tag
+                                          ? _c("TagChip", {
+                                              staticClass: "mr-2",
+                                              attrs: { tag: item.tag }
+                                            })
+                                          : _vm._e(),
                                         _vm._v(
                                           "\n                                " +
                                             _vm._s(item.name) +
