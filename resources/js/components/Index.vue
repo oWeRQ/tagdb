@@ -222,7 +222,7 @@
                 return stringifySort(this.options.sortBy, this.options.sortDesc);
             },
             exportHeaders() {
-                return this.headers.slice(0, -1);
+                return this.headers.slice(0, -2);
             },
             exportFilename() {
                 return (this.query.tags.join('_') || 'export') + '.csv';

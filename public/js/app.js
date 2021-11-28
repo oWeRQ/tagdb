@@ -3533,13 +3533,27 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _functions_toQueryString__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../functions/toQueryString */ "./resources/js/functions/toQueryString.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _functions_toQueryString__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions/toQueryString */ "./resources/js/functions/toQueryString.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -3570,6 +3584,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3581,10 +3596,54 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   data: function data() {
     return {
       visible: false,
-      columns: []
+      columns: [],
+      fields: []
     };
   },
+  computed: {
+    presets: function presets() {
+      return this.$root.presets;
+    },
+    queryTags: function queryTags() {
+      var _this = this;
+
+      var queryJson = this.params.preset ? this.presets.find(function (preset) {
+        return preset.name === _this.params.preset;
+      }).query : this.params.query;
+      return queryJson ? JSON.parse(queryJson).tags : [];
+    },
+    headersExtended: function headersExtended() {
+      return [].concat(_toConsumableArray(this.headers), _toConsumableArray(this.fields.map(function (field) {
+        return {
+          text: field.name,
+          value: 'contents.' + field.id
+        };
+      })), [{
+        text: 'Created At',
+        value: 'created_at'
+      }, {
+        text: 'Updated At',
+        value: 'updated_at'
+      }]);
+    }
+  },
   methods: {
+    fetchFields: function fetchFields() {
+      var _this2 = this;
+
+      var params = {
+        with_tags: this.queryTags
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags', {
+        params: params
+      }).then(function (response) {
+        _this2.fields = response.data.data.filter(function (tag) {
+          return tag.entities_count;
+        }).flatMap(function (tag) {
+          return tag.fields;
+        });
+      });
+    },
     submit: function submit() {
       var params = _objectSpread({
         sort: this.sort,
@@ -3592,13 +3651,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         columns: this.columns
       }, this.params);
 
-      window.open(this.resource + '?' + Object(_functions_toQueryString__WEBPACK_IMPORTED_MODULE_0__["default"])(params));
+      window.open(this.resource + '?' + Object(_functions_toQueryString__WEBPACK_IMPORTED_MODULE_1__["default"])(params));
       this.close();
     },
     show: function show() {
       this.columns = this.headers.map(function (header) {
         return header.value;
       });
+      this.fetchFields();
       this.visible = true;
     },
     close: function close() {
@@ -4306,7 +4366,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.options.sortBy, this.options.sortDesc);
     },
     exportHeaders: function exportHeaders() {
-      return this.headers.slice(0, -1);
+      return this.headers.slice(0, -2);
     },
     exportFilename: function exportFilename() {
       return (this.query.tags.join('_') || 'export') + '.csv';
@@ -4737,7 +4797,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       return Object(_functions_stringifySort__WEBPACK_IMPORTED_MODULE_2__["default"])(this.options.sortBy, this.options.sortDesc);
     },
     exportHeaders: function exportHeaders() {
-      return this.headers.slice(0, -1);
+      return this.headers.slice(0, -2);
     },
     exportFilename: function exportFilename() {
       var _this$preset;
@@ -28058,7 +28118,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { "max-width": "250px" },
+      attrs: { "max-width": "320px", scrollable: "" },
       model: {
         value: _vm.visible,
         callback: function($$v) {
@@ -28093,7 +28153,7 @@ var render = function() {
                 [
                   _c("div", [_vm._v("Columns")]),
                   _vm._v(" "),
-                  _vm._l(_vm.headers, function(header) {
+                  _vm._l(_vm.headersExtended, function(header) {
                     return _c("v-checkbox", {
                       key: header.value,
                       attrs: {

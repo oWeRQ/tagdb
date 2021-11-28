@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="250px">
+    <v-dialog v-model="visible" max-width="320px" scrollable>
         <v-form @submit.prevent="submit">
             <v-card>
                 <v-card-title>
@@ -9,7 +9,7 @@
                 <v-card-text>
                     <div>Columns</div>
                     <v-checkbox
-                        v-for="header in headers"
+                        v-for="header in headersExtended"
                         :key="header.value"
                         v-model="columns"
                         :value="header.value"
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import toQueryString from '../functions/toQueryString';
 
 export default {
@@ -42,9 +43,41 @@ export default {
         return {
             visible: false,
             columns: [],
+            fields: [],
         };
     },
+    computed: {
+        presets() {
+            return this.$root.presets;
+        },
+        queryTags() {
+            const queryJson = (
+                this.params.preset
+                ? this.presets.find(preset => preset.name === this.params.preset).query
+                : this.params.query
+            );
+
+            return (queryJson ? JSON.parse(queryJson).tags : []);
+        },
+        headersExtended() {
+            return [
+                ...this.headers,
+                ...this.fields.map(field => ({ text: field.name, value: 'contents.' + field.id })),
+                { text: 'Created At', value: 'created_at' },
+                { text: 'Updated At', value: 'updated_at' },
+            ];
+        },
+    },
     methods: {
+        fetchFields() {
+            const params = {
+                with_tags: this.queryTags,
+            };
+
+            axios.get('/api/v1/tags', { params }).then(response => {
+                this.fields = response.data.data.filter(tag => tag.entities_count).flatMap(tag => tag.fields);
+            });
+        },
         submit() {
             const params = {
                 sort: this.sort,
@@ -57,6 +90,7 @@ export default {
         },
         show() {
             this.columns = this.headers.map(header => header.value);
+            this.fetchFields();
             this.visible = true;
         },
         close() {

@@ -35,6 +35,8 @@ class EntitiesExport implements FromQuery, WithHeadings, WithMapping
                 $this->headings[] = 'Name';
             } elseif ($column === 'created_at') {
                 $this->headings[] = 'Created At';
+            } elseif ($column === 'updated_at') {
+                $this->headings[] = 'Updated At';
             } else {
                 $this->headings[] = $column;
             }
