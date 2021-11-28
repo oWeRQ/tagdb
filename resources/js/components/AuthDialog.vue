@@ -24,6 +24,12 @@
                                 required
                                 :error-messages="loginErrors.password"
                             ></v-text-field>
+                            <v-checkbox
+                                v-model="remember"
+                                name="remember"
+                                label="Remember"
+                                hide-details
+                            ></v-checkbox>
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
@@ -89,6 +95,7 @@
                 email: null,
                 password: null,
                 password_confirmation: null,
+                remember: null,
                 loginErrors: {},
                 registerErrors: {},
             };
@@ -98,6 +105,7 @@
                 axios.post('/login', {
                     email: this.email,
                     password: this.password,
+                    remember: this.remember,
                 }, {
                     headers: {'Accept': 'application/json'},
                 }).then(() => {

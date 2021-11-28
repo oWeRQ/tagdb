@@ -2541,6 +2541,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2553,6 +2559,7 @@ __webpack_require__.r(__webpack_exports__);
       email: null,
       password: null,
       password_confirmation: null,
+      remember: null,
       loginErrors: {},
       registerErrors: {}
     };
@@ -2563,7 +2570,8 @@ __webpack_require__.r(__webpack_exports__);
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/login', {
         email: this.email,
-        password: this.password
+        password: this.password,
+        remember: this.remember
       }, {
         headers: {
           'Accept': 'application/json'
@@ -26696,6 +26704,21 @@ var render = function() {
                                 _vm.password = $$v
                               },
                               expression: "password"
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("v-checkbox", {
+                            attrs: {
+                              name: "remember",
+                              label: "Remember",
+                              "hide-details": ""
+                            },
+                            model: {
+                              value: _vm.remember,
+                              callback: function($$v) {
+                                _vm.remember = $$v
+                              },
+                              expression: "remember"
                             }
                           })
                         ],
