@@ -3677,13 +3677,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _CrudDialog_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CrudDialog.vue */ "./resources/js/components/CrudDialog.vue");
 /* harmony import */ var _TagForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TagForm */ "./resources/js/components/TagForm.vue");
 /* harmony import */ var _TagChip_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TagChip.vue */ "./resources/js/components/TagChip.vue");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -3796,6 +3796,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   computed: {
     fieldItems: function fieldItems() {
+      var _this = this;
+
       return [{
         id: 'tags',
         name: 'Tags'
@@ -3808,7 +3810,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }, {
         id: 'updated_at',
         name: 'Updated At'
-      }].concat(_toConsumableArray(this.fields));
+      }].concat(_toConsumableArray(this.fields.map(function (field) {
+        return _objectSpread(_objectSpread({}, field), {}, {
+          tag: _this.tags.find(function (tag) {
+            return tag.id == field.tag_id;
+          })
+        });
+      })));
     },
     tags: function tags() {
       return this.$root.tags;
@@ -3822,10 +3830,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: {
     updatePreviewTags: function updatePreviewTags() {
-      var _this = this;
+      var _this2 = this;
 
       this.previewTags = this.previewData.tags.map(function (name) {
-        return _this.tags.find(function (tag) {
+        return _this2.tags.find(function (tag) {
           return tag.name === name;
         }) || {
           name: name,
@@ -3858,19 +3866,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     },
     autoFieldsMap: function autoFieldsMap() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _iterator = _createForOfIteratorHelper(this.previewData.headers),
           _step;
 
       try {
         var _loop = function _loop() {
-          var _this2$fieldItems$fin;
+          var _this3$fieldItems$fin;
 
           var header = _step.value;
-          _this2.fieldsMap[header] = (_this2$fieldItems$fin = _this2.fieldItems.find(function (field) {
+          _this3.fieldsMap[header] = (_this3$fieldItems$fin = _this3.fieldItems.find(function (field) {
             return field.name === header;
-          })) === null || _this2$fieldItems$fin === void 0 ? void 0 : _this2$fieldItems$fin.id;
+          })) === null || _this3$fieldItems$fin === void 0 ? void 0 : _this3$fieldItems$fin.id;
         };
 
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -3886,23 +3894,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.$root.getTags();
     },
     fetchFields: function fetchFields() {
-      var _this3 = this;
+      var _this4 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/v1/fields').then(function (response) {
-        _this3.fields = response.data.data.map(function (field) {
-          return _objectSpread(_objectSpread({}, field), {}, {
-            tag: _this3.tags.find(function (tag) {
-              return tag.id == field.tag_id;
-            })
-          });
-        });
+        _this4.fields = response.data.data;
       });
     },
     submit: function submit() {
       if (!this.previewData) this.preview();else this["import"]();
     },
     preview: function preview() {
-      var _this4 = this;
+      var _this5 = this;
 
       var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_2__["default"])({
         importFile: this.importFile,
@@ -3910,36 +3912,36 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         preview: 0
       });
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/v1/import', data).then(function (response) {
-        _this4.previewData = response.data;
+        _this5.previewData = response.data;
 
-        _this4.autoFieldsMap();
+        _this5.autoFieldsMap();
 
-        _this4.updatePreviewTags();
+        _this5.updatePreviewTags();
       });
     },
     "import": function _import() {
-      var _this5 = this;
+      var _this6 = this;
 
       var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_2__["default"])(_objectSpread({
         importFile: this.importFile,
         fields: this.fieldsMap
       }, this.params));
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/v1/import', data).then(function (response) {
-        _this5.$emit('done');
+        _this6.$emit('done');
 
-        _this5.close();
+        _this6.close();
       });
     },
     show: function show() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.visible = true;
       this.previewData = null;
       this.fieldsMap = {};
       this.$nextTick(function () {
-        console.log('importFile', _this6.$refs.importFile);
+        console.log('importFile', _this7.$refs.importFile);
 
-        _this6.$refs.importFile.$refs.input.click();
+        _this7.$refs.importFile.$refs.input.click();
       });
     },
     close: function close() {

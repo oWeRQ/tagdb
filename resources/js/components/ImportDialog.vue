@@ -104,7 +104,10 @@ export default {
                 { id: 'name', name: 'Name' },
                 { id: 'created_at', name: 'Created At' },
                 { id: 'updated_at', name: 'Updated At' },
-                ...this.fields,
+                ...this.fields.map(field => ({
+                    ...field,
+                    tag: this.tags.find(tag => tag.id == field.tag_id),
+                })),
             ];
         },
         tags() {
@@ -155,10 +158,7 @@ export default {
         },
         fetchFields() {
             axios.get('/api/v1/fields').then(response => {
-                this.fields = response.data.data.map(field => ({
-                    ...field,
-                    tag: this.tags.find(tag => tag.id == field.tag_id),
-                }));
+                this.fields = response.data.data;
             });
         },
         submit() {
