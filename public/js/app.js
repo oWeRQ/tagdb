@@ -28114,7 +28114,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { "max-width": "500px" },
+      attrs: { "max-width": "500px", scrollable: "" },
       model: {
         value: _vm.visible,
         callback: function($$v) {
@@ -28248,7 +28248,7 @@ var render = function() {
                           _vm._l(_vm.previewTags, function(tag) {
                             return _c("TagChip", {
                               key: tag.name,
-                              staticClass: "mr-2",
+                              staticClass: "mr-1 mb-1",
                               attrs: { tag: tag }
                             })
                           }),

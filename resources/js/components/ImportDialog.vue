@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="500px">
+    <v-dialog v-model="visible" max-width="500px" scrollable>
         <v-form @submit.prevent="submit">
             <v-card>
                 <v-card-title>
@@ -32,7 +32,7 @@
                             </v-autocomplete>
                         </div>
                         <div class="mt-4">
-                            <TagChip v-for="tag in previewTags" :key="tag.name" :tag="tag" class="mr-2"></TagChip>
+                            <TagChip v-for="tag in previewTags" :key="tag.name" :tag="tag" class="mr-1 mb-1"></TagChip>
                         </div>
                     </div>
                 </v-card-text>
