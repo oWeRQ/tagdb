@@ -3669,10 +3669,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _functions_toFormData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions/toFormData */ "./resources/js/functions/toFormData.js");
-/* harmony import */ var _TagChip_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./TagChip.vue */ "./resources/js/components/TagChip.vue");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! clone-deep */ "./node_modules/clone-deep/index.js");
+/* harmony import */ var clone_deep__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(clone_deep__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _functions_toFormData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/toFormData */ "./resources/js/functions/toFormData.js");
+/* harmony import */ var _CrudDialog_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./CrudDialog.vue */ "./resources/js/components/CrudDialog.vue");
+/* harmony import */ var _TagForm__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TagForm */ "./resources/js/components/TagForm.vue");
+/* harmony import */ var _TagChip_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TagChip.vue */ "./resources/js/components/TagChip.vue");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -3741,21 +3745,51 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    TagChip: _TagChip_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+    CrudDialog: _CrudDialog_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    TagChip: _TagChip_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
   props: {
     params: Object
   },
   data: function data() {
     return {
+      TagForm: _TagForm__WEBPACK_IMPORTED_MODULE_4__["default"],
+      editedTag: null,
       visible: false,
       importFile: null,
       previewData: null,
+      previewTags: [],
       fieldsMap: {},
       fields: []
     };
@@ -3779,18 +3813,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     tags: function tags() {
       return this.$root.tags;
     },
-    previewTags: function previewTags() {
-      var _this = this;
-
-      return this.previewData.tags.map(function (name) {
-        return _this.tags.find(function (tag) {
-          return tag.name === name;
-        }) || {
-          name: name,
-          fields: []
-        };
-      });
-    },
     submitText: function submitText() {
       if (!this.previewData) return 'Preview';else return 'Import';
     }
@@ -3799,6 +3821,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     this.fetchFields();
   },
   methods: {
+    updatePreviewTags: function updatePreviewTags() {
+      var _this = this;
+
+      this.previewTags = this.previewData.tags.map(function (name) {
+        return _this.tags.find(function (tag) {
+          return tag.name === name;
+        }) || {
+          name: name,
+          id: null,
+          color: null,
+          fields: []
+        };
+      });
+    },
+    showTag: function showTag(tag) {
+      this.originalTag = tag;
+      this.editedTag = clone_deep__WEBPACK_IMPORTED_MODULE_0___default()(tag);
+      this.$refs.tagDialog.show();
+    },
+    saveTag: function saveTag(tag) {
+      Object.assign(this.originalTag, tag);
+      this.fetchFields();
+    },
+    deleteTag: function deleteTag() {
+      delete this.originalTag.id;
+      delete this.originalTag.color;
+      this.originalTag.fields = [];
+      this.fetchFields();
+    },
     fieldChange: function fieldChange(header) {
       var field = this.fieldsMap[header];
 
@@ -3831,10 +3882,13 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _iterator.f();
       }
     },
+    fetchTags: function fetchTags() {
+      this.$root.getTags();
+    },
     fetchFields: function fetchFields() {
       var _this3 = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/fields').then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/v1/fields').then(function (response) {
         _this3.fields = response.data.data.map(function (field) {
           return _objectSpread(_objectSpread({}, field), {}, {
             tag: _this3.tags.find(function (tag) {
@@ -3850,37 +3904,46 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     preview: function preview() {
       var _this4 = this;
 
-      var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_2__["default"])({
         importFile: this.importFile,
         fields: this.fieldsMap,
         preview: 0
       });
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/import', data).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/v1/import', data).then(function (response) {
         _this4.previewData = response.data;
 
         _this4.autoFieldsMap();
+
+        _this4.updatePreviewTags();
       });
     },
     "import": function _import() {
       var _this5 = this;
 
-      var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_1__["default"])(_objectSpread({
+      var data = Object(_functions_toFormData__WEBPACK_IMPORTED_MODULE_2__["default"])(_objectSpread({
         importFile: this.importFile,
         fields: this.fieldsMap
       }, this.params));
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/v1/import', data).then(function (response) {
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/v1/import', data).then(function (response) {
         _this5.$emit('done');
 
         _this5.close();
       });
     },
     show: function show() {
+      var _this6 = this;
+
       this.visible = true;
+      this.previewData = null;
+      this.fieldsMap = {};
+      this.$nextTick(function () {
+        console.log('importFile', _this6.$refs.importFile);
+
+        _this6.$refs.importFile.$refs.input.click();
+      });
     },
     close: function close() {
       this.visible = false;
-      this.previewData = null;
-      this.fieldsMap = {};
     }
   }
 });
@@ -28137,7 +28200,7 @@ var render = function() {
   return _c(
     "v-dialog",
     {
-      attrs: { "max-width": "500px", scrollable: "" },
+      attrs: { "max-width": "600px", scrollable: "" },
       model: {
         value: _vm.visible,
         callback: function($$v) {
@@ -28171,6 +28234,7 @@ var render = function() {
                       "div",
                       [
                         _c("v-file-input", {
+                          ref: "importFile",
                           attrs: { label: "Import File" },
                           model: {
                             value: _vm.importFile,
@@ -28189,96 +28253,130 @@ var render = function() {
                   ? _c(
                       "div",
                       [
-                        _vm._l(_vm.previewData.headers, function(header, i) {
-                          return _c(
-                            "div",
-                            { key: i },
-                            [
-                              _c("v-autocomplete", {
-                                attrs: {
-                                  label: 'Import "' + header + '" as',
-                                  items: _vm.fieldItems,
-                                  "item-text": "name",
-                                  "item-value": "id",
-                                  clearable: "",
-                                  "hide-details": ""
-                                },
-                                on: {
-                                  change: function($event) {
-                                    return _vm.fieldChange(header)
-                                  }
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "selection",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          item.tag
-                                            ? _c("TagChip", {
-                                                staticClass: "mr-2",
-                                                attrs: { tag: item.tag }
-                                              })
-                                            : _vm._e(),
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(item.name) +
-                                              "\n                            "
-                                          )
-                                        ]
-                                      }
-                                    },
-                                    {
-                                      key: "item",
-                                      fn: function(ref) {
-                                        var item = ref.item
-                                        return [
-                                          item.tag
-                                            ? _c("TagChip", {
-                                                staticClass: "mr-2",
-                                                attrs: { tag: item.tag }
-                                              })
-                                            : _vm._e(),
-                                          _vm._v(
-                                            "\n                                " +
-                                              _vm._s(item.name) +
-                                              "\n                            "
-                                          )
-                                        ]
+                        _c(
+                          "v-row",
+                          [
+                            _c(
+                              "v-col",
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "text-overline mb-2" },
+                                  [_vm._v("Fields")]
+                                ),
+                                _vm._v(" "),
+                                _vm._l(_vm.previewData.headers, function(
+                                  header,
+                                  i
+                                ) {
+                                  return _c(
+                                    "div",
+                                    { key: i },
+                                    [
+                                      _c("v-autocomplete", {
+                                        attrs: {
+                                          label: 'Import "' + header + '" as',
+                                          items: _vm.fieldItems,
+                                          "item-text": "name",
+                                          "item-value": "id",
+                                          clearable: "",
+                                          outlined: "",
+                                          dense: ""
+                                        },
+                                        on: {
+                                          change: function($event) {
+                                            return _vm.fieldChange(header)
+                                          }
+                                        },
+                                        scopedSlots: _vm._u(
+                                          [
+                                            {
+                                              key: "selection",
+                                              fn: function(ref) {
+                                                var item = ref.item
+                                                return [
+                                                  item.tag
+                                                    ? _c("TagChip", {
+                                                        staticClass: "mr-2",
+                                                        attrs: { tag: item.tag }
+                                                      })
+                                                    : _vm._e(),
+                                                  _vm._v(
+                                                    "\n                                        " +
+                                                      _vm._s(item.name) +
+                                                      "\n                                    "
+                                                  )
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              key: "item",
+                                              fn: function(ref) {
+                                                var item = ref.item
+                                                return [
+                                                  item.tag
+                                                    ? _c("TagChip", {
+                                                        staticClass: "mr-2",
+                                                        attrs: { tag: item.tag }
+                                                      })
+                                                    : _vm._e(),
+                                                  _vm._v(
+                                                    "\n                                        " +
+                                                      _vm._s(item.name) +
+                                                      "\n                                    "
+                                                  )
+                                                ]
+                                              }
+                                            }
+                                          ],
+                                          null,
+                                          true
+                                        ),
+                                        model: {
+                                          value: _vm.fieldsMap[header],
+                                          callback: function($$v) {
+                                            _vm.$set(_vm.fieldsMap, header, $$v)
+                                          },
+                                          expression: "fieldsMap[header]"
+                                        }
+                                      })
+                                    ],
+                                    1
+                                  )
+                                })
+                              ],
+                              2
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-col",
+                              [
+                                _c(
+                                  "div",
+                                  { staticClass: "text-overline mb-2" },
+                                  [_vm._v("Tags")]
+                                ),
+                                _vm._v(" "),
+                                _vm._l(_vm.previewTags, function(tag) {
+                                  return _c("TagChip", {
+                                    key: tag.name,
+                                    staticClass: "mr-1 mb-1",
+                                    attrs: { tag: tag },
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.showTag(tag)
                                       }
                                     }
-                                  ],
-                                  null,
-                                  true
-                                ),
-                                model: {
-                                  value: _vm.fieldsMap[header],
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.fieldsMap, header, $$v)
-                                  },
-                                  expression: "fieldsMap[header]"
-                                }
-                              })
-                            ],
-                            1
-                          )
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "div",
-                          { staticClass: "mt-4" },
-                          _vm._l(_vm.previewTags, function(tag) {
-                            return _c("TagChip", {
-                              key: tag.name,
-                              staticClass: "mr-1 mb-1",
-                              attrs: { tag: tag }
-                            })
-                          }),
+                                  })
+                                })
+                              ],
+                              2
+                            )
+                          ],
                           1
                         )
                       ],
-                      2
+                      1
                     )
                   : _vm._e()
               ]),
@@ -28316,7 +28414,18 @@ var render = function() {
           )
         ],
         1
-      )
+      ),
+      _vm._v(" "),
+      _c("CrudDialog", {
+        ref: "tagDialog",
+        attrs: {
+          title: "Tag",
+          form: _vm.TagForm,
+          resource: "/api/v1/tags",
+          value: _vm.editedTag
+        },
+        on: { input: _vm.saveTag, delete: _vm.deleteTag }
+      })
     ],
     1
   )

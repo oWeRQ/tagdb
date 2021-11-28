@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="500px" scrollable>
+    <v-dialog v-model="visible" max-width="600px" scrollable>
         <v-form @submit.prevent="submit">
             <v-card>
                 <v-card-title>
@@ -7,33 +7,46 @@
                 </v-card-title>
                 <v-card-text>
                     <div v-if="!previewData">
-                        <v-file-input v-model="importFile" label="Import File"></v-file-input>
+                        <v-file-input ref="importFile" v-model="importFile" label="Import File"></v-file-input>
                     </div>
                     <div v-if="previewData">
-                        <div v-for="(header, i) in previewData.headers" :key="i">
-                            <v-autocomplete
-                                :label='"Import \"" + header + "\" as"'
-                                v-model="fieldsMap[header]"
-                                @change="fieldChange(header)"
-                                :items="fieldItems"
-                                item-text="name"
-                                item-value="id"
-                                clearable
-                                hide-details
-                            >
-                                <template v-slot:selection="{ item }">
-                                    <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
-                                    {{ item.name }}
-                                </template>
-                                <template v-slot:item="{ item }">
-                                    <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
-                                    {{ item.name }}
-                                </template>
-                            </v-autocomplete>
-                        </div>
-                        <div class="mt-4">
-                            <TagChip v-for="tag in previewTags" :key="tag.name" :tag="tag" class="mr-1 mb-1"></TagChip>
-                        </div>
+                        <v-row>
+                            <v-col>
+                                <div class="text-overline mb-2">Fields</div>
+                                <div v-for="(header, i) in previewData.headers" :key="i">
+                                    <v-autocomplete
+                                        :label='"Import \"" + header + "\" as"'
+                                        v-model="fieldsMap[header]"
+                                        @change="fieldChange(header)"
+                                        :items="fieldItems"
+                                        item-text="name"
+                                        item-value="id"
+                                        clearable
+                                        outlined
+                                        dense
+                                    >
+                                        <template v-slot:selection="{ item }">
+                                            <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
+                                            {{ item.name }}
+                                        </template>
+                                        <template v-slot:item="{ item }">
+                                            <TagChip v-if="item.tag" :tag="item.tag" class="mr-2"></TagChip>
+                                            {{ item.name }}
+                                        </template>
+                                    </v-autocomplete>
+                                </div>
+                            </v-col>
+                            <v-col>
+                                <div class="text-overline mb-2">Tags</div>
+                                <TagChip
+                                    v-for="tag in previewTags"
+                                    :key="tag.name"
+                                    :tag="tag"
+                                    class="mr-1 mb-1"
+                                    @click="showTag(tag)"
+                                ></TagChip>
+                            </v-col>
+                        </v-row>
                     </div>
                 </v-card-text>
                 <v-card-actions>
@@ -43,16 +56,30 @@
                 </v-card-actions>
             </v-card>
         </v-form>
+
+        <CrudDialog
+            ref="tagDialog"
+            title="Tag"
+            :form="TagForm"
+            resource="/api/v1/tags"
+            :value="editedTag"
+            @input="saveTag"
+            @delete="deleteTag"
+        ></CrudDialog>
     </v-dialog>
 </template>
 
 <script>
+import cloneDeep from 'clone-deep';
 import axios from 'axios';
 import toFormData from '../functions/toFormData';
+import CrudDialog from './CrudDialog.vue';
+import TagForm from './TagForm';
 import TagChip from './TagChip.vue';
 
 export default {
     components: {
+        CrudDialog,
         TagChip,
     },
     props: {
@@ -60,9 +87,12 @@ export default {
     },
     data() {
         return {
+            TagForm,
+            editedTag: null,
             visible: false,
             importFile: null,
             previewData: null,
+            previewTags: [],
             fieldsMap: {},
             fields: [],
         };
@@ -80,9 +110,6 @@ export default {
         tags() {
             return this.$root.tags;
         },
-        previewTags() {
-            return this.previewData.tags.map(name => (this.tags.find(tag => tag.name === name) || { name, fields: [] }));
-        },
         submitText() {
             if (!this.previewData)
                 return 'Preview';
@@ -94,6 +121,24 @@ export default {
         this.fetchFields();
     },
     methods: {
+        updatePreviewTags() {
+            this.previewTags = this.previewData.tags.map(name => (this.tags.find(tag => tag.name === name) || { name, id: null, color: null, fields: [] }));
+        },
+        showTag(tag) {
+            this.originalTag = tag;
+            this.editedTag = cloneDeep(tag);
+            this.$refs.tagDialog.show();
+        },
+        saveTag(tag) {
+            Object.assign(this.originalTag, tag);
+            this.fetchFields();
+        },
+        deleteTag() {
+            delete this.originalTag.id;
+            delete this.originalTag.color;
+            this.originalTag.fields = [];
+            this.fetchFields();
+        },
         fieldChange(header) {
             const field = this.fieldsMap[header];
             if (field === 'tags') {
@@ -104,6 +149,9 @@ export default {
             for (const header of this.previewData.headers) {
                 this.fieldsMap[header] = this.fieldItems.find(field => field.name === header)?.id;
             }
+        },
+        fetchTags() {
+            this.$root.getTags();
         },
         fetchFields() {
             axios.get('/api/v1/fields').then(response => {
@@ -129,6 +177,7 @@ export default {
             axios.post('/api/v1/import', data).then(response => {
                 this.previewData = response.data;
                 this.autoFieldsMap();
+                this.updatePreviewTags();
             });
         },
         import() {
@@ -145,11 +194,15 @@ export default {
         },
         show() {
             this.visible = true;
+            this.previewData = null;
+            this.fieldsMap = {};
+            this.$nextTick(() => {
+                console.log('importFile', this.$refs.importFile);
+                this.$refs.importFile.$refs.input.click();
+            });
         },
         close() {
             this.visible = false;
-            this.previewData = null;
-            this.fieldsMap = {};
         },
     },
 };
