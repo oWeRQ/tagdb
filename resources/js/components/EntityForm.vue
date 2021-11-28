@@ -50,6 +50,8 @@
 
                 <v-textarea v-else-if="field.type === 'text'" v-model="value.contents[field.id]" :type="field.type" :label="field.name" filled></v-textarea>
 
+                <v-text-field v-else-if="field.type === 'url'" v-model="value.contents[field.id]" :type="field.type" :label="field.name" append-icon="mdi-link" @click:append="openUrl(value.contents[field.id])"></v-text-field>
+
                 <v-text-field v-else v-model="value.contents[field.id]" :type="field.type" :label="field.name"></v-text-field>
             </div>
         </template>
@@ -142,6 +144,9 @@
                 if (tag) {
                     tag.fields.push(field);
                 }
+            },
+            openUrl(url) {
+                window.open(url, '_blank');
             },
         },
     };

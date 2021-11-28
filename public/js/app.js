@@ -2547,6 +2547,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2559,10 +2566,19 @@ __webpack_require__.r(__webpack_exports__);
       email: null,
       password: null,
       password_confirmation: null,
+      show_password: false,
       remember: null,
       loginErrors: {},
       registerErrors: {}
     };
+  },
+  computed: {
+    passwordType: function passwordType() {
+      return this.show_password ? 'text' : 'password';
+    },
+    passwordIcon: function passwordIcon() {
+      return this.show_password ? 'mdi-eye-off' : 'mdi-eye';
+    }
   },
   methods: {
     submitLogin: function submitLogin() {
@@ -2599,6 +2615,9 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         _this2.registerErrors = error.response.data.errors || {};
       });
+    },
+    togglePassword: function togglePassword() {
+      this.show_password = !this.show_password;
     }
   }
 });
@@ -3173,6 +3192,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 
 
@@ -3254,6 +3275,9 @@ __webpack_require__.r(__webpack_exports__);
       if (tag) {
         tag.fields.push(field);
       }
+    },
+    openUrl: function openUrl(url) {
+      window.open(url, '_blank');
     }
   }
 });
@@ -26766,10 +26790,12 @@ var render = function() {
                             attrs: {
                               name: "password",
                               label: "Password",
-                              type: "password",
+                              type: _vm.passwordType,
                               required: "",
-                              "error-messages": _vm.loginErrors.password
+                              "error-messages": _vm.loginErrors.password,
+                              "append-icon": _vm.passwordIcon
                             },
+                            on: { "click:append": _vm.togglePassword },
                             model: {
                               value: _vm.password,
                               callback: function($$v) {
@@ -26876,10 +26902,12 @@ var render = function() {
                             attrs: {
                               name: "password",
                               label: "Password",
-                              type: "password",
+                              type: _vm.passwordType,
                               required: "",
-                              "error-messages": _vm.registerErrors.password
+                              "error-messages": _vm.registerErrors.password,
+                              "append-icon": _vm.passwordIcon
                             },
+                            on: { "click:append": _vm.togglePassword },
                             model: {
                               value: _vm.password,
                               callback: function($$v) {
@@ -26893,9 +26921,13 @@ var render = function() {
                             attrs: {
                               name: "password",
                               label: "Confirmation",
-                              type: "password",
-                              required: ""
+                              type: _vm.passwordType,
+                              required: "",
+                              "error-messages":
+                                _vm.registerErrors.password_confirmation,
+                              "append-icon": _vm.passwordIcon
                             },
+                            on: { "click:append": _vm.togglePassword },
                             model: {
                               value: _vm.password_confirmation,
                               callback: function($$v) {
@@ -27631,6 +27663,26 @@ var render = function() {
                 : field.type === "text"
                 ? _c("v-textarea", {
                     attrs: { type: field.type, label: field.name, filled: "" },
+                    model: {
+                      value: _vm.value.contents[field.id],
+                      callback: function($$v) {
+                        _vm.$set(_vm.value.contents, field.id, $$v)
+                      },
+                      expression: "value.contents[field.id]"
+                    }
+                  })
+                : field.type === "url"
+                ? _c("v-text-field", {
+                    attrs: {
+                      type: field.type,
+                      label: field.name,
+                      "append-icon": "mdi-link"
+                    },
+                    on: {
+                      "click:append": function($event) {
+                        return _vm.openUrl(_vm.value.contents[field.id])
+                      }
+                    },
                     model: {
                       value: _vm.value.contents[field.id],
                       callback: function($$v) {

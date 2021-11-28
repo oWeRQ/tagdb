@@ -20,9 +20,11 @@
                                 v-model="password"
                                 name="password"
                                 label="Password"
-                                type="password"
+                                :type="passwordType"
                                 required
                                 :error-messages="loginErrors.password"
+                                :append-icon="passwordIcon"
+                                @click:append="togglePassword"
                             ></v-text-field>
                             <v-checkbox
                                 v-model="remember"
@@ -58,16 +60,21 @@
                                 v-model="password"
                                 name="password"
                                 label="Password"
-                                type="password"
+                                :type="passwordType"
                                 required
                                 :error-messages="registerErrors.password"
+                                :append-icon="passwordIcon"
+                                @click:append="togglePassword"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password_confirmation"
                                 name="password"
                                 label="Confirmation"
-                                type="password"
+                                :type="passwordType"
                                 required
+                                :error-messages="registerErrors.password_confirmation"
+                                :append-icon="passwordIcon"
+                                @click:append="togglePassword"
                             ></v-text-field>
                         </v-card-text>
                         <v-card-actions>
@@ -95,10 +102,19 @@
                 email: null,
                 password: null,
                 password_confirmation: null,
+                show_password: false,
                 remember: null,
                 loginErrors: {},
                 registerErrors: {},
             };
+        },
+        computed: {
+            passwordType() {
+                return (this.show_password ? 'text' : 'password');
+            },
+            passwordIcon() {
+                return (this.show_password ? 'mdi-eye-off' : 'mdi-eye');
+            },
         },
         methods: {
             submitLogin() {
@@ -127,6 +143,9 @@
                 }).catch((error) => {
                     this.registerErrors = error.response.data.errors || {};
                 });
+            },
+            togglePassword() {
+                this.show_password = !this.show_password;
             },
         },
     };
