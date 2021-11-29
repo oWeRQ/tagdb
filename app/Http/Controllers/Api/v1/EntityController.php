@@ -60,8 +60,10 @@ class EntityController extends Controller
 
     public function destroy($id)
     {
-        Entity::find($id)->delete();
+        foreach (explode(',', $id) as $id) {
+            Entity::find($id)->delete();
+        }
 
-        return 204;
+        return response()->noContent();
     }
 }

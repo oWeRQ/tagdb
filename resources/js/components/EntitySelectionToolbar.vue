@@ -82,8 +82,8 @@
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {
-                    const requests = this.value.map(item => axios.delete(this.resource + '/' + item.id));
-                    Promise.all(requests).then(() => {
+                    const id = this.value.map(item => item.id).join(',');
+                    axios.delete(this.resource + '/' + id).then(() => {
                         this.$emit('update');
                         this.$emit('input', []);
                     });

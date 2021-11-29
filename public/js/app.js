@@ -3509,11 +3509,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.$root.confirm('Delete selected items?').then(function () {
-        var requests = _this2.value.map(function (item) {
-          return axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + item.id);
-        });
+        var id = _this2.value.map(function (item) {
+          return item.id;
+        }).join(',');
 
-        Promise.all(requests).then(function () {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + id).then(function () {
           _this2.$emit('update');
 
           _this2.$emit('input', []);
