@@ -11,7 +11,7 @@ class TagController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Tag::query();
+        $query = Tag::query()->with('fields');
 
         $with_tags = $request->get('with_tags');
 

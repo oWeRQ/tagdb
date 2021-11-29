@@ -13,7 +13,7 @@ class EntityController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Entity::query();
+        $query = Entity::query()->with(['tags.fields', 'values.field']);
 
         if ($request->has('preset')) {
             $preset = Preset::firstWhere('name', $request->get('preset'));
