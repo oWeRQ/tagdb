@@ -74,6 +74,7 @@ export default {
                 with_tags: this.queryTags,
             };
 
+            this.fields = [];
             axios.get('/api/v1/tags', { params }).then(response => {
                 this.fields = response.data.data.filter(tag => tag.entities_count).flatMap(tag => tag.fields);
             });

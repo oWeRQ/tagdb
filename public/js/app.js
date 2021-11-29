@@ -2554,6 +2554,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -3634,6 +3635,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var params = {
         with_tags: this.queryTags
       };
+      this.fields = [];
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags', {
         params: params
       }).then(function (response) {
@@ -26868,6 +26870,7 @@ var render = function() {
                           }),
                           _vm._v(" "),
                           _c("v-checkbox", {
+                            staticClass: "mt-0",
                             attrs: {
                               name: "remember",
                               label: "Remember",

@@ -30,6 +30,7 @@
                                 v-model="remember"
                                 name="remember"
                                 label="Remember"
+                                class="mt-0"
                                 hide-details
                             ></v-checkbox>
                         </v-card-text>
