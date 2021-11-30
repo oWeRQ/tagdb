@@ -26,6 +26,11 @@ class Tag extends Model
         static::addGlobalScope(new ProjectScope);
     }
 
+    public static function parseString($tagsString)
+    {
+        return preg_split('/\s*,\s*/', trim($tagsString), -1, PREG_SPLIT_NO_EMPTY);
+    }
+
     public function entities()
     {
         return $this->belongsToMany('App\Entity', 'entities_tags');
