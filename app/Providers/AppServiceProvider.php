@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
 
             $sql = $query->sql;
             foreach ($query->bindings as $value) {
-                $sql = preg_replace('/\?/', "'{$value}'", $sql);
+                $sql = preg_replace('/\?/', "'{$value}'", $sql, 1);
             }
 
             $message = "\n\turl: $url\n\tcount: $count\n\tsql: $sql\n\ttime: {$query->time}ms\n\ttotal: {$totalTime}ms";
