@@ -152,6 +152,23 @@ class Entity extends Model
         $this->tags()->sync($tagIds);
     }
 
+    public function insertContents(array $contents = null)
+    {
+        if (!$contents)
+            return;
+
+        $values = [];
+        foreach ($contents as $field_id => $content) {
+            $values[] = [
+                'entity_id' => $this->id,
+                'field_id' => $field_id,
+                'content' => (string)$content,
+            ];
+        }
+
+        Value::insert($values);
+    }
+
     public function updateContents(array $contents = null)
     {
         if (!$contents)

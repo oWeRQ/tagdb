@@ -58,7 +58,7 @@ class EntityImport implements ToCollection, WithHeadingRow
 
             $entity->save();
             $entity->updateTags($mergedTags);
-            $entity->updateContents($contents);
+            $entity->insertContents($contents);
         }
     }
 }
