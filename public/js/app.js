@@ -27318,7 +27318,7 @@ var render = function() {
     ? _c(
         "v-dialog",
         {
-          attrs: { "max-width": _vm.maxWidth },
+          attrs: { "max-width": _vm.maxWidth, scrollable: "" },
           model: {
             value: _vm.visible,
             callback: function($$v) {
@@ -27361,6 +27361,7 @@ var render = function() {
                     [
                       _c(_vm.form, {
                         tag: "component",
+                        staticClass: "mt-3",
                         attrs: { editable: _vm.editable },
                         model: {
                           value: _vm.value,

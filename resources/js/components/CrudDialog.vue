@@ -1,12 +1,12 @@
 <template>
-    <v-dialog v-if="value" v-model="visible" :max-width="maxWidth">
+    <v-dialog v-if="value" v-model="visible" :max-width="maxWidth" scrollable>
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
                     <span class="headline">{{ headline }}</span>
                 </v-card-title>
                 <v-card-text>
-                    <component :is="form" :editable="editable" v-model="value"></component>
+                    <component :is="form" :editable="editable" v-model="value" class="mt-3"></component>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew && deletable" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
