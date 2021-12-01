@@ -7,7 +7,10 @@
                 </v-card-title>
                 <v-divider></v-divider>
                 <v-card-text>
-                    <div>Columns</div>
+                    <div class="d-flex">
+                        Columns
+                        <v-btn @click="selectAll" text x-small color="blue darken-1" class="ml-auto">Select All</v-btn>
+                    </div>
                     <v-checkbox
                         v-for="header in headersExtended"
                         :key="header.value"
@@ -69,6 +72,9 @@ export default {
         },
     },
     methods: {
+        selectAll() {
+            this.columns = this.headersExtended.map(header => header.value);
+        },
         fetchFields() {
             const params = {
                 with_tags: this.queryTags,

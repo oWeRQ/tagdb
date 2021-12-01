@@ -3640,6 +3640,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -3684,6 +3687,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
+    selectAll: function selectAll() {
+      this.columns = this.headersExtended.map(function (header) {
+        return header.value;
+      });
+    },
     fetchFields: function fetchFields() {
       var _this2 = this;
 
@@ -28295,7 +28303,29 @@ var render = function() {
               _c(
                 "v-card-text",
                 [
-                  _c("div", [_vm._v("Columns")]),
+                  _c(
+                    "div",
+                    { staticClass: "d-flex" },
+                    [
+                      _vm._v(
+                        "\n                    Columns\n                    "
+                      ),
+                      _c(
+                        "v-btn",
+                        {
+                          staticClass: "ml-auto",
+                          attrs: {
+                            text: "",
+                            "x-small": "",
+                            color: "blue darken-1"
+                          },
+                          on: { click: _vm.selectAll }
+                        },
+                        [_vm._v("Select All")]
+                      )
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _vm._l(_vm.headersExtended, function(header) {
                     return _c("v-checkbox", {
