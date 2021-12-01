@@ -22,6 +22,9 @@
     >
         <template v-slot:selection="{ item, index }">
             <v-chip close @click.stop="click(index, item)" @click:close="remove(index)" class="lighten-2" :color="item.color" :dark="!!item.color">
+                <v-icon left v-if="returnObject && !item.id">
+                    mdi-plus
+                </v-icon>
                 <span :style="{'text-decoration': isHyphen(item) ? 'line-through' : 'none'}">
                     {{ itemText(item) }}
                 </span>

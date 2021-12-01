@@ -5368,6 +5368,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
 
 
 function toggleHyphen(value) {
@@ -29558,6 +29561,12 @@ var render = function() {
                 }
               },
               [
+                _vm.returnObject && !item.id
+                  ? _c("v-icon", { attrs: { left: "" } }, [
+                      _vm._v("\n                mdi-plus\n            ")
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "span",
                   {
@@ -29575,7 +29584,8 @@ var render = function() {
                     )
                   ]
                 )
-              ]
+              ],
+              1
             )
           ]
         }
