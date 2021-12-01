@@ -6,7 +6,7 @@
                     <span class="headline">{{ headline }}</span>
                 </v-card-title>
                 <v-card-text>
-                    <component :is="form" :editable="editable" v-model="value" class="mt-3"></component>
+                    <component :is="form" :editable="editable" v-model="value" @submit="submit" class="mt-3"></component>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew && deletable" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -54,7 +54,7 @@
             },
             maxWidth: {
                 type: String,
-                default: '500px',
+                default: '560px',
             },
         },
         computed: {

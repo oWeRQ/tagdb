@@ -19,6 +19,7 @@
         :hide-details="solo"
         :return-object="returnObject"
         :autofocus="autofocus"
+        :prepend-icon="prependIcon"
     >
         <template v-slot:selection="{ item, index }">
             <v-chip close @click.stop="click(index, item)" @click:close="remove(index)" class="lighten-2" :color="item.color" :dark="!!item.color">
@@ -78,6 +79,9 @@
             hyphen: {
                 type: Boolean,
                 default: false,
+            },
+            prependIcon: {
+                type: String,
             },
         },
         data() {

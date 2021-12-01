@@ -16,28 +16,54 @@
             :rules="rules.tags"
             :autofocus="!value.tags.length"
             @click:tag="showTag($event)"
+            prepend-icon="mdi-tag-multiple-outline"
         ></TagsField>
 
-        <v-text-field v-model="value.name" :rules="rules.name" label="Name" :autofocus="!!value.tags.length"></v-text-field>
+        <v-textarea
+            v-model="value.name"
+            :rules="rules.name"
+            :autofocus="!!value.tags.length"
+            label="Name"
+            auto-grow
+            rows="1"
+            prepend-icon="mdi-table-row"
+            @keydown.enter.exact.prevent="$emit('submit')"
+        ></v-textarea>
 
-        <template v-for="field in editedFields">
-            <div :key="field.id">
-                <v-menu v-if="field.type === 'date'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field v-model="value.contents[field.id]" :label="field.name" readonly clearable v-bind="attrs" v-on="on"></v-text-field>
-                    </template>
-                    <v-date-picker v-model="value.contents[field.id]" @input="menu[field.id] = false" first-day-of-week="1"></v-date-picker>
-                </v-menu>
+        <div v-for="field in editedFields" :key="field.id">
+            <v-menu v-if="field.type === 'date'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                        v-model="value.contents[field.id]"
+                        :label="field.name"
+                        readonly
+                        clearable
+                        v-bind="attrs"
+                        v-on="on"
+                        prepend-icon="mdi-calendar"
+                    ></v-text-field>
+                </template>
+                <v-date-picker v-model="value.contents[field.id]" @input="menu[field.id] = false" first-day-of-week="1"></v-date-picker>
+            </v-menu>
 
-                <v-menu v-else-if="field.type === 'time'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-text-field v-model="value.contents[field.id]" :label="field.name" readonly clearable v-bind="attrs" v-on="on"></v-text-field>
-                    </template>
-                    <v-time-picker v-model="value.contents[field.id]" @click:minute="menu[field.id] = false" format="24hr"></v-time-picker>
-                </v-menu>
+            <v-menu v-else-if="field.type === 'time'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                        v-model="value.contents[field.id]"
+                        :label="field.name"
+                        readonly
+                        clearable
+                        v-bind="attrs"
+                        v-on="on"
+                        prepend-icon="mdi-clock-outline"
+                    ></v-text-field>
+                </template>
+                <v-time-picker v-model="value.contents[field.id]" @click:minute="menu[field.id] = false" format="24hr"></v-time-picker>
+            </v-menu>
 
-                <template v-else-if="field.type === 'rating'">
-                    <div class="text-caption">{{ field.name }}</div>
+            <div v-else-if="field.type === 'rating'">
+                <div class="text-caption ml-8">{{ field.name }}</div>
+                <v-input prepend-icon="mdi-backspace-reverse-outline" @click:prepend="value.contents[field.id] = 0">
                     <v-rating
                         :value="+value.contents[field.id]"
                         @input="value.contents[field.id] = $event"
@@ -45,18 +71,39 @@
                         half-increments
                         color="orange"
                         background-color="grey lighten-1"
+                        class="mt-n1"
                     ></v-rating>
-                </template>
-
-                <v-textarea v-else-if="field.type === 'text'" v-model="value.contents[field.id]" :type="field.type" :label="field.name" filled></v-textarea>
-
-                <v-text-field v-else-if="field.type === 'url'" v-model="value.contents[field.id]" :type="field.type" :label="field.name" append-icon="mdi-link" @click:append="openUrl(value.contents[field.id])"></v-text-field>
-
-                <v-text-field v-else v-model="value.contents[field.id]" :type="field.type" :label="field.name"></v-text-field>
+                </v-input>
             </div>
-        </template>
 
-        <v-btn @click="addField" :disabled="!firstSavedTag" text x-small color="blue darken-1" class="mt-4 ml-n1">
+            <v-textarea
+                v-else-if="field.type === 'text'"
+                v-model="value.contents[field.id]"
+                :type="field.type"
+                :label="field.name"
+                filled
+                auto-grow
+            ></v-textarea>
+
+            <v-text-field
+                v-else-if="field.type === 'url'"
+                v-model="value.contents[field.id]"
+                :type="field.type"
+                :label="field.name"
+                prepend-icon="mdi-link"
+                @click:prepend="open(field)"
+            ></v-text-field>
+
+            <v-text-field
+                v-else
+                v-model="value.contents[field.id]"
+                :type="field.type"
+                :label="field.name"
+                prepend-icon="mdi-form-textbox"
+            ></v-text-field>
+        </div>
+
+        <v-btn @click="addField" :disabled="!firstSavedTag" text x-small color="blue darken-1">
             <v-icon left>mdi-plus</v-icon>
             Add Field
         </v-btn>
@@ -145,8 +192,8 @@
                     tag.fields.push(field);
                 }
             },
-            openUrl(url) {
-                window.open(url, '_blank');
+            open(field) {
+                window.open(this.value.contents[field.id], '_blank');
             },
         },
     };

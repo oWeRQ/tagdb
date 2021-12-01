@@ -3013,7 +3013,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     maxWidth: {
       type: String,
-      "default": '500px'
+      "default": '560px'
     }
   },
   computed: {
@@ -3195,6 +3195,53 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -3277,8 +3324,8 @@ __webpack_require__.r(__webpack_exports__);
         tag.fields.push(field);
       }
     },
-    openUrl: function openUrl(url) {
-      window.open(url, '_blank');
+    open: function open(field) {
+      window.open(this.value.contents[field.id], '_blank');
     }
   }
 });
@@ -5377,6 +5424,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 
 function toggleHyphen(value) {
@@ -5414,6 +5462,9 @@ function toggleHyphen(value) {
     hyphen: {
       type: Boolean,
       "default": false
+    },
+    prependIcon: {
+      type: String
     }
   },
   data: function data() {
@@ -27372,6 +27423,7 @@ var render = function() {
                         tag: "component",
                         staticClass: "mt-3",
                         attrs: { editable: _vm.editable },
+                        on: { submit: _vm.submit },
                         model: {
                           value: _vm.value,
                           callback: function($$v) {
@@ -27515,7 +27567,8 @@ var render = function() {
         attrs: {
           "return-object": "",
           rules: _vm.rules.tags,
-          autofocus: !_vm.value.tags.length
+          autofocus: !_vm.value.tags.length,
+          "prepend-icon": "mdi-tag-multiple-outline"
         },
         on: {
           "click:tag": function($event) {
@@ -27531,11 +27584,34 @@ var render = function() {
         }
       }),
       _vm._v(" "),
-      _c("v-text-field", {
+      _c("v-textarea", {
         attrs: {
           rules: _vm.rules.name,
+          autofocus: !!_vm.value.tags.length,
           label: "Name",
-          autofocus: !!_vm.value.tags.length
+          "auto-grow": "",
+          rows: "1",
+          "prepend-icon": "mdi-table-row"
+        },
+        on: {
+          keydown: function($event) {
+            if (
+              !$event.type.indexOf("key") &&
+              _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+            ) {
+              return null
+            }
+            if (
+              $event.ctrlKey ||
+              $event.shiftKey ||
+              $event.altKey ||
+              $event.metaKey
+            ) {
+              return null
+            }
+            $event.preventDefault()
+            return _vm.$emit("submit")
+          }
         },
         model: {
           value: _vm.value.name,
@@ -27547,245 +27623,274 @@ var render = function() {
       }),
       _vm._v(" "),
       _vm._l(_vm.editedFields, function(field) {
-        return [
-          _c(
-            "div",
-            { key: field.id },
-            [
-              field.type === "date"
-                ? _c(
-                    "v-menu",
-                    {
-                      attrs: {
-                        "close-on-content-click": false,
-                        "offset-y": "",
-                        "min-width": "290px"
-                      },
-                      scopedSlots: _vm._u(
-                        [
-                          {
-                            key: "activator",
-                            fn: function(ref) {
-                              var on = ref.on
-                              var attrs = ref.attrs
-                              return [
-                                _c(
-                                  "v-text-field",
-                                  _vm._g(
-                                    _vm._b(
-                                      {
-                                        attrs: {
-                                          label: field.name,
-                                          readonly: "",
-                                          clearable: ""
-                                        },
-                                        model: {
-                                          value: _vm.value.contents[field.id],
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.value.contents,
-                                              field.id,
-                                              $$v
-                                            )
-                                          },
-                                          expression: "value.contents[field.id]"
-                                        }
-                                      },
-                                      "v-text-field",
-                                      attrs,
-                                      false
-                                    ),
-                                    on
-                                  )
-                                )
-                              ]
-                            }
-                          }
-                        ],
-                        null,
-                        true
-                      ),
-                      model: {
-                        value: _vm.menu[field.id],
-                        callback: function($$v) {
-                          _vm.$set(_vm.menu, field.id, $$v)
-                        },
-                        expression: "menu[field.id]"
-                      }
+        return _c(
+          "div",
+          { key: field.id },
+          [
+            field.type === "date"
+              ? _c(
+                  "v-menu",
+                  {
+                    attrs: {
+                      "close-on-content-click": false,
+                      "offset-y": "",
+                      "min-width": "290px"
                     },
-                    [
-                      _vm._v(" "),
-                      _c("v-date-picker", {
-                        attrs: { "first-day-of-week": "1" },
-                        on: {
-                          input: function($event) {
-                            _vm.menu[field.id] = false
-                          }
-                        },
-                        model: {
-                          value: _vm.value.contents[field.id],
-                          callback: function($$v) {
-                            _vm.$set(_vm.value.contents, field.id, $$v)
-                          },
-                          expression: "value.contents[field.id]"
-                        }
-                      })
-                    ],
-                    1
-                  )
-                : field.type === "time"
-                ? _c(
-                    "v-menu",
-                    {
-                      attrs: {
-                        "close-on-content-click": false,
-                        "offset-y": "",
-                        "min-width": "290px"
-                      },
-                      scopedSlots: _vm._u(
-                        [
-                          {
-                            key: "activator",
-                            fn: function(ref) {
-                              var on = ref.on
-                              var attrs = ref.attrs
-                              return [
-                                _c(
-                                  "v-text-field",
-                                  _vm._g(
-                                    _vm._b(
-                                      {
-                                        attrs: {
-                                          label: field.name,
-                                          readonly: "",
-                                          clearable: ""
-                                        },
-                                        model: {
-                                          value: _vm.value.contents[field.id],
-                                          callback: function($$v) {
-                                            _vm.$set(
-                                              _vm.value.contents,
-                                              field.id,
-                                              $$v
-                                            )
-                                          },
-                                          expression: "value.contents[field.id]"
-                                        }
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var on = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _c(
+                                "v-text-field",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      attrs: {
+                                        label: field.name,
+                                        readonly: "",
+                                        clearable: "",
+                                        "prepend-icon": "mdi-calendar"
                                       },
-                                      "v-text-field",
-                                      attrs,
-                                      false
-                                    ),
-                                    on
-                                  )
+                                      model: {
+                                        value: _vm.value.contents[field.id],
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.value.contents,
+                                            field.id,
+                                            $$v
+                                          )
+                                        },
+                                        expression: "value.contents[field.id]"
+                                      }
+                                    },
+                                    "v-text-field",
+                                    attrs,
+                                    false
+                                  ),
+                                  on
                                 )
-                              ]
-                            }
+                              )
+                            ]
                           }
-                        ],
-                        null,
-                        true
-                      ),
-                      model: {
-                        value: _vm.menu[field.id],
-                        callback: function($$v) {
-                          _vm.$set(_vm.menu, field.id, $$v)
-                        },
-                        expression: "menu[field.id]"
-                      }
-                    },
-                    [
-                      _vm._v(" "),
-                      _c("v-time-picker", {
-                        attrs: { format: "24hr" },
-                        on: {
-                          "click:minute": function($event) {
-                            _vm.menu[field.id] = false
-                          }
-                        },
-                        model: {
-                          value: _vm.value.contents[field.id],
-                          callback: function($$v) {
-                            _vm.$set(_vm.value.contents, field.id, $$v)
-                          },
-                          expression: "value.contents[field.id]"
                         }
-                      })
-                    ],
-                    1
-                  )
-                : field.type === "rating"
-                ? [
-                    _c("div", { staticClass: "text-caption" }, [
+                      ],
+                      null,
+                      true
+                    ),
+                    model: {
+                      value: _vm.menu[field.id],
+                      callback: function($$v) {
+                        _vm.$set(_vm.menu, field.id, $$v)
+                      },
+                      expression: "menu[field.id]"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c("v-date-picker", {
+                      attrs: { "first-day-of-week": "1" },
+                      on: {
+                        input: function($event) {
+                          _vm.menu[field.id] = false
+                        }
+                      },
+                      model: {
+                        value: _vm.value.contents[field.id],
+                        callback: function($$v) {
+                          _vm.$set(_vm.value.contents, field.id, $$v)
+                        },
+                        expression: "value.contents[field.id]"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : field.type === "time"
+              ? _c(
+                  "v-menu",
+                  {
+                    attrs: {
+                      "close-on-content-click": false,
+                      "offset-y": "",
+                      "min-width": "290px"
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var on = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _c(
+                                "v-text-field",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      attrs: {
+                                        label: field.name,
+                                        readonly: "",
+                                        clearable: "",
+                                        "prepend-icon": "mdi-clock-outline"
+                                      },
+                                      model: {
+                                        value: _vm.value.contents[field.id],
+                                        callback: function($$v) {
+                                          _vm.$set(
+                                            _vm.value.contents,
+                                            field.id,
+                                            $$v
+                                          )
+                                        },
+                                        expression: "value.contents[field.id]"
+                                      }
+                                    },
+                                    "v-text-field",
+                                    attrs,
+                                    false
+                                  ),
+                                  on
+                                )
+                              )
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      true
+                    ),
+                    model: {
+                      value: _vm.menu[field.id],
+                      callback: function($$v) {
+                        _vm.$set(_vm.menu, field.id, $$v)
+                      },
+                      expression: "menu[field.id]"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c("v-time-picker", {
+                      attrs: { format: "24hr" },
+                      on: {
+                        "click:minute": function($event) {
+                          _vm.menu[field.id] = false
+                        }
+                      },
+                      model: {
+                        value: _vm.value.contents[field.id],
+                        callback: function($$v) {
+                          _vm.$set(_vm.value.contents, field.id, $$v)
+                        },
+                        expression: "value.contents[field.id]"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : field.type === "rating"
+              ? _c(
+                  "div",
+                  [
+                    _c("div", { staticClass: "text-caption ml-8" }, [
                       _vm._v(_vm._s(field.name))
                     ]),
                     _vm._v(" "),
-                    _c("v-rating", {
-                      attrs: {
-                        value: +_vm.value.contents[field.id],
-                        hover: "",
-                        "half-increments": "",
-                        color: "orange",
-                        "background-color": "grey lighten-1"
-                      },
-                      on: {
-                        input: function($event) {
-                          _vm.value.contents[field.id] = $event
+                    _c(
+                      "v-input",
+                      {
+                        attrs: {
+                          "prepend-icon": "mdi-backspace-reverse-outline"
+                        },
+                        on: {
+                          "click:prepend": function($event) {
+                            _vm.value.contents[field.id] = 0
+                          }
                         }
-                      }
-                    })
-                  ]
-                : field.type === "text"
-                ? _c("v-textarea", {
-                    attrs: { type: field.type, label: field.name, filled: "" },
-                    model: {
-                      value: _vm.value.contents[field.id],
-                      callback: function($$v) {
-                        _vm.$set(_vm.value.contents, field.id, $$v)
                       },
-                      expression: "value.contents[field.id]"
-                    }
-                  })
-                : field.type === "url"
-                ? _c("v-text-field", {
-                    attrs: {
-                      type: field.type,
-                      label: field.name,
-                      "append-icon": "mdi-link"
+                      [
+                        _c("v-rating", {
+                          staticClass: "mt-n1",
+                          attrs: {
+                            value: +_vm.value.contents[field.id],
+                            hover: "",
+                            "half-increments": "",
+                            color: "orange",
+                            "background-color": "grey lighten-1"
+                          },
+                          on: {
+                            input: function($event) {
+                              _vm.value.contents[field.id] = $event
+                            }
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              : field.type === "text"
+              ? _c("v-textarea", {
+                  attrs: {
+                    type: field.type,
+                    label: field.name,
+                    filled: "",
+                    "auto-grow": ""
+                  },
+                  model: {
+                    value: _vm.value.contents[field.id],
+                    callback: function($$v) {
+                      _vm.$set(_vm.value.contents, field.id, $$v)
                     },
-                    on: {
-                      "click:append": function($event) {
-                        return _vm.openUrl(_vm.value.contents[field.id])
-                      }
+                    expression: "value.contents[field.id]"
+                  }
+                })
+              : field.type === "url"
+              ? _c("v-text-field", {
+                  attrs: {
+                    type: field.type,
+                    label: field.name,
+                    "prepend-icon": "mdi-link"
+                  },
+                  on: {
+                    "click:prepend": function($event) {
+                      return _vm.open(field)
+                    }
+                  },
+                  model: {
+                    value: _vm.value.contents[field.id],
+                    callback: function($$v) {
+                      _vm.$set(_vm.value.contents, field.id, $$v)
                     },
-                    model: {
-                      value: _vm.value.contents[field.id],
-                      callback: function($$v) {
-                        _vm.$set(_vm.value.contents, field.id, $$v)
-                      },
-                      expression: "value.contents[field.id]"
-                    }
-                  })
-                : _c("v-text-field", {
-                    attrs: { type: field.type, label: field.name },
-                    model: {
-                      value: _vm.value.contents[field.id],
-                      callback: function($$v) {
-                        _vm.$set(_vm.value.contents, field.id, $$v)
-                      },
-                      expression: "value.contents[field.id]"
-                    }
-                  })
-            ],
-            2
-          )
-        ]
+                    expression: "value.contents[field.id]"
+                  }
+                })
+              : _c("v-text-field", {
+                  attrs: {
+                    type: field.type,
+                    label: field.name,
+                    "prepend-icon": "mdi-form-textbox"
+                  },
+                  model: {
+                    value: _vm.value.contents[field.id],
+                    callback: function($$v) {
+                      _vm.$set(_vm.value.contents, field.id, $$v)
+                    },
+                    expression: "value.contents[field.id]"
+                  }
+                })
+          ],
+          1
+        )
       }),
       _vm._v(" "),
       _c(
         "v-btn",
         {
-          staticClass: "mt-4 ml-n1",
           attrs: {
             disabled: !_vm.firstSavedTag,
             text: "",
@@ -29554,7 +29659,8 @@ var render = function() {
       solo: _vm.solo,
       "hide-details": _vm.solo,
       "return-object": _vm.returnObject,
-      autofocus: _vm.autofocus
+      autofocus: _vm.autofocus,
+      "prepend-icon": _vm.prependIcon
     },
     on: {
       input: _vm.input,
