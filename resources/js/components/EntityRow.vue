@@ -29,7 +29,7 @@
                 {{ item.created_at | date }}
             </template>
             <template v-else-if="header.type === 'url'">
-                <a :href="item | value(header.value)" :title="item | value(header.value)" target="_blank">{{ item | value(header.value) | truncate }}</a>
+                <a :href="item | value(header.value)" :title="item | value(header.value)" target="_blank" class="text-decoration-none">{{ item | value(header.value) | truncateUrl }}</a>
             </template>
             <template v-else-if="header.type === 'color'">
                 <v-chip>
@@ -59,11 +59,13 @@
     import { getObjectValueByPath } from 'vuetify/lib/util/helpers'
     import date from '../functions/date';
     import truncate from '../functions/truncate';
+    import truncateUrl from '../functions/truncateUrl';
 
     export default {
         filters: {
             date,
             truncate,
+            truncateUrl,
             value: getObjectValueByPath,
             number: Number,
         },

@@ -3344,6 +3344,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuetify/lib/util/helpers */ "./node_modules/vuetify/lib/util/helpers.js");
 /* harmony import */ var _functions_date__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../functions/date */ "./resources/js/functions/date.js");
 /* harmony import */ var _functions_truncate__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../functions/truncate */ "./resources/js/functions/truncate.js");
+/* harmony import */ var _functions_truncateUrl__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../functions/truncateUrl */ "./resources/js/functions/truncateUrl.js");
 //
 //
 //
@@ -3401,6 +3402,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 
 
@@ -3408,6 +3410,7 @@ __webpack_require__.r(__webpack_exports__);
   filters: {
     date: _functions_date__WEBPACK_IMPORTED_MODULE_1__["default"],
     truncate: _functions_truncate__WEBPACK_IMPORTED_MODULE_2__["default"],
+    truncateUrl: _functions_truncateUrl__WEBPACK_IMPORTED_MODULE_3__["default"],
     value: vuetify_lib_util_helpers__WEBPACK_IMPORTED_MODULE_0__["getObjectValueByPath"],
     number: Number
   },
@@ -28061,6 +28064,7 @@ var render = function() {
                 _c(
                   "a",
                   {
+                    staticClass: "text-decoration-none",
                     attrs: {
                       href: _vm._f("value")(_vm.item, header.value),
                       title: _vm._f("value")(_vm.item, header.value),
@@ -28070,7 +28074,7 @@ var render = function() {
                   [
                     _vm._v(
                       _vm._s(
-                        _vm._f("truncate")(
+                        _vm._f("truncateUrl")(
                           _vm._f("value")(_vm.item, header.value)
                         )
                       )
@@ -92977,6 +92981,52 @@ __webpack_require__.r(__webpack_exports__);
   var clamp = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '...';
   if (str.length > len) return str.substr(0, len) + clamp;
   return str;
+});
+;
+
+/***/ }),
+
+/***/ "./resources/js/functions/truncateCenter.js":
+/*!**************************************************!*\
+  !*** ./resources/js/functions/truncateCenter.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var len = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 30;
+  var clamp = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '...';
+  if (str.length > len) return str.slice(0, Math.ceil(len / 2)) + clamp + str.slice(-Math.floor(len / 2));
+  return str;
+});
+;
+
+/***/ }),
+
+/***/ "./resources/js/functions/truncateUrl.js":
+/*!***********************************************!*\
+  !*** ./resources/js/functions/truncateUrl.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _truncateCenter__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./truncateCenter */ "./resources/js/functions/truncateCenter.js");
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var str = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var len = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 20;
+  var clamp = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '...';
+  var url = new URL(str);
+  url.host = Object(_truncateCenter__WEBPACK_IMPORTED_MODULE_0__["default"])(url.pathname, len, clamp);
+  url.pathname = Object(_truncateCenter__WEBPACK_IMPORTED_MODULE_0__["default"])(url.pathname, len, clamp);
+  url.search = Object(_truncateCenter__WEBPACK_IMPORTED_MODULE_0__["default"])(url.search, len, clamp);
+  url.hash = Object(_truncateCenter__WEBPACK_IMPORTED_MODULE_0__["default"])(url.hash, len, clamp);
+  return url.toString().replace(/^\w+:\/\/(www\.)?/, '').replace(/[/?#]$/, '');
 });
 ;
 
