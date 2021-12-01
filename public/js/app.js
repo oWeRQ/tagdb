@@ -3349,6 +3349,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 
 
 
@@ -5330,6 +5335,7 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
 //
 //
 //
@@ -27916,6 +27922,27 @@ var render = function() {
                   2
                 )
               ]
+            : header.value === "name"
+            ? [
+                _c(
+                  "span",
+                  {
+                    staticStyle: { cursor: "pointer" },
+                    on: {
+                      click: function($event) {
+                        return _vm.$emit("edit")
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm._f("truncate")(_vm.item.name, 120)) +
+                        "\n            "
+                    )
+                  ]
+                )
+              ]
             : header.value === "created_at"
             ? [
                 _vm._v(
@@ -29583,7 +29610,11 @@ var render = function() {
                         "\n            "
                     )
                   ]
-                )
+                ),
+                _vm._v(" "),
+                _vm.returnObject && item.fields.length
+                  ? _c("sup", [_vm._v(_vm._s(item.fields.length))])
+                  : _vm._e()
               ],
               1
             )

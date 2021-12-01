@@ -20,6 +20,11 @@
                     </v-chip>
                 </v-chip-group>
             </template>
+            <template v-else-if="header.value === 'name'">
+                <span @click="$emit('edit')" style="cursor: pointer;">
+                    {{ item.name | truncate(120) }}
+                </span>
+            </template>
             <template v-else-if="header.value === 'created_at'">
                 {{ item.created_at | date }}
             </template>

@@ -28,6 +28,7 @@
                 <span :style="{'text-decoration': isHyphen(item) ? 'line-through' : 'none'}">
                     {{ itemText(item) }}
                 </span>
+                <sup v-if="returnObject && item.fields.length">{{ item.fields.length }}</sup>
             </v-chip>
         </template>
         <template v-slot:item="{ item }">
