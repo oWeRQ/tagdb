@@ -7659,7 +7659,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\nhtml {\n    overflow-y: auto;\n}\n.v-application--wrap {\n    min-height: -webkit-fill-available;\n}\n.v-data-table__wrapper {\n    flex: 1 1 0;\n}\n", ""]);
+exports.push([module.i, "\nhtml {\n    overflow-y: auto;\n}\n.v-application--wrap {\n    min-height: -webkit-fill-available;\n}\n.v-data-table__wrapper {\n    flex: 1 1 0;\n}\n.v-dialog__content {\n    align-items: flex-start;\n}\n", ""]);
 
 // exports
 

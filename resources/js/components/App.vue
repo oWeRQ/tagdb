@@ -224,4 +224,8 @@
     .v-data-table__wrapper {
         flex: 1 1 0;
     }
+
+    .v-dialog__content {
+        align-items: flex-start;
+    }
 </style>
