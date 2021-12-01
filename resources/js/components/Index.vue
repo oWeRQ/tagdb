@@ -23,7 +23,7 @@
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
-                <v-toolbar-title class="mr-4">{{ title }}</v-toolbar-title>
+                <v-toolbar-title class="mr-4">{{ projectName }}</v-toolbar-title>
                 <TagsField
                     v-model="query.tags"
                     solo
@@ -134,10 +134,6 @@
             EntityRow,
         },
         props: {
-            title: {
-                type: String,
-                default: 'Entities',
-            },
             form: {
                 type: Object,
                 default: () => EntityForm,
@@ -173,6 +169,9 @@
             }
         },
         computed: {
+            projectName() {
+                return this.$root.currentProject?.name;
+            },
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
@@ -225,7 +224,7 @@
                 return this.headers.slice(0, -2);
             },
             exportFilename() {
-                return (this.query.tags.join('_') || 'export') + '.csv';
+                return (this.query.tags.join(' ') || this.projectName) + '.csv';
             },
             exportParams() {
                 return {

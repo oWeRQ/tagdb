@@ -4275,10 +4275,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     EntityRow: _EntityRow__WEBPACK_IMPORTED_MODULE_9__["default"]
   },
   props: {
-    title: {
-      type: String,
-      "default": 'Entities'
-    },
     form: {
       type: Object,
       "default": function _default() {
@@ -4318,6 +4314,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   computed: {
+    projectName: function projectName() {
+      var _this$$root$currentPr;
+
+      return (_this$$root$currentPr = this.$root.currentProject) === null || _this$$root$currentPr === void 0 ? void 0 : _this$$root$currentPr.name;
+    },
     serverItemsLength: function serverItemsLength() {
       return Math.max(this.items.length, this.total);
     },
@@ -4426,7 +4427,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       return this.headers.slice(0, -2);
     },
     exportFilename: function exportFilename() {
-      return (this.query.tags.join('_') || 'export') + '.csv';
+      return (this.query.tags.join(' ') || this.projectName) + '.csv';
     },
     exportParams: function exportParams() {
       return {
@@ -28781,7 +28782,7 @@ var render = function() {
               },
               [
                 _c("v-toolbar-title", { staticClass: "mr-4" }, [
-                  _vm._v(_vm._s(_vm.title))
+                  _vm._v(_vm._s(_vm.projectName))
                 ]),
                 _vm._v(" "),
                 _c("TagsField", {
