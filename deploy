@@ -1,7 +1,6 @@
 #!/bin/sh
 
-source ./.env
-IMAGE="${COMPOSE_PROJECT_NAME}_app"
+IMAGE="tagdb_app"
 
 docker build . -t "$IMAGE"
 docker save "$IMAGE" | gzip | pv | ssh "$1" "zcat | docker load"
