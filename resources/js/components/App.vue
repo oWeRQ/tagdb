@@ -217,6 +217,12 @@
         overflow-y: auto;
     }
 
+    html,
+    body {
+        height: 100%;
+    }
+
+    .v-application,
     .v-application--wrap {
         min-height: -webkit-fill-available;
     }
