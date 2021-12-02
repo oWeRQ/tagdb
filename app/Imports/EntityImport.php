@@ -41,16 +41,15 @@ class EntityImport implements ToCollection, WithHeadingRow
         $tagsByName = $tags->pluck('id', 'name');
 
         foreach ($rows as $row) {
-            $entity = new Entity;
-
+            $attributes = [];
             $contents = [];
             $fieldsTags = collect();
             $columnTags = collect();
 
             foreach ($row as $key => $content) {
                 if ($field = $this->fields->get($key)) {
-                    if (in_array($field, ['name', 'created_at', 'updated_at'])) {
-                        $entity->{$field} = $content;
+                    if (in_array($field, ['name', 'created_at', 'updated_at'], true)) {
+                        $attributes[$field] = $content;
                     } elseif ($field === 'tags') {
                         $columnTags = collect(Tag::parseString($content))->map(function($name) use($tagsByName) {
                             return $tagsByName[$name];
@@ -64,7 +63,7 @@ class EntityImport implements ToCollection, WithHeadingRow
 
             $mergedTags = $importTags->concat($fieldsTags)->concat($columnTags)->unique()->all();
 
-            $entity->save();
+            $entity = Entity::create($attributes);
             $entity->tags()->attach($mergedTags);
             $entity->insertContents($contents);
         }
