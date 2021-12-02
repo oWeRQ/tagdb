@@ -3363,14 +3363,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3381,17 +3373,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    RowActions: _row_RowActions_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
-    RowCheckbox: _row_RowCheckbox_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
-    RowColor: _row_RowColor_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    RowDate: _row_RowDate_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    RowName: _row_RowName_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
-    RowRating: _row_RowRating_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
-    RowTags: _row_RowTags_vue__WEBPACK_IMPORTED_MODULE_6__["default"],
-    RowText: _row_RowText_vue__WEBPACK_IMPORTED_MODULE_7__["default"],
-    RowUrl: _row_RowUrl_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
-  },
   props: {
     isMobile: {
       type: Boolean,
@@ -3416,6 +3397,19 @@ __webpack_require__.r(__webpack_exports__);
     },
     select: {
       type: Function
+    }
+  },
+  methods: {
+    getComponent: function getComponent(header) {
+      if (header.value === 'data-table-select') return _row_RowCheckbox_vue__WEBPACK_IMPORTED_MODULE_1__["default"];
+      if (header.value === 'actions') return _row_RowActions_vue__WEBPACK_IMPORTED_MODULE_0__["default"];
+      if (header.value === 'tags') return _row_RowTags_vue__WEBPACK_IMPORTED_MODULE_6__["default"];
+      if (header.value === 'name') return _row_RowName_vue__WEBPACK_IMPORTED_MODULE_4__["default"];
+      if (header.type === 'date') return _row_RowDate_vue__WEBPACK_IMPORTED_MODULE_3__["default"];
+      if (header.type === 'url') return _row_RowUrl_vue__WEBPACK_IMPORTED_MODULE_8__["default"];
+      if (header.type === 'color') return _row_RowColor_vue__WEBPACK_IMPORTED_MODULE_2__["default"];
+      if (header.type === 'rating') return _row_RowRating_vue__WEBPACK_IMPORTED_MODULE_5__["default"];
+      return _row_RowText_vue__WEBPACK_IMPORTED_MODULE_7__["default"];
     }
   }
 });
@@ -28275,46 +28269,18 @@ var render = function() {
             "span",
             { staticClass: "v-data-table__mobile-row__cell" },
             [
-              header.value === "data-table-select"
-                ? _c("RowCheckbox", {
-                    attrs: { isSelected: _vm.isSelected, select: _vm.select }
-                  })
-                : header.value === "actions"
-                ? _c("RowActions", {
-                    attrs: { item: _vm.item },
-                    on: {
-                      edit: function($event) {
-                        return _vm.$emit("edit")
-                      }
-                    }
-                  })
-                : header.value === "tags"
-                ? _c("RowTags", {
-                    attrs: { item: _vm.item, query: _vm.query },
-                    on: {
-                      "click:tag": function($event) {
-                        return _vm.$emit("click:tag", $event)
-                      }
-                    }
-                  })
-                : header.value === "name"
-                ? _c("RowName", {
-                    attrs: { item: _vm.item },
-                    on: {
-                      edit: function($event) {
-                        return _vm.$emit("edit")
-                      }
-                    }
-                  })
-                : header.type === "date"
-                ? _c("RowDate", { attrs: { item: _vm.item, header: header } })
-                : header.type === "url"
-                ? _c("RowUrl", { attrs: { item: _vm.item, header: header } })
-                : header.type === "color"
-                ? _c("RowColor", { attrs: { item: _vm.item, header: header } })
-                : header.type === "rating"
-                ? _c("RowRating", { attrs: { item: _vm.item, header: header } })
-                : _c("RowText", { attrs: { item: _vm.item, header: header } })
+              _c(
+                _vm.getComponent(header),
+                _vm._g(
+                  _vm._b(
+                    { tag: "component", attrs: { header: header } },
+                    "component",
+                    _vm.$props,
+                    false
+                  ),
+                  _vm.$listeners
+                )
+              )
             ],
             1
           )
