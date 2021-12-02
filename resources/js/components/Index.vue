@@ -57,13 +57,14 @@
                 @input="savePreset"
             ></CrudDialog>
         </template>
-        <template v-slot:item="{ item, headers, isSelected, select }">
+        <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
                 :query="query"
                 @click:tag="query.tags.push($event.name)"
                 :item="item"
                 :headers="headers"
                 :isSelected="isSelected"
+                :isMobile="isMobile"
                 :select="select"
                 @edit="editItem(item)"
             ></EntityRow>

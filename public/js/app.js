@@ -3371,19 +3371,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -3406,6 +3393,10 @@ __webpack_require__.r(__webpack_exports__);
     RowUrl: _row_RowUrl_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
   },
   props: {
+    isMobile: {
+      type: Boolean,
+      "default": false
+    },
     query: {
       type: Object,
       "default": function _default() {
@@ -4236,6 +4227,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -4582,6 +4574,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
 //
 //
 //
@@ -28253,61 +28246,79 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "tr",
+    {
+      class: {
+        "v-data-table__selected": _vm.isSelected,
+        "v-data-table__mobile-table-row": _vm.isMobile
+      }
+    },
     _vm._l(_vm.headers, function(header) {
+      var _obj
       return _c(
         "td",
-        { key: header.value, class: header.align && "text-" + header.align },
+        {
+          key: header.value,
+          class:
+            ((_obj = {}),
+            (_obj["text-" + header.align] = header.align),
+            (_obj["v-data-table__mobile-row"] = _vm.isMobile),
+            _obj)
+        },
         [
-          header.value === "data-table-select"
-            ? [
-                _c("RowCheckbox", {
-                  attrs: { isSelected: _vm.isSelected, select: _vm.select }
-                })
-              ]
-            : header.value === "actions"
-            ? [
-                _c("RowActions", {
-                  attrs: { item: _vm.item },
-                  on: {
-                    edit: function($event) {
-                      return _vm.$emit("edit")
+          _vm.isMobile
+            ? _c("span", { staticClass: "v-data-table__mobile-row__header" }, [
+                _vm._v("\n            " + _vm._s(header.text) + "\n        ")
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "span",
+            { staticClass: "v-data-table__mobile-row__cell" },
+            [
+              header.value === "data-table-select"
+                ? _c("RowCheckbox", {
+                    attrs: { isSelected: _vm.isSelected, select: _vm.select }
+                  })
+                : header.value === "actions"
+                ? _c("RowActions", {
+                    attrs: { item: _vm.item },
+                    on: {
+                      edit: function($event) {
+                        return _vm.$emit("edit")
+                      }
                     }
-                  }
-                })
-              ]
-            : header.value === "tags"
-            ? [
-                _c("RowTags", {
-                  attrs: { item: _vm.item, query: _vm.query },
-                  on: {
-                    "click:tag": function($event) {
-                      return _vm.$emit("click:tag", $event)
+                  })
+                : header.value === "tags"
+                ? _c("RowTags", {
+                    attrs: { item: _vm.item, query: _vm.query },
+                    on: {
+                      "click:tag": function($event) {
+                        return _vm.$emit("click:tag", $event)
+                      }
                     }
-                  }
-                })
-              ]
-            : header.value === "name"
-            ? [
-                _c("RowName", {
-                  attrs: { item: _vm.item },
-                  on: {
-                    edit: function($event) {
-                      return _vm.$emit("edit")
+                  })
+                : header.value === "name"
+                ? _c("RowName", {
+                    attrs: { item: _vm.item },
+                    on: {
+                      edit: function($event) {
+                        return _vm.$emit("edit")
+                      }
                     }
-                  }
-                })
-              ]
-            : header.type === "date"
-            ? [_c("RowDate", { attrs: { item: _vm.item, header: header } })]
-            : header.type === "url"
-            ? [_c("RowUrl", { attrs: { item: _vm.item, header: header } })]
-            : header.type === "color"
-            ? [_c("RowColor", { attrs: { item: _vm.item, header: header } })]
-            : header.type === "rating"
-            ? [_c("RowRating", { attrs: { item: _vm.item, header: header } })]
-            : [_c("RowText", { attrs: { item: _vm.item, header: header } })]
-        ],
-        2
+                  })
+                : header.type === "date"
+                ? _c("RowDate", { attrs: { item: _vm.item, header: header } })
+                : header.type === "url"
+                ? _c("RowUrl", { attrs: { item: _vm.item, header: header } })
+                : header.type === "color"
+                ? _c("RowColor", { attrs: { item: _vm.item, header: header } })
+                : header.type === "rating"
+                ? _c("RowRating", { attrs: { item: _vm.item, header: header } })
+                : _c("RowText", { attrs: { item: _vm.item, header: header } })
+            ],
+            1
+          )
+        ]
       )
     }),
     0
@@ -28337,7 +28348,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-toolbar",
-    { attrs: { flat: "", color: "grey lighten-2" } },
+    { attrs: { flat: "", color: "blue lighten-5" } },
     [
       _c(
         "v-btn",
@@ -29051,6 +29062,7 @@ var render = function() {
           var item = ref.item
           var headers = ref.headers
           var isSelected = ref.isSelected
+          var isMobile = ref.isMobile
           var select = ref.select
           return [
             _c("EntityRow", {
@@ -29059,6 +29071,7 @@ var render = function() {
                 item: item,
                 headers: headers,
                 isSelected: isSelected,
+                isMobile: isMobile,
                 select: select
               },
               on: {
@@ -29282,6 +29295,7 @@ var render = function() {
           var item = ref.item
           var headers = ref.headers
           var isSelected = ref.isSelected
+          var isMobile = ref.isMobile
           var select = ref.select
           return [
             _c("EntityRow", {
@@ -29290,6 +29304,7 @@ var render = function() {
                 item: item,
                 headers: headers,
                 isSelected: isSelected,
+                isMobile: isMobile,
                 select: select
               },
               on: {

@@ -1,33 +1,20 @@
 <template>
-    <tr>
-        <td v-for="header in headers" :key="header.value" :class="header.align && 'text-' + header.align">
-            <template v-if="header.value === 'data-table-select'">
-                <RowCheckbox :isSelected="isSelected" :select="select"></RowCheckbox>
-            </template>
-            <template v-else-if="header.value === 'actions'">
-                <RowActions :item="item" @edit="$emit('edit')"></RowActions>
-            </template>
-            <template v-else-if="header.value === 'tags'">
-                <RowTags :item="item" :query="query" @click:tag="$emit('click:tag', $event)"></RowTags>
-            </template>
-            <template v-else-if="header.value === 'name'">
-                <RowName :item="item" @edit="$emit('edit')"></RowName>
-            </template>
-            <template v-else-if="header.type === 'date'">
-                <RowDate :item="item" :header="header"></RowDate>
-            </template>
-            <template v-else-if="header.type === 'url'">
-                <RowUrl :item="item" :header="header"></RowUrl>
-            </template>
-            <template v-else-if="header.type === 'color'">
-                <RowColor :item="item" :header="header"></RowColor>
-            </template>
-            <template v-else-if="header.type === 'rating'">
-                <RowRating :item="item" :header="header"></RowRating>
-            </template>
-            <template v-else>
-                <RowText :item="item" :header="header"></RowText>
-            </template>
+    <tr :class="{'v-data-table__selected': isSelected, 'v-data-table__mobile-table-row': isMobile}">
+        <td v-for="header in headers" :key="header.value" :class="{[`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
+            <span v-if="isMobile" class="v-data-table__mobile-row__header">
+                {{ header.text }}
+            </span>
+            <span class="v-data-table__mobile-row__cell">
+                <RowCheckbox v-if="header.value === 'data-table-select'" :isSelected="isSelected" :select="select"></RowCheckbox>
+                <RowActions v-else-if="header.value === 'actions'" :item="item" @edit="$emit('edit')"></RowActions>
+                <RowTags v-else-if="header.value === 'tags'" :item="item" :query="query" @click:tag="$emit('click:tag', $event)"></RowTags>
+                <RowName v-else-if="header.value === 'name'" :item="item" @edit="$emit('edit')"></RowName>
+                <RowDate v-else-if="header.type === 'date'" :item="item" :header="header"></RowDate>
+                <RowUrl v-else-if="header.type === 'url'" :item="item" :header="header"></RowUrl>
+                <RowColor v-else-if="header.type === 'color'" :item="item" :header="header"></RowColor>
+                <RowRating v-else-if="header.type === 'rating'" :item="item" :header="header"></RowRating>
+                <RowText v-else :item="item" :header="header"></RowText>
+            </span>
         </td>
     </tr>
 </template>
@@ -56,6 +43,10 @@
             RowUrl,
         },
         props: {
+            isMobile: {
+                type: Boolean,
+                default: false,
+            },
             query: {
                 type: Object,
                 default: () => ({tags: []}),

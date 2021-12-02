@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar flat color="grey lighten-2">
+    <v-toolbar flat color="blue lighten-5">
         <v-btn icon @click="$emit('input', [])">
             <v-icon>mdi-close</v-icon>
         </v-btn>
