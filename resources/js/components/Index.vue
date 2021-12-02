@@ -205,7 +205,7 @@
                     { text: 'Name', value: 'name' },
                 ];
                 const after = [
-                    { text: 'Created', value: 'created_at', width: '120px' },
+                    { text: 'Created', value: 'created_at', type: 'date', width: '120px' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
                 const fields = this.loading ? [] : this.displayFields.map((field) => {

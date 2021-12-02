@@ -2,72 +2,58 @@
     <tr>
         <td v-for="header in headers" :key="header.value" :class="header.align && 'text-' + header.align">
             <template v-if="header.value === 'data-table-select'">
-                <v-simple-checkbox :value="isSelected" @input="select" class="v-data-table__checkbox"></v-simple-checkbox>
+                <RowCheckbox :isSelected="isSelected" :select="select"></RowCheckbox>
             </template>
             <template v-else-if="header.value === 'actions'">
-                <v-icon @click="$emit('edit')" color="grey" :title="'ID: ' + item.id">
-                    mdi-pencil
-                </v-icon>
+                <RowActions :item="item" @edit="$emit('edit')"></RowActions>
             </template>
             <template v-else-if="header.value === 'tags'">
-                <v-chip-group>
-                    <v-chip v-if="invisibleTags.length" small outlined class="grey--text">
-                        {{ invisibleTags.length }}
-                    </v-chip>
-                    <v-chip v-for="tag in visibleTags" :key="tag.name" @click="$emit('click:tag', tag)" :color="tag.color" :dark="!!tag.color" small class="lighten-2">
-                        {{ tag.name }}
-                        <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
-                    </v-chip>
-                </v-chip-group>
+                <RowTags :item="item" :query="query" @click:tag="$emit('click:tag', $event)"></RowTags>
             </template>
             <template v-else-if="header.value === 'name'">
-                <span @click="$emit('edit')" style="cursor: pointer;">
-                    {{ item.name | truncate(120) }}
-                </span>
+                <RowName :item="item" @edit="$emit('edit')"></RowName>
             </template>
-            <template v-else-if="header.value === 'created_at'">
-                {{ item.created_at | date }}
+            <template v-else-if="header.type === 'date'">
+                <RowDate :item="item" :header="header"></RowDate>
             </template>
             <template v-else-if="header.type === 'url'">
-                <a :href="item | value(header.value)" :title="item | value(header.value)" target="_blank" class="text-decoration-none">{{ item | value(header.value) | truncateUrl }}</a>
+                <RowUrl :item="item" :header="header"></RowUrl>
             </template>
             <template v-else-if="header.type === 'color'">
-                <v-chip>
-                    <v-avatar left :color="item | value(header.value)"></v-avatar>
-                    {{ item | value(header.value) }}
-                </v-chip>
+                <RowColor :item="item" :header="header"></RowColor>
             </template>
             <template v-else-if="header.type === 'rating'">
-                <v-rating
-                    :value="item | value(header.value) | number"
-                    readonly
-                    half-increments
-                    color="orange"
-                    background-color="grey lighten-1"
-                    size="18"
-                    class="d-inline-block"
-                ></v-rating>
+                <RowRating :item="item" :header="header"></RowRating>
             </template>
             <template v-else>
-                {{ item | value(header.value) | truncate }}
+                <RowText :item="item" :header="header"></RowText>
             </template>
         </td>
     </tr>
 </template>
 
 <script>
-    import { getObjectValueByPath } from 'vuetify/lib/util/helpers'
-    import date from '../functions/date';
-    import truncate from '../functions/truncate';
-    import truncateUrl from '../functions/truncateUrl';
+    import RowActions from './row/RowActions.vue';
+    import RowCheckbox from './row/RowCheckbox.vue';
+    import RowColor from './row/RowColor.vue';
+    import RowDate from './row/RowDate.vue';
+    import RowName from './row/RowName.vue';
+    import RowRating from './row/RowRating.vue';
+    import RowTags from './row/RowTags.vue';
+    import RowText from './row/RowText.vue';
+    import RowUrl from './row/RowUrl.vue';
 
     export default {
-        filters: {
-            date,
-            truncate,
-            truncateUrl,
-            value: getObjectValueByPath,
-            number: Number,
+        components: {
+            RowActions,
+            RowCheckbox,
+            RowColor,
+            RowDate,
+            RowName,
+            RowRating,
+            RowTags,
+            RowText,
+            RowUrl,
         },
         props: {
             query: {
@@ -85,14 +71,6 @@
             },
             select: {
                 type: Function,
-            },
-        },
-        computed: {
-            visibleTags() {
-                return this.item.tags.filter(tag => !this.query.tags.includes(tag.name));
-            },
-            invisibleTags() {
-                return this.item.tags.filter(tag => this.query.tags.includes(tag.name));
             },
         },
     }
