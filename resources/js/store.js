@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import axios from 'axios';
 import api from './api';
 
 Vue.use(Vuex);
@@ -39,6 +40,21 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        init(context) {
+            axios.interceptors.response.use(response => {
+                return response;
+            }, error => {
+                if (error.response.status === 401) {
+                    context.dispatch('logoutSuccess');
+                    return new Promise(() => {});
+                }
+                return Promise.reject(error);
+            });
+
+            context.dispatch('getAccount').then(() => {
+                context.dispatch('authSuccess');
+            });
+        },
         register(context, data) {
             return api.auth.register(data).then(() => {
                 context.dispatch('authSuccess');

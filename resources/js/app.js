@@ -1,8 +1,6 @@
 import './bootstrap';
 
 import Vue from 'vue';
-import { mapActions } from 'vuex';
-import axios from 'axios';
 
 import store from './store';
 import router from './router';
@@ -16,36 +14,16 @@ const app = new Vue({
     store,
     router,
     vuetify,
-    template: `<App>
-        <AuthDialog />
-        <ConfirmDialog ref="confirm" />
-    </App>`,
-    components: {
-        App,
-        AuthDialog,
-        ConfirmDialog,
+    render(h) {
+        return h(App, [
+            h(AuthDialog),
+            h(ConfirmDialog, { ref: 'confirm' }),
+        ]);
     },
     mounted() {
-        axios.interceptors.response.use(response => {
-            return response;
-        }, error => {
-            if (error.response.status === 401) {
-                this.logoutSuccess();
-                return new Promise(() => {});
-            }
-            return Promise.reject(error);
-        });
-
-        this.getAccount().then(() => {
-            this.authSuccess();
-        });
+        this.$store.dispatch('init');
     },
     methods: {
-        ...mapActions([
-            'logoutSuccess',
-            'getAccount',
-            'authSuccess',
-        ]),
         confirm(title, text = null) {
             return this.$refs.confirm.show(title, text);
         },
