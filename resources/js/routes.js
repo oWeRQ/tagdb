@@ -6,6 +6,8 @@ import FieldDialog from './components/field/FieldDialog.vue';
 import PresetDialog from './components/preset/PresetDialog.vue';
 import ProjectDialog from './components/project/ProjectDialog.vue';
 
+import api from './api';
+
 export default [
     {
         path: '',
@@ -27,7 +29,7 @@ export default [
                 fields: [],
             },
             title: 'Tags',
-            resource: '/api/v1/tags',
+            api: api.tags,
             columns: [
                 { text: 'ID', value: 'id' },
                 { text: 'Name', value: 'name' },
@@ -43,7 +45,7 @@ export default [
         props: {
             dialog: FieldDialog,
             title: 'Fields',
-            resource: '/api/v1/fields',
+            api: api.fields,
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
@@ -59,7 +61,7 @@ export default [
         component: Crud,
         props: {
             title: 'Values',
-            resource: '/api/v1/values',
+            api: api.values,
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
@@ -84,7 +86,7 @@ export default [
         props: {
             dialog: PresetDialog,
             title: 'Presets',
-            resource: '/api/v1/presets',
+            api: api.presets,
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
@@ -100,7 +102,7 @@ export default [
         props: {
             dialog: ProjectDialog,
             title: 'Projects',
-            resource: '/api/v1/projects',
+            api: api.projects,
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
@@ -113,7 +115,7 @@ export default [
         component: Crud,
         props: {
             title: 'Users',
-            resource: '/api/v1/users',
+            api: api.users,
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },

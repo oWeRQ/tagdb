@@ -20,7 +20,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import CrudForm from './CrudForm';
 
     export default {
@@ -33,8 +32,8 @@
                 type: Object,
                 default: () => CrudForm,
             },
-            resource: {
-                type: String,
+            api: {
+                type: Object,
                 required: true,
             },
             deletable: {
@@ -74,7 +73,7 @@
         methods: {
             remove() {
                 this.$root.confirm(`Delete ${this.title}?`).then(() => {
-                    axios.delete(this.resource + '/' + this.value.id).then(response => {
+                    this.api.destroy(this.value.id).then(response => {
                         this.$emit('delete', this.value);
                         this.close();
                     });
@@ -87,9 +86,9 @@
                 }
 
                 if (this.value.id) {
-                    axios.put(this.resource + '/' + this.value.id, this.value).then(this.success);
+                    this.api.update(this.value.id, this.value).then(this.success);
                 } else {
-                    axios.post(this.resource, this.value).then(this.success);
+                    this.api.store(this.value).then(this.success);
                 }
             },
             success(response) {

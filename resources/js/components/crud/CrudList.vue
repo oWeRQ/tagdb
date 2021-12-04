@@ -33,7 +33,7 @@
                 ref="crudDialog"
                 :title="singularTitle"
                 :form="form"
-                :resource="resource"
+                :api="api"
                 :editable="editable"
                 :processValue="processItem"
                 :value="editedItem"
@@ -45,7 +45,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../../functions/stringifySort';
     import CrudDialog from './CrudDialog';
@@ -69,8 +68,8 @@
                 type: String,
                 default: 'Items',
             },
-            resource: {
-                type: String,
+            api: {
+                type: Object,
                 required: true,
             },
             columns: {
@@ -119,7 +118,7 @@
             },
         },
         watch: {
-            resource: 'getItems',
+            api: 'getItems',
             options: {
                 handler: 'getItems',
                 deep: true,
@@ -139,7 +138,7 @@
                 this.loading = true;
                 this.items = [];
                 this.total = 0;
-                axios.get(this.resource, { params }).then(response => {
+                this.api.index(params).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
