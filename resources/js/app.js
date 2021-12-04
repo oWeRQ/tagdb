@@ -1,23 +1,20 @@
 import './bootstrap';
 
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Vuetify from 'vuetify';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@mdi/font/css/materialdesignicons.css';
-import 'vuetify/dist/vuetify.min.css';
 import axios from 'axios';
+
+import store from './store';
+import router from './router';
+import vuetify from './vuetify';
 
 import App from './components/App.vue';
 import AuthDialog from './components/AuthDialog.vue';
 import ConfirmDialog from './components/ConfirmDialog.vue';
-import routes from './routes';
-
-Vue.use(Vuetify);
-Vue.use(VueRouter);
 
 const app = new Vue({
+    store,
+    router,
+    vuetify,
     template: `<App>
         <AuthDialog
             :visible="isAuth"
@@ -25,10 +22,6 @@ const app = new Vue({
         />
         <ConfirmDialog ref="confirm"></ConfirmDialog>
     </App>`,
-    vuetify: new Vuetify({}),
-    router: new VueRouter({
-        routes,
-    }),
     components: {
         App,
         AuthDialog,
