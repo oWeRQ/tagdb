@@ -46,7 +46,7 @@ export default {
             return axios.post(`/api/v1/tags/${id}/entities`, data);
         },
         detachEntities(id, data) {
-            return axios.delete(`/api/v1/tags/${id}/entities`, {data});
+            return axios.delete(`/api/v1/tags/${id}/entities`, { data });
         },
     },
     users: apiResource(`/api/v1/users`),
