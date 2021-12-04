@@ -54,10 +54,26 @@ class TagController extends Controller
         return new TagResource($tag);
     }
 
+    public function attachEntities(Request $request, $id)
+    {
+        $tag = Tag::findOrFail($id);
+        $tag->entities()->sync($request->get('id'), false);
+
+        return response()->noContent();
+    }
+
+    public function detachEntities(Request $request, $id)
+    {
+        $tag = Tag::findOrFail($id);
+        $tag->entities()->detach($request->get('id'));
+
+        return response()->noContent();
+    }
+
     public function destroy($id)
     {
         Tag::find($id)->delete();
 
-        return 204;
+        return response()->noContent();
     }
 }

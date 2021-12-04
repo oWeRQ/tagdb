@@ -22,6 +22,8 @@ Route::prefix('v1')->middleware('auth')->group(function() {
     Route::post('account/switch-project', [ApiV1\AccountController::class, 'switchProject']);
     Route::apiResource('entities', 'Api\v1\EntityController');
     Route::apiResource('tags', 'Api\v1\TagController');
+    Route::post('tags/{id}/entities', [ApiV1\TagController::class, 'attachEntities']);
+    Route::delete('tags/{id}/entities', [ApiV1\TagController::class, 'detachEntities']);
     Route::apiResource('fields', 'Api\v1\FieldController');
     Route::apiResource('values', 'Api\v1\ValueController');
     Route::apiResource('presets', 'Api\v1\PresetController');

@@ -40,6 +40,10 @@
             resource: {
                 type: String,
             },
+            tagResource: {
+                type: String,
+                default: '/api/v1/tags',
+            },
             value: {
                 type: Array,
                 default: () => [],
@@ -61,29 +65,25 @@
                 if (!tag)
                     return;
 
-                const items = this.value.filter(item => {
-                    const idx = item.tags.findIndex(tag => tag.name === this.selectedTag);
-                    if (state && idx === -1) {
-                        item.tags.push(tag);
-                        return true;
-                    }
-                    if (!state && idx !== -1) {
-                        item.tags.splice(idx, 1);
-                        return true;
-                    }
-                    return false;
-                });
-
-                const requests = items.map(item => axios.put(this.resource + '/' + item.id, {tags: item.tags}));
-                Promise.all(requests).then(() => {
+                const url = `${this.tagResource}/${tag.id}/entities`;
+                const data = {
+                    id: this.value.map(item => item.id),
+                };
+                const success = () => {
                     this.$emit('update');
                     this.$emit('input', []);
-                });
+                };
+
+                if (state) {
+                    axios.post(url, data).then(success);
+                } else {
+                    axios.delete(url, {data}).then(success);
+                }
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {
-                    const id = this.value.map(item => item.id).join(',');
-                    axios.delete(this.resource + '/' + id).then(() => {
+                    const id = this.value.map(item => item.id);
+                    axios.delete(this.resource + '/' + id.join(',')).then(() => {
                         this.$emit('update');
                         this.$emit('input', []);
                     });

@@ -3467,6 +3467,10 @@ __webpack_require__.r(__webpack_exports__);
     resource: {
       type: String
     },
+    tagResource: {
+      type: String,
+      "default": '/api/v1/tags'
+    },
     value: {
       type: Array,
       "default": function _default() {
@@ -3492,33 +3496,26 @@ __webpack_require__.r(__webpack_exports__);
         return tag.name === _this.selectedTag;
       });
       if (!tag) return;
-      var items = this.value.filter(function (item) {
-        var idx = item.tags.findIndex(function (tag) {
-          return tag.name === _this.selectedTag;
-        });
+      var url = "".concat(this.tagResource, "/").concat(tag.id, "/entities");
+      var data = {
+        id: this.value.map(function (item) {
+          return item.id;
+        })
+      };
 
-        if (state && idx === -1) {
-          item.tags.push(tag);
-          return true;
-        }
-
-        if (!state && idx !== -1) {
-          item.tags.splice(idx, 1);
-          return true;
-        }
-
-        return false;
-      });
-      var requests = items.map(function (item) {
-        return axios__WEBPACK_IMPORTED_MODULE_0___default.a.put(_this.resource + '/' + item.id, {
-          tags: item.tags
-        });
-      });
-      Promise.all(requests).then(function () {
+      var success = function success() {
         _this.$emit('update');
 
         _this.$emit('input', []);
-      });
+      };
+
+      if (state) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, data).then(success);
+      } else {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url, {
+          data: data
+        }).then(success);
+      }
     },
     deleteItems: function deleteItems() {
       var _this2 = this;
@@ -3526,9 +3523,9 @@ __webpack_require__.r(__webpack_exports__);
       this.$root.confirm('Delete selected items?').then(function () {
         var id = _this2.value.map(function (item) {
           return item.id;
-        }).join(',');
+        });
 
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + id).then(function () {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + id.join(',')).then(function () {
           _this2.$emit('update');
 
           _this2.$emit('input', []);
