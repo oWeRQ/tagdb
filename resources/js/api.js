@@ -21,6 +21,21 @@ function apiResource(resource) {
 };
 
 export default {
+    auth: {
+        register(data) {
+            return axios.post('/register', data, {
+                headers: { Accept: 'application/json' },
+            });
+        },
+        login(data) {
+            return axios.post('/login', data, {
+                headers: { Accept: 'application/json' },
+            });
+        },
+        logout() {
+            return axios.post('/logout');
+        },
+    },
     account: {
         index() {
             return axios.get(`/api/v1/account`);

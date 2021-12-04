@@ -90,12 +90,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
-
     export default {
-        props: {
-            visible: Boolean,
-        },
         data() {
             return {
                 tab: null,
@@ -110,6 +105,9 @@
             };
         },
         computed: {
+            visible() {
+                return this.$store.state.isAuth;
+            },
             passwordType() {
                 return (this.show_password ? 'text' : 'password');
             },
@@ -119,28 +117,20 @@
         },
         methods: {
             submitLogin() {
-                axios.post('/login', {
+                this.$store.dispatch('login', {
                     email: this.email,
                     password: this.password,
                     remember: this.remember,
-                }, {
-                    headers: {'Accept': 'application/json'},
-                }).then(() => {
-                    this.$emit('success');
                 }).catch((error) => {
                     this.loginErrors = error.response.data.errors || {};
                 });
             },
             submitRegister() {
-                axios.post('/register', {
+                this.$store.dispatch('register', {
                     name: this.name,
                     email: this.email,
                     password: this.password,
                     password_confirmation: this.password_confirmation,
-                }, {
-                    headers: {'Accept': 'application/json'},
-                }).then(() => {
-                    this.$emit('success');
                 }).catch((error) => {
                     this.registerErrors = error.response.data.errors || {};
                 });
