@@ -23,6 +23,7 @@
             v-model="value.name"
             :rules="rules.name"
             :autofocus="!!value.tags.length"
+            spellcheck="false"
             label="Name"
             auto-grow
             rows="1"
