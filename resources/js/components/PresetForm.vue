@@ -7,6 +7,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import SortField from './SortField';
     import QueryField from './QueryField';
 
@@ -24,6 +25,9 @@
             },
         },
         computed: {
+            ...mapState([
+                'tags',
+            ]),
             rules: () => ({
                 name: [
                     v => !!v || 'Required',
@@ -32,16 +36,16 @@
                     v => !!v || 'Required',
                 ],
             }),
-            tags() {
+            queryTags() {
                 try {
                     const tags = JSON.parse(this.value.query).tags;
-                    return this.$root.tags.filter(tag => tags.includes(tag.name));
+                    return this.tags.filter(tag => tags.includes(tag.name));
                 } catch (ex) {
                     return [];
                 }
             },
             fields() {
-                return this.tags.flatMap(item => item.fields);
+                return this.queryTags.flatMap(item => item.fields);
             },
         },
     }

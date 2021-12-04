@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import Vue from 'vue';
     import TagsField from './TagsField';
 
@@ -26,15 +27,15 @@
             },
         },
         computed: {
+            ...mapState([
+                'tags',
+            ]),
             rules() {
                 return {
                     tags: [
                         v => !!v.length || 'Required',
                     ],
                 };
-            },
-            tags() {
-                return this.$root.tags;
             },
             query() {
                 return Vue.observable(this.value ? JSON.parse(this.value) : {tags: [], search: ''});

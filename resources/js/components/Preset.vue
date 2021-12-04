@@ -95,6 +95,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
@@ -145,15 +146,16 @@
             };
         },
         computed: {
+            ...mapState([
+                'tags',
+                'presets',
+            ]),
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
-            tags() {
-                return this.$root.tags;
-            },
             preset() {
                 const name = this.$route.params.name;
-                return this.$root.presets.find(preset => preset.name === name);
+                return this.presets.find(preset => preset.name === name);
             },
             title() {
                 return this.preset && this.preset.name;
@@ -283,7 +285,7 @@
                     this.$router.push({name: 'preset', params: { name: rawPreset.name }});
                 }
 
-                this.$root.getPresets();
+                this.$store.dispatch('getPresets');
             },
         },
     }

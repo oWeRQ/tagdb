@@ -113,6 +113,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
@@ -171,14 +172,15 @@
             }
         },
         computed: {
+            ...mapState([
+                'currentProject',
+                'tags',
+            ]),
             projectName() {
-                return this.$root.currentProject?.name;
+                return this.currentProject?.name;
             },
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
-            },
-            tags() {
-                return this.$root.tags;
             },
             availableTags() {
                 const tags = [];
@@ -323,7 +325,7 @@
                 this.$refs.presetDialog.show();
             },
             savePreset(rawPreset) {
-                this.$root.getPresets();
+                this.$store.dispatch('getPresets');
             },
         },
     };

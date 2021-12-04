@@ -8,6 +8,7 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import makeCode from '../functions/makeCode';
 
     export default {
@@ -18,9 +19,9 @@
             },
         },
         computed: {
-            tags() {
-                return this.$root.tags;
-            },
+            ...mapState([
+                'tags',
+            ]),
             types: () => [
                 { text: 'String', value: 'string' },
                 { text: 'Text', value: 'text' },

@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapState } from 'vuex';
+import api from '../api';
 import toQueryString from '../functions/toQueryString';
 
 export default {
@@ -50,9 +51,9 @@ export default {
         };
     },
     computed: {
-        presets() {
-            return this.$root.presets;
-        },
+        ...mapState([
+            'presets',
+        ]),
         queryTags() {
             const queryJson = (
                 this.params.preset
@@ -81,7 +82,7 @@ export default {
             };
 
             this.fields = [];
-            axios.get('/api/v1/tags', { params }).then(response => {
+            api.tags.index(params).then(response => {
                 this.fields = response.data.data.filter(tag => tag.entities_count).flatMap(tag => tag.fields);
             });
         },
