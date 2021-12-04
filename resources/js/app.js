@@ -1,7 +1,7 @@
 import './bootstrap';
 
 import Vue from 'vue';
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 import axios from 'axios';
 
 import store from './store';
@@ -25,15 +25,6 @@ const app = new Vue({
         AuthDialog,
         ConfirmDialog,
     },
-    computed: mapState([
-        'isReady',
-        'isAuth',
-        'account',
-        'currentProject',
-        'projects',
-        'tags',
-        'presets',
-    ]),
     mounted() {
         axios.interceptors.response.use(response => {
             return response;
@@ -51,17 +42,9 @@ const app = new Vue({
     },
     methods: {
         ...mapActions([
-            'reloadContent',
-            'authSuccess',
             'logoutSuccess',
-            'logout',
-            'getProjectData',
-            'switchProject',
             'getAccount',
-            'getCurrentProject',
-            'getProjects',
-            'getTags',
-            'getPresets',
+            'authSuccess',
         ]),
         confirm(title, text = null) {
             return this.$refs.confirm.show(title, text);

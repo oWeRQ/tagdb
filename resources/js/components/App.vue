@@ -148,6 +148,7 @@
 </template>
 
 <script>
+    import { mapActions, mapState } from 'vuex';
     import cloneDeep from 'clone-deep';
     import CrudDialog from './CrudDialog';
 
@@ -164,35 +165,24 @@
             projectEdited: {},
         }),
         computed: {
-            isReady() {
-                return this.$root.isReady;
-            },
-            account() {
-                return this.$root.account;
-            },
-            currentProject() {
-                return this.$root.currentProject;
-            },
-            projects() {
-                return this.$root.projects;
-            },
-            presets() {
-                return this.$root.presets;
-            },
+            ...mapState([
+                'isReady',
+                'account',
+                'currentProject',
+                'projects',
+                'presets',
+            ]),
             projectDeletable() {
                 return this.projects.length > 1;
             },
         },
         methods: {
-            logout() {
-                this.$root.logout();
-            },
-            authSuccess() {
-                this.$root.authSuccess();
-            },
-            switchProject(project) {
-                this.$root.switchProject(project);
-            },
+            ...mapActions([
+                'logout',
+                'authSuccess',
+                'switchProject',
+                'getProjects',
+            ]),
             updateProject() {
                 this.projectEdited = cloneDeep(this.currentProject);
                 this.$refs.projectDialog.show();
@@ -203,7 +193,7 @@
             },
             saveProject(project) {
                 this.switchProject(project);
-                this.$root.getProjects();
+                this.getProjects();
             },
             deleteProject({id}) {
                 this.switchProject(this.projects.find(project => project.id != id));
