@@ -12,7 +12,7 @@
 <script>
     import { mapState } from 'vuex';
     import Vue from 'vue';
-    import TagsField from './TagsField';
+    import TagsField from '../entity/TagsField';
 
     export default {
         components: {

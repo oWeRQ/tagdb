@@ -33,8 +33,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import api from '../api';
-import toQueryString from '../functions/toQueryString';
+import api from '../../api';
+import toQueryString from '../../functions/toQueryString';
 
 export default {
     props: {

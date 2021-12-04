@@ -12,15 +12,15 @@
 </template>
 
 <script>
-    import RowActions from './row/RowActions.vue';
-    import RowCheckbox from './row/RowCheckbox.vue';
-    import RowColor from './row/RowColor.vue';
-    import RowDate from './row/RowDate.vue';
-    import RowName from './row/RowName.vue';
-    import RowRating from './row/RowRating.vue';
-    import RowTags from './row/RowTags.vue';
-    import RowText from './row/RowText.vue';
-    import RowUrl from './row/RowUrl.vue';
+    import RowActions from '../row/RowActions.vue';
+    import RowCheckbox from '../row/RowCheckbox.vue';
+    import RowColor from '../row/RowColor.vue';
+    import RowDate from '../row/RowDate.vue';
+    import RowName from '../row/RowName.vue';
+    import RowRating from '../row/RowRating.vue';
+    import RowTags from '../row/RowTags.vue';
+    import RowText from '../row/RowText.vue';
+    import RowUrl from '../row/RowUrl.vue';
 
     export default {
         props: {

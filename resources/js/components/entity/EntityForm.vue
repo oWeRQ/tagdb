@@ -122,9 +122,9 @@
 
 <script>
     import cloneDeep from 'clone-deep';
-    import CrudDialog from './CrudDialog';
-    import TagForm from './TagForm';
-    import FieldForm from './FieldForm';
+    import CrudDialog from '../crud/CrudDialog';
+    import TagForm from '../tag/TagForm';
+    import FieldForm from '../field/FieldForm';
     import TagsField from './TagsField';
 
     export default {

@@ -71,11 +71,11 @@
 
 <script>
 import cloneDeep from 'clone-deep';
-import api from '../api';
-import toFormData from '../functions/toFormData';
-import CrudDialog from './CrudDialog.vue';
-import TagForm from './TagForm';
-import TagChip from './TagChip.vue';
+import api from '../../api';
+import toFormData from '../../functions/toFormData';
+import CrudDialog from '../crud/CrudDialog.vue';
+import TagForm from '../tag/TagForm';
+import TagChip from '../tag/TagChip.vue';
 
 export default {
     components: {

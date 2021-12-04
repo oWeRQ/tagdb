@@ -9,7 +9,7 @@
 
 <script>
     import { mapState } from 'vuex';
-    import makeCode from '../functions/makeCode';
+    import makeCode from '../../functions/makeCode';
 
     export default {
         props: {

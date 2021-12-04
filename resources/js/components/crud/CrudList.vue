@@ -28,7 +28,8 @@
                 Add {{ singularTitle }}
             </v-btn>
 
-            <CrudDialog
+            <component
+                :is="dialog"
                 ref="crudDialog"
                 :title="singularTitle"
                 :form="form"
@@ -38,7 +39,7 @@
                 :value="editedItem"
                 @input="saveItem"
                 @delete="deleteItem"
-            ></CrudDialog>
+            ></component>
         </template>
     </v-data-table>
 </template>
@@ -46,15 +47,16 @@
 <script>
     import axios from 'axios';
     import cloneDeep from 'clone-deep';
-    import stringifySort from '../functions/stringifySort';
+    import stringifySort from '../../functions/stringifySort';
     import CrudDialog from './CrudDialog';
     import CrudForm from './CrudForm';
 
     export default {
-        components: {
-            CrudDialog,
-        },
         props: {
+            dialog: {
+                type: Object,
+                default: () => CrudDialog,
+            },
             form: {
                 type: Object,
                 default: () => CrudForm,

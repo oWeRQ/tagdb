@@ -1,15 +1,20 @@
-import Index from './components/Index.vue';
-import Crud from './components/Crud.vue';
-import TagForm from './components/TagForm.vue';
-import FieldForm from './components/FieldForm.vue';
-import PresetForm from './components/PresetForm.vue';
-import Preset from './components/Preset.vue';
+import EntityList from './components/entity/EntityList.vue';
+import EntityPreset from './components/entity/EntityPreset.vue';
+import Crud from './components/crud/CrudList.vue';
+import TagForm from './components/tag/TagForm.vue';
+import FieldForm from './components/field/FieldForm.vue';
+import PresetForm from './components/preset/PresetForm.vue';
 
 export default [
     {
         path: '',
         name: 'index',
-        component: Index,
+        component: EntityList,
+    },
+    {
+        path: '/presets/:name',
+        name: 'preset',
+        component: EntityPreset,
     },
     {
         path: '/tags',
@@ -127,9 +132,4 @@ export default [
             ],
         },
     },
-    {
-        path: '/presets/:name',
-        name: 'preset',
-        component: Preset,
-    }
 ];

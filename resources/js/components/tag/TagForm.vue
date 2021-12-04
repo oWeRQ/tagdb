@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import makeCode from '../functions/makeCode';
+    import makeCode from '../../functions/makeCode';
     import ColorSwitcher from './ColorSwitcher';
 
     export default {

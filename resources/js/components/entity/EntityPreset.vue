@@ -94,16 +94,16 @@
 
 <script>
     import { mapState } from 'vuex';
-    import api from '../api';
+    import api from '../../api';
     import cloneDeep from 'clone-deep';
-    import stringifySort from '../functions/stringifySort';
-    import CrudDialog from './CrudDialog';
+    import stringifySort from '../../functions/stringifySort';
+    import CrudDialog from '../crud/CrudDialog';
     import ExportDialog from './ExportDialog';
     import ImportDialog from './ImportDialog';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
     import EntityForm from './EntityForm';
-    import PresetForm from './PresetForm';
+    import PresetForm from '../preset/PresetForm';
 
     export default {
         components: {

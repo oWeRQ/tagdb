@@ -150,7 +150,7 @@
 <script>
     import { mapActions, mapState } from 'vuex';
     import cloneDeep from 'clone-deep';
-    import CrudDialog from './CrudDialog';
+    import CrudDialog from './crud/CrudDialog';
 
     export default {
         components: {
