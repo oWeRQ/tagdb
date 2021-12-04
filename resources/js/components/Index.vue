@@ -19,7 +19,6 @@
             <EntitySelectionToolbar v-if="selected.length"
                 v-model="selected"
                 @update="getItems"
-                :resource="resource"
                 :query-tags="queryTags"
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
@@ -53,7 +52,7 @@
                 ref="presetDialog"
                 title="Preset"
                 :form="presetForm"
-                :resource="presetResource"
+                resource="/api/v1/presets"
                 :value="editedPreset"
                 @input="savePreset"
             ></CrudDialog>
@@ -87,8 +86,8 @@
             <CrudDialog
                 ref="entityDialog"
                 title="Entity"
-                :form="form"
-                :resource="resource"
+                :form="entityForm"
+                resource="/api/v1/entities"
                 :processValue="processItem"
                 :value="editedItem"
                 @input="saveItem"
@@ -97,7 +96,6 @@
 
             <ExportDialog
                 ref="exportDialog"
-                :resource="resource"
                 :filename="exportFilename"
                 :headers="exportHeaders"
                 :params="exportParams"
@@ -114,7 +112,7 @@
 
 <script>
     import { mapState } from 'vuex';
-    import axios from 'axios';
+    import api from '../api';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../functions/stringifySort';
     import ucwords from '../functions/ucwords';
@@ -137,21 +135,13 @@
             EntityRow,
         },
         props: {
-            form: {
+            entityForm: {
                 type: Object,
                 default: () => EntityForm,
-            },
-            resource: {
-                type: String,
-                default: '/api/v1/entities',
             },
             presetForm: {
                 type: Object,
                 default: () => PresetForm,
-            },
-            presetResource: {
-                type: String,
-                default: '/api/v1/presets',
             },
         },
         data() {
@@ -283,7 +273,7 @@
                 this.loading = true;
                 // this.items = [];
                 // this.total = 0;
-                axios.get(this.resource, { params }).then(response => {
+                api.entities.index(params).then(response => {
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;

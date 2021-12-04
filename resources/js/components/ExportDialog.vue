@@ -38,7 +38,6 @@ import toQueryString from '../functions/toQueryString';
 
 export default {
     props: {
-        resource: String,
         filename: String,
         headers: Array,
         params: Object,
@@ -93,7 +92,7 @@ export default {
                 columns: this.columns,
                 ...this.params,
             };
-            window.open(this.resource + '?' + toQueryString(params));
+            window.open(api.entities.resource + '?' + toQueryString(params));
             this.close();
         },
         show() {

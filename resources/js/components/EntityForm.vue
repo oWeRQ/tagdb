@@ -4,7 +4,7 @@
             ref="tagDialog"
             title="Tag"
             :form="tagForm"
-            :resource="tagResource"
+            resource="/api/v1/tags"
             :value="editedTag"
             @input="saveTag"
             @delete="deleteTag"
@@ -113,7 +113,7 @@
             ref="fieldDialog"
             title="Field"
             :form="fieldForm"
-            :resource="fieldResource"
+            resource="/api/v1/fields"
             :value="editedField"
             @input="saveField"
         ></CrudDialog>
@@ -142,10 +142,8 @@
                 menu: {},
                 editedTag: null,
                 tagForm: TagForm,
-                tagResource: '/api/v1/tags',
                 editedField: null,
                 fieldForm: FieldForm,
-                fieldResource: '/api/v1/fields',
             };
         },
         computed: {

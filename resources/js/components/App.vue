@@ -49,7 +49,7 @@
             <CrudDialog
                 ref="projectDialog"
                 title="Project"
-                :resource="projectResource"
+                resource="/api/v1/projects"
                 :editable="projectEditable"
                 :deletable="projectDeletable"
                 :value="projectEdited"
@@ -158,7 +158,6 @@
         },
         data: () => ({
             drawer: null,
-            projectResource: '/api/v1/projects',
             projectEditable: [
                 { text: 'Name', value: 'name' },
             ],

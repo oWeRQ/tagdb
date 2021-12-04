@@ -83,13 +83,6 @@
 
     export default {
         props: {
-            resource: {
-                type: String,
-            },
-            tagResource: {
-                type: String,
-                default: '/api/v1/tags',
-            },
             value: {
                 type: Array,
                 default: () => [],

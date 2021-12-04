@@ -2,6 +2,7 @@ import axios from 'axios';
 
 function apiResource(resource) {
     return {
+        resource,
         index(params) {
             return axios.get(resource, { params });
         },

@@ -10,10 +10,6 @@ export default [
         path: '',
         name: 'index',
         component: Index,
-        props: {
-            title: 'Entities',
-            resource: '/api/v1/entities',
-        },
     },
     {
         path: '/tags',
@@ -135,8 +131,5 @@ export default [
         path: '/presets/:name',
         name: 'preset',
         component: Preset,
-        props: {
-            resource: '/api/v1/entities',
-        },
     }
 ];

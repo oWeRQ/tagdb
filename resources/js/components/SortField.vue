@@ -20,7 +20,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import parseSort from '../functions/parseSort'
     import stringifySort from '../functions/stringifySort'
 

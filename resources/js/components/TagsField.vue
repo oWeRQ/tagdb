@@ -42,7 +42,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import api from '../api';
 
     function toggleHyphen(value) {
         if (value[0] === '-') {
@@ -122,7 +122,7 @@
                 const params = {
                     with_tags: this.returnObject ? this.value.map(tag => tag.name) : this.value,
                 };
-                axios.get('/api/v1/tags', { params }).then(response => {
+                api.tags.index(params).then(response => {
                     this.tags = response.data.data;
                 });
             },

@@ -71,7 +71,7 @@
 
 <script>
 import cloneDeep from 'clone-deep';
-import axios from 'axios';
+import api from '../api';
 import toFormData from '../functions/toFormData';
 import CrudDialog from './CrudDialog.vue';
 import TagForm from './TagForm';
@@ -155,12 +155,12 @@ export default {
             }
         },
         fetchTags() {
-            return axios.get('/api/v1/tags').then(response => {
+            return api.tags.index().then(response => {
                 this.tags = response.data.data;
             });
         },
         fetchFields() {
-            return axios.get('/api/v1/fields').then(response => {
+            return api.fields.index().then(response => {
                 this.fields = response.data.data;
             });
         },
@@ -177,7 +177,7 @@ export default {
                 preview: 0,
             });
 
-            axios.post('/api/v1/import', data).then(response => {
+            api.import.store(data).then(response => {
                 this.previewData = response.data;
                 this.autoFieldsMap();
                 this.updatePreviewTags();
@@ -190,7 +190,7 @@ export default {
                 ...this.params,
             });
 
-            axios.post('/api/v1/import', data).then(response => {
+            api.import.store(data).then(response => {
                 this.$emit('done');
                 this.close();
             });
