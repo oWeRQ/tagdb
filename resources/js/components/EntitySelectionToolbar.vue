@@ -79,7 +79,7 @@
 </template>
 
 <script>
-    import axios from 'axios';
+    import api from '../api';
 
     export default {
         props: {
@@ -107,6 +107,9 @@
             };
         },
         computed: {
+            selectedId() {
+                return this.value.map(item => item.id);
+            },
             availableTags() {
                 const tags = [];
                 for (let item of this.value) {
@@ -120,11 +123,9 @@
         },
         methods: {
             fetchTags() {
-                const params = {
+                api.tags.index({
                     with_tags: this.queryTags.map(tag => tag.name),
-                };
-
-                axios.get('/api/v1/tags', { params }).then(response => {
+                }).then(response => {
                     this.tags = response.data.data;
                 });
             },
@@ -136,29 +137,20 @@
                 this.visibleRemoveTag = true;
             },
             addTag(tag) {
-                const url = `${this.tagResource}/${tag.id}/entities`;
-                const data = {
-                    id: this.value.map(item => item.id),
-                };
-                axios.post(url, data).then(() => {
+                api.tags.attachEntities(tag.id, { id: this.selectedId }).then(() => {
                     this.$emit('update');
                     this.$emit('input', []);
                 });
             },
             removeTag(tag) {
-                const url = `${this.tagResource}/${tag.id}/entities`;
-                const data = {
-                    id: this.value.map(item => item.id),
-                };
-                axios.delete(url, {data}).then(() => {
+                api.tags.detachEntities(tag.id, { id: this.selectedId }).then(() => {
                     this.$emit('update');
                     this.$emit('input', []);
                 });
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {
-                    const id = this.value.map(item => item.id);
-                    axios.delete(this.resource + '/' + id.join(',')).then(() => {
+                    api.entities.destroy(this.selectedId).then(() => {
                         this.$emit('update');
                         this.$emit('input', []);
                     });
