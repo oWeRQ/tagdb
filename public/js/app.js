@@ -3427,6 +3427,58 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -3476,59 +3528,127 @@ __webpack_require__.r(__webpack_exports__);
       "default": function _default() {
         return [];
       }
+    },
+    queryTags: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
     }
   },
   data: function data() {
     return {
-      selectedTag: null
+      tags: [],
+      visibleAddTag: false,
+      visibleRemoveTag: false
     };
   },
   computed: {
-    tags: function tags() {
-      return this.$root.tags;
+    availableTags: function availableTags() {
+      var tags = [];
+
+      var _iterator = _createForOfIteratorHelper(this.value),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var item = _step.value;
+
+          var _iterator2 = _createForOfIteratorHelper(item.tags),
+              _step2;
+
+          try {
+            var _loop = function _loop() {
+              var tag = _step2.value;
+              if (!tags.some(function (t) {
+                return t.id === tag.id;
+              })) tags.push(tag);
+            };
+
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              _loop();
+            }
+          } catch (err) {
+            _iterator2.e(err);
+          } finally {
+            _iterator2.f();
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      return tags;
     }
   },
   methods: {
-    toggleTag: function toggleTag(state) {
+    fetchTags: function fetchTags() {
       var _this = this;
 
-      var tag = this.tags.find(function (tag) {
-        return tag.name === _this.selectedTag;
+      var params = {
+        with_tags: this.queryTags.map(function (tag) {
+          return tag.name;
+        })
+      };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/v1/tags', {
+        params: params
+      }).then(function (response) {
+        _this.tags = response.data.data;
       });
-      if (!tag) return;
+    },
+    showAddTag: function showAddTag() {
+      this.fetchTags();
+      this.visibleAddTag = true;
+    },
+    showRemoveTag: function showRemoveTag() {
+      this.visibleRemoveTag = true;
+    },
+    addTag: function addTag(tag) {
+      var _this2 = this;
+
       var url = "".concat(this.tagResource, "/").concat(tag.id, "/entities");
       var data = {
         id: this.value.map(function (item) {
           return item.id;
         })
       };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, data).then(function () {
+        _this2.$emit('update');
 
-      var success = function success() {
-        _this.$emit('update');
+        _this2.$emit('input', []);
+      });
+    },
+    removeTag: function removeTag(tag) {
+      var _this3 = this;
 
-        _this.$emit('input', []);
+      var url = "".concat(this.tagResource, "/").concat(tag.id, "/entities");
+      var data = {
+        id: this.value.map(function (item) {
+          return item.id;
+        })
       };
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url, {
+        data: data
+      }).then(function () {
+        _this3.$emit('update');
 
-      if (state) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post(url, data).then(success);
-      } else {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](url, {
-          data: data
-        }).then(success);
-      }
+        _this3.$emit('input', []);
+      });
     },
     deleteItems: function deleteItems() {
-      var _this2 = this;
+      var _this4 = this;
 
       this.$root.confirm('Delete selected items?').then(function () {
-        var id = _this2.value.map(function (item) {
+        var id = _this4.value.map(function (item) {
           return item.id;
         });
 
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this2.resource + '/' + id.join(',')).then(function () {
-          _this2.$emit('update');
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a["delete"](_this4.resource + '/' + id.join(',')).then(function () {
+          _this4.$emit('update');
 
-          _this2.$emit('input', []);
+          _this4.$emit('input', []);
         });
       });
     }
@@ -4219,6 +4339,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 
 
 
@@ -4565,6 +4686,8 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
+//
 //
 //
 //
@@ -27704,9 +27827,11 @@ var render = function() {
                 "v-card",
                 [
                   _c("v-card-title", [
-                    _c("span", { staticClass: "headline" }, [
-                      _vm._v(_vm._s(_vm.headline))
-                    ])
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(_vm.headline) +
+                        "\n            "
+                    )
                   ]),
                   _vm._v(" "),
                   _c(
@@ -28331,48 +28456,16 @@ var render = function() {
       _vm._v(" "),
       _c("v-spacer"),
       _vm._v(" "),
-      _c("v-autocomplete", {
-        style: { maxWidth: "240px" },
-        attrs: {
-          items: _vm.tags,
-          "item-text": "name",
-          label: "Tag",
-          "hide-details": "",
-          "single-line": ""
-        },
-        model: {
-          value: _vm.selectedTag,
-          callback: function($$v) {
-            _vm.selectedTag = $$v
-          },
-          expression: "selectedTag"
-        }
-      }),
-      _vm._v(" "),
       _c(
         "v-btn",
-        {
-          attrs: { icon: "" },
-          on: {
-            click: function($event) {
-              return _vm.toggleTag(true)
-            }
-          }
-        },
+        { attrs: { icon: "" }, on: { click: _vm.showAddTag } },
         [_c("v-icon", [_vm._v("mdi-tag-plus")])],
         1
       ),
       _vm._v(" "),
       _c(
         "v-btn",
-        {
-          attrs: { icon: "" },
-          on: {
-            click: function($event) {
-              return _vm.toggleTag(false)
-            }
-          }
-        },
+        { attrs: { icon: "" }, on: { click: _vm.showRemoveTag } },
         [_c("v-icon", [_vm._v("mdi-tag-minus")])],
         1
       ),
@@ -28381,6 +28474,218 @@ var render = function() {
         "v-btn",
         { attrs: { icon: "" }, on: { click: _vm.deleteItems } },
         [_c("v-icon", [_vm._v("mdi-delete")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "320px", scrollable: "" },
+          model: {
+            value: _vm.visibleAddTag,
+            callback: function($$v) {
+              _vm.visibleAddTag = $$v
+            },
+            expression: "visibleAddTag"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _vm._v("\n                Add Tag\n            ")
+              ]),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                { staticClass: "pa-0" },
+                [
+                  _c(
+                    "v-list",
+                    _vm._l(_vm.tags, function(item) {
+                      return _c(
+                        "v-list-item",
+                        {
+                          key: item.id,
+                          on: {
+                            click: function($event) {
+                              return _vm.addTag(item)
+                            }
+                          }
+                        },
+                        [
+                          _c("v-avatar", {
+                            staticClass: "mr-2",
+                            attrs: { color: item.color, size: "8" }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              class: {
+                                "grey--text text--darken-2": !item.entities_count
+                              }
+                            },
+                            [_vm._v(_vm._s(item.name))]
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          item.entities_count
+                            ? _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "caption grey--text text--darken-1"
+                                },
+                                [_vm._v(_vm._s(item.entities_count))]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.visibleAddTag = false
+                        }
+                      }
+                    },
+                    [_vm._v("Cancel")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "320px", scrollable: "" },
+          model: {
+            value: _vm.visibleRemoveTag,
+            callback: function($$v) {
+              _vm.visibleRemoveTag = $$v
+            },
+            expression: "visibleRemoveTag"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            [
+              _c("v-card-title", [
+                _vm._v("\n                Remove Tag\n            ")
+              ]),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                { staticClass: "pa-0" },
+                [
+                  _c(
+                    "v-list",
+                    _vm._l(_vm.availableTags, function(item) {
+                      return _c(
+                        "v-list-item",
+                        {
+                          key: item.id,
+                          on: {
+                            click: function($event) {
+                              return _vm.removeTag(item)
+                            }
+                          }
+                        },
+                        [
+                          _c("v-avatar", {
+                            staticClass: "mr-2",
+                            attrs: { color: item.color, size: "8" }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "span",
+                            {
+                              class: {
+                                "grey--text text--darken-2": !item.entities_count
+                              }
+                            },
+                            [_vm._v(_vm._s(item.name))]
+                          ),
+                          _vm._v(" "),
+                          _c("v-spacer"),
+                          _vm._v(" "),
+                          item.entities_count
+                            ? _c(
+                                "span",
+                                {
+                                  staticClass:
+                                    "caption grey--text text--darken-1"
+                                },
+                                [_vm._v(_vm._s(item.entities_count))]
+                              )
+                            : _vm._e()
+                        ],
+                        1
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-divider"),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", text: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.visibleRemoveTag = false
+                        }
+                      }
+                    },
+                    [_vm._v("Cancel")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
         1
       )
     ],
@@ -28664,7 +28969,7 @@ var render = function() {
             "v-card",
             [
               _c("v-card-title", [
-                _c("span", { staticClass: "headline" }, [_vm._v("Import")])
+                _vm._v("\n                Import\n            ")
               ]),
               _vm._v(" "),
               _c("v-card-text", [
@@ -28926,7 +29231,10 @@ var render = function() {
             _vm.selected.length
               ? _c("EntitySelectionToolbar", {
                   staticClass: "flex-grow-0",
-                  attrs: { resource: _vm.resource },
+                  attrs: {
+                    resource: _vm.resource,
+                    "query-tags": _vm.queryTags
+                  },
                   on: { update: _vm.getItems },
                   model: {
                     value: _vm.selected,
@@ -29191,7 +29499,11 @@ var render = function() {
             _vm.selected.length
               ? _c("EntitySelectionToolbar", {
                   staticClass: "flex-grow-0",
-                  attrs: { resource: _vm.resource },
+                  attrs: {
+                    resource: _vm.resource,
+                    "query-tags": _vm.queryTags
+                  },
+                  on: { update: _vm.getItems },
                   model: {
                     value: _vm.selected,
                     callback: function($$v) {

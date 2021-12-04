@@ -8,27 +8,73 @@
 
         <v-spacer></v-spacer>
 
-        <v-autocomplete
-            v-model="selectedTag"
-            :items="tags"
-            item-text="name"
-            label="Tag"
-            hide-details
-            single-line
-            :style="{maxWidth: '240px'}"
-        ></v-autocomplete>
-
-        <v-btn icon @click="toggleTag(true)">
+        <v-btn icon @click="showAddTag">
             <v-icon>mdi-tag-plus</v-icon>
         </v-btn>
 
-        <v-btn icon @click="toggleTag(false)">
+        <v-btn icon @click="showRemoveTag">
             <v-icon>mdi-tag-minus</v-icon>
         </v-btn>
 
         <v-btn icon @click="deleteItems">
             <v-icon>mdi-delete</v-icon>
         </v-btn>
+
+        <v-dialog v-model="visibleAddTag" max-width="320px" scrollable>
+            <v-card>
+                <v-card-title>
+                    Add Tag
+                </v-card-title>
+                <v-divider></v-divider>
+                <v-card-text class="pa-0">
+                    <v-list>
+                        <v-list-item
+                            v-for="item in tags"
+                            :key="item.id"
+                            @click="addTag(item)"
+                        >
+                            <v-avatar :color="item.color" size="8" class="mr-2"></v-avatar>
+                            <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
+                            <v-spacer></v-spacer>
+                            <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+                        </v-list-item>
+                    </v-list>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="visibleAddTag = false">Cancel</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
+        <v-dialog v-model="visibleRemoveTag" max-width="320px" scrollable>
+            <v-card>
+                <v-card-title>
+                    Remove Tag
+                </v-card-title>
+                <v-divider></v-divider>
+                <v-card-text class="pa-0">
+                    <v-list>
+                        <v-list-item
+                            v-for="item in availableTags"
+                            :key="item.id"
+                            @click="removeTag(item)"
+                        >
+                            <v-avatar :color="item.color" size="8" class="mr-2"></v-avatar>
+                            <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
+                            <v-spacer></v-spacer>
+                            <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+                        </v-list-item>
+                    </v-list>
+                </v-card-text>
+                <v-divider></v-divider>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="visibleRemoveTag = false">Cancel</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-toolbar>
 </template>
 
@@ -48,37 +94,66 @@
                 type: Array,
                 default: () => [],
             },
+            queryTags: {
+                type: Array,
+                default: () => [],
+            },
         },
         data() {
             return {
-                selectedTag: null,
+                tags: [],
+                visibleAddTag: false,
+                visibleRemoveTag: false,
             };
         },
         computed: {
-            tags() {
-                return this.$root.tags;
+            availableTags() {
+                const tags = [];
+                for (let item of this.value) {
+                    for (let tag of item.tags) {
+                        if (!tags.some(t => t.id === tag.id))
+                            tags.push(tag);
+                    }
+                }
+                return tags;
             },
         },
         methods: {
-            toggleTag(state) {
-                const tag = this.tags.find(tag => tag.name === this.selectedTag);
-                if (!tag)
-                    return;
+            fetchTags() {
+                const params = {
+                    with_tags: this.queryTags.map(tag => tag.name),
+                };
 
+                axios.get('/api/v1/tags', { params }).then(response => {
+                    this.tags = response.data.data;
+                });
+            },
+            showAddTag() {
+                this.fetchTags();
+                this.visibleAddTag = true;
+            },
+            showRemoveTag() {
+                this.visibleRemoveTag = true;
+            },
+            addTag(tag) {
                 const url = `${this.tagResource}/${tag.id}/entities`;
                 const data = {
                     id: this.value.map(item => item.id),
                 };
-                const success = () => {
+                axios.post(url, data).then(() => {
                     this.$emit('update');
                     this.$emit('input', []);
+                });
+            },
+            removeTag(tag) {
+                const url = `${this.tagResource}/${tag.id}/entities`;
+                const data = {
+                    id: this.value.map(item => item.id),
                 };
-
-                if (state) {
-                    axios.post(url, data).then(success);
-                } else {
-                    axios.delete(url, {data}).then(success);
-                }
+                axios.delete(url, {data}).then(() => {
+                    this.$emit('update');
+                    this.$emit('input', []);
+                });
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {

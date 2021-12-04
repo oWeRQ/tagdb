@@ -3,7 +3,7 @@
         <v-form @submit.prevent="submit">
             <v-card>
                 <v-card-title>
-                    <span class="headline">Import</span>
+                    Import
                 </v-card-title>
                 <v-card-text>
                     <div v-if="!previewData">

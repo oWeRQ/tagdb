@@ -17,7 +17,9 @@
         <template v-slot:top>
             <EntitySelectionToolbar v-if="selected.length"
                 v-model="selected"
+                @update="getItems"
                 :resource="resource"
+                :query-tags="queryTags"
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">

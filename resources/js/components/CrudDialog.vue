@@ -3,7 +3,7 @@
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
-                    <span class="headline">{{ headline }}</span>
+                    {{ headline }}
                 </v-card-title>
                 <v-card-text>
                     <component :is="form" :editable="editable" v-model="value" @submit="submit" class="mt-3"></component>
