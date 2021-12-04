@@ -1,9 +1,10 @@
 import EntityList from './components/entity/EntityList.vue';
 import EntityPreset from './components/entity/EntityPreset.vue';
 import Crud from './components/crud/CrudList.vue';
-import TagForm from './components/tag/TagForm.vue';
-import FieldForm from './components/field/FieldForm.vue';
-import PresetForm from './components/preset/PresetForm.vue';
+import TagDialog from './components/tag/TagDialog.vue';
+import FieldDialog from './components/field/FieldDialog.vue';
+import PresetDialog from './components/preset/PresetDialog.vue';
+import ProjectDialog from './components/project/ProjectDialog.vue';
 
 export default [
     {
@@ -20,7 +21,7 @@ export default [
         path: '/tags',
         component: Crud,
         props: {
-            form: TagForm,
+            dialog: TagDialog,
             defaultItem: {
                 name: '',
                 fields: [],
@@ -40,7 +41,7 @@ export default [
         path: '/fields',
         component: Crud,
         props: {
-            form: FieldForm,
+            dialog: FieldDialog,
             title: 'Fields',
             resource: '/api/v1/fields',
             defaultItem: {},
@@ -81,17 +82,12 @@ export default [
         path: '/presets',
         component: Crud,
         props: {
-            form: PresetForm,
+            dialog: PresetDialog,
             title: 'Presets',
             resource: '/api/v1/presets',
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
-                { text: 'Name', value: 'name' },
-                { text: 'Sort', value: 'sort' },
-                { text: 'Query', value: 'query' },
-            ],
-            editable: [
                 { text: 'Name', value: 'name' },
                 { text: 'Sort', value: 'sort' },
                 { text: 'Query', value: 'query' },
@@ -102,14 +98,12 @@ export default [
         path: '/projects',
         component: Crud,
         props: {
+            dialog: ProjectDialog,
             title: 'Projects',
             resource: '/api/v1/projects',
             defaultItem: {},
             columns: [
                 { text: 'ID', value: 'id' },
-                { text: 'Name', value: 'name' },
-            ],
-            editable: [
                 { text: 'Name', value: 'name' },
             ],
         },

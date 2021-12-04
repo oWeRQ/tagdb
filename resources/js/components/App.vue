@@ -46,17 +46,6 @@
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title>TagDB</v-toolbar-title>
 
-            <CrudDialog
-                ref="projectDialog"
-                title="Project"
-                resource="/api/v1/projects"
-                :editable="projectEditable"
-                :deletable="projectDeletable"
-                :value="projectEdited"
-                @input="saveProject"
-                @delete="deleteProject"
-            ></CrudDialog>
-
             <v-menu
                 v-if="account"
                 offset-y
@@ -144,17 +133,25 @@
             <slot></slot>
             <router-view v-if="isReady"></router-view>
         </v-main>
+
+        <ProjectDialog
+            ref="projectDialog"
+            :deletable="projectDeletable"
+            :value="projectEdited"
+            @input="saveProject"
+            @delete="deleteProject"
+        ></ProjectDialog>
     </v-app>
 </template>
 
 <script>
     import { mapActions, mapState } from 'vuex';
     import cloneDeep from 'clone-deep';
-    import CrudDialog from './crud/CrudDialog';
+    import ProjectDialog from './project/ProjectDialog';
 
     export default {
         components: {
-            CrudDialog,
+            ProjectDialog,
         },
         data: () => ({
             drawer: null,

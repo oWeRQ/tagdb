@@ -57,15 +57,12 @@
             </v-card>
         </v-form>
 
-        <CrudDialog
+        <TagDialog
             ref="tagDialog"
-            title="Tag"
-            :form="TagForm"
-            resource="/api/v1/tags"
             :value="editedTag"
             @input="saveTag"
             @delete="deleteTag"
-        ></CrudDialog>
+        ></TagDialog>
     </v-dialog>
 </template>
 
@@ -73,13 +70,12 @@
 import cloneDeep from 'clone-deep';
 import api from '../../api';
 import toFormData from '../../functions/toFormData';
-import CrudDialog from '../crud/CrudDialog.vue';
-import TagForm from '../tag/TagForm';
+import TagDialog from '../tag/TagDialog.vue';
 import TagChip from '../tag/TagChip.vue';
 
 export default {
     components: {
-        CrudDialog,
+        TagDialog,
         TagChip,
     },
     props: {
@@ -87,7 +83,6 @@ export default {
     },
     data() {
         return {
-            TagForm,
             editedTag: null,
             visible: false,
             importFile: null,

@@ -17,9 +17,6 @@
             QueryField,
         },
         props: {
-            editable: {
-                type: Array,
-            },
             value: {
                 type: Object,
             },

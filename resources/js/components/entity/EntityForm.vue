@@ -1,15 +1,5 @@
 <template>
     <div>
-        <CrudDialog
-            ref="tagDialog"
-            title="Tag"
-            :form="tagForm"
-            resource="/api/v1/tags"
-            :value="editedTag"
-            @input="saveTag"
-            @delete="deleteTag"
-        ></CrudDialog>
-
         <TagsField
             return-object
             v-model="value.tags"
@@ -109,27 +99,31 @@
             Add Field
         </v-btn>
 
-        <CrudDialog
+        <FieldDialog
             ref="fieldDialog"
-            title="Field"
-            :form="fieldForm"
-            resource="/api/v1/fields"
             :value="editedField"
             @input="saveField"
-        ></CrudDialog>
+        ></FieldDialog>
+
+        <TagDialog
+            ref="tagDialog"
+            :value="editedTag"
+            @input="saveTag"
+            @delete="deleteTag"
+        ></TagDialog>
     </div>
 </template>
 
 <script>
     import cloneDeep from 'clone-deep';
-    import CrudDialog from '../crud/CrudDialog';
-    import TagForm from '../tag/TagForm';
-    import FieldForm from '../field/FieldForm';
+    import FieldDialog from '../field/FieldDialog';
+    import TagDialog from '../tag/TagDialog';
     import TagsField from './TagsField';
 
     export default {
         components: {
-            CrudDialog,
+            FieldDialog,
+            TagDialog,
             TagsField,
         },
         props: {
@@ -141,9 +135,7 @@
             return {
                 menu: {},
                 editedTag: null,
-                tagForm: TagForm,
                 editedField: null,
-                fieldForm: FieldForm,
             };
         },
         computed: {

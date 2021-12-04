@@ -47,15 +47,6 @@
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
             </v-toolbar>
-
-            <CrudDialog
-                ref="presetDialog"
-                title="Preset"
-                :form="presetForm"
-                resource="/api/v1/presets"
-                :value="editedPreset"
-                @input="savePreset"
-            ></CrudDialog>
         </template>
         <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
@@ -83,16 +74,19 @@
                 Import
             </v-btn>
 
-            <CrudDialog
+            <PresetDialog
+                ref="presetDialog"
+                :value="editedPreset"
+                @input="savePreset"
+            ></PresetDialog>
+
+            <EntityDialog
                 ref="entityDialog"
-                title="Entity"
-                :form="entityForm"
-                resource="/api/v1/entities"
                 :processValue="processItem"
                 :value="editedItem"
                 @input="saveItem"
                 @delete="deleteItem"
-            ></CrudDialog>
+            ></EntityDialog>
 
             <ExportDialog
                 ref="exportDialog"
@@ -116,7 +110,8 @@
     import cloneDeep from 'clone-deep';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
-    import CrudDialog from '../crud/CrudDialog';
+    import PresetDialog from '../preset/PresetDialog';
+    import EntityDialog from './EntityDialog';
     import ExportDialog from './ExportDialog';
     import ImportDialog from './ImportDialog';
     import TagsField from './TagsField';
@@ -127,7 +122,8 @@
 
     export default {
         components: {
-            CrudDialog,
+            PresetDialog,
+            EntityDialog,
             ExportDialog,
             ImportDialog,
             TagsField,
