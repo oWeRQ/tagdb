@@ -28912,7 +28912,7 @@ var render = function() {
       "multi-sort": _vm.multiSort,
       "items-per-page": 100,
       "footer-props": {
-        itemsPerPageOptions: [10, 20, 50, 100, 500]
+        itemsPerPageOptions: [10, 20, 50, 100, 500, 1000]
       },
       "fixed-header": true
     },
@@ -29177,7 +29177,7 @@ var render = function() {
       loading: _vm.loading,
       "items-per-page": 100,
       "footer-props": {
-        itemsPerPageOptions: [10, 20, 50, 100]
+        itemsPerPageOptions: [10, 20, 50, 100, 500, 1000]
       },
       "fixed-header": true
     },
