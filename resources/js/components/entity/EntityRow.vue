@@ -5,12 +5,18 @@
                 {{ header.text }}
             </span>
             <span class="v-data-table__mobile-row__cell">
+                <RowTags
+                    v-if="header.value === 'tags'"
+                    :item="item"
+                    :query="query"
+                    @click:tag="$emit('click:tag', $event)"
+                ></RowTags>
                 <component
+                    v-else
                     :is="getComponent(header)"
                     :header="header"
                     :item="item"
                     @edit="$emit('edit')"
-                    @click:tag="$emit('click:tag', $event)"
                 ></component>
             </span>
         </td>
@@ -29,6 +35,9 @@
     import RowUrl from '../row/RowUrl.vue';
 
     export default {
+        components: {
+            RowTags,
+        },
         props: {
             isMobile: {
                 type: Boolean,
@@ -58,9 +67,6 @@
 
                 if (header.value === 'actions')
                     return RowActions;
-
-                if (header.value === 'tags')
-                    return RowTags;
 
                 if (header.value === 'name')
                     return RowName;

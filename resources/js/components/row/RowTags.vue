@@ -1,13 +1,26 @@
 <template>
-    <v-chip-group>
-        <v-chip v-if="invisibleTags.length" small outlined class="grey--text">
-            {{ invisibleTags.length }}
-        </v-chip>
-        <v-chip v-for="tag in visibleTags" :key="tag.name" @click="$emit('click:tag', tag)" :color="tag.color" :dark="!!tag.color" small class="lighten-2">
-            {{ tag.name }}
-            <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
-        </v-chip>
-    </v-chip-group>
+    <div class="d-flex">
+        <span
+            v-if="invisibleTags.length"
+            tabindex="0"
+            class="grey--text v-chip v-chip--clickable v-chip--no-color v-chip--outlined theme--light v-size--small mr-2"
+        >
+            <span class="v-chip__content">{{ invisibleTags.length }}</span>
+        </span>
+        <span
+            v-for="tag in visibleTags"
+            :key="tag.name"
+            @click="$emit('click:tag', tag)"
+            tabindex="0"
+            class="lighten-2 v-chip v-chip--clickable v-size--small mr-2"
+            :class="tag.color ? `theme--dark ${tag.color}` : `theme--light`"
+        >
+            <span class="v-chip__content">
+                {{ tag.name }}
+                <sup v-if="tag.fields.length">{{ tag.fields.length }}</sup>
+            </span>
+        </span>
+    </div>
 </template>
 
 <script>
