@@ -5,7 +5,13 @@
                 {{ header.text }}
             </span>
             <span class="v-data-table__mobile-row__cell">
-                <component :is="getComponent(header)" :header="header" v-bind="$props" v-on="$listeners"></component>
+                <component
+                    :is="getComponent(header)"
+                    :header="header"
+                    :item="item"
+                    @edit="$emit('edit')"
+                    @click:tag="$emit('click:tag', $event)"
+                ></component>
             </span>
         </td>
     </tr>

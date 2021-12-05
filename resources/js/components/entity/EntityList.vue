@@ -269,10 +269,16 @@
                 this.loading = true;
                 // this.items = [];
                 // this.total = 0;
+                console.time('get items');
                 api.entities.index(params).then(response => {
+                    console.timeEnd('get items');
+                    console.time('render items');
                     this.items = response.data.data.map(this.processItem);
                     this.total = response.data.meta.total;
                     this.loading = false;
+                    this.$nextTick(() => {
+                        console.timeEnd('render items');
+                    });
                 });
             },
             deleteItem(item) {

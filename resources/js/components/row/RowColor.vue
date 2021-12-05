@@ -1,7 +1,7 @@
 <template>
-    <v-chip>
-        <v-avatar left :color="item | value(header.value)"></v-avatar>
-        {{ item | value(header.value) }}
+    <v-chip v-if="value">
+        <v-avatar left :color="value"></v-avatar>
+        {{ value }}
     </v-chip>
 </template>
 
@@ -9,15 +9,17 @@
 import { getObjectValueByPath } from 'vuetify/lib/util/helpers';
 
 export default {
-    filters: {
-        value: getObjectValueByPath,
-    },
     props: {
         header: {
             type: Object,
         },
         item: {
             type: Object,
+        },
+    },
+    computed: {
+        value() {
+            return getObjectValueByPath(this.item, this.header.value);
         },
     },
 };

@@ -1,19 +1,22 @@
 <template>
-    <span @click="$emit('edit')" style="cursor: pointer;">
-        {{ item.name | truncate(120) }}
-    </span>
+    <span @click="$emit('edit')" style="cursor: pointer;" v-text="value"></span>
 </template>
 
 <script>
 import truncate from '../../functions/truncate';
 
 export default {
-    filters: {
-        truncate,
-    },
     props: {
+        header: {
+            type: Object,
+        },
         item: {
             type: Object,
+        },
+    },
+    computed: {
+        value() {
+            return truncate(this.item.name, 120);
         },
     },
 };
