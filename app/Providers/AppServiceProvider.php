@@ -26,6 +26,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if (env('DB_LOG', false)) {
+            $this->enableDBLog();
+        }
+    }
+
+    public function enableDBLog()
+    {
         $url = request()->fullUrl();
         $count = 0;
         $totalTime = 0;
