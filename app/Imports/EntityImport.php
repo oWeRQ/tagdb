@@ -6,6 +6,7 @@ use App\Entity;
 use App\Field;
 use App\Tag;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -29,6 +30,20 @@ class EntityImport implements ToCollection, WithHeadingRow
         return $rows->flatMap(function($row) use($tagsField) {
             return Tag::parseString($row->get($tagsField));
         })->unique();
+    }
+
+    public function createEntity($attributes, $tags, $contents)
+    {
+        $entity = Entity::create($attributes);
+        $entity->tags()->attach($tags);
+        $entity->insertContents($contents);
+    }
+
+    public function createEntityRaw($attributes, $tags, $contents)
+    {
+        $entity_id = DB::table('entities')->insertGetId(array_merge($attributes, ['project_id' => auth()->user()->currentProject->id]));
+        DB::table('entities_tags')->insert(collect($tags)->map(fn($tag_id) => ['tag_id' => $tag_id, 'entity_id' => $entity_id])->all());
+        DB::table('values')->insert(collect($contents)->map(fn($content, $field_id) => ['entity_id' => $entity_id, 'field_id' => $field_id, 'content' => $content])->all());
     }
 
     public function collection(Collection $rows)
@@ -63,9 +78,7 @@ class EntityImport implements ToCollection, WithHeadingRow
 
             $mergedTags = $importTags->concat($fieldsTags)->concat($columnTags)->unique()->all();
 
-            $entity = Entity::create($attributes);
-            $entity->tags()->attach($mergedTags);
-            $entity->insertContents($contents);
+            $this->createEntityRaw($attributes, $mergedTags, $contents);
         }
     }
 }
