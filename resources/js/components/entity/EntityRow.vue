@@ -5,8 +5,13 @@
                 {{ header.text }}
             </span>
             <span class="v-data-table__mobile-row__cell">
+                <RowCheckbox
+                    v-if="header.value === 'data-table-select'"
+                    :isSelected="isSelected"
+                    :select="select"
+                ></RowCheckbox>
                 <RowTags
-                    v-if="header.value === 'tags'"
+                    v-else-if="header.value === 'tags'"
                     :item="item"
                     :query="query"
                     @click:tag="$emit('click:tag', $event)"
@@ -36,6 +41,7 @@
 
     export default {
         components: {
+            RowCheckbox,
             RowTags,
         },
         props: {
@@ -62,9 +68,6 @@
         },
         methods: {
             getComponent(header) {
-                if (header.value === 'data-table-select')
-                    return RowCheckbox;
-
                 if (header.value === 'actions')
                     return RowActions;
 
