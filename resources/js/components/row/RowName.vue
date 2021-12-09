@@ -1,5 +1,5 @@
 <template>
-    <span @click="$emit('edit')" style="cursor: pointer;" v-text="value"></span>
+    <span @click="$emit('edit')" style="cursor: pointer; display: inline-block; min-width: 200px;" v-text="value"></span>
 </template>
 
 <script>
@@ -16,7 +16,7 @@ export default {
     },
     computed: {
         value() {
-            return truncate(this.item.name, 120);
+            return truncate(this.item.name, 90);
         },
     },
 };
