@@ -1,10 +1,10 @@
 <template>
     <tr :class="{'v-data-table__selected': isSelected, 'v-data-table__mobile-table-row': isMobile}">
         <td v-for="header in headers" :key="header.value" :class="{[`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
-            <span v-if="isMobile" class="v-data-table__mobile-row__header">
+            <span v-if="isMobile" :class="{'v-data-table__mobile-row__header': isMobile}">
                 {{ header.text }}
             </span>
-            <span class="v-data-table__mobile-row__cell">
+            <span :class="{'v-data-table__mobile-row__cell': isMobile}">
                 <RowCheckbox
                     v-if="header.value === 'data-table-select'"
                     :isSelected="isSelected"
