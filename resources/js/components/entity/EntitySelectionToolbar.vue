@@ -143,7 +143,7 @@
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {
-                    api.entities.destroy(this.selectedId).then(() => {
+                    api.entities.destroyMany({ id: this.selectedId }).then(() => {
                         this.$emit('update');
                         this.$emit('input', []);
                     });

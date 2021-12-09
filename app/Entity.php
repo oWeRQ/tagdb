@@ -34,6 +34,13 @@ class Entity extends Model
         static::addGlobalScope(new ProjectScope);
     }
 
+    public static function deleteById($id)
+    {
+        static::find($id)->each(function($entity) {
+            $entity->delete();
+        });
+    }
+
     public function tags()
     {
         return $this->belongsToMany('App\Tag', 'entities_tags');

@@ -51,7 +51,12 @@ export default {
             return axios.post(`/api/v1/account/switch-project`, data);
         },
     },
-    entities: apiResource(`/api/v1/entities`),
+    entities: {
+        ...apiResource(`/api/v1/entities`),
+        destroyMany(data) {
+            return axios.delete(`/api/v1/entities`, { data });
+        },
+    },
     fields: apiResource(`/api/v1/fields`),
     import: apiResource(`/api/v1/import`),
     presets: apiResource(`/api/v1/presets`),
