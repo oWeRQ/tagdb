@@ -19,6 +19,7 @@
                                         v-model="fieldsMap[header]"
                                         @change="fieldChange(header)"
                                         :items="fieldItems"
+                                        :filter="fieldFilter"
                                         item-text="name"
                                         item-value="id"
                                         clearable
@@ -45,6 +46,12 @@
                                     class="mr-2 mb-2"
                                     @click="showTag(tag)"
                                 ></TagChip>
+                                <div class="mt-2">
+                                    <v-btn @click="addTag" text x-small color="blue darken-1">
+                                        <v-icon left>mdi-plus</v-icon>
+                                        Add Tag
+                                    </v-btn>
+                                </div>
                             </v-col>
                         </v-row>
                     </div>
@@ -70,6 +77,7 @@
 import cloneDeep from 'clone-deep';
 import api from '../../api';
 import toFormData from '../../functions/toFormData';
+import fuzzyMatch from '../../functions/fuzzyMatch';
 import TagDialog from '../tag/TagDialog.vue';
 import TagChip from '../tag/TagChip.vue';
 
@@ -118,23 +126,37 @@ export default {
         this.fetchFields();
     },
     methods: {
+        fieldFilter(item, queryText) {
+            return fuzzyMatch(`${item.tag?.name} ${item.name}`, queryText);
+        },
         updatePreviewTags() {
             this.previewTags = this.previewData.tags.map(name => (this.tags.find(tag => tag.name === name) || { name, id: null, color: null, fields: [] }));
         },
+        addTag() {
+            this.editedTag = { name: '', id: null, color: null, fields: [] };
+            this.$refs.tagDialog.show();
+        },
         showTag(tag) {
-            this.originalTag = tag;
             this.editedTag = cloneDeep(tag);
             this.$refs.tagDialog.show();
         },
         saveTag(tag) {
-            Object.assign(this.originalTag, tag);
+            const previewTag = this.previewTags.find(item => item.id === tag.id) || this.previewTags.find(item => !item.id && item.name === tag.name);
+            if (previewTag) {
+                Object.assign(previewTag, tag);
+            } else {
+                this.previewTags.push(tag);
+            }
             this.fetchTags();
             this.fetchFields();
         },
-        deleteTag() {
-            delete this.originalTag.id;
-            delete this.originalTag.color;
-            this.originalTag.fields = [];
+        deleteTag(tag) {
+            const previewTag = this.previewTags.find(item => item.id === tag.id);
+            if (previewTag) {
+                delete previewTag.id;
+                delete previewTag.color;
+                previewTag.fields = [];
+            }
             this.fetchTags();
             this.fetchFields();
         },
