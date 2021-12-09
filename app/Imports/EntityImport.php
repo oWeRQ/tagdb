@@ -18,10 +18,18 @@ class EntityImport implements ToCollection, WithHeadingRow
     /** @var Collection */
     protected $fields;
 
+    /** @var array */
+    protected $attributes;
+
     public function __construct(Collection $tags, Collection $fields)
     {
         $this->tags = $tags;
         $this->fields = $fields;
+        $this->attributes = [
+            'project_id' => auth()->user()->currentProject->id,
+            'created_at' => DB::raw('NOW()'),
+            'updated_at' => DB::raw('NOW()'),
+        ];
     }
 
     public static function collectionTags(Collection $rows, Collection $fields)
@@ -41,7 +49,7 @@ class EntityImport implements ToCollection, WithHeadingRow
 
     public function createEntityRaw($attributes, $tags, $contents)
     {
-        $entity_id = DB::table('entities')->insertGetId(array_merge($attributes, ['project_id' => auth()->user()->currentProject->id]));
+        $entity_id = DB::table('entities')->insertGetId($attributes);
         DB::table('entities_tags')->insert(collect($tags)->map(fn($tag_id) => ['tag_id' => $tag_id, 'entity_id' => $entity_id])->all());
         DB::table('values')->insert(collect($contents)->map(fn($content, $field_id) => ['entity_id' => $entity_id, 'field_id' => $field_id, 'content' => $content])->all());
     }
@@ -56,7 +64,7 @@ class EntityImport implements ToCollection, WithHeadingRow
         $tagsByName = $tags->pluck('id', 'name');
 
         foreach ($rows as $row) {
-            $attributes = [];
+            $attributes = $this->attributes;
             $contents = [];
             $fieldsTags = collect();
             $columnTags = collect();
