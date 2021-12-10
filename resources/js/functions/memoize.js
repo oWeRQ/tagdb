@@ -1,13 +1,15 @@
 export default function(fn) {
+    const cache = new Map;
+
     function memoized(key) {
-        if (memoized.cache.has(key))
-            return memoized.cache.get(key);
+        if (cache.has(key))
+            return cache.get(key);
 
         const result = fn.apply(this, arguments);
-        memoized.cache.set(key, result);
+        cache.set(key, result);
         return result;
     }
 
-    memoized.cache = new Map;
+    memoized.cache = cache;
     return memoized;
 }
