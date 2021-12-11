@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 
 import axios from 'axios';
 import api from './api';
+import router from './router';
 
 Vue.use(Vuex);
 
@@ -71,6 +72,7 @@ export default new Vuex.Store({
             });
         },
         reloadContent(context) {
+            router.push({ name: 'index' });
             context.commit('isReady', false);
             Vue.nextTick(() => {
                 context.commit('isReady', true);
