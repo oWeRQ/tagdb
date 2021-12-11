@@ -72,7 +72,10 @@ export default new Vuex.Store({
             });
         },
         reloadContent(context) {
-            router.push({ name: 'index' });
+            if (router.history.current.name === 'preset') {
+                router.push({ name: 'index' });
+            }
+
             context.commit('isReady', false);
             Vue.nextTick(() => {
                 context.commit('isReady', true);
