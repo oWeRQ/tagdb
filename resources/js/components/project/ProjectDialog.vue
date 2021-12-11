@@ -6,7 +6,7 @@
                     {{ headline }}
                 </v-card-title>
                 <v-card-text>
-                    <ProjectForm v-model="value" @submit="submit" class="mt-3"></ProjectForm>
+                    <ProjectForm v-model="value" :errors="errors" @submit="submit" class="mt-3"></ProjectForm>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew && deletable" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -42,8 +42,11 @@
             },
         },
         computed: {
+            id() {
+                return this.value.id;
+            },
             isNew() {
-                return !this.value.id;
+                return !this.id;
             },
             headline() {
                 return (this.isNew ? 'Create' : 'Update') + ' Project';
@@ -53,12 +56,13 @@
             return {
                 visible: false,
                 isValid: false,
+                errors: {},
             };
         },
         methods: {
             remove() {
                 this.$root.confirm(`Delete Project?`).then(() => {
-                    api.projects.destroy(this.value.id).then(response => {
+                    api.projects.destroy(this.id).then(response => {
                         this.$emit('delete', this.value);
                         this.close();
                     });
@@ -70,18 +74,16 @@
                     return;
                 }
 
-                if (this.value.id) {
-                    api.projects.update(this.value.id, this.value).then(this.success);
-                } else {
-                    api.projects.store(this.value).then(this.success);
-                }
-            },
-            success(response) {
-                this.$emit('input', this.processValue(response.data.data));
-                this.close();
+                return api.projects.save(this.id, this.value).then(response => {
+                    this.$emit('input', this.processValue(response.data.data));
+                    this.close();
+                }).catch(error => {
+                    this.errors = error.response.data.errors || {};
+                })
             },
             show() {
                 this.resetValidation();
+                this.errors = {};
                 this.visible = true;
             },
             close() {

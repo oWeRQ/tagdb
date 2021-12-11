@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\ValidationException;
 use App\Scopes\UserScope;
 
 class Project extends Model
@@ -24,6 +25,36 @@ class Project extends Model
     //     parent::boot();
     //     static::addGlobalScope(new UserScope);
     // }
+
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, Membership::class)
+            ->withPivot('role')
+            ->withTimestamps()
+            ->as('membership');
+    }
+
+    public function updateUsers(array $users = null)
+    {
+        if (!is_array($users))
+            return;
+
+        $ids = collect($users)->mapWithKeys(function($requestUser) {
+            $user = User::where('email', $requestUser['email'])->first();
+            if (!$user) {
+                throw ValidationException::withMessages(['users' => [$requestUser['email'].' does not exist']]);
+            }
+
+            return [$user->id => $requestUser['membership']];
+        });
+
+        $this->users()->sync($ids);
+    }
 
     public function entities()
     {

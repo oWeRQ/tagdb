@@ -15,6 +15,9 @@ function apiResource(resource) {
         update(id, data) {
             return axios.put(`${resource}/${id}`, data);
         },
+        save(id, data) {
+            return (id ? this.update(id, data) : this.store(data));
+        },
         destroy(id) {
             return axios.delete(`${resource}/${id}`);
         },

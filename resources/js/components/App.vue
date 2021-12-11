@@ -184,7 +184,10 @@
                 this.$refs.projectDialog.show();
             },
             createProject() {
-                this.projectEdited = {name: ''};
+                this.projectEdited = {
+                    name: '',
+                    users: [],
+                };
                 this.$refs.projectDialog.show();
             },
             saveProject(project) {

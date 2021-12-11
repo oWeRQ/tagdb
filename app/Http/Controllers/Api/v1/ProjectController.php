@@ -23,15 +23,19 @@ class ProjectController extends Controller
 
     public function store(Request $request)
     {
-        return new ProjectResource(Project::create($request->all()));
+        $project = Project::create($request->all());
+        $project->updateUsers($request->get('users'));
+
+        return new ProjectResource($project);
     }
 
     public function update(Request $request, $id)
     {
-        $field = Project::findOrFail($id);
-        $field->update($request->all());
+        $project = Project::findOrFail($id);
+        $project->update($request->all());
+        $project->updateUsers($request->get('users'));
 
-        return new ProjectResource($field);
+        return new ProjectResource($project);
     }
 
     public function destroy($id)
