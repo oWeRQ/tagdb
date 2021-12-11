@@ -39,23 +39,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $_currentProject = null;
-
-    public function getCurrentProjectAttribute()
+    public function currentProject()
     {
-        if (!$this->_currentProject) {
-            $this->_currentProject = Project::find(session('currentProject', $this->allProjects()->first()->id));
+        if (is_null($this->current_project_id) && $this->id) {
+            $this->switchProject($this->allProjects()->first());
         }
 
-        return $this->_currentProject;
+        return $this->belongsTo(Project::class, 'current_project_id');
     }
 
-    public function switchProject($project) {
+    public function switchProject($project)
+    {
         if (!$this->belongsToProject($project)) {
             return false;
         }
 
-        session(['currentProject' => $project->id]);
+        $this->forceFill([
+            'current_project_id' => $project->id,
+        ])->save();
+
+        $this->setRelation('currentProject', $project);
 
         return true;
     }
