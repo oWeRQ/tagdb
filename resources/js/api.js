@@ -52,7 +52,9 @@ export default {
             return axios.get(`/api/v1/account/projects`).then(resolveData);
         },
         currentProject() {
-            return axios.get(`/api/v1/account/current-project`).then(resolveData);
+            return axios.get(`/api/v1/account/current-project`).then(resolveData).then(project => {
+                return (project.length === 0 ? null : project);
+            });
         },
         switchProject(data) {
             return axios.post(`/api/v1/account/switch-project`, data);

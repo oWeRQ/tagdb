@@ -40,13 +40,11 @@ export default new Vuex.Store({
         pending(state) {
             state.isReady = false;
         },
-        authResolved(state, { account, currentProject } = {}) {
-            state.isReady = true;
+        authResolved(state, { account, currentProject }) {
+            state.isReady = !!currentProject;
             state.isAuth = false;
             state.account = account;
-            if (currentProject) {
-                state.currentProject = currentProject;
-            }
+            state.currentProject = currentProject;
         },
         authRejected(state) {
             state.isReady = false;
@@ -95,13 +93,6 @@ export default new Vuex.Store({
                 router.push({ name: 'index' });
             }
         },
-        fetchAll({ dispatch }) {
-            return Promise.all([
-                dispatch('fetchCurrentProject'),
-                dispatch('fetchProjects'),
-                dispatch('fetchProjectData'),
-            ]);
-        },
         fetchProjectData({ dispatch }) {
             return Promise.all([
                 dispatch('fetchTags'),
@@ -118,15 +109,15 @@ export default new Vuex.Store({
             });
         },
         fetchAccount({ dispatch, commit }) {
-            api.account.index().then(account => {
-                commit('authResolved', { account });
-                dispatch('fetchAll');
-            });
-        },
-        fetchCurrentProject({ commit }) {
-            commit('currentProject', null);
-            return api.account.currentProject().then(currentProject => {
-                commit('currentProject', currentProject);
+            return Promise.all([
+                api.account.index(),
+                api.account.currentProject(),
+            ]).then(([account, currentProject]) => {
+                commit('authResolved', { account, currentProject });
+                dispatch('fetchProjects');
+                if (currentProject) {
+                    dispatch('fetchProjectData');
+                }
             });
         },
         fetchProjects({ commit }) {
