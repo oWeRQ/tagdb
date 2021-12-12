@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\UserResource;
 use App\Project;
 
 class AccountController extends Controller
 {
     public function index(Request $request)
     {
-        return $request->user();
+        return new UserResource($request->user());
     }
 
     public function projects(Request $request)

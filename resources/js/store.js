@@ -19,15 +19,6 @@ export default new Vuex.Store({
         presets: [],
     },
     mutations: {
-        isReady(state, value) {
-            state.isReady = value;
-        },
-        isAuth(state, value) {
-            state.isAuth = value;
-        },
-        account(state, value) {
-            state.account = value;
-        },
         currentProject(state, value) {
             state.currentProject = value;
         },
@@ -43,58 +34,73 @@ export default new Vuex.Store({
         presets(state, value) {
             state.presets = value;
         },
+        ready(state) {
+            state.isReady = true;
+        },
+        pending(state) {
+            state.isReady = false;
+        },
+        authResolved(state, { account, currentProject } = {}) {
+            state.isReady = true;
+            state.isAuth = false;
+            state.account = account;
+            if (currentProject) {
+                state.currentProject = currentProject;
+            }
+        },
+        authRejected(state) {
+            state.isReady = false;
+            state.isAuth = true;
+            state.account = null;
+            state.currentProject = null;
+        },
     },
     actions: {
-        init({ dispatch }) {
+        init({ dispatch, commit }) {
             axios.interceptors.response.use(response => {
                 return response;
             }, error => {
                 if (error.response.status === 401) {
-                    dispatch('logoutSuccess');
+                    commit('authRejected');
                     return new Promise(() => {});
                 }
                 return Promise.reject(error);
             });
 
-            dispatch('fetchAccount').then(() => {
-                dispatch('authSuccess');
-            });
+            return dispatch('fetchAccount');
         },
         register({ dispatch }, data) {
             return api.auth.register(data).then(() => {
-                dispatch('fetchAccount');
-                dispatch('authSuccess');
+                return dispatch('fetchAccount');
             });
         },
         login({ dispatch }, data) {
             return api.auth.login(data).then(() => {
-                dispatch('fetchAccount');
-                dispatch('authSuccess');
+                return dispatch('fetchAccount');
             });
         },
-        logout({ dispatch }) {
+        logout({ commit }) {
             return api.auth.logout().then(() => {
-                dispatch('logoutSuccess');
+                commit('authRejected');
             });
         },
         reloadContent({ commit }) {
-            commit('isReady', false);
+            commit('pending');
             Vue.nextTick(() => {
-                commit('isReady', true);
+                commit('ready');
             });
         },
-        authSuccess({ dispatch, commit }) {
-            commit('isReady', true);
-            commit('isAuth', false);
-            dispatch('fetchCurrentProject');
-            dispatch('fetchProjects');
-            dispatch('fetchProjectData');
+        redirectIfPreset() {
+            if (router.history.current.name === 'preset') {
+                router.push({ name: 'index' });
+            }
         },
-        logoutSuccess({ commit }) {
-            commit('isReady', false);
-            commit('isAuth', true);
-            commit('account', null);
-            commit('currentProject', null);
+        fetchAll({ dispatch }) {
+            return Promise.all([
+                dispatch('fetchCurrentProject'),
+                dispatch('fetchProjects'),
+                dispatch('fetchProjectData'),
+            ]);
         },
         fetchProjectData({ dispatch }) {
             return Promise.all([
@@ -108,27 +114,25 @@ export default new Vuex.Store({
             return api.account.switchProject(project).then(response => {
                 dispatch('fetchProjectData');
                 dispatch('reloadContent');
-                if (router.history.current.name === 'preset') {
-                    router.push({ name: 'index' });
-                }
+                dispatch('redirectIfPreset');
             });
         },
-        fetchAccount({ commit }) {
-            commit('account', null);
-            return api.account.index().then(response => {
-                commit('account', response.data);
+        fetchAccount({ dispatch, commit }) {
+            api.account.index().then(account => {
+                commit('authResolved', { account });
+                dispatch('fetchAll');
             });
         },
         fetchCurrentProject({ commit }) {
             commit('currentProject', null);
-            return api.account.currentProject().then(response => {
-                commit('currentProject', response.data.data);
+            return api.account.currentProject().then(currentProject => {
+                commit('currentProject', currentProject);
             });
         },
         fetchProjects({ commit }) {
             commit('projects', []);
-            return api.account.projects().then(response => {
-                commit('projects', response.data.data);
+            return api.account.projects().then(projects => {
+                commit('projects', projects);
             });
         },
         fetchTags({ commit }) {

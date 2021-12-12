@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+function resolveData(response) {
+    return response.data.data;
+}
+
 function apiResource(resource) {
     return {
         resource,
@@ -42,13 +46,13 @@ export default {
     },
     account: {
         index() {
-            return axios.get(`/api/v1/account`);
+            return axios.get(`/api/v1/account`).then(resolveData);
         },
         projects() {
-            return axios.get(`/api/v1/account/projects`);
+            return axios.get(`/api/v1/account/projects`).then(resolveData);
         },
         currentProject() {
-            return axios.get(`/api/v1/account/current-project`);
+            return axios.get(`/api/v1/account/current-project`).then(resolveData);
         },
         switchProject(data) {
             return axios.post(`/api/v1/account/switch-project`, data);
