@@ -7,8 +7,8 @@ import router from './router';
 import vuetify from './vuetify';
 
 import App from './components/App.vue';
-import AuthDialog from './components/AuthDialog.vue';
-import ConfirmDialog from './components/ConfirmDialog.vue';
+import AuthDialog from './components/common/AuthDialog.vue';
+import ConfirmDialog from './components/common/ConfirmDialog.vue';
 
 const app = new Vue({
     store,
