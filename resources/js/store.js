@@ -67,6 +67,17 @@ export default new Vuex.Store({
 
             return dispatch('fetchAccount');
         },
+        redirectIfPreset() {
+            if (router.history.current.name === 'preset') {
+                router.push({ name: 'index' });
+            }
+        },
+        reloadContent({ commit }) {
+            commit('pending');
+            Vue.nextTick(() => {
+                commit('ready');
+            });
+        },
         register({ dispatch }, data) {
             return api.auth.register(data).then(() => {
                 return dispatch('fetchAccount');
@@ -81,24 +92,6 @@ export default new Vuex.Store({
             return api.auth.logout().then(() => {
                 commit('authRejected');
             });
-        },
-        reloadContent({ commit }) {
-            commit('pending');
-            Vue.nextTick(() => {
-                commit('ready');
-            });
-        },
-        redirectIfPreset() {
-            if (router.history.current.name === 'preset') {
-                router.push({ name: 'index' });
-            }
-        },
-        fetchProjectData({ dispatch }) {
-            return Promise.all([
-                dispatch('fetchTags'),
-                dispatch('fetchFields'),
-                dispatch('fetchPresets'),
-            ]);
         },
         switchProject({ dispatch, commit }, project) {
             commit('currentProject', project)
@@ -119,6 +112,13 @@ export default new Vuex.Store({
                     dispatch('fetchProjectData');
                 }
             });
+        },
+        fetchProjectData({ dispatch }) {
+            return Promise.all([
+                dispatch('fetchTags'),
+                dispatch('fetchFields'),
+                dispatch('fetchPresets'),
+            ]);
         },
         fetchProjects({ commit }) {
             commit('projects', []);
