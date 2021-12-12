@@ -15,6 +15,7 @@ export default new Vuex.Store({
         currentProject: null,
         projects: [],
         tags: [],
+        fields: [],
         presets: [],
     },
     mutations: {
@@ -35,6 +36,9 @@ export default new Vuex.Store({
         },
         tags(state, value) {
             state.tags = value;
+        },
+        fields(state, value) {
+            state.fields = value;
         },
         presets(state, value) {
             state.presets = value;
@@ -100,6 +104,7 @@ export default new Vuex.Store({
         fetchProjectData({ dispatch }) {
             return Promise.all([
                 dispatch('fetchTags'),
+                dispatch('fetchFields'),
                 dispatch('fetchPresets'),
             ]);
         },
@@ -132,6 +137,12 @@ export default new Vuex.Store({
             commit('tags', []);
             return api.tags.index().then(response => {
                 commit('tags', response.data.data);
+            });
+        },
+        fetchFields({ commit }) {
+            commit('fields', []);
+            return api.fields.index().then(response => {
+                commit('fields', response.data.data);
             });
         },
         fetchPresets({ commit }) {
