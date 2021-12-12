@@ -62,11 +62,13 @@ export default new Vuex.Store({
         },
         register({ dispatch }, data) {
             return api.auth.register(data).then(() => {
+                dispatch('fetchAccount');
                 dispatch('authSuccess');
-            })
+            });
         },
         login({ dispatch }, data) {
             return api.auth.login(data).then(() => {
+                dispatch('fetchAccount');
                 dispatch('authSuccess');
             });
         },
@@ -76,21 +78,14 @@ export default new Vuex.Store({
             });
         },
         reloadContent({ commit }) {
-            if (router.history.current.name === 'preset') {
-                router.push({ name: 'index' });
-            }
-
             commit('isReady', false);
             Vue.nextTick(() => {
                 commit('isReady', true);
             });
         },
-        authSuccess({ dispatch, commit, state }) {
+        authSuccess({ dispatch, commit }) {
             commit('isReady', true);
             commit('isAuth', false);
-            if (!state.account) {
-                dispatch('fetchAccount');
-            }
             dispatch('fetchCurrentProject');
             dispatch('fetchProjects');
             dispatch('fetchProjectData');
@@ -110,9 +105,12 @@ export default new Vuex.Store({
         },
         switchProject({ dispatch, commit }, project) {
             commit('currentProject', project)
-            return api.account.switchProject(project).then(() => {
+            return api.account.switchProject(project).then(response => {
                 dispatch('fetchProjectData');
                 dispatch('reloadContent');
+                if (router.history.current.name === 'preset') {
+                    router.push({ name: 'index' });
+                }
             });
         },
         fetchAccount({ commit }) {

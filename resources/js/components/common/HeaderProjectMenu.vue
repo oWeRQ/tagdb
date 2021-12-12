@@ -1,4 +1,5 @@
 <template>
+<div>
     <v-menu
         v-if="account"
         offset-y
@@ -14,14 +15,6 @@
                 {{ currentProject && currentProject.name }}
                 <v-icon class="ml-1" size="20">mdi-chevron-down</v-icon>
             </v-btn>
-
-            <ProjectDialog
-                ref="projectDialog"
-                :deletable="projectDeletable"
-                :value="projectEdited"
-                @input="saveProject"
-                @delete="deleteProject"
-            ></ProjectDialog>
         </template>
 
         <v-list dense>
@@ -57,12 +50,21 @@
             </v-list-item>
         </v-list>
     </v-menu>
+
+    <ProjectDialog
+        ref="projectDialog"
+        :deletable="projectDeletable"
+        :value="projectEdited"
+        @input="saveProject"
+        @delete="deleteProject"
+    ></ProjectDialog>
+</div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
 import cloneDeep from 'clone-deep';
-import ProjectDialog from '../project/ProjectDialog';
+import ProjectDialog from '../project/ProjectDialog.vue';
 
 export default {
     components: {
