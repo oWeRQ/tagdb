@@ -41,103 +41,103 @@ export default new Vuex.Store({
         },
     },
     actions: {
-        init(context) {
+        init({ dispatch }) {
             axios.interceptors.response.use(response => {
                 return response;
             }, error => {
                 if (error.response.status === 401) {
-                    context.dispatch('logoutSuccess');
+                    dispatch('logoutSuccess');
                     return new Promise(() => {});
                 }
                 return Promise.reject(error);
             });
 
-            context.dispatch('getAccount').then(() => {
-                context.dispatch('authSuccess');
+            dispatch('fetchAccount').then(() => {
+                dispatch('authSuccess');
             });
         },
-        register(context, data) {
+        register({ dispatch }, data) {
             return api.auth.register(data).then(() => {
-                context.dispatch('authSuccess');
+                dispatch('authSuccess');
             })
         },
-        login(context, data) {
+        login({ dispatch }, data) {
             return api.auth.login(data).then(() => {
-                context.dispatch('authSuccess');
+                dispatch('authSuccess');
             });
         },
-        logout(context) {
+        logout({ dispatch }) {
             return api.auth.logout().then(() => {
-                context.dispatch('logoutSuccess');
+                dispatch('logoutSuccess');
             });
         },
-        reloadContent(context) {
+        reloadContent({ commit }) {
             if (router.history.current.name === 'preset') {
                 router.push({ name: 'index' });
             }
 
-            context.commit('isReady', false);
+            commit('isReady', false);
             Vue.nextTick(() => {
-                context.commit('isReady', true);
+                commit('isReady', true);
             });
         },
-        authSuccess(context) {
-            context.commit('isReady', true);
-            context.commit('isAuth', false);
-            if (!context.state.account) {
-                context.dispatch('getAccount');
+        authSuccess({ dispatch, commit, state }) {
+            commit('isReady', true);
+            commit('isAuth', false);
+            if (!state.account) {
+                dispatch('fetchAccount');
             }
-            context.dispatch('getCurrentProject');
-            context.dispatch('getProjects');
-            context.dispatch('getProjectData');
+            dispatch('fetchCurrentProject');
+            dispatch('fetchProjects');
+            dispatch('fetchProjectData');
         },
-        logoutSuccess(context) {
-            context.commit('isReady', false);
-            context.commit('isAuth', true);
-            context.commit('account', null);
-            context.commit('currentProject', null);
+        logoutSuccess({ commit }) {
+            commit('isReady', false);
+            commit('isAuth', true);
+            commit('account', null);
+            commit('currentProject', null);
         },
-        getProjectData(context) {
+        fetchProjectData({ dispatch }) {
             return Promise.all([
-                context.dispatch('getTags'),
-                context.dispatch('getPresets'),
+                dispatch('fetchTags'),
+                dispatch('fetchPresets'),
             ]);
         },
-        switchProject(context, project) {
-            context.commit('currentProject', project)
-            return api.account.switchProject(project).then(response => {
-                context.dispatch('getProjectData');
-                context.dispatch('reloadContent');
+        switchProject({ dispatch, commit }, project) {
+            commit('currentProject', project)
+            return api.account.switchProject(project).then(() => {
+                dispatch('fetchProjectData');
+                dispatch('reloadContent');
             });
         },
-        getAccount(context) {
-            context.commit('account', null);
+        fetchAccount({ commit }) {
+            commit('account', null);
             return api.account.index().then(response => {
-                context.commit('account', response.data);
+                commit('account', response.data);
             });
         },
-        getCurrentProject(context) {
-            context.commit('currentProject', null);
+        fetchCurrentProject({ commit }) {
+            commit('currentProject', null);
             return api.account.currentProject().then(response => {
-                context.commit('currentProject', response.data.data);
+                commit('currentProject', response.data.data);
             });
         },
-        getProjects(context) {
-            context.commit('projects', []);
+        fetchProjects({ commit }) {
+            commit('projects', []);
             return api.account.projects().then(response => {
-                context.commit('projects', response.data.data);
+                commit('projects', response.data.data);
             });
         },
-        getTags(context) {
-            context.commit('tags', []);
+        fetchTags({ commit }) {
+            commit('tags', []);
             return api.tags.index().then(response => {
-                context.commit('tags', response.data.data);
+                commit('tags', response.data.data);
             });
         },
-        getPresets(context) {
-            context.commit('presets', []);
+        fetchPresets({ commit }) {
+            commit('presets', []);
             return api.presets.index().then(response => {
-                context.commit('presets', response.data.data);
+                commit('presets', response.data.data);
             });
         },
     },

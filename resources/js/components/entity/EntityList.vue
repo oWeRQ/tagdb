@@ -317,7 +317,7 @@
                 this.$refs.presetDialog.show();
             },
             savePreset(rawPreset) {
-                this.$store.dispatch('getPresets');
+                this.$store.dispatch('fetchPresets');
             },
         },
     };

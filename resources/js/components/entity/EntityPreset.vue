@@ -272,10 +272,10 @@
                     this.$router.push({name: 'preset', params: { name: rawPreset.name }});
                 }
 
-                this.$store.dispatch('getPresets');
+                this.$store.dispatch('fetchPresets');
             },
             deletePreset(preset) {
-                this.$store.dispatch('getPresets');
+                this.$store.dispatch('fetchPresets');
                 this.$router.push({name: 'index'});
             },
         },

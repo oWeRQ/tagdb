@@ -91,10 +91,10 @@
             };
         },
         watch: {
-            value: 'getTags',
+            value: 'filterTags',
         },
         mounted() {
-            this.getTags();
+            this.filterTags();
         },
         methods: {
             isHyphen(item) {
@@ -118,7 +118,7 @@
             remove(index) {
                 this.$emit('input', this.value.filter((v, i) => i !== index));
             },
-            getTags() {
+            filterTags() {
                 const params = {
                     with_tags: this.returnObject ? this.value.map(tag => tag.name) : this.value,
                 };
