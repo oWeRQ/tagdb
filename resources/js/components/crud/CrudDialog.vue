@@ -85,8 +85,8 @@
                     return;
                 }
 
-                this.api.save(this.value.id, this.value).then(response => {
-                    this.$emit('input', this.processValue(response.data.data));
+                this.api.save(this.value.id, this.value).then(result => {
+                    this.$emit('input', this.processValue(result));
                     this.close();
                 });
             },

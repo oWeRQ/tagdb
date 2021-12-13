@@ -67,8 +67,8 @@
                     return;
                 }
 
-                api.tags.save(this.value.id, this.value).then(response => {
-                    const tag = this.processValue(response.data.data);
+                api.tags.save(this.value.id, this.value).then(tag => {
+                    tag = this.processValue(tag);
                     this.$emit('input', tag);
                     this.$store.dispatch('saveTag', tag);
                     this.close();

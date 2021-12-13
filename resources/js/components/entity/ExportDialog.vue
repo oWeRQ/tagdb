@@ -81,8 +81,8 @@ export default {
             };
 
             this.fields = [];
-            api.tags.index(params).then(response => {
-                this.fields = response.data.data.filter(tag => tag.entities_count).flatMap(tag => tag.fields);
+            api.tags.index(params).then(tags => {
+                this.fields = tags.filter(tag => tag.entities_count).flatMap(tag => tag.fields);
             });
         },
         submit() {

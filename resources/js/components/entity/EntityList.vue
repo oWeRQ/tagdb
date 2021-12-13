@@ -269,11 +269,11 @@
                 // this.items = [];
                 // this.total = 0;
                 console.time('get items');
-                api.entities.index(params).then(response => {
+                api.entities.index(params).then(items => {
                     console.timeEnd('get items');
                     console.time('render items');
-                    this.items = response.data.data.map(this.processItem);
-                    this.total = response.data.meta.total;
+                    this.items = items.map(this.processItem);
+                    this.total = items.meta.total;
                     this.loading = false;
                     this.$nextTick(() => {
                         console.timeEnd('render items');

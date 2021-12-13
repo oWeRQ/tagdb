@@ -67,8 +67,8 @@
                     return;
                 }
 
-                api.presets.save(this.value.id, this.value).then(response => {
-                    const preset = this.processValue(response.data.data);
+                api.presets.save(this.value.id, this.value).then(preset => {
+                    preset = this.processValue(preset);
                     this.$emit('input', preset);
                     this.$store.dispatch('savePreset', preset);
                     this.close();

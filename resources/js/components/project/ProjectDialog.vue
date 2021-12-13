@@ -75,8 +75,8 @@
                     return;
                 }
 
-                return api.projects.save(this.id, this.value).then(response => {
-                    const project = this.processValue(response.data.data);
+                return api.projects.save(this.id, this.value).then(project => {
+                    project = this.processValue(project);
                     this.$emit('input', project);
                     this.$store.dispatch('saveProject', project);
                     this.close();

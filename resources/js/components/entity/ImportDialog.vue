@@ -101,10 +101,10 @@ export default {
         };
     },
     computed: {
-        ...mapState(
+        ...mapState([
             'tags',
             'fields',
-        ),
+        ]),
         fieldItems() {
             return [
                 { id: 'tags', name: 'Tags' },

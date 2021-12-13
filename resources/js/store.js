@@ -25,14 +25,12 @@ export default new Vuex.Store({
         projects(state, value) {
             state.projects = value;
         },
-        tags(state, value) {
-            state.tags = value;
-        },
-        fields(state, value) {
-            state.fields = value;
-        },
         presets(state, value) {
             state.presets = value;
+        },
+        tagsAndFields(state, { tags, fields }) {
+            state.tags = tags;
+            state.fields = fields;
         },
         ready(state) {
             state.isReady = true;
@@ -115,33 +113,26 @@ export default new Vuex.Store({
         },
         fetchProjectData({ dispatch }) {
             return Promise.all([
-                dispatch('fetchTags'),
-                dispatch('fetchFields'),
                 dispatch('fetchPresets'),
+                dispatch('fetchTagsAndFields'),
             ]);
         },
         fetchProjects({ commit }) {
-            commit('projects', []);
             return api.account.projects().then(projects => {
                 commit('projects', projects);
             });
         },
-        fetchTags({ commit }) {
-            commit('tags', []);
-            return api.tags.index().then(response => {
-                commit('tags', response.data.data);
-            });
-        },
-        fetchFields({ commit }) {
-            commit('fields', []);
-            return api.fields.index().then(response => {
-                commit('fields', response.data.data);
-            });
-        },
         fetchPresets({ commit }) {
-            commit('presets', []);
-            return api.presets.index().then(response => {
-                commit('presets', response.data.data);
+            return api.presets.index().then(presets => {
+                commit('presets', presets);
+            });
+        },
+        fetchTagsAndFields({ commit }) {
+            return Promise.all([
+                api.tags.index(),
+                api.fields.index(),
+            ]).then(([tags, fields]) => {
+                commit('tagsAndFields', { tags, fields });
             });
         },
         saveProject({ dispatch }, project) {
@@ -150,33 +141,29 @@ export default new Vuex.Store({
         deleteProject({ dispatch }, project) {
             dispatch('fetchProjects');
         },
-        saveTag({ dispatch }, tag) {
-            dispatch('fetchTags');
-            dispatch('fetchFields');
-        },
-        deleteTag({ dispatch }, tag) {
-            dispatch('fetchTags');
-            dispatch('fetchFields');
-        },
-        saveField({ dispatch }, field) {
-            dispatch('fetchTags');
-            dispatch('fetchFields');
-        },
-        deleteField({ dispatch }, field) {
-            dispatch('fetchTags');
-            dispatch('fetchFields');
-        },
         savePreset({ dispatch }, preset) {
             dispatch('fetchPresets');
         },
         deletePreset({ dispatch }, preset) {
             dispatch('fetchPresets');
         },
+        saveTag({ dispatch }, tag) {
+            dispatch('fetchTagsAndFields');
+        },
+        deleteTag({ dispatch }, tag) {
+            dispatch('fetchTagsAndFields');
+        },
+        saveField({ dispatch }, field) {
+            dispatch('fetchTagsAndFields');
+        },
+        deleteField({ dispatch }, field) {
+            dispatch('fetchTagsAndFields');
+        },
         saveEntity({ dispatch }, entity) {
-            dispatch('fetchTags');
+            dispatch('fetchTagsAndFields');
         },
         deleteEntity({ dispatch }, entity) {
-            dispatch('fetchTags');
+            dispatch('fetchTagsAndFields');
         },
     },
 });

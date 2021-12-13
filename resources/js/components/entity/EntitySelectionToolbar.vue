@@ -118,8 +118,8 @@
             fetchTags() {
                 api.tags.index({
                     with_tags: this.queryTags.map(tag => tag.name),
-                }).then(response => {
-                    this.tags = response.data.data;
+                }).then(tags => {
+                    this.tags = tags;
                 });
             },
             showAddTag() {

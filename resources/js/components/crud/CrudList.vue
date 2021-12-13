@@ -138,9 +138,9 @@
                 this.loading = true;
                 this.items = [];
                 this.total = 0;
-                this.api.index(params).then(response => {
-                    this.items = response.data.data.map(this.processItem);
-                    this.total = response.data.meta.total;
+                this.api.index(params).then(items => {
+                    this.items = items.map(this.processItem);
+                    this.total = items.meta.total;
                     this.loading = false;
                 });
             },

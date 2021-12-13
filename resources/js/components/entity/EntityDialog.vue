@@ -67,8 +67,8 @@
                     return;
                 }
 
-                api.entities.save(this.value.id, this.value).then(response => {
-                    const entity = this.processValue(response.data.data);
+                api.entities.save(this.value.id, this.value).then(entity => {
+                    entity = this.processValue(entity);
                     this.$emit('input', entity);
                     this.$store.dispatch('saveEntity', entity);
                     this.close();

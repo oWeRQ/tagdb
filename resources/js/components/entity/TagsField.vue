@@ -122,8 +122,8 @@
                 const params = {
                     with_tags: this.returnObject ? this.value.map(tag => tag.name) : this.value,
                 };
-                api.tags.index(params).then(response => {
-                    this.tags = response.data.data;
+                api.tags.index(params).then(tags => {
+                    this.tags = tags;
                 });
             },
             input(value) {
