@@ -3,7 +3,7 @@
         v-model="selected"
         :show-select="true"
         :headers="headers"
-        :items="items"
+        :items="displayItems"
         :options.sync="options"
         :server-items-length="serverItemsLength"
         :loading="loading"
@@ -23,7 +23,7 @@
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
-                <v-toolbar-title class="mr-4">{{ projectName }}</v-toolbar-title>
+                <v-toolbar-title class="mr-4">{{ title }}</v-toolbar-title>
                 <TagsField
                     v-model="query.tags"
                     solo
@@ -77,6 +77,7 @@
             <PresetDialog
                 ref="presetDialog"
                 :value="editedPreset"
+                @input="savePreset"
             ></PresetDialog>
 
             <EntityDialog
@@ -145,7 +146,6 @@
                 items: [],
                 options: {},
                 selected: [],
-                editedIndex: null,
                 editedItem: null,
                 editedPreset: null,
                 multiSort: false,
@@ -160,7 +160,7 @@
                 'currentProject',
                 'tags',
             ]),
-            projectName() {
+            title() {
                 return this.currentProject?.name;
             },
             serverItemsLength() {
@@ -182,9 +182,13 @@
             displayFields() {
                 return this.queryTags.flatMap(item => item.fields);
             },
-            displaySlots() {
-                return this.displayFields.map((field) => {
-                    return { name: 'item.contents.' + field.id, type: field.type };
+            displayItems() {
+                return this.items.map(item => {
+                    const contents = {};
+                    for (let value of item.values) {
+                        contents[value.field.id] = value.content;
+                    }
+                    return { ...item, contents };
                 });
             },
             headers() {
@@ -212,7 +216,7 @@
                 return this.headers.slice(0, -2);
             },
             exportFilename() {
-                return (this.query.tags.join(' ') || this.projectName) + '.csv';
+                return (this.query.tags.join(' ') || this.title) + '.csv';
             },
             exportParams() {
                 return {
@@ -249,13 +253,6 @@
             options: 'getItems',
         },
         methods: {
-            processItem(item) {
-                const contents = {};
-                for (let value of item.values) {
-                    contents[value.field.id] = value.content;
-                }
-                return { ...item, contents };
-            },
             getItems() {
                 const params = {
                     query: this.query,
@@ -265,24 +262,17 @@
                 };
 
                 this.loading = true;
-                // this.items = [];
-                // this.total = 0;
                 console.time('get items');
                 api.entities.index(params).then(items => {
                     console.timeEnd('get items');
                     console.time('render items');
-                    this.items = items.map(this.processItem);
+                    this.items = items;
                     this.total = items.meta.total;
                     this.loading = false;
                     this.$nextTick(() => {
                         console.timeEnd('render items');
                     });
                 });
-            },
-            deleteItem(item) {
-                if (this.editedIndex > -1) {
-                    this.items.splice(this.editedIndex, 1);
-                }
             },
             addItem() {
                 this.editItem({
@@ -291,21 +281,19 @@
                 });
             },
             editItem(item) {
-                this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
                 this.$refs.entityDialog.show();
             },
-            saveItem(item) {
-                item = this.processItem(item);
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], item);
+            saveItem(entity) {
+                const item = this.items.find(item => item.id === entity.id);
+                if (item) {
+                    Object.assign(item, entity);
                 } else {
-                    this.items.unshift(item);
+                    this.items.unshift(entity);
                 }
             },
-            resetQuery() {
-                this.query.search = '';
-                this.query.tags = [];
+            deleteItem(entity) {
+                this.items = this.items.filter(item => item.id !== entity.id)
             },
             addPreset() {
                 this.editedPreset = {
@@ -314,6 +302,9 @@
                     query: JSON.stringify(this.query),
                 };
                 this.$refs.presetDialog.show();
+            },
+            savePreset(rawPreset) {
+                this.$router.push({name: 'preset', params: { name: rawPreset.name }});
             },
         },
     };

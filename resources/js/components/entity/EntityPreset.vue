@@ -3,7 +3,7 @@
         v-model="selected"
         :show-select="true"
         :headers="headers"
-        :items="items"
+        :items="displayItems"
         :options.sync="options"
         :server-items-length="serverItemsLength"
         :loading="loading"
@@ -126,7 +126,6 @@
                 items: [],
                 options: {},
                 selected: [],
-                editedIndex: null,
                 editedItem: null,
                 editedPreset: null,
             };
@@ -144,7 +143,7 @@
                 return this.presets.find(preset => preset.name === name);
             },
             title() {
-                return this.preset && this.preset.name;
+                return this.preset?.name;
             },
             query() {
                 return (this.preset ? JSON.parse(this.preset.query) : undefined);
@@ -166,9 +165,13 @@
                 // return this.availableTags.flatMap(item => item.fields);
                 return this.queryTags.flatMap(item => item.fields);
             },
-            displaySlots() {
-                return this.displayFields.map((field) => {
-                    return { name: 'item.contents.' + field.id, type: field.type };
+            displayItems() {
+                return this.items.map(item => {
+                    const contents = {};
+                    for (let value of item.values) {
+                        contents[value.field.id] = value.content;
+                    }
+                    return { ...item, contents };
                 });
             },
             headers() {
@@ -193,7 +196,7 @@
                 return this.headers.slice(0, -2);
             },
             exportFilename() {
-                return this.preset?.name + '.csv';
+                return this.title + '.csv';
             },
             exportParams() {
                 return {
@@ -208,17 +211,14 @@
             },
         },
         watch: {
-            preset: 'getItems',
+            preset() {
+                this.items = [];
+                this.total = 0;
+                this.getItems();
+            },
             options: 'getItems',
         },
         methods: {
-            processItem(item) {
-                const contents = {};
-                for (let value of item.values) {
-                    contents[value.field.id] = value.content;
-                }
-                return { ...item, contents };
-            },
             getItems() {
                 if (!this.preset)
                     return;
@@ -231,18 +231,11 @@
                 };
 
                 this.loading = true;
-                this.items = [];
-                this.total = 0;
                 api.entities.index(params).then(items => {
-                    this.items = items.map(this.processItem);
+                    this.items = items;
                     this.total = items.meta.total;
                     this.loading = false;
                 });
-            },
-            deleteItem(item) {
-                if (this.editedIndex > -1) {
-                    this.items.splice(this.editedIndex, 1);
-                }
             },
             addItem() {
                 this.editItem({
@@ -251,17 +244,19 @@
                 });
             },
             editItem(item) {
-                this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
                 this.$refs.entityDialog.show();
             },
-            saveItem(item) {
-                item = this.processItem(item);
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], item);
+            saveItem(entity) {
+                const item = this.items.find(item => item.id === entity.id);
+                if (item) {
+                    Object.assign(item, entity);
                 } else {
-                    this.items.unshift(item);
+                    this.items.unshift(entity);
                 }
+            },
+            deleteItem(entity) {
+                this.items = this.items.filter(item => item.id !== entity.id)
             },
             editPreset() {
                 this.editedPreset = cloneDeep(this.preset);
