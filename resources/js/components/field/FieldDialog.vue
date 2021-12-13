@@ -32,10 +32,6 @@
                 type: Object,
                 default: () => ({}),
             },
-            processValue: {
-                type: Function,
-                default: value => value,
-            },
         },
         computed: {
             isNew() {
@@ -68,7 +64,6 @@
                 }
 
                 api.fields.save(this.value.id, this.value).then(field => {
-                    field = this.processValue(field);
                     this.$emit('input', field);
                     this.$store.dispatch('saveField', field);
                     this.close();

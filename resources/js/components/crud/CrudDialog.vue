@@ -47,10 +47,6 @@
                 type: Object,
                 default: () => ({}),
             },
-            processValue: {
-                type: Function,
-                default: value => value,
-            },
             maxWidth: {
                 type: String,
                 default: '560px',
@@ -86,7 +82,7 @@
                 }
 
                 this.api.save(this.value.id, this.value).then(result => {
-                    this.$emit('input', this.processValue(result));
+                    this.$emit('input', result);
                     this.close();
                 });
             },

@@ -65,7 +65,6 @@
 
             <EntityDialog
                 ref="entityDialog"
-                :processValue="processItem"
                 :value="editedItem"
                 @input="saveItem"
                 @delete="deleteItem"
@@ -257,6 +256,7 @@
                 this.$refs.entityDialog.show();
             },
             saveItem(item) {
+                item = this.processItem(item);
                 if (this.editedIndex > -1) {
                     Object.assign(this.items[this.editedIndex], item);
                 } else {

@@ -32,10 +32,6 @@
                 type: Object,
                 default: () => ({}),
             },
-            processValue: {
-                type: Function,
-                default: value => value,
-            },
         },
         computed: {
             isNew() {
@@ -68,7 +64,6 @@
                 }
 
                 api.presets.save(this.value.id, this.value).then(preset => {
-                    preset = this.processValue(preset);
                     this.$emit('input', preset);
                     this.$store.dispatch('savePreset', preset);
                     this.close();

@@ -36,10 +36,6 @@
                 type: Object,
                 default: () => ({}),
             },
-            processValue: {
-                type: Function,
-                default: value => value,
-            },
         },
         computed: {
             id() {
@@ -76,7 +72,6 @@
                 }
 
                 return api.projects.save(this.id, this.value).then(project => {
-                    project = this.processValue(project);
                     this.$emit('input', project);
                     this.$store.dispatch('saveProject', project);
                     this.close();
