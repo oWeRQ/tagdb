@@ -64,6 +64,7 @@
                 this.$root.confirm(`Delete Project?`).then(() => {
                     api.projects.destroy(this.id).then(response => {
                         this.$emit('delete', this.value);
+                        this.$store.dispatch('deleteProject', this.value);
                         this.close();
                     });
                 });
@@ -75,7 +76,9 @@
                 }
 
                 return api.projects.save(this.id, this.value).then(response => {
-                    this.$emit('input', this.processValue(response.data.data));
+                    const project = this.processValue(response.data.data);
+                    this.$emit('input', project);
+                    this.$store.dispatch('saveProject', project);
                     this.close();
                 }).catch(error => {
                     this.errors = error.response.data.errors || {};

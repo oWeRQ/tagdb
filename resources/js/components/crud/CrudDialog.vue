@@ -85,15 +85,10 @@
                     return;
                 }
 
-                if (this.value.id) {
-                    this.api.update(this.value.id, this.value).then(this.success);
-                } else {
-                    this.api.store(this.value).then(this.success);
-                }
-            },
-            success(response) {
-                this.$emit('input', this.processValue(response.data.data));
-                this.close();
+                this.api.save(this.value.id, this.value).then(response => {
+                    this.$emit('input', this.processValue(response.data.data));
+                    this.close();
+                });
             },
             show() {
                 this.resetValidation();

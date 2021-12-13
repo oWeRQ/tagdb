@@ -80,6 +80,7 @@ import toFormData from '../../functions/toFormData';
 import fuzzyMatch from '../../functions/fuzzyMatch';
 import TagDialog from '../tag/TagDialog.vue';
 import TagChip from '../tag/TagChip.vue';
+import { mapState } from 'vuex';
 
 export default {
     components: {
@@ -97,11 +98,13 @@ export default {
             previewData: null,
             previewTags: [],
             fieldsMap: {},
-            fields: [],
-            tags: [],
         };
     },
     computed: {
+        ...mapState(
+            'tags',
+            'fields',
+        ),
         fieldItems() {
             return [
                 { id: 'tags', name: 'Tags' },
@@ -120,10 +123,6 @@ export default {
             else
                 return 'Import';
         },
-    },
-    mounted() {
-        this.fetchTags();
-        this.fetchFields();
     },
     methods: {
         fieldFilter(item, queryText) {
@@ -147,8 +146,6 @@ export default {
             } else {
                 this.previewTags.push(tag);
             }
-            this.fetchTags();
-            this.fetchFields();
         },
         deleteTag(tag) {
             const previewTag = this.previewTags.find(item => item.id === tag.id);
@@ -157,8 +154,6 @@ export default {
                 delete previewTag.color;
                 previewTag.fields = [];
             }
-            this.fetchTags();
-            this.fetchFields();
         },
         fieldChange(header) {
             const field = this.fieldsMap[header];
@@ -170,16 +165,6 @@ export default {
             for (const header of this.previewData.headers) {
                 this.fieldsMap[header] = this.fieldItems.find(field => field.name === header)?.id;
             }
-        },
-        fetchTags() {
-            return api.tags.index().then(response => {
-                this.tags = response.data.data;
-            });
-        },
-        fetchFields() {
-            return api.fields.index().then(response => {
-                this.fields = response.data.data;
-            });
         },
         submit() {
             if (!this.previewData)

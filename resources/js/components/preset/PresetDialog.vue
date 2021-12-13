@@ -56,6 +56,7 @@
                 this.$root.confirm(`Delete Preset?`).then(() => {
                     api.presets.destroy(this.value.id).then(response => {
                         this.$emit('delete', this.value);
+                        this.$store.dispatch('deletePreset', this.value);
                         this.close();
                     });
                 });
@@ -66,15 +67,12 @@
                     return;
                 }
 
-                if (this.value.id) {
-                    api.presets.update(this.value.id, this.value).then(this.success);
-                } else {
-                    api.presets.store(this.value).then(this.success);
-                }
-            },
-            success(response) {
-                this.$emit('input', this.processValue(response.data.data));
-                this.close();
+                api.presets.save(this.value.id, this.value).then(response => {
+                    const preset = this.processValue(response.data.data);
+                    this.$emit('input', preset);
+                    this.$store.dispatch('savePreset', preset);
+                    this.close();
+                });
             },
             show() {
                 this.resetValidation();

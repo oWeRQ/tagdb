@@ -87,7 +87,6 @@ export default {
     methods: {
         ...mapActions([
             'switchProject',
-            'fetchProjects',
         ]),
         updateProject() {
             this.projectEdited = cloneDeep(this.currentProject);
@@ -102,7 +101,6 @@ export default {
         },
         saveProject(project) {
             this.switchProject(project);
-            this.fetchProjects();
         },
         deleteProject({id}) {
             this.switchProject(this.projects.find(project => project.id != id));

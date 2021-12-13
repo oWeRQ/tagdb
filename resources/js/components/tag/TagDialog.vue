@@ -56,6 +56,7 @@
                 this.$root.confirm(`Delete Tag?`).then(() => {
                     api.tags.destroy(this.value.id).then(response => {
                         this.$emit('delete', this.value);
+                        this.$store.dispatch('deleteTag', this.value);
                         this.close();
                     });
                 });
@@ -66,15 +67,12 @@
                     return;
                 }
 
-                if (this.value.id) {
-                    api.tags.update(this.value.id, this.value).then(this.success);
-                } else {
-                    api.tags.store(this.value).then(this.success);
-                }
-            },
-            success(response) {
-                this.$emit('input', this.processValue(response.data.data));
-                this.close();
+                api.tags.save(this.value.id, this.value).then(response => {
+                    const tag = this.processValue(response.data.data);
+                    this.$emit('input', tag);
+                    this.$store.dispatch('saveTag', tag);
+                    this.close();
+                });
             },
             show() {
                 this.resetValidation();

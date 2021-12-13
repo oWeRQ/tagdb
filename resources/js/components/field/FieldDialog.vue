@@ -56,6 +56,7 @@
                 this.$root.confirm(`Delete Field?`).then(() => {
                     api.fields.destroy(this.value.id).then(response => {
                         this.$emit('delete', this.value);
+                        this.$store.dispatch('deleteField', this.value);
                         this.close();
                     });
                 });
@@ -66,15 +67,12 @@
                     return;
                 }
 
-                if (this.value.id) {
-                    api.fields.update(this.value.id, this.value).then(this.success);
-                } else {
-                    api.fields.store(this.value).then(this.success);
-                }
-            },
-            success(response) {
-                this.$emit('input', this.processValue(response.data.data));
-                this.close();
+                api.fields.save(this.value.id, this.value).then(response => {
+                    const field = this.processValue(response.data.data);
+                    this.$emit('input', field);
+                    this.$store.dispatch('saveField', field);
+                    this.close();
+                });
             },
             show() {
                 this.resetValidation();

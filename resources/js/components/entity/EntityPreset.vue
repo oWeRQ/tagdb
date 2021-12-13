@@ -271,11 +271,8 @@
                 if (this.preset.name !== rawPreset.name) {
                     this.$router.push({name: 'preset', params: { name: rawPreset.name }});
                 }
-
-                this.$store.dispatch('fetchPresets');
             },
-            deletePreset(preset) {
-                this.$store.dispatch('fetchPresets');
+            deletePreset() {
                 this.$router.push({name: 'index'});
             },
         },

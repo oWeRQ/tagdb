@@ -144,5 +144,39 @@ export default new Vuex.Store({
                 commit('presets', response.data.data);
             });
         },
+        saveProject({ dispatch }, project) {
+            dispatch('fetchProjects');
+        },
+        deleteProject({ dispatch }, project) {
+            dispatch('fetchProjects');
+        },
+        saveTag({ dispatch }, tag) {
+            dispatch('fetchTags');
+            dispatch('fetchFields');
+        },
+        deleteTag({ dispatch }, tag) {
+            dispatch('fetchTags');
+            dispatch('fetchFields');
+        },
+        saveField({ dispatch }, field) {
+            dispatch('fetchTags');
+            dispatch('fetchFields');
+        },
+        deleteField({ dispatch }, field) {
+            dispatch('fetchTags');
+            dispatch('fetchFields');
+        },
+        savePreset({ dispatch }, preset) {
+            dispatch('fetchPresets');
+        },
+        deletePreset({ dispatch }, preset) {
+            dispatch('fetchPresets');
+        },
+        saveEntity({ dispatch }, entity) {
+            dispatch('fetchTags');
+        },
+        deleteEntity({ dispatch }, entity) {
+            dispatch('fetchTags');
+        },
     },
 });

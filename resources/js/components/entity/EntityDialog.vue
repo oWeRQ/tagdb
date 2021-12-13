@@ -56,6 +56,7 @@
                 this.$root.confirm(`Delete Entity?`).then(() => {
                     api.entities.destroy(this.value.id).then(response => {
                         this.$emit('delete', this.value);
+                        this.$store.dispatch('deleteEntity', this.value);
                         this.close();
                     });
                 });
@@ -66,15 +67,12 @@
                     return;
                 }
 
-                if (this.value.id) {
-                    api.entities.update(this.value.id, this.value).then(this.success);
-                } else {
-                    api.entities.store(this.value).then(this.success);
-                }
-            },
-            success(response) {
-                this.$emit('input', this.processValue(response.data.data));
-                this.close();
+                api.entities.save(this.value.id, this.value).then(response => {
+                    const entity = this.processValue(response.data.data);
+                    this.$emit('input', entity);
+                    this.$store.dispatch('saveEntity', entity);
+                    this.close();
+                });
             },
             show() {
                 this.resetValidation();

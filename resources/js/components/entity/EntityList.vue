@@ -77,7 +77,6 @@
             <PresetDialog
                 ref="presetDialog"
                 :value="editedPreset"
-                @input="savePreset"
             ></PresetDialog>
 
             <EntityDialog
@@ -315,9 +314,6 @@
                     query: JSON.stringify(this.query),
                 };
                 this.$refs.presetDialog.show();
-            },
-            savePreset(rawPreset) {
-                this.$store.dispatch('fetchPresets');
             },
         },
     };
