@@ -23,25 +23,28 @@
                 </span>
             </span>
         </template>
-        <v-card>
-            <v-card-title>
-                Filter
-            </v-card-title>
-            <v-card-text>
-                <v-row v-for="(filter, i) in filters" :key="i" no-gutters>
-                    <v-col>
-                        <v-text-field v-model="filter.value" :label="filter.text" hide-details></v-text-field>
-                    </v-col>
-                    <v-col cols="3">
-                        <v-select :items="operators" v-model="filter.operator" hide-details></v-select>
-                    </v-col>
-                </v-row>
-            </v-card-text>
-            <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="apply">Apply</v-btn>
-            </v-card-actions>
-        </v-card>
+        <v-form ref="form" @submit.prevent="apply">
+            <v-card>
+                <v-card-title class="pb-0">
+                    Filter
+                </v-card-title>
+                <v-card-text>
+                    <v-row v-for="(filter, i) in filters" :key="i" no-gutters>
+                        <v-col>
+                            <v-text-field v-model="filter.value" :label="filter.text" hide-details></v-text-field>
+                        </v-col>
+                        <v-col cols="3">
+                            <v-select :items="operators" v-model="filter.operator" hide-details class="ml-2"></v-select>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
+                    <v-btn color="blue darken-1" text type="submit">Apply</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-form>
     </v-menu>
 </template>
 
@@ -99,6 +102,11 @@ export default {
         fields: 'refresh',
     },
     methods: {
+        getOperatorIcon(filter) {
+            return {
+
+            }[filter.operator];
+        },
         refresh() {
             this.filters = this.fields.map(field => {
                 for (const operator in this.value[field.value]) {
@@ -132,6 +140,10 @@ export default {
                 }
                 return a;
             }, {}));
+            this.close();
+        },
+        cancel() {
+            this.refresh();
             this.close();
         },
         close() {
