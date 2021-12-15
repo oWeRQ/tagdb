@@ -99,7 +99,10 @@ export default {
         },
     },
     watch: {
-        fields: 'refresh',
+        fields: {
+            immediate: true,
+            handler: 'refresh',
+        },
     },
     methods: {
         getOperatorIcon(filter) {
