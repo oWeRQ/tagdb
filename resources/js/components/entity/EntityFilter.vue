@@ -13,8 +13,10 @@
                         v-if="filter.value"
                         class="mx-1"
                         close
+                        @click="edit(filter, i)"
                         @click:close="remove(filter, i)"
                     >
+                        <v-icon size="16" class="mr-2" v-text="getOperatorIcon(filter)"></v-icon>
                         <span class="grey--text text--darken-1 mr-1">
                             {{ filter.text }}:
                         </span>
@@ -107,7 +109,12 @@ export default {
     methods: {
         getOperatorIcon(filter) {
             return {
-
+                eq: 'mdi-equal',
+                like: 'mdi-contain',
+                gt: 'mdi-greater-than',
+                gte: 'mdi-greater-than-or-equal',
+                lt: 'mdi-less-than',
+                lte: 'mdi-less-than-or-equal',
             }[filter.operator];
         },
         refresh() {
@@ -148,6 +155,9 @@ export default {
         cancel() {
             this.refresh();
             this.close();
+        },
+        edit(field, i) {
+            this.$refs.menu.isActive = true;
         },
         close() {
             this.$refs.menu.isActive = false;
