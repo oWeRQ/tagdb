@@ -40,6 +40,7 @@
                     clearable
                     class="shrink mr-3"
                 ></v-text-field>
+                <EntityFilter v-model="query.filter" :fields="filterFields"></EntityFilter>
                 <v-btn icon @click="addPreset">
                     <v-icon>mdi-database-plus</v-icon>
                 </v-btn>
@@ -109,6 +110,7 @@
     import cloneDeep from 'clone-deep';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
+    import EntityFilter from './EntityFilter';
     import PresetDialog from '../preset/PresetDialog';
     import EntityDialog from './EntityDialog';
     import ExportDialog from './ExportDialog';
@@ -121,6 +123,7 @@
 
     export default {
         components: {
+            EntityFilter,
             PresetDialog,
             EntityDialog,
             ExportDialog,
@@ -151,6 +154,7 @@
                 multiSort: false,
                 query: {
                     tags: [],
+                    filter: {},
                     search: '',
                 },
             }
@@ -194,7 +198,7 @@
             headers() {
                 const before = [
                     { text: 'Tags', value: 'tags', sortable: false, width: '1%' },
-                    { text: 'Name', value: 'name' },
+                    { text: 'Name', value: 'name', type: 'text' },
                 ];
                 const after = [
                     { text: 'Created', value: 'created_at', type: 'date', width: '120px' },
@@ -205,6 +209,9 @@
                 });
 
                 return [...before, ...fields, ...after];
+            },
+            filterFields() {
+                return this.headers.filter(header => header.sortable !== false);
             },
             sortable() {
                 return this.headers.filter(header => header.sortable !== false).map(header => header.value);
@@ -234,6 +241,9 @@
             'query.search'() {
                 clearTimeout(this._timeout_search);
                 this._timeout_search = setTimeout(this.getItems, 500);
+            },
+            'query.filter'() {
+                this.getItems();
             },
             'query.tags'() {
                 const sortable = this.options.sortBy.map(value => this.sortable.includes(value));
