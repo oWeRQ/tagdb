@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use App\Scopes\ProjectScope;
 
 class Entity extends Model
@@ -62,6 +63,7 @@ class Entity extends Model
         $queryData = json_decode($json, true);
 
         $query->havingTags($queryData['tags'] ?? null);
+        $query->filter($queryData['filter'] ?? null);
         $query->search($queryData['search'] ?? null);
 
         return $query;
@@ -97,6 +99,40 @@ class Entity extends Model
         return $query;
     }
 
+    public function scopeFilter(Builder $query, $filter = null)
+    {
+        if ($filter) {
+            $operatorMap = [
+                'eq' => '=',
+                'gt' => '>',
+                'gte' => '>=',
+                'lt' => '<',
+                'lte' => '<=',
+            ];
+
+            foreach ($filter as $column => $operators) {
+                $column = explode('.', $column);
+                foreach ($operators as $operator => $value) {
+                    if ($column[0] === 'contents') {
+                        $field_id = $column[1];
+                        $field_column = "values_$field_id.content";
+                        $query->selectContents($field_id);
+                    } else {
+                        $field_column = $column[0];
+                    }
+
+                    if ($operator === 'like') {
+                        $query->where($field_column, 'like', '%'.$value.'%');
+                    } else {
+                        $query->where($field_column, $operatorMap[$operator], $value);
+                    }
+                }
+            }
+        }
+
+        return $query;
+    }
+
     public function scopeSearch($query, $search = null)
     {
         if (!$search)
@@ -111,7 +147,7 @@ class Entity extends Model
     {
         $column = "values_$field_id.content as contents.$field_id";
 
-        if (!in_array($column, $query->getQuery()->columns)) {
+        if (!in_array($column, (array)$query->getQuery()->columns)) {
             $query->leftJoin("values as values_$field_id", function($join) use($field_id) {
                 $join->on("values_$field_id.entity_id", '=', 'entities.id');
                 $join->where("values_$field_id.field_id", '=', $field_id);
