@@ -58,21 +58,19 @@ class Entity extends Model
         })->all();
     }
 
-    public function scopeQueryJson($query, $json)
+    public function scopeQueryJson(Builder $builder, $json)
     {
         $queryData = json_decode($json, true);
 
-        $query->havingTags($queryData['tags'] ?? null);
-        $query->filter($queryData['filter'] ?? null);
-        $query->search($queryData['search'] ?? null);
-
-        return $query;
+        $builder->havingTags($queryData['tags'] ?? null);
+        $builder->filter($queryData['filter'] ?? null);
+        $builder->search($queryData['search'] ?? null);
     }
 
-    public function scopeHavingTags($query, array $tags = null)
+    public function scopeHavingTags(Builder $builder, array $tags = null)
     {
         if (!$tags)
-            return $query;
+            return $builder;
 
         $includeTags = [];
         $excludeTags = [];
@@ -85,21 +83,19 @@ class Entity extends Model
         }
 
         if ($includeTags) {
-            $query->whereHas('tags', function($query) use($includeTags) {
-                $query->whereIn('name', $includeTags);
+            $builder->whereHas('tags', function($builder) use($includeTags) {
+                $builder->whereIn('name', $includeTags);
             }, '=', count($includeTags));
         }
 
         if ($excludeTags) {
-            $query->whereDoesntHave('tags', function($query) use($excludeTags) {
-                $query->whereIn('name', $excludeTags);
+            $builder->whereDoesntHave('tags', function($builder) use($excludeTags) {
+                $builder->whereIn('name', $excludeTags);
             });
         }
-
-        return $query;
     }
 
-    public function scopeFilter(Builder $query, $filter = null)
+    public function scopeFilter(Builder $builder, $filter = null)
     {
         if ($filter) {
             $operatorMap = [
@@ -116,51 +112,49 @@ class Entity extends Model
                     if ($column[0] === 'contents') {
                         $field_id = $column[1];
                         $field_column = "values_$field_id.content";
-                        $query->selectContents($field_id);
+                        $builder->selectContents($field_id);
                     } else {
                         $field_column = $column[0];
                     }
 
                     if ($operator === 'like') {
-                        $query->where($field_column, 'like', '%'.$value.'%');
+                        $builder->where($field_column, 'like', '%'.$value.'%');
                     } else {
-                        $query->where($field_column, $operatorMap[$operator], $value);
+                        $builder->where($field_column, $operatorMap[$operator], $value);
                     }
                 }
             }
         }
-
-        return $query;
     }
 
-    public function scopeSearch($query, $search = null)
+    public function scopeSearch(Builder $builder, $search = null)
     {
         if (!$search)
-            return $query;
+            return;
 
-        return $query->where('name', 'like', '%'.$search.'%')->orWhereHas('values', function($query) use($search) {
-            $query->where('content', 'like', '%'.$search.'%');
+        $builder->where('name', 'like', '%'.$search.'%')->orWhereHas('values', function($builder) use($search) {
+            $builder->where('content', 'like', '%'.$search.'%');
         });
     }
 
-    public function scopeSelectContents($query, $field_id = null)
+    public function scopeSelectContents(Builder $builder, $field_id = null)
     {
         $column = "values_$field_id.content as contents.$field_id";
 
-        if (!in_array($column, (array)$query->getQuery()->columns)) {
-            $query->leftJoin("values as values_$field_id", function($join) use($field_id) {
+        if (!in_array($column, (array)$builder->getQuery()->columns)) {
+            $builder->leftJoin("values as values_$field_id", function($join) use($field_id) {
                 $join->on("values_$field_id.entity_id", '=', 'entities.id');
                 $join->where("values_$field_id.field_id", '=', $field_id);
             })->addSelect($column);
         }
     }
 
-    public function scopeSort($query, $sort = null)
+    public function scopeSort(Builder $builder, $sort = null)
     {
-        $query->select('entities.*');
+        $builder->addSelect('entities.*');
 
         if (!$sort)
-            return $query->orderBy('created_at', 'desc');
+            return $builder->orderBy('created_at', 'desc');
 
         foreach (explode(',', $sort) as $i => $part) {
             $column = explode('.', trim($part, '+-'));
@@ -168,13 +162,11 @@ class Entity extends Model
 
             if ($column[0] === 'contents') {
                 $field_id = $column[1];
-                $query->selectContents($field_id)->orderBy("values_$field_id.content", $direction);
+                $builder->selectContents($field_id)->orderBy("values_$field_id.content", $direction);
             } else {
-                $query->orderBy($column[0], $direction);
+                $builder->orderBy($column[0], $direction);
             }
         }
-
-        return $query;
     }
 
     public function updateTags(array $tags = null)
