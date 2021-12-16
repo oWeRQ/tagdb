@@ -1,5 +1,5 @@
 <template>
-    <v-menu ref="menu" offset-y :close-on-content-click="false">
+    <v-menu ref="menu" offset-y :close-on-content-click="false" max-width="360px">
         <template v-slot:activator="{ on, attrs }">
             <span>
                 <v-btn icon v-bind="attrs" v-on="on">
@@ -16,10 +16,10 @@
                         @click="edit(filter, i)"
                         @click:close="remove(filter, i)"
                     >
-                        <v-icon size="16" class="mr-2" v-text="getOperatorIcon(filter)"></v-icon>
                         <span class="grey--text text--darken-1 mr-1">
-                            {{ filter.text }}:
+                            {{ filter.text }}
                         </span>
+                        <v-icon size="14" class="mr-1" v-text="getOperatorIcon(filter)"></v-icon>
                         {{ filter.value }}
                     </v-chip>
                 </span>
@@ -35,7 +35,7 @@
                         <v-col>
                             <v-text-field v-model="filter.value" :label="filter.text" hide-details></v-text-field>
                         </v-col>
-                        <v-col cols="3">
+                        <v-col cols="5">
                             <v-select :items="operators" v-model="filter.operator" hide-details class="ml-2"></v-select>
                         </v-col>
                     </v-row>

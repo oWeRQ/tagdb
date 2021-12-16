@@ -211,7 +211,10 @@
                 return [...before, ...fields, ...after];
             },
             filterFields() {
-                return this.headers.filter(header => header.sortable !== false);
+                return [
+                    { text: 'Name', value: 'name', type: 'text' },
+                    ...this.displayFields.map(field => ({ text: field.name, value: 'contents.' + field.id, type: field.type })),
+                ];
             },
             sortable() {
                 return this.headers.filter(header => header.sortable !== false).map(header => header.value);
