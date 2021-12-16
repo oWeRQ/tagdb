@@ -1,5 +1,5 @@
 <template>
-    <v-menu ref="menu" offset-y :close-on-content-click="false" max-width="360px">
+    <v-menu v-model="isShow" offset-y :close-on-content-click="false" max-width="360px">
         <template v-slot:activator="{ on, attrs }">
             <span>
                 <v-btn icon v-bind="attrs" v-on="on">
@@ -33,7 +33,7 @@
                 <v-card-text>
                     <v-row v-for="(filter, i) in filters" :key="i" no-gutters>
                         <v-col>
-                            <v-text-field v-model="filter.value" :label="filter.text" hide-details></v-text-field>
+                            <v-text-field v-model="filter.value" :label="filter.text" :autofocus="focus === i" hide-details></v-text-field>
                         </v-col>
                         <v-col cols="5">
                             <v-select :items="operators" v-model="filter.operator" hide-details class="ml-2"></v-select>
@@ -58,6 +58,8 @@ export default {
     },
     data() {
         return {
+            isShow: false,
+            focus: 0,
             valueFilters: [],
             filters: [],
         };
@@ -123,6 +125,7 @@ export default {
             }).filter(Boolean);
         },
         fieldsUpdate() {
+            this.focus = 0;
             this.filters = this.fields.map(field => {
                 for (const operator in this.value[field.value]) {
                     const value = this.value[field.value][operator];
@@ -161,11 +164,12 @@ export default {
             this.fieldsUpdate();
             this.close();
         },
-        edit(field, i) {
-            this.$refs.menu.isActive = true;
+        edit(filter, i) {
+            this.focus = this.filters.findIndex(item => item.name === filter.name);
+            this.isShow = true;
         },
         close() {
-            this.$refs.menu.isActive = false;
+            this.isShow = false;
         },
     },
 };
