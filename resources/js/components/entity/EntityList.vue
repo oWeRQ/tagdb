@@ -30,17 +30,8 @@
                     hyphen
                     class="shrink mr-3"
                 ></TagsField>
-                <v-text-field
-                    v-model="query.search"
-                    label="Search"
-                    dense
-                    solo
-                    single-line
-                    hide-details
-                    clearable
-                    class="shrink mr-3"
-                ></v-text-field>
                 <EntityFilter v-model="query.filter" :fields="filterFields"></EntityFilter>
+                <EntitySearch v-model="query.search"></EntitySearch>
                 <v-btn icon @click="addPreset">
                     <v-icon>mdi-database-plus</v-icon>
                 </v-btn>
@@ -111,6 +102,7 @@
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
     import EntityFilter from './EntityFilter';
+    import EntitySearch from './EntitySearch';
     import PresetDialog from '../preset/PresetDialog';
     import EntityDialog from './EntityDialog';
     import ExportDialog from './ExportDialog';
@@ -124,6 +116,7 @@
     export default {
         components: {
             EntityFilter,
+            EntitySearch,
             PresetDialog,
             EntityDialog,
             ExportDialog,
