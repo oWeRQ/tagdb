@@ -61,7 +61,7 @@
                         hover
                         half-increments
                         color="orange"
-                        background-color="grey lighten-1"
+                        background-color="grey"
                         class="mt-n1"
                     ></v-rating>
                 </v-input>
