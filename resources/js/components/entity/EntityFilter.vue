@@ -58,6 +58,7 @@ export default {
     },
     data() {
         return {
+            valueFilters: [],
             filters: [],
         };
     },
@@ -86,24 +87,15 @@ export default {
                 rating: 'gte',
             };
         },
-        valueFilters() {
-            return this.fields.map(field => {
-                for (const operator in this.value[field.value]) {
-                    const value = this.value[field.value][operator];
-                    return {
-                        text: field.text,
-                        name: field.value,
-                        operator,
-                        value,
-                    };
-                }
-            }).filter(Boolean);
-        },
     },
     watch: {
+        value: {
+            immediate: true,
+            handler: 'valueUpdate',
+        },
         fields: {
             immediate: true,
-            handler: 'refresh',
+            handler: 'fieldsUpdate',
         },
     },
     methods: {
@@ -117,7 +109,20 @@ export default {
                 lte: 'mdi-less-than-or-equal',
             }[filter.operator];
         },
-        refresh() {
+        valueUpdate() {
+            this.valueFilters = this.fields.map(field => {
+                for (const operator in this.value[field.value]) {
+                    const value = this.value[field.value][operator];
+                    return {
+                        text: field.text,
+                        name: field.value,
+                        operator,
+                        value,
+                    };
+                }
+            }).filter(Boolean);
+        },
+        fieldsUpdate() {
             this.filters = this.fields.map(field => {
                 for (const operator in this.value[field.value]) {
                     const value = this.value[field.value][operator];
@@ -153,7 +158,7 @@ export default {
             this.close();
         },
         cancel() {
-            this.refresh();
+            this.fieldsUpdate();
             this.close();
         },
         edit(field, i) {
