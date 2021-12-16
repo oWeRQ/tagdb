@@ -95,6 +95,11 @@ class Entity extends Model
         }
     }
 
+    protected function escapeLike($value)
+    {
+        return preg_replace('/[%_]/', '\\\\$0', $value);
+    }
+
     public function scopeFilter(Builder $builder, $filter = null)
     {
         if ($filter) {
@@ -118,7 +123,7 @@ class Entity extends Model
                     }
 
                     if ($operator === 'like') {
-                        $builder->where($field_column, 'like', '%'.$value.'%');
+                        $builder->where($field_column, 'like', '%'.$this->escapeLike($value).'%');
                     } else {
                         $builder->where($field_column, $operatorMap[$operator], $value);
                     }
@@ -132,8 +137,8 @@ class Entity extends Model
         if (!$search)
             return;
 
-        $builder->where('name', 'like', '%'.$search.'%')->orWhereHas('values', function($builder) use($search) {
-            $builder->where('content', 'like', '%'.$search.'%');
+        $builder->where('name', 'like', '%'.$this->escapeLike($search).'%')->orWhereHas('values', function($builder) use($search) {
+            $builder->where('content', 'like', '%'.$this->escapeLike($search).'%');
         });
     }
 
