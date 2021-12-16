@@ -20,6 +20,7 @@
         :return-object="returnObject"
         :autofocus="autofocus"
         :prepend-icon="prependIcon"
+        :prepend-inner-icon="prependInnerIcon"
     >
         <template v-slot:selection="{ item, index }">
             <v-chip close @click.stop="click(index, item)" @click:close="remove(index)" class="lighten-2" :color="item.color" :dark="!!item.color">
@@ -81,6 +82,9 @@
                 default: false,
             },
             prependIcon: {
+                type: String,
+            },
+            prependInnerIcon: {
                 type: String,
             },
         },

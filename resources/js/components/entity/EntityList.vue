@@ -29,6 +29,7 @@
                     solo
                     hyphen
                     class="shrink mr-3"
+                    prepend-inner-icon="mdi-tag-multiple-outline"
                 ></TagsField>
                 <EntityFilter v-model="query.filter" :fields="filterFields"></EntityFilter>
                 <EntitySearch v-model="query.search"></EntitySearch>
