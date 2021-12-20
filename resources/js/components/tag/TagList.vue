@@ -14,7 +14,7 @@
     >
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
-                <v-toolbar-title>{{ title }}</v-toolbar-title>
+                <v-toolbar-title>Tags</v-toolbar-title>
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
@@ -25,24 +25,28 @@
         <template v-slot:footer.prepend>
             <v-btn text large color="blue darken-3" @click="addItem">
                 <v-icon left>mdi-plus</v-icon>
-                Add {{ singularTitle }}
+                Add Tag
             </v-btn>
             <v-btn text large color="blue darken-3" @click="exportTags">
                 <v-icon left>mdi-export</v-icon>
                 Export
             </v-btn>
+            <v-btn text large color="blue darken-3" @click="$refs.importDialog.show()">
+                <v-icon left>mdi-import</v-icon>
+                Import
+            </v-btn>
 
-            <component
-                :is="dialog"
-                ref="crudDialog"
-                :title="singularTitle"
-                :form="form"
-                :api="api"
-                :editable="editable"
+            <TagDialog
+                ref="dialog"
                 :value="editedItem"
                 @input="saveItem"
                 @delete="deleteItem"
-            ></component>
+            ></TagDialog>
+
+            <TagImportDialog
+                ref="importDialog"
+                @done="getItems"
+            ></TagImportDialog>
         </template>
     </v-data-table>
 </template>
@@ -52,48 +56,13 @@
     import cloneDeep from 'clone-deep';
     import stringifySort from '../../functions/stringifySort';
     import toQueryString from '../../functions/toQueryString';
-    import CrudDialog from '../crud/CrudDialog';
-    import CrudForm from '../crud/CrudForm';
+    import TagDialog from './TagDialog.vue';
+    import TagImportDialog from './TagImportDialog.vue';
 
     export default {
-        props: {
-            dialog: {
-                type: Object,
-                default: () => CrudDialog,
-            },
-            form: {
-                type: Object,
-                default: () => CrudForm,
-            },
-            defaultItem: {
-                type: Object,
-                default: () => {},
-            },
-            title: {
-                type: String,
-                default: 'Items',
-            },
-            api: {
-                type: Object,
-                required: true,
-            },
-            columns: {
-                type: Array,
-                default: () => [
-                    { text: 'ID', value: 'id' },
-                    { text: 'Name', value: 'name' },
-                ],
-            },
-            editable: {
-                type: Array,
-                default: () => [
-                    { text: 'Name', value: 'name' },
-                ],
-            },
-            processItem: {
-                type: Function,
-                default: value => value,
-            },
+        components: {
+            TagDialog,
+            TagImportDialog,
         },
         data() {
             return {
@@ -109,12 +78,13 @@
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
-            singularTitle() {
-                return this.title.replace(/ies$/, 'y').replace(/s$/, '');
-            },
             headers() {
                 return [
-                    ...this.columns,
+                    { text: 'ID', value: 'id' },
+                    { text: 'Name', value: 'name' },
+                    { text: 'Color', value: 'color' },
+                    { text: 'Fields', value: 'fields.length', sortable: false },
+                    { text: 'Entities Count', value: 'entities_count' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
@@ -123,7 +93,6 @@
             },
         },
         watch: {
-            api: 'getItems',
             options: {
                 handler: 'getItems',
                 deep: true,
@@ -143,8 +112,8 @@
                 this.loading = true;
                 this.items = [];
                 this.total = 0;
-                this.api.index(params).then(items => {
-                    this.items = items.map(this.processItem);
+                api.tags.index(params).then(items => {
+                    this.items = items;
                     this.total = items.meta.total;
                     this.loading = false;
                 });
@@ -155,12 +124,15 @@
                 }
             },
             addItem() {
-                this.editItem(this.defaultItem);
+                this.editItem({
+                    name: '',
+                    fields: [],
+                });
             },
             editItem(item) {
                 this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
-                this.$refs.crudDialog.show();
+                this.$refs.dialog.show();
             },
             saveItem(item) {
                 item = this.processItem(item);

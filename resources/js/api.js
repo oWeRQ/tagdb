@@ -1,9 +1,11 @@
 import axios from 'axios';
 
 function resolveData(response) {
-    const data = response.data.data;
-    data.meta = response.data.meta;
-    return data;
+    if (response.data) {
+        const data = response.data.data;
+        data.meta = response.data.meta;
+        return data;
+    }
 }
 
 function apiResource(resource) {
@@ -85,6 +87,7 @@ export default {
             return axios.delete(`${this.resourceId(id)}/entities`, { data });
         },
     },
+    tagsImport: apiResource(`/api/v1/tags-import`),
     users: apiResource(`/api/v1/users`),
     values: apiResource(`/api/v1/values`),
 };

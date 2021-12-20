@@ -25,6 +25,7 @@ Route::prefix('v1')->middleware('auth')->group(function() {
     Route::apiResource('tags', 'Api\v1\TagController');
     Route::post('tags/{id}/entities', [ApiV1\TagController::class, 'attachEntities']);
     Route::delete('tags/{id}/entities', [ApiV1\TagController::class, 'detachEntities']);
+    Route::apiResource('tags-import', 'Api\v1\TagImportController', ['only' => ['store']]);
     Route::apiResource('fields', 'Api\v1\FieldController');
     Route::apiResource('values', 'Api\v1\ValueController');
     Route::apiResource('presets', 'Api\v1\PresetController');

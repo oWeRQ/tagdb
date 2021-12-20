@@ -23,22 +23,6 @@ export default [
     {
         path: '/tags',
         component: TagList,
-        props: {
-            dialog: TagDialog,
-            defaultItem: {
-                name: '',
-                fields: [],
-            },
-            title: 'Tags',
-            api: api.tags,
-            columns: [
-                { text: 'ID', value: 'id' },
-                { text: 'Name', value: 'name' },
-                { text: 'Color', value: 'color' },
-                { text: 'Fields', value: 'fields.length', sortable: false },
-                { text: 'Entities Count', value: 'entities_count' },
-            ],
-        },
     },
     {
         path: '/fields',
