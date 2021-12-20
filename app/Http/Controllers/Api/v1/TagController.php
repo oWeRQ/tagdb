@@ -27,6 +27,12 @@ class TagController extends Controller
 
         $query->sort($request->get('sort'));
 
+        if ($export = $request->get('export')) {
+            $json_options = JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE;
+            $json = TagResource::collection($query->get())->toJson($json_options);
+            return response()->streamDownload(function() use($json) { echo $json; }, $export);
+        }
+
         $perPage = $request->get('per_page', 100);
 
         return TagResource::collection($query->paginate($perPage));

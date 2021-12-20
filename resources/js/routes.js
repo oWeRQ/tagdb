@@ -1,5 +1,6 @@
 import EntityList from './components/entity/EntityList.vue';
 import EntityPreset from './components/entity/EntityPreset.vue';
+import TagList from './components/tag/TagList.vue';
 import Crud from './components/crud/CrudList.vue';
 import TagDialog from './components/tag/TagDialog.vue';
 import FieldDialog from './components/field/FieldDialog.vue';
@@ -21,7 +22,7 @@ export default [
     },
     {
         path: '/tags',
-        component: Crud,
+        component: TagList,
         props: {
             dialog: TagDialog,
             defaultItem: {
