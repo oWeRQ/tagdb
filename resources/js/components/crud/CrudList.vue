@@ -117,14 +117,12 @@
             },
         },
         watch: {
-            api: 'getItems',
-            options: {
-                handler: 'getItems',
-                deep: true,
+            api() {
+                this.items = [];
+                this.total = 0;
+                this.getItems();
             },
-        },
-        mounted() {
-            this.getItems();
+            options: 'getItems',
         },
         methods: {
             getItems() {
@@ -135,8 +133,6 @@
                 };
 
                 this.loading = true;
-                this.items = [];
-                this.total = 0;
                 this.api.index(params).then(items => {
                     this.items = items.map(this.processItem);
                     this.total = items.meta.total;

@@ -93,13 +93,7 @@
             },
         },
         watch: {
-            options: {
-                handler: 'getItems',
-                deep: true,
-            },
-        },
-        mounted() {
-            this.getItems();
+            options: 'getItems',
         },
         methods: {
             getItems() {
@@ -110,8 +104,6 @@
                 };
 
                 this.loading = true;
-                this.items = [];
-                this.total = 0;
                 api.tags.index(params).then(items => {
                     this.items = items;
                     this.total = items.meta.total;

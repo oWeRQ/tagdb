@@ -198,7 +198,7 @@
                     { text: 'Created', value: 'created_at', type: 'date', width: '120px' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
-                const fields = this.loading ? [] : this.displayFields.map((field) => {
+                const fields = this.displayFields.map((field) => {
                     return { text: field.name, value: 'contents.' + field.id, type: field.type };
                 });
 
