@@ -10,8 +10,6 @@ class TagScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $builder->whereHas('tag', function($query) {
-            $query->where('project_id', '=', auth()->user()->currentProject->id);
-        });
+        $builder->has('tag');
     }
 }
