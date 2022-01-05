@@ -141,7 +141,10 @@
                 loading: true,
                 total: 0,
                 items: [],
-                options: {},
+                options: {
+                    sortBy: ['created_at'],
+                    sortDesc: [true],
+                },
                 selected: [],
                 editedItem: null,
                 editedPreset: null,

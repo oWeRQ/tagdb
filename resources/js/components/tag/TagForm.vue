@@ -13,13 +13,13 @@
                     <v-list-item-content>
                         <v-row no-gutters>
                             <v-col>
-                                <v-select :items="types" v-model="field.type" :rules="rules.required" label="Type" hide-details class="mr-4"></v-select>
-                            </v-col>
-                            <v-col>
                                 <v-text-field v-model="field.name" @change="nameChanged(field)" :rules="rules.required" label="Name" hide-details class="mr-4"></v-text-field>
                             </v-col>
                             <v-col>
-                                <v-text-field v-model="field.code" @change="nameChanged(field)" :rules="rules.required" label="Code" hide-details></v-text-field>
+                                <v-text-field v-model="field.code" @change="nameChanged(field)" :rules="rules.required" label="Code" hide-details class="mr-4"></v-text-field>
+                            </v-col>
+                            <v-col>
+                                <v-select :items="types" v-model="field.type" :rules="rules.required" label="Type" hide-details></v-select>
                             </v-col>
                         </v-row>
                     </v-list-item-content>

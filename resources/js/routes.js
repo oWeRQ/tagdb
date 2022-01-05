@@ -1,9 +1,8 @@
 import EntityList from './components/entity/EntityList.vue';
 import EntityPreset from './components/entity/EntityPreset.vue';
 import TagList from './components/tag/TagList.vue';
+import FieldList from './components/field/FieldList.vue';
 import Crud from './components/crud/CrudList.vue';
-import TagDialog from './components/tag/TagDialog.vue';
-import FieldDialog from './components/field/FieldDialog.vue';
 import PresetDialog from './components/preset/PresetDialog.vue';
 import ProjectDialog from './components/project/ProjectDialog.vue';
 
@@ -26,20 +25,7 @@ export default [
     },
     {
         path: '/fields',
-        component: Crud,
-        props: {
-            dialog: FieldDialog,
-            title: 'Fields',
-            api: api.fields,
-            defaultItem: {},
-            columns: [
-                { text: 'ID', value: 'id' },
-                { text: 'Tag ID', value: 'tag_id' },
-                { text: 'Type', value: 'type' },
-                { text: 'Name', value: 'name' },
-                { text: 'Code', value: 'code' },
-            ],
-        },
+        component: FieldList,
     },
     {
         path: '/values',
