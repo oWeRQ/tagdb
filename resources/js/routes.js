@@ -92,6 +92,7 @@ export default [
             columns: [
                 { text: 'ID', value: 'id' },
                 { text: 'Name', value: 'name' },
+                { text: 'Owner', value: 'owner.email' },
             ],
         },
     },

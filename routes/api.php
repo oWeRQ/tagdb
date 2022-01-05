@@ -27,10 +27,13 @@ Route::prefix('v1')->middleware('auth')->group(function() {
     Route::delete('tags/{id}/entities', [ApiV1\TagController::class, 'detachEntities']);
     Route::apiResource('tags-import', 'Api\v1\TagImportController', ['only' => ['store']]);
     Route::apiResource('fields', 'Api\v1\FieldController');
-    Route::apiResource('values', 'Api\v1\ValueController');
     Route::apiResource('presets', 'Api\v1\PresetController');
     Route::apiResource('projects', 'Api\v1\ProjectController');
-    Route::apiResource('users', 'Api\v1\UserController');
     Route::apiResource('import', 'Api\v1\ImportController', ['only' => ['store']]);
     Route::apiResource('public/{preset}', 'Api\v1\PublicController', ['parameters' => ['{preset}' => 'entity']]);
+
+    Route::middleware('can:admin')->group(function() {
+        Route::apiResource('users', 'Api\v1\UserController');
+        Route::apiResource('values', 'Api\v1\ValueController');
+    });
 });
