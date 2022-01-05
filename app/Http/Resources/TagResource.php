@@ -21,8 +21,8 @@ class TagResource extends JsonResource
             // 'entities' => EntityResource::collection($this->entities),
             'fields' => FieldResource::collection($this->fields),
             'entities_count' => $this->entities_count,
-            // 'created_at' => $this->created_at,
-            // 'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

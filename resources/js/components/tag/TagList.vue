@@ -17,6 +17,23 @@
                 <v-toolbar-title>Tags</v-toolbar-title>
             </v-toolbar>
         </template>
+        <template v-slot:item.name="{ item }">
+            <TagChip @click="editItem(item)" :tag="item" small></TagChip>
+        </template>
+        <template v-slot:item.fields="{ item }">
+            <v-chip
+                v-for="field in item.fields"
+                :key="field.id"
+                label
+                outlined
+                small
+                class="mr-1"
+                @click="editField(field)"
+            >{{ field.name }}</v-chip>
+        </template>
+        <template v-slot:item.created_at="{ item }">
+            {{ item.created_at | date }}
+        </template>
         <template v-slot:item.actions="{ item }">
             <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
@@ -47,6 +64,13 @@
                 ref="importDialog"
                 @done="getItems"
             ></TagImportDialog>
+
+            <FieldDialog
+                ref="fieldDialog"
+                :value="editedField"
+                @input="getItems"
+                @delete="getItems"
+            ></FieldDialog>
         </template>
     </v-data-table>
 </template>
@@ -54,24 +78,35 @@
 <script>
     import api from '../../api';
     import cloneDeep from 'clone-deep';
+    import date from '../../functions/date';
     import stringifySort from '../../functions/stringifySort';
     import toQueryString from '../../functions/toQueryString';
+    import TagChip from './TagChip.vue';
     import TagDialog from './TagDialog.vue';
     import TagImportDialog from './TagImportDialog.vue';
+    import FieldDialog from '../field/FieldDialog.vue';
 
     export default {
         components: {
+            TagChip,
             TagDialog,
             TagImportDialog,
+            FieldDialog,
+        },
+        filters: {
+            date,
         },
         data() {
             return {
                 loading: true,
                 total: 0,
                 items: [],
-                options: {},
-                editedIndex: -1,
+                options: {
+                    sortBy: ['name'],
+                    sortDesc: [false],
+                },
                 editedItem: {},
+                editedField: {},
             }
         },
         computed: {
@@ -80,11 +115,10 @@
             },
             headers() {
                 return [
-                    { text: 'ID', value: 'id' },
-                    { text: 'Name', value: 'name' },
-                    { text: 'Color', value: 'color' },
-                    { text: 'Fields', value: 'fields.length', sortable: false },
+                    { text: 'Tag', value: 'name' },
+                    { text: 'Fields', value: 'fields', sortable: false },
                     { text: 'Entities Count', value: 'entities_count' },
+                    { text: 'Created', value: 'created_at' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
@@ -110,11 +144,6 @@
                     this.loading = false;
                 });
             },
-            deleteItem(item) {
-                if (this.editedIndex > -1) {
-                    this.items.splice(this.editedIndex, 1);
-                }
-            },
             addItem() {
                 this.editItem({
                     name: '',
@@ -122,17 +151,23 @@
                 });
             },
             editItem(item) {
-                this.editedIndex = this.items.indexOf(item);
                 this.editedItem = cloneDeep(item);
                 this.$refs.dialog.show();
             },
-            saveItem(item) {
-                item = this.processItem(item);
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], item);
+            saveItem(result) {
+                const item = this.items.find(item => item.id === result.id);
+                if (item) {
+                    Object.assign(item, result);
                 } else {
-                    this.items.unshift(item);
+                    this.items.unshift(result);
                 }
+            },
+            deleteItem(result) {
+                this.items = this.items.filter(item => item.id !== result.id)
+            },
+            editField(item) {
+                this.editedField = cloneDeep(item);
+                this.$refs.fieldDialog.show();
             },
             exportTags() {
                 const params = {
