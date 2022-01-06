@@ -26,9 +26,9 @@
 <script>
 export default {
     props: {
-        query: {
-            type: Object,
-            default: () => ({tags: []}),
+        tags: {
+            type: Array,
+            default: () => [],
         },
         item: {
             type: Object,
@@ -36,10 +36,10 @@ export default {
     },
     computed: {
         visibleTags() {
-            return this.item.tags.filter(tag => !this.query.tags.includes(tag.name));
+            return this.item.tags.filter(tag => !this.tags.includes(tag.name));
         },
         invisibleTags() {
-            return this.item.tags.filter(tag => this.query.tags.includes(tag.name));
+            return this.item.tags.filter(tag => this.tags.includes(tag.name));
         },
     },
 };

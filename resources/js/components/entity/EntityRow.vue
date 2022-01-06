@@ -13,7 +13,7 @@
                 <RowTags
                     v-else-if="header.value === 'tags'"
                     :item="item"
-                    :query="query"
+                    :tags="tags"
                     @click:tag="$emit('click:tag', $event)"
                 ></RowTags>
                 <component
@@ -49,9 +49,9 @@
                 type: Boolean,
                 default: false,
             },
-            query: {
-                type: Object,
-                default: () => ({tags: []}),
+            tags: {
+                type: Array,
+                default: () => [],
             },
             item: {
                 type: Object,

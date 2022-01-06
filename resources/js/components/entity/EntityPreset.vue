@@ -23,10 +23,19 @@
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title class="mr-2">{{ title }}</v-toolbar-title>
-                <v-btn icon @click="editPreset">
-                    <v-icon>mdi-pencil</v-icon>
+                <v-btn icon @click="editPreset" class="mr-2">
+                    <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
-                <EntitySearch v-model="search"></EntitySearch>
+                <TagsField
+                    v-model="query.tags"
+                    :hidden-tags="presetQuery.tags"
+                    solo
+                    hyphen
+                    class="shrink mr-2"
+                    prepend-inner-icon="mdi-tag-multiple-outline"
+                ></TagsField>
+                <EntityFilter v-model="query.filter" :fields="filterFields"></EntityFilter>
+                <EntitySearch v-model="query.search"></EntitySearch>
                 <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
@@ -34,7 +43,8 @@
         </template>
         <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
-                :query="query"
+                :tags="allQueryTags"
+                @click:tag="query.tags.push($event.name)"
                 :item="item"
                 :headers="headers"
                 :isSelected="isSelected"
@@ -97,10 +107,10 @@
     import ExportDialog from './ExportDialog';
     import ImportDialog from './ImportDialog';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
+    import TagsField from './TagsField';
+    import EntityFilter from './EntityFilter';
     import EntitySearch from './EntitySearch';
     import EntityRow from './EntityRow';
-    import EntityForm from './EntityForm';
-    import PresetForm from '../preset/PresetForm';
 
     export default {
         components: {
@@ -109,18 +119,10 @@
             ExportDialog,
             ImportDialog,
             EntitySelectionToolbar,
+            TagsField,
+            EntityFilter,
             EntitySearch,
             EntityRow,
-        },
-        props: {
-            entityForm: {
-                type: Object,
-                default: () => EntityForm,
-            },
-            presetForm: {
-                type: Object,
-                default: () => PresetForm,
-            },
         },
         data() {
             return {
@@ -131,7 +133,11 @@
                 selected: [],
                 editedItem: null,
                 editedPreset: null,
-                search: '',
+                query: {
+                    tags: [],
+                    filter: {},
+                    search: '',
+                },
             };
         },
         computed: {
@@ -149,8 +155,11 @@
             title() {
                 return this.preset?.name;
             },
-            query() {
+            presetQuery() {
                 return (this.preset ? JSON.parse(this.preset.query) : undefined);
+            },
+            allQueryTags() {
+                return this.presetQuery.tags.concat(this.query.tags);
             },
             availableTags() {
                 const tags = [];
@@ -163,7 +172,7 @@
                 return tags;
             },
             queryTags() {
-                return (this.query ? this.tags.filter(tag => this.query.tags.includes(tag.name)) : []);
+                return (this.presetQuery ? this.tags.filter(tag => this.presetQuery.tags.includes(tag.name)) : []);
             },
             displayFields() {
                 // return this.availableTags.flatMap(item => item.fields);
@@ -193,6 +202,12 @@
 
                 return [...before, ...fields, ...after];
             },
+            filterFields() {
+                return [
+                    { text: 'Name', value: 'name', type: 'text' },
+                    ...this.displayFields.map(field => ({ text: field.name, value: 'contents.' + field.id, type: field.type })),
+                ];
+            },
             sort() {
                 return stringifySort(this.options.sortBy, this.options.sortDesc);
             },
@@ -204,20 +219,28 @@
             },
             exportParams() {
                 return {
+                    query: this.query,
                     preset: this.preset?.name,
                     sort: this.sort,
                 };
             },
             importParams() {
                 return {
+                    query: this.query,
                     preset: this.preset?.name,
                 };
             },
         },
         watch: {
-            search() {
+            'query.search'() {
                 clearTimeout(this._timeout_search);
                 this._timeout_search = setTimeout(this.getItems, 500);
+            },
+            'query.filter'() {
+                this.getItems();
+            },
+            'query.tags'() {
+                this.getItems();
             },
             preset() {
                 this.items = [];
@@ -232,9 +255,7 @@
                     return;
 
                 const params = {
-                    query: {
-                        search: this.search || undefined,
-                    },
+                    query: this.query,
                     preset: this.preset.name,
                     sort: this.sort,
                     page: this.options.page,

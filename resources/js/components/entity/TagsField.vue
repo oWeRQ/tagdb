@@ -58,6 +58,9 @@
             value: {
                 type: Array,
             },
+            hiddenTags: {
+                type: Array,
+            },
             rules: {
                 type: Array,
             },
@@ -123,8 +126,9 @@
                 this.$emit('input', this.value.filter((v, i) => i !== index));
             },
             fetchTags() {
+                const allTags = this.value.concat(this.hiddenTags);
                 const params = {
-                    with_tags: this.returnObject ? this.value.map(tag => tag.name) : this.value,
+                    with_tags: this.returnObject ? allTags.map(tag => tag.name) : allTags,
                 };
                 api.tags.index(params).then(tags => {
                     this.tags = tags;

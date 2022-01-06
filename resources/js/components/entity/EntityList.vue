@@ -22,19 +22,19 @@
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
-                <v-toolbar-title class="mr-4">{{ title }}</v-toolbar-title>
+                <v-toolbar-title class="mr-2">{{ title }}</v-toolbar-title>
+                <v-btn icon @click="addPreset" class="mr-2">
+                    <v-icon>mdi-database-plus</v-icon>
+                </v-btn>
                 <TagsField
                     v-model="query.tags"
                     solo
                     hyphen
-                    class="shrink mr-3"
+                    class="shrink mr-2"
                     prepend-inner-icon="mdi-tag-multiple-outline"
                 ></TagsField>
                 <EntityFilter v-model="query.filter" :fields="filterFields"></EntityFilter>
                 <EntitySearch v-model="query.search"></EntitySearch>
-                <v-btn icon @click="addPreset">
-                    <v-icon>mdi-database-plus</v-icon>
-                </v-btn>
                 <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
@@ -42,7 +42,7 @@
         </template>
         <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
-                :query="query"
+                :tags="query.tags"
                 @click:tag="query.tags.push($event.name)"
                 :item="item"
                 :headers="headers"
@@ -110,8 +110,6 @@
     import TagsField from './TagsField';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import EntityRow from './EntityRow';
-    import EntityForm from './EntityForm';
-    import PresetForm from '../preset/PresetForm';
 
     export default {
         components: {
@@ -124,16 +122,6 @@
             TagsField,
             EntitySelectionToolbar,
             EntityRow,
-        },
-        props: {
-            entityForm: {
-                type: Object,
-                default: () => EntityForm,
-            },
-            presetForm: {
-                type: Object,
-                default: () => PresetForm,
-            },
         },
         data() {
             return {

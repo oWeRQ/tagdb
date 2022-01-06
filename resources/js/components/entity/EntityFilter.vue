@@ -11,7 +11,7 @@
                 >
                     <v-chip
                         v-if="filter.value"
-                        class="mx-1"
+                        class="mr-1"
                         close
                         @click="edit(filter, i)"
                         @click:close="remove(filter, i)"
@@ -72,8 +72,8 @@ export default {
         },
         operators() {
             return [
-                { text: 'Equal', value: 'eq' },
                 { text: 'Contains', value: 'like' },
+                { text: 'Equal', value: 'eq' },
                 { text: 'Greater', value: 'gt' },
                 { text: 'Greater Equal', value: 'gte' },
                 { text: 'Less', value: 'lt' },
