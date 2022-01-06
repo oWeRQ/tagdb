@@ -99,30 +99,32 @@
 <script>
     import { mapState } from 'vuex';
     import api from '../../api';
+    import _ from 'lodash';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
-    import EntityFilter from './EntityFilter';
-    import EntitySearch from './EntitySearch';
-    import PresetDialog from '../preset/PresetDialog';
+
     import EntityDialog from './EntityDialog';
+    import EntityFilter from './EntityFilter';
+    import EntityRow from './EntityRow';
+    import EntitySearch from './EntitySearch';
+    import EntitySelectionToolbar from './EntitySelectionToolbar';
     import ExportDialog from './ExportDialog';
     import ImportDialog from './ImportDialog';
+    import PresetDialog from '../preset/PresetDialog';
     import TagsField from './TagsField';
-    import EntitySelectionToolbar from './EntitySelectionToolbar';
-    import EntityRow from './EntityRow';
 
     export default {
         components: {
-            EntityFilter,
-            EntitySearch,
-            PresetDialog,
             EntityDialog,
+            EntityFilter,
+            EntityRow,
+            EntitySearch,
+            EntitySelectionToolbar,
             ExportDialog,
             ImportDialog,
+            PresetDialog,
             TagsField,
-            EntitySelectionToolbar,
-            EntityRow,
         },
         data() {
             return {
@@ -155,21 +157,13 @@
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
-            availableTags() {
-                const tags = [];
-                for (let item of this.items) {
-                    for (let tag of item.tags) {
-                        if (!tags.some(t => t.id === tag.id))
-                            tags.push(tag);
-                    }
-                }
-                return tags;
-            },
             queryTagNames() {
                 return this.queryTags.map(tag => tag.name);
             },
             displayFields() {
-                return this.queryTags.flatMap(item => item.fields);
+                return this.queryTags.flatMap(item => item.fields).map((field) => {
+                    return { text: field.name, value: 'contents.' + field.id, type: field.type };
+                });
             },
             displayItems() {
                 return this.items.map(item => {
@@ -181,24 +175,18 @@
                 });
             },
             headers() {
-                const before = [
+                return [
                     { text: 'Tags', value: 'tags', sortable: false, width: '1%' },
-                    { text: 'Name', value: 'name', type: 'text' },
-                ];
-                const after = [
+                    { text: 'Name', value: 'name' },
+                    ...this.displayFields,
                     { text: 'Created', value: 'created_at', type: 'date', width: '120px' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
-                const fields = this.displayFields.map((field) => {
-                    return { text: field.name, value: 'contents.' + field.id, type: field.type };
-                });
-
-                return [...before, ...fields, ...after];
             },
             filterFields() {
                 return [
                     { text: 'Name', value: 'name', type: 'text' },
-                    ...this.displayFields.map(field => ({ text: field.name, value: 'contents.' + field.id, type: field.type })),
+                    ...this.displayFields,
                 ];
             },
             sortable() {
@@ -226,30 +214,12 @@
             },
         },
         watch: {
-            'query.search'() {
-                clearTimeout(this._timeout_search);
-                this._timeout_search = setTimeout(this.getItems, 500);
-            },
-            'query.filter'() {
-                this.getItems();
-            },
-            'query.tags'() {
-                const sortable = this.options.sortBy.map(value => this.sortable.includes(value));
-                if (!sortable.every(Boolean)) {
-                    this.options.sortBy = this.options.sortBy.filter((v, i) => sortable[i]);
-                    this.options.sortDesc = this.options.sortDesc.filter((v, i) => sortable[i]);
-                } else {
-                    this.getItems();
-                }
-            },
-            'options.sortBy'(value) {
-                if (value.length > 2) {
-                    this.options.sortBy = this.options.sortBy.slice(value.length - 2);
-                    this.options.sortDesc = this.options.sortDesc.slice(value.length - 2);
-                }
-            },
             queryTags() {
                 this.query.tags = this.queryTagNames;
+            },
+            query: {
+                deep: true,
+                handler: 'getItems',
             },
             options: 'getItems',
         },
@@ -257,7 +227,7 @@
             addQueryTag(tag) {
                 this.queryTags.push(tag);
             },
-            getItems() {
+            getItems: _.debounce(function() {
                 const params = {
                     query: this.query,
                     sort: this.sort,
@@ -277,7 +247,7 @@
                         console.timeEnd('render items');
                     });
                 });
-            },
+            }, 500),
             addItem() {
                 this.editItem({
                     tags: this.queryTags,

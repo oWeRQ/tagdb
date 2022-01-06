@@ -104,27 +104,28 @@
     import _ from 'lodash';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../../functions/stringifySort';
-    import PresetDialog from '../preset/PresetDialog';
+
     import EntityDialog from './EntityDialog';
+    import EntityFilter from './EntityFilter';
+    import EntityRow from './EntityRow';
+    import EntitySearch from './EntitySearch';
+    import EntitySelectionToolbar from './EntitySelectionToolbar';
     import ExportDialog from './ExportDialog';
     import ImportDialog from './ImportDialog';
-    import EntitySelectionToolbar from './EntitySelectionToolbar';
+    import PresetDialog from '../preset/PresetDialog';
     import TagsField from './TagsField';
-    import EntityFilter from './EntityFilter';
-    import EntitySearch from './EntitySearch';
-    import EntityRow from './EntityRow';
 
     export default {
         components: {
-            PresetDialog,
             EntityDialog,
+            EntityFilter,
+            EntityRow,
+            EntitySearch,
+            EntitySelectionToolbar,
             ExportDialog,
             ImportDialog,
-            EntitySelectionToolbar,
+            PresetDialog,
             TagsField,
-            EntityFilter,
-            EntitySearch,
-            EntityRow,
         },
         data() {
             return {
@@ -148,15 +149,15 @@
                 'tags',
                 'presets',
             ]),
+            title() {
+                return this.preset?.name;
+            },
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
             preset() {
                 const name = this.$route.params.name;
                 return this.presets.find(preset => preset.name === name);
-            },
-            title() {
-                return this.preset?.name;
             },
             presetQuery() {
                 return (this.preset ? JSON.parse(this.preset.query) : undefined);
@@ -176,19 +177,10 @@
             queryTagNames() {
                 return this.queryTags.map(tag => tag.name);
             },
-            availableTags() {
-                const tags = [];
-                for (let item of this.items) {
-                    for (let tag of item.tags) {
-                        if (!tags.some(t => t.id === tag.id))
-                            tags.push(tag);
-                    }
-                }
-                return tags;
-            },
             displayFields() {
-                // return this.availableTags.flatMap(item => item.fields);
-                return this.allQueryTags.flatMap(item => item.fields);
+                return this.allQueryTags.flatMap(item => item.fields).map((field) => {
+                    return { text: field.name, value: 'contents.' + field.id, type: field.type };
+                });
             },
             displayItems() {
                 return this.items.map(item => {
@@ -200,24 +192,18 @@
                 });
             },
             headers() {
-                const before = [
+                return [
                     { text: 'Tags', value: 'tags', sortable: false, width: '1%' },
                     { text: 'Name', value: 'name' },
-                ];
-                const after = [
+                    ...this.displayFields,
                     { text: 'Created', value: 'created_at', type: 'date', width: '120px' },
                     { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
-                const fields = this.displayFields.map((field) => {
-                    return { text: field.name, value: 'contents.' + field.id, type: field.type };
-                });
-
-                return [...before, ...fields, ...after];
             },
             filterFields() {
                 return [
                     { text: 'Name', value: 'name', type: 'text' },
-                    ...this.displayFields.map(field => ({ text: field.name, value: 'contents.' + field.id, type: field.type })),
+                    ...this.displayFields,
                 ];
             },
             sort() {
@@ -280,10 +266,16 @@
                 };
 
                 this.loading = true;
+                console.time('get items');
                 api.entities.index(params).then(items => {
+                    console.timeEnd('get items');
+                    console.time('render items');
                     this.items = items;
                     this.total = items.meta.total;
                     this.loading = false;
+                    this.$nextTick(() => {
+                        console.timeEnd('render items');
+                    });
                 });
             }, 500),
             addItem() {
