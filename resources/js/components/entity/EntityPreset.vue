@@ -226,14 +226,14 @@
             },
             exportParams() {
                 return {
-                    query: this.query,
+                    query: JSON.stringify(this.query),
                     preset: this.preset?.name,
                     sort: this.sort,
                 };
             },
             importParams() {
                 return {
-                    query: this.query,
+                    tags: this.allQueryTagNames,
                     preset: this.preset?.name,
                 };
             },

@@ -8,10 +8,9 @@ export default function flattenParams(params) {
                 const flattenKey = param  + key.replace(/^([^[]+)/, '[$1]');
                 flatten[flattenKey] = flattenValue[key];
             }
-        } else {
+        } else if (value != null) {
             flatten[param] = value;
         }
-
     }
     return flatten;
 }

@@ -180,7 +180,7 @@ export default {
             });
 
             api.import.store(data).then(response => {
-                this.previewData = response.data;
+                this.previewData = response;
                 this.autoFieldsMap();
                 this.updatePreviewTags();
             });

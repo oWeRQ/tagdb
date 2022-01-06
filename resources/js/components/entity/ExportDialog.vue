@@ -87,7 +87,6 @@ export default {
         },
         submit() {
             const params = {
-                sort: this.sort,
                 export: this.filename,
                 columns: this.columns,
                 ...this.params,

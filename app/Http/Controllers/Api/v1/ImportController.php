@@ -27,9 +27,11 @@ class ImportController extends Controller
             $rows = Excel::toCollection(new EntityImport($tags, $fields), $importFile)->first();
             $tags = EntityImport::collectionTags($rows, $fields);
             return response([
-                'headers' => $headings[0][0],
-                'rows' => ($preview ? $rows->take($preview)->all() : []),
-                'tags' => $tags->sort()->values()->all(),
+                'data' => [
+                    'headers' => $headings[0][0],
+                    'rows' => ($preview ? $rows->take($preview)->all() : []),
+                    'tags' => $tags->sort()->values()->all(),
+                ],
             ]);
         }
 
