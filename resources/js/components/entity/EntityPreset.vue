@@ -27,7 +27,8 @@
                     <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
                 <TagsField
-                    v-model="query.tags"
+                    v-model="queryTags"
+                    return-object
                     :hidden-tags="presetQueryTagNames"
                     solo
                     hyphen
@@ -44,7 +45,7 @@
         <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
                 :tags="allQueryTagNames"
-                @click:tag="query.tags.push($event.name)"
+                @click:tag="addQueryTag"
                 :item="item"
                 :headers="headers"
                 :isSelected="isSelected"
@@ -134,6 +135,7 @@
                 selected: [],
                 editedItem: null,
                 editedPreset: null,
+                queryTags: [],
                 query: {
                     tags: [],
                     filter: {},
@@ -166,10 +168,13 @@
                 return this.tags.filter(tag => this.presetQueryTagNames.includes(tag.name));
             },
             allQueryTagNames() {
-                return this.presetQueryTagNames.concat(this.query.tags);
+                return this.presetQueryTagNames.concat(this.queryTagNames);
             },
             allQueryTags() {
                 return this.tags.filter(tag => this.allQueryTagNames.includes(tag.name));
+            },
+            queryTagNames() {
+                return this.queryTags.map(tag => tag.name);
             },
             availableTags() {
                 const tags = [];
@@ -249,6 +254,9 @@
                     search: '',
                 };
             },
+            queryTags() {
+                this.query.tags = this.queryTagNames;
+            },
             query: {
                 deep: true,
                 handler: 'getItems',
@@ -256,6 +264,9 @@
             options: 'getItems',
         },
         methods: {
+            addQueryTag(tag) {
+                this.queryTags.push(tag);
+            },
             getItems: _.debounce(function() {
                 if (!this.preset)
                     return;

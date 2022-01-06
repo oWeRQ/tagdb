@@ -27,7 +27,8 @@
                     <v-icon>mdi-database-plus</v-icon>
                 </v-btn>
                 <TagsField
-                    v-model="query.tags"
+                    v-model="queryTags"
+                    return-object
                     solo
                     hyphen
                     class="shrink mr-2"
@@ -42,8 +43,8 @@
         </template>
         <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
-                :tags="query.tags"
-                @click:tag="query.tags.push($event.name)"
+                :tags="queryTagNames"
+                @click:tag="addQueryTag"
                 :item="item"
                 :headers="headers"
                 :isSelected="isSelected"
@@ -135,6 +136,7 @@
                 selected: [],
                 editedItem: null,
                 editedPreset: null,
+                queryTags: [],
                 query: {
                     tags: [],
                     filter: {},
@@ -163,8 +165,8 @@
                 }
                 return tags;
             },
-            queryTags() {
-                return this.tags.filter(tag => this.query.tags.includes(tag.name));
+            queryTagNames() {
+                return this.queryTags.map(tag => tag.name);
             },
             displayFields() {
                 return this.queryTags.flatMap(item => item.fields);
@@ -209,7 +211,7 @@
                 return this.headers.slice(0, -2);
             },
             exportFilename() {
-                return (this.query.tags.join(' ') || this.title) + '.csv';
+                return (this.queryTagNames.join(' ') || this.title) + '.csv';
             },
             exportParams() {
                 return {
@@ -219,7 +221,7 @@
             },
             importParams() {
                 return {
-                    tags: this.query.tags,
+                    tags: this.queryTagNames,
                 };
             },
         },
@@ -246,9 +248,15 @@
                     this.options.sortDesc = this.options.sortDesc.slice(value.length - 2);
                 }
             },
+            queryTags() {
+                this.query.tags = this.queryTagNames;
+            },
             options: 'getItems',
         },
         methods: {
+            addQueryTag(tag) {
+                this.queryTags.push(tag);
+            },
             getItems() {
                 const params = {
                     query: this.query,
@@ -293,7 +301,7 @@
             },
             addPreset() {
                 this.editedPreset = {
-                    name: ucwords(this.query.tags.join(' ')),
+                    name: ucwords(this.queryTagNames.join(' ')),
                     sort: this.sort || '-created_at',
                     query: JSON.stringify(this.query),
                 };
