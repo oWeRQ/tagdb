@@ -1,3 +1,7 @@
 export default function(str = '') {
-    return str && new Date(str).toISOString().substr(0, 10);
+    try {
+        return str && new Date(str).toISOString().slice(0, 10);
+    } catch(e) {
+        return '';
+    }
 };

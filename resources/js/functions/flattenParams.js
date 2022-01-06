@@ -5,7 +5,7 @@ export default function flattenParams(params) {
         if (typeof value === 'object' && !(params[param] instanceof Blob)) {
             const flattenValue = flattenParams(value);
             for (const key in flattenValue) {
-                const flattenKey = param  + key.replace(/^([^[]+)/, '[$1]');
+                const flattenKey = param + key.replace(/^([^[]+)/, '[$1]');
                 flatten[flattenKey] = flattenValue[key];
             }
         } else if (value != null) {
