@@ -18,7 +18,7 @@
             <EntitySelectionToolbar v-if="selected.length"
                 v-model="selected"
                 @update="getItems"
-                :query-tags="queryTags"
+                :query-tags="allQueryTags"
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
@@ -28,7 +28,7 @@
                 </v-btn>
                 <TagsField
                     v-model="query.tags"
-                    :hidden-tags="presetQuery.tags"
+                    :hidden-tags="presetQueryTagNames"
                     solo
                     hyphen
                     class="shrink mr-2"
@@ -43,7 +43,7 @@
         </template>
         <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
-                :tags="allQueryTags"
+                :tags="allQueryTagNames"
                 @click:tag="query.tags.push($event.name)"
                 :item="item"
                 :headers="headers"
@@ -100,6 +100,7 @@
 <script>
     import { mapState } from 'vuex';
     import api from '../../api';
+    import _ from 'lodash';
     import cloneDeep from 'clone-deep';
     import stringifySort from '../../functions/stringifySort';
     import PresetDialog from '../preset/PresetDialog';
@@ -158,8 +159,17 @@
             presetQuery() {
                 return (this.preset ? JSON.parse(this.preset.query) : undefined);
             },
+            presetQueryTagNames() {
+                return (this.presetQuery ? this.presetQuery.tags : []);
+            },
+            presetQueryTags() {
+                return this.tags.filter(tag => this.presetQueryTagNames.includes(tag.name));
+            },
+            allQueryTagNames() {
+                return this.presetQueryTagNames.concat(this.query.tags);
+            },
             allQueryTags() {
-                return this.presetQuery.tags.concat(this.query.tags);
+                return this.tags.filter(tag => this.allQueryTagNames.includes(tag.name));
             },
             availableTags() {
                 const tags = [];
@@ -171,12 +181,9 @@
                 }
                 return tags;
             },
-            queryTags() {
-                return (this.presetQuery ? this.tags.filter(tag => this.presetQuery.tags.includes(tag.name)) : []);
-            },
             displayFields() {
                 // return this.availableTags.flatMap(item => item.fields);
-                return this.queryTags.flatMap(item => item.fields);
+                return this.allQueryTags.flatMap(item => item.fields);
             },
             displayItems() {
                 return this.items.map(item => {
@@ -232,25 +239,23 @@
             },
         },
         watch: {
-            'query.search'() {
-                clearTimeout(this._timeout_search);
-                this._timeout_search = setTimeout(this.getItems, 500);
-            },
-            'query.filter'() {
-                this.getItems();
-            },
-            'query.tags'() {
-                this.getItems();
-            },
             preset() {
                 this.items = [];
                 this.total = 0;
-                this.getItems();
+                this.query = {
+                    tags: [],
+                    filter: {},
+                    search: '',
+                };
+            },
+            query: {
+                deep: true,
+                handler: 'getItems',
             },
             options: 'getItems',
         },
         methods: {
-            getItems() {
+            getItems: _.debounce(function() {
                 if (!this.preset)
                     return;
 
@@ -268,10 +273,10 @@
                     this.total = items.meta.total;
                     this.loading = false;
                 });
-            },
+            }, 500),
             addItem() {
                 this.editItem({
-                    tags: this.queryTags,
+                    tags: this.allQueryTags,
                     contents: {}
                 });
             },

@@ -53,8 +53,14 @@
 <script>
 export default {
     props: {
-        value: {},
-        fields: {},
+        value: {
+            type: Object,
+            default: () => ({}),
+        },
+        fields: {
+            type: Array,
+            default: () => [],
+        },
     },
     data() {
         return {

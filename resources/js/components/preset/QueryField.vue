@@ -42,7 +42,12 @@
                 };
             },
             query() {
-                return Vue.observable(this.value ? JSON.parse(this.value) : {tags: [], filter: {}, search: ''});
+                return Vue.observable({
+                    tags: [],
+                    filter: {},
+                    search: '',
+                    ...JSON.parse(this.value || '{}'),
+                });
             },
             queryTags() {
                 return this.tags.filter(tag => this.query.tags.includes(tag.name));

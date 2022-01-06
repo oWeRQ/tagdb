@@ -60,6 +60,7 @@
             },
             hiddenTags: {
                 type: Array,
+                default: () => [],
             },
             rules: {
                 type: Array,
