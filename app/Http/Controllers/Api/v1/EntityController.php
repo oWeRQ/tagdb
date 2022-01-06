@@ -23,7 +23,7 @@ class EntityController extends Controller
         }
 
         $query->queryJson($request->get('query', '{}'));
-        $query->sort($request->get('sort'), $sort);
+        $query->sort($request->get('sort', $sort));
 
         if ($export = $request->get('export')) {
             $columns = $request->get('columns');

@@ -242,6 +242,7 @@
             preset() {
                 this.items = [];
                 this.total = 0;
+                this.options = {};
                 this.query = {
                     tags: [],
                     filter: {},
