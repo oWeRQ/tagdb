@@ -26,6 +26,7 @@
                 <v-btn icon @click="editPreset">
                     <v-icon>mdi-pencil</v-icon>
                 </v-btn>
+                <EntitySearch v-model="search"></EntitySearch>
                 <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
@@ -96,6 +97,7 @@
     import ExportDialog from './ExportDialog';
     import ImportDialog from './ImportDialog';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
+    import EntitySearch from './EntitySearch';
     import EntityRow from './EntityRow';
     import EntityForm from './EntityForm';
     import PresetForm from '../preset/PresetForm';
@@ -107,6 +109,7 @@
             ExportDialog,
             ImportDialog,
             EntitySelectionToolbar,
+            EntitySearch,
             EntityRow,
         },
         props: {
@@ -128,6 +131,7 @@
                 selected: [],
                 editedItem: null,
                 editedPreset: null,
+                search: '',
             };
         },
         computed: {
@@ -211,6 +215,10 @@
             },
         },
         watch: {
+            search() {
+                clearTimeout(this._timeout_search);
+                this._timeout_search = setTimeout(this.getItems, 500);
+            },
             preset() {
                 this.items = [];
                 this.total = 0;
@@ -224,6 +232,9 @@
                     return;
 
                 const params = {
+                    query: {
+                        search: this.search || undefined,
+                    },
                     preset: this.preset.name,
                     sort: this.sort,
                     page: this.options.page,

@@ -15,14 +15,15 @@ class EntityController extends Controller
     {
         $query = Entity::query()->with(['tags.fields', 'values.field']);
 
+        $sort = '-created_at';
         if ($request->has('preset')) {
             $preset = Preset::firstWhere('name', $request->get('preset'));
             $query->queryJson($preset->query);
-            $query->sort($request->get('sort') ?: $preset->sort);
-        } else {
-            $query->queryJson($request->get('query', '{}'));
-            $query->sort($request->get('sort'));
+            $sort = $preset->sort;
         }
+
+        $query->queryJson($request->get('query', '{}'));
+        $query->sort($request->get('sort'), $sort);
 
         if ($export = $request->get('export')) {
             $columns = $request->get('columns');
