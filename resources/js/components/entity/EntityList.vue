@@ -169,7 +169,7 @@
                 return this.headers.slice(0, -2);
             },
             exportFilename() {
-                return (this.queryTagNames.join(' ') || this.title) + '.csv';
+                return (this.queryTagNames.join(' ') || this.title);
             },
             exportParams() {
                 return {

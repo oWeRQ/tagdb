@@ -181,7 +181,7 @@
                 return this.headers.slice(0, -2);
             },
             exportFilename() {
-                return this.title + '.csv';
+                return this.title;
             },
             exportParams() {
                 return {

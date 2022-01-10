@@ -87,7 +87,7 @@ export default {
         },
         submit() {
             const params = {
-                export: this.filename,
+                export: this.filename + '.csv',
                 columns: this.columns,
                 ...this.params,
             };
