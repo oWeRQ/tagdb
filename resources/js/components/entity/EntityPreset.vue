@@ -23,13 +23,13 @@
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title class="mr-2">{{ title }}</v-toolbar-title>
-                <v-btn icon @click="editPreset" class="mr-2">
+                <v-btn icon @click="editPreset(preset)" class="mr-2">
                     <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
                 <TagsField
                     v-model="queryTags"
                     return-object
-                    :hidden-tags="presetQueryTagNames"
+                    :hidden-tags="presetQueryTags"
                     solo
                     hyphen
                     class="shrink mr-2"
@@ -267,9 +267,9 @@
             deleteItem(result) {
                 this.items = this.items.filter(item => item.id !== result.id)
             },
-            editPreset() {
+            editPreset(preset) {
                 this.$root.showDialog(PresetDialog, {
-                    value: cloneDeep(this.preset),
+                    value: cloneDeep(preset),
                 }, {
                     input: this.savePreset,
                     delete: this.deletePreset,

@@ -99,6 +99,7 @@
             };
         },
         watch: {
+            hiddenTags: 'fetchTags',
             value: 'fetchTags',
         },
         mounted() {

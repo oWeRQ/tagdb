@@ -247,9 +247,9 @@
                     query: JSON.stringify(this.query),
                 });
             },
-            editPreset() {
+            editPreset(preset) {
                 this.$root.showDialog(PresetDialog, {
-                    value: cloneDeep(this.preset),
+                    value: cloneDeep(preset),
                 }, {
                     input: this.savePreset,
                     delete: this.deletePreset,

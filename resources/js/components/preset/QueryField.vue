@@ -7,7 +7,7 @@
         ></TagsField>
         <EntityFilter v-model="query.filter" :fields="filterFields"></EntityFilter>
         <v-divider class="mb-4"></v-divider>
-        <v-text-field v-model="query.search" label="Search"></v-text-field>
+        <v-text-field v-model="query.search" label="Search" clearable></v-text-field>
     </div>
 </template>
 
