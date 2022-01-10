@@ -18,7 +18,7 @@
             <EntitySelectionToolbar v-if="selected.length"
                 v-model="selected"
                 @update="getItems"
-                :query-tags="allQueryTags"
+                :query-tag-names="allQueryTagNames"
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
@@ -298,5 +298,5 @@
                 });
             },
         },
-    }
+    };
 </script>

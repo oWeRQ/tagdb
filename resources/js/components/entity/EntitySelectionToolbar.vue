@@ -87,7 +87,7 @@
                 type: Array,
                 default: () => [],
             },
-            queryTags: {
+            queryTagNames: {
                 type: Array,
                 default: () => [],
             },
@@ -111,13 +111,13 @@
                             tags.push(tag);
                     }
                 }
-                return tags;
+                return tags.sort((a, b) => a.name.localeCompare(b.name));
             },
         },
         methods: {
             fetchTags() {
                 api.tags.index({
-                    with_tags: this.queryTags.map(tag => tag.name),
+                    with_tags: this.queryTagNames,
                 }).then(tags => {
                     this.tags = tags;
                 });
