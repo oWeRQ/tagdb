@@ -23,18 +23,20 @@
                 type: String,
                 default: '400px',
             },
+            title: {
+                type: String,
+            },
+            text: {
+                type: String,
+            },
         },
         data() {
             return {
                 visible: false,
-                title: null,
-                text: null,
             };
         },
         methods: {
-            show(title, text = null) {
-                this.title = title;
-                this.text = text;
+            show() {
                 this.visible = true;
 
                 return new Promise((resolve) => {

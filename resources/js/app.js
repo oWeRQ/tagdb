@@ -18,7 +18,6 @@ const app = new Vue({
     render(h) {
         return h(App, [
             h(AuthDialog),
-            h(ConfirmDialog, { ref: 'confirm' }),
             h(DialogStack, { ref: 'dialogStack' }),
         ]);
     },
@@ -27,10 +26,10 @@ const app = new Vue({
     },
     methods: {
         confirm(title, text = null) {
-            return this.$refs.confirm.show(title, text);
+            return this.showDialog(ConfirmDialog, {title, text});
         },
         showDialog(component, bind, on) {
-            this.$refs.dialogStack.show(component, bind, on);
+            return this.$refs.dialogStack.show(component, bind, on);
         },
     },
 }).$mount('#app');
