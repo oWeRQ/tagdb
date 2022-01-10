@@ -44,7 +44,7 @@
                                     :key="tag.name"
                                     :tag="tag"
                                     class="mr-2 mb-2"
-                                    @click="showTag(tag)"
+                                    @click="editTag(tag)"
                                 ></TagChip>
                                 <div class="mt-2">
                                     <v-btn @click="addTag" text x-small color="blue darken-1">
@@ -63,28 +63,20 @@
                 </v-card-actions>
             </v-card>
         </v-form>
-
-        <TagDialog
-            ref="tagDialog"
-            :value="editedTag"
-            @input="saveTag"
-            @delete="deleteTag"
-        ></TagDialog>
     </v-dialog>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import cloneDeep from 'clone-deep';
 import api from '../../api';
 import toFormData from '../../functions/toFormData';
 import fuzzyMatch from '../../functions/fuzzyMatch';
 import TagDialog from '../tag/TagDialog.vue';
 import TagChip from '../tag/TagChip.vue';
-import { mapState } from 'vuex';
 
 export default {
     components: {
-        TagDialog,
         TagChip,
     },
     props: {
@@ -92,7 +84,6 @@ export default {
     },
     data() {
         return {
-            editedTag: null,
             visible: false,
             importFile: null,
             previewData: null,
@@ -132,12 +123,20 @@ export default {
             this.previewTags = this.previewData.tags.map(name => (this.tags.find(tag => tag.name === name) || { name, id: null, color: null, fields: [] }));
         },
         addTag() {
-            this.editedTag = { name: '', id: null, color: null, fields: [] };
-            this.$refs.tagDialog.show();
+            this.editTag({
+                name: '',
+                id: null,
+                color: null,
+                fields: [],
+            });
         },
-        showTag(tag) {
-            this.editedTag = cloneDeep(tag);
-            this.$refs.tagDialog.show();
+        editTag(tag) {
+            this.$root.showDialog(TagDialog, {
+                value: cloneDeep(tag),
+            }, {
+                input: this.saveTag,
+                delete: this.deleteTag,
+            });
         },
         saveTag(tag) {
             const previewTag = this.previewTags.find(item => item.id === tag.id) || this.previewTags.find(item => !item.id && item.name === tag.name);

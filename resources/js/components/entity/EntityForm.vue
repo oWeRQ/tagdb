@@ -98,19 +98,6 @@
             <v-icon left>mdi-plus</v-icon>
             Add Field
         </v-btn>
-
-        <FieldDialog
-            ref="fieldDialog"
-            :value="editedField"
-            @input="saveField"
-        ></FieldDialog>
-
-        <TagDialog
-            ref="tagDialog"
-            :value="editedTag"
-            @input="saveTag"
-            @delete="deleteTag"
-        ></TagDialog>
     </div>
 </template>
 
@@ -122,8 +109,6 @@
 
     export default {
         components: {
-            FieldDialog,
-            TagDialog,
             TagsField,
         },
         props: {
@@ -134,8 +119,6 @@
         data() {
             return {
                 menu: {},
-                editedTag: null,
-                editedField: null,
             };
         },
         computed: {
@@ -159,8 +142,12 @@
         methods: {
             showTag(tag) {
                 this.originalTag = tag;
-                this.editedTag = cloneDeep(tag);
-                this.$refs.tagDialog.show();
+                this.$root.showDialog(TagDialog, {
+                    value: cloneDeep(tag),
+                }, {
+                    input: this.saveTag,
+                    delete: this.deleteTag,
+                });
             },
             saveTag(tag) {
                 Object.assign(this.originalTag, tag);
@@ -169,13 +156,19 @@
                 this.value.tags = this.value.tags.filter(item => item.id !== tag.id);
             },
             addField() {
-                this.editedField = {
+                this.editField({
                     tag_id: this.firstSavedTag?.id,
                     type: 'string',
                     name: '',
                     code: '',
-                };
-                this.$refs.fieldDialog.show();
+                });
+            },
+            editField(field) {
+                this.$root.showDialog(FieldDialog, {
+                    value: cloneDeep(field),
+                }, {
+                    input: this.saveField,
+                });
             },
             saveField(field) {
                 const tag = this.value.tags.find(tag => tag.id == field.tag_id);

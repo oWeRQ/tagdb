@@ -27,24 +27,13 @@
                 <v-icon left>mdi-plus</v-icon>
                 Add {{ singularTitle }}
             </v-btn>
-
-            <component
-                :is="dialog"
-                ref="crudDialog"
-                :title="singularTitle"
-                :form="form"
-                :api="api"
-                :editable="editable"
-                :value="editedItem"
-                @input="saveItem"
-                @delete="deleteItem"
-            ></component>
         </template>
     </v-data-table>
 </template>
 
 <script>
     import cloneDeep from 'clone-deep';
+    import updateItem from '../../functions/updateItem';
     import stringifySort from '../../functions/stringifySort';
     import CrudDialog from './CrudDialog';
     import CrudForm from './CrudForm';
@@ -95,8 +84,6 @@
                 total: 0,
                 items: [],
                 options: {},
-                editedIndex: -1,
-                editedItem: {},
             }
         },
         computed: {
@@ -139,26 +126,26 @@
                     this.loading = false;
                 });
             },
-            deleteItem(item) {
-                if (this.editedIndex > -1) {
-                    this.items.splice(this.editedIndex, 1);
-                }
-            },
             addItem() {
                 this.editItem(this.defaultItem);
             },
             editItem(item) {
-                this.editedIndex = this.items.indexOf(item);
-                this.editedItem = cloneDeep(item);
-                this.$refs.crudDialog.show();
+                this.$root.showDialog(this.dialog, {
+                    title: this.singularTitle,
+                    form: this.form,
+                    api: this.api,
+                    editable: this.editable,
+                    value: cloneDeep(item),
+                }, {
+                    input: this.saveItem,
+                    delete: this.deleteItem,
+                });
             },
-            saveItem(item) {
-                item = this.processItem(item);
-                if (this.editedIndex > -1) {
-                    Object.assign(this.items[this.editedIndex], item);
-                } else {
-                    this.items.unshift(item);
-                }
+            saveItem(result) {
+                updateItem(this.items, result);
+            },
+            deleteItem(result) {
+                this.items = this.items.filter(item => item.id !== result.id);
             },
         },
     };

@@ -75,6 +75,7 @@
     import api from '../../api';
     import _ from 'lodash';
     import cloneDeep from 'clone-deep';
+    import updateItem from '../../functions/updateItem';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
 
@@ -106,8 +107,6 @@
                     sortDesc: [true],
                 },
                 selected: [],
-                editedItem: null,
-                editedPreset: null,
                 queryTags: [],
                 query: {
                     tags: [],
@@ -232,16 +231,11 @@
                     delete: this.deleteItem,
                 });
             },
-            saveItem(entity) {
-                const item = this.items.find(item => item.id === entity.id);
-                if (item) {
-                    Object.assign(item, entity);
-                } else {
-                    this.items.unshift(entity);
-                }
+            saveItem(result) {
+                updateItem(this.items, result);
             },
-            deleteItem(entity) {
-                this.items = this.items.filter(item => item.id !== entity.id)
+            deleteItem(result) {
+                this.items = this.items.filter(item => item.id !== result.id)
             },
             addPreset() {
                 this.editPreset({

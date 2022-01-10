@@ -41,39 +41,24 @@
                 <v-icon left>mdi-plus</v-icon>
                 Add Field
             </v-btn>
-
-            <FieldDialog
-                ref="dialog"
-                :value="editedItem"
-                @input="saveItem"
-                @delete="deleteItem"
-            ></FieldDialog>
-
-            <TagDialog
-                ref="tagDialog"
-                :value="editedTag"
-                @input="getItems"
-                @delete="getItems"
-            ></TagDialog>
         </template>
     </v-data-table>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import api from '../../api';
     import cloneDeep from 'clone-deep';
+    import updateItem from '../../functions/updateItem';
     import date from '../../functions/date';
     import stringifySort from '../../functions/stringifySort';
     import TagChip from '../tag/TagChip.vue';
     import TagDialog from '../tag/TagDialog.vue';
     import FieldDialog from './FieldDialog.vue';
-import { mapState } from 'vuex';
 
     export default {
         components: {
             TagChip,
-            TagDialog,
-            FieldDialog,
         },
         filters: {
             date,
@@ -87,8 +72,6 @@ import { mapState } from 'vuex';
                     sortBy: ['name'],
                     sortDesc: [false],
                 },
-                editedItem: {},
-                editedTag: {},
             }
         },
         computed: {
@@ -140,23 +123,26 @@ import { mapState } from 'vuex';
                 this.editItem({});
             },
             editItem(item) {
-                this.editedItem = cloneDeep(item);
-                this.$refs.dialog.show();
+                this.$root.showDialog(FieldDialog, {
+                    value: cloneDeep(item),
+                }, {
+                    input: this.saveItem,
+                    delete: this.deleteItem,
+                });
             },
             saveItem(result) {
-                const item = this.items.find(item => item.id === result.id);
-                if (item) {
-                    Object.assign(item, this.processItem(result));
-                } else {
-                    this.items.unshift(this.processItem(result));
-                }
+                updateItem(this.items, this.processItem(result));
             },
             deleteItem(result) {
-                this.items = this.items.filter(item => item.id !== result.id)
+                this.items = this.items.filter(item => item.id !== result.id);
             },
             editTag(item) {
-                this.editedTag = cloneDeep(item);
-                this.$refs.tagDialog.show();
+                this.$root.showDialog(TagDialog, {
+                    value: cloneDeep(item),
+                }, {
+                    input: this.getItems,
+                    delete: this.getItems,
+                });
             },
         },
     };

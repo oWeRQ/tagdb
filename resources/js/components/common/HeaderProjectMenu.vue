@@ -32,7 +32,7 @@
                 </v-list-item-content>
             </v-list-item>
             <v-divider></v-divider>
-            <v-list-item @click="updateProject">
+            <v-list-item @click="editProject(currentProject)">
                 <v-list-item-icon class="mr-4">
                     <v-icon>mdi-pencil</v-icon>
                 </v-list-item-icon>
@@ -40,7 +40,7 @@
                     <v-list-item-title>Edit Project</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
-            <v-list-item @click="createProject">
+            <v-list-item @click="addProject">
                 <v-list-item-icon class="mr-4">
                     <v-icon>mdi-plus</v-icon>
                 </v-list-item-icon>
@@ -50,14 +50,6 @@
             </v-list-item>
         </v-list>
     </v-menu>
-
-    <ProjectDialog
-        ref="projectDialog"
-        :deletable="projectDeletable"
-        :value="projectEdited"
-        @input="saveProject"
-        @delete="deleteProject"
-    ></ProjectDialog>
 </div>
 </template>
 
@@ -67,12 +59,6 @@ import cloneDeep from 'clone-deep';
 import ProjectDialog from '../project/ProjectDialog.vue';
 
 export default {
-    components: {
-        ProjectDialog,
-    },
-    data: () => ({
-        projectEdited: {},
-    }),
     computed: {
         ...mapState([
             'isReady',
@@ -88,16 +74,20 @@ export default {
         ...mapActions([
             'switchProject',
         ]),
-        updateProject() {
-            this.projectEdited = cloneDeep(this.currentProject);
-            this.$refs.projectDialog.show();
-        },
-        createProject() {
-            this.projectEdited = {
+        addProject() {
+            this.editProject({
                 name: '',
                 users: [],
-            };
-            this.$refs.projectDialog.show();
+            });
+        },
+        editProject(item) {
+            this.$root.showDialog(ProjectDialog, {
+                deletable: this.projectDeletable,
+                value: cloneDeep(item),
+            }, {
+                input: this.saveProject,
+                delete: this.deleteProject,
+            });
         },
         saveProject(project) {
             this.switchProject(project);

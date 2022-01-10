@@ -48,29 +48,10 @@
                 <v-icon left>mdi-export</v-icon>
                 Export
             </v-btn>
-            <v-btn text large color="blue darken-3" @click="$refs.importDialog.show()">
+            <v-btn text large color="blue darken-3" @click="importTags">
                 <v-icon left>mdi-import</v-icon>
                 Import
             </v-btn>
-
-            <TagDialog
-                ref="dialog"
-                :value="editedItem"
-                @input="saveItem"
-                @delete="deleteItem"
-            ></TagDialog>
-
-            <TagImportDialog
-                ref="importDialog"
-                @done="getItems"
-            ></TagImportDialog>
-
-            <FieldDialog
-                ref="fieldDialog"
-                :value="editedField"
-                @input="getItems"
-                @delete="getItems"
-            ></FieldDialog>
         </template>
     </v-data-table>
 </template>
@@ -78,6 +59,7 @@
 <script>
     import api from '../../api';
     import cloneDeep from 'clone-deep';
+    import updateItem from '../../functions/updateItem';
     import date from '../../functions/date';
     import stringifySort from '../../functions/stringifySort';
     import toQueryString from '../../functions/toQueryString';
@@ -89,9 +71,6 @@
     export default {
         components: {
             TagChip,
-            TagDialog,
-            TagImportDialog,
-            FieldDialog,
         },
         filters: {
             date,
@@ -105,8 +84,6 @@
                     sortBy: ['name'],
                     sortDesc: [false],
                 },
-                editedItem: {},
-                editedField: {},
             }
         },
         computed: {
@@ -151,29 +128,37 @@
                 });
             },
             editItem(item) {
-                this.editedItem = cloneDeep(item);
-                this.$refs.dialog.show();
+                this.$root.showDialog(TagDialog, {
+                    value: cloneDeep(item),
+                }, {
+                    input: this.saveItem,
+                    delete: this.deleteItem,
+                });
             },
             saveItem(result) {
-                const item = this.items.find(item => item.id === result.id);
-                if (item) {
-                    Object.assign(item, result);
-                } else {
-                    this.items.unshift(result);
-                }
+                updateItem(this.items, result);
             },
             deleteItem(result) {
                 this.items = this.items.filter(item => item.id !== result.id)
             },
             editField(item) {
-                this.editedField = cloneDeep(item);
-                this.$refs.fieldDialog.show();
+                this.$root.showDialog(FieldDialog, {
+                    value: cloneDeep(item),
+                }, {
+                    input: this.getItems,
+                    delete: this.getItems,
+                });
             },
             exportTags() {
                 const params = {
                     export: this.$store.state.currentProject.name + '.json',
                 };
                 window.open(api.tags.resource + '?' + toQueryString(params));
+            },
+            importTags() {
+                this.$root.showDialog(TagImportDialog, {}, {
+                    done: this.getItems,
+                });
             },
         },
     };
