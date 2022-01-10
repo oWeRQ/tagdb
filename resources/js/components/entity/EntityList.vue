@@ -126,11 +126,14 @@
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
+            allQueryTags() {
+                return this.queryTags.filter(tag => tag.name[0] !== '-');
+            },
             queryTagNames() {
                 return this.queryTags.map(tag => tag.name);
             },
             displayFields() {
-                return this.queryTags.flatMap(item => item.fields).map((field) => {
+                return this.allQueryTags.flatMap(item => item.fields).map((field) => {
                     return { text: field.name, value: 'contents.' + field.id, type: field.type };
                 });
             },
