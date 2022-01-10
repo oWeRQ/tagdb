@@ -59,34 +59,14 @@
                 <v-icon left>mdi-plus</v-icon>
                 Add Entity
             </v-btn>
-            <v-btn text large color="blue darken-3" @click="$refs.exportDialog.show()">
+            <v-btn text large color="blue darken-3" @click="showExport()">
                 <v-icon left>mdi-export</v-icon>
                 Export
             </v-btn>
-            <v-btn text large color="blue darken-3" @click="$refs.importDialog.show()">
+            <v-btn text large color="blue darken-3" @click="showImport()">
                 <v-icon left>mdi-import</v-icon>
                 Import
             </v-btn>
-
-            <PresetDialog
-                ref="presetDialog"
-                :value="editedPreset"
-                @input="savePreset"
-                @delete="deletePreset"
-            ></PresetDialog>
-
-            <ExportDialog
-                ref="exportDialog"
-                :filename="exportFilename"
-                :headers="exportHeaders"
-                :params="exportParams"
-            ></ExportDialog>
-
-            <ImportDialog
-                ref="importDialog"
-                :params="importParams"
-                @done="getItems"
-            ></ImportDialog>
         </template>
     </v-data-table>
 </template>
@@ -114,9 +94,6 @@
             EntityRow,
             EntitySearch,
             EntitySelectionToolbar,
-            ExportDialog,
-            ImportDialog,
-            PresetDialog,
             TagsField,
         },
         data() {
@@ -126,7 +103,6 @@
                 items: [],
                 options: {},
                 selected: [],
-                editedItem: null,
                 editedPreset: null,
                 queryTags: [],
                 query: {
@@ -277,9 +253,8 @@
                 });
             },
             editItem(item) {
-                this.editedItem = cloneDeep(item);
                 this.$root.showDialog(EntityDialog, {
-                    value: this.editedItem,
+                    value: cloneDeep(item),
                 }, {
                     input: this.saveItem,
                     delete: this.deleteItem,
@@ -297,8 +272,12 @@
                 this.items = this.items.filter(item => item.id !== entity.id)
             },
             editPreset() {
-                this.editedPreset = cloneDeep(this.preset);
-                this.$refs.presetDialog.show();
+                this.$root.showDialog(PresetDialog, {
+                    value: cloneDeep(this.preset),
+                }, {
+                    input: this.savePreset,
+                    delete: this.deletePreset,
+                });
             },
             savePreset(rawPreset) {
                 if (this.preset.name !== rawPreset.name) {
@@ -307,6 +286,20 @@
             },
             deletePreset() {
                 this.$router.push({name: 'index'});
+            },
+            showExport() {
+                this.$root.showDialog(ExportDialog, {
+                    filename: this.exportFilename,
+                    headers: this.exportHeaders,
+                    params: this.exportParams,
+                });
+            },
+            showImport() {
+                this.$root.showDialog(ImportDialog, {
+                    params: this.importParams,
+                }, {
+                    done: this.getItems,
+                });
             },
         },
     }
