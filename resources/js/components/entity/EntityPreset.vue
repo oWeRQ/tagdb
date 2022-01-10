@@ -75,13 +75,6 @@
                 @delete="deletePreset"
             ></PresetDialog>
 
-            <EntityDialog
-                ref="entityDialog"
-                :value="editedItem"
-                @input="saveItem"
-                @delete="deleteItem"
-            ></EntityDialog>
-
             <ExportDialog
                 ref="exportDialog"
                 :filename="exportFilename"
@@ -117,7 +110,6 @@
 
     export default {
         components: {
-            EntityDialog,
             EntityFilter,
             EntityRow,
             EntitySearch,
@@ -286,7 +278,12 @@
             },
             editItem(item) {
                 this.editedItem = cloneDeep(item);
-                this.$refs.entityDialog.show();
+                this.$root.showDialog(EntityDialog, {
+                    value: this.editedItem,
+                }, {
+                    input: this.saveItem,
+                    delete: this.deleteItem,
+                });
             },
             saveItem(entity) {
                 const item = this.items.find(item => item.id === entity.id);
