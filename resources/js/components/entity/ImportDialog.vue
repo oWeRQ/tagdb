@@ -115,6 +115,13 @@ export default {
                 return 'Import';
         },
     },
+    watch: {
+        visible(value) {
+            if (!value) {
+                this.$emit('close');
+            }
+        },
+    },
     methods: {
         fieldFilter(item, queryText) {
             return fuzzyMatch(`${item.tag?.name} ${item.name}`, queryText);

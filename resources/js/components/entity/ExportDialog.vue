@@ -71,6 +71,13 @@ export default {
             ];
         },
     },
+    watch: {
+        visible(value) {
+            if (!value) {
+                this.$emit('close');
+            }
+        },
+    },
     methods: {
         selectAll() {
             this.columns = this.headersExtended.map(header => header.value);

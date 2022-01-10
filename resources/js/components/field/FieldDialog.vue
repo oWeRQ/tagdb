@@ -47,6 +47,13 @@
                 isValid: false,
             };
         },
+        watch: {
+            visible(value) {
+                if (!value) {
+                    this.$emit('close');
+                }
+            },
+        },
         methods: {
             remove() {
                 this.$root.confirm(`Delete Field?`).then(() => {

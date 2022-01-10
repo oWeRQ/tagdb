@@ -35,6 +35,13 @@
                 visible: false,
             };
         },
+        watch: {
+            visible(value) {
+                if (!value) {
+                    this.$emit('close');
+                }
+            },
+        },
         methods: {
             show() {
                 this.visible = true;

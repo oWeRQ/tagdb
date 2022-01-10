@@ -7,6 +7,7 @@
             ref="dialogs"
             v-bind="dialog.bind"
             v-on="dialog.on"
+            @close="close(dialog)"
         ></component>
     </div>
 </template>
@@ -28,16 +29,16 @@ export default {
                 this.$nextTick(() => {
                     const idx = this.dialogs.indexOf(dialog);
                     const instance = this.$refs.dialogs[idx];
-                    instance.$watch('visible', (visible) => {
-                        if (!visible) {
-                            setTimeout(() => {
-                                this.dialogs = this.dialogs.filter(m => m !== dialog);
-                            }, 1000);
-                        }
-                    });
-                    resolve(instance.show());
+                    if (instance) {
+                        resolve(instance.show());
+                    }
                 });
             });
+        },
+        close(dialog) {
+            setTimeout(() => {
+                this.dialogs = this.dialogs.filter(m => m !== dialog);
+            }, 1000);
         },
     },
 };
