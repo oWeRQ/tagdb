@@ -4,7 +4,8 @@
         :show-select="true"
         :headers="headers"
         :items="displayItems"
-        :options.sync="options"
+        :options="options"
+        @update:options="updateOptions"
         :server-items-length="serverItemsLength"
         :loading="loading"
         :items-per-page="100"
@@ -73,7 +74,6 @@
 <script>
     import { mapState } from 'vuex';
     import api from '../../api';
-    import _ from 'lodash';
     import cloneDeep from 'clone-deep';
     import updateItem from '../../functions/updateItem';
     import stringifySort from '../../functions/stringifySort';
@@ -193,13 +193,16 @@
                 deep: true,
                 handler: 'getItems',
             },
-            options: 'getItems',
         },
         methods: {
             addQueryTag(tag) {
                 this.queryTags.push(tag);
             },
-            getItems: _.debounce(function() {
+            updateOptions(options) {
+                this.options = options;
+                this.getItems();
+            },
+            getItems() {
                 const params = {
                     query: this.query,
                     sort: this.sort,
@@ -219,7 +222,7 @@
                         console.timeEnd('render items');
                     });
                 });
-            }, 500),
+            },
             addItem() {
                 this.editItem({
                     tags: this.queryTags,

@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
     props: {
         value: {},
@@ -34,7 +36,7 @@ export default {
                 return this.value;
             },
             set(value) {
-                this.$emit('input', value);
+                this.emitInput(value);
             },
         },
     },
@@ -45,6 +47,9 @@ export default {
         blur() {
             this.isShow = !!this.value;
         },
+        emitInput: _.debounce(function(value) {
+            this.$emit('input', value);
+        }, 500),
     },
 };
 </script>
