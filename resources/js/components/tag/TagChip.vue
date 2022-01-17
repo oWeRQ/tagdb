@@ -1,5 +1,5 @@
 <template>
-    <v-chip @click="$emit('click')" :color="tag.color" :dark="!!tag.color" :small="small" class="lighten-2">
+    <v-chip @click="$emit('click', $event)" :color="tag.color" :dark="!!tag.color" :small="small" class="lighten-2">
         <v-icon left v-if="!tag.id">
             mdi-plus
         </v-icon>

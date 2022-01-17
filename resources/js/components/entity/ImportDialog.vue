@@ -25,9 +25,11 @@
                                         clearable
                                         outlined
                                         dense
+                                        :prepend-inner-icon="fieldsMap[header] ? undefined : 'mdi-plus'"
+                                        @click:prepend-inner="addField(header)"
                                     >
                                         <template v-slot:selection="{ item }">
-                                            <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2"></TagChip>
+                                            <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2" @click.stop="editTag(item.tag)"></TagChip>
                                             {{ item.name }}
                                         </template>
                                         <template v-slot:item="{ item }">
@@ -71,7 +73,9 @@ import { mapState } from 'vuex';
 import cloneDeep from 'clone-deep';
 import api from '../../api';
 import toFormData from '../../functions/toFormData';
+import makeCode from '../../functions/makeCode';
 import fuzzyMatch from '../../functions/fuzzyMatch';
+import FieldDialog from '../field/FieldDialog.vue';
 import TagDialog from '../tag/TagDialog.vue';
 import TagChip from '../tag/TagChip.vue';
 
@@ -128,6 +132,22 @@ export default {
         },
         updatePreviewTags() {
             this.previewTags = this.previewData.tags.map(name => (this.tags.find(tag => tag.name === name) || { name, id: null, color: null, fields: [] }));
+        },
+        addField(name) {
+            this.editField({
+                name,
+                code: makeCode(name),
+                type: 'string',
+            });
+        },
+        editField(field) {
+            this.$root.showDialog(FieldDialog, {
+                value: cloneDeep(field),
+            }, {
+                input: (result) => {
+                    this.fieldsMap[field.name] = result.id;
+                },
+            });
         },
         addTag() {
             this.editTag({
