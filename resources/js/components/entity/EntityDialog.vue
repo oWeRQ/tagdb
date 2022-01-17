@@ -34,20 +34,23 @@
                 default: () => ({}),
             },
         },
-        computed: {
-            isNew() {
-                return !this.data.id;
-            },
-            headline() {
-                return (this.isNew ? 'Create' : 'Update') + ' Entity';
-            },
-        },
         data() {
             return {
                 visible: false,
                 isValid: false,
                 data: {},
             };
+        },
+        computed: {
+            id() {
+                return this.data?.id;
+            },
+            isNew() {
+                return !this.id;
+            },
+            headline() {
+                return (this.isNew ? 'Create' : 'Update') + ' Entity';
+            },
         },
         watch: {
             visible(value) {
@@ -64,21 +67,21 @@
             },
         },
         methods: {
-            setData(entity) {
+            setData(data) {
                 const contents = {};
-                for (let value of entity.values) {
+                for (let value of data.values) {
                     contents[value.field.id] = value.content;
                 }
-                this.data = { ...entity, contents };
+                this.data = { ...data, contents };
             },
             fetch() {
-                if (this.data.id) {
-                    api.entities.show(this.data.id).then(this.setData);
+                if (this.id) {
+                    api.entities.show(this.id).then(this.setData);
                 }
             },
             remove() {
                 this.$root.confirm(`Delete Entity?`).then(() => {
-                    api.entities.destroy(this.data.id).then(response => {
+                    api.entities.destroy(this.id).then(response => {
                         this.$emit('delete', this.data);
                         this.$store.dispatch('deleteEntity', this.data);
                         this.close();
@@ -91,7 +94,7 @@
                     return;
                 }
 
-                api.entities.save(this.data.id, this.data).then(entity => {
+                api.entities.save(this.id, this.data).then(entity => {
                     this.$emit('input', entity);
                     this.$store.dispatch('saveEntity', entity);
                     this.close();

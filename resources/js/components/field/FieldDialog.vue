@@ -1,12 +1,12 @@
 <template>
-    <v-dialog v-if="value" v-model="visible" max-width="560px" scrollable>
+    <v-dialog v-model="visible" max-width="560px" scrollable>
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
                     {{ headline }}
                 </v-card-title>
                 <v-card-text>
-                    <FieldForm v-model="value" @submit="submit" class="mt-3"></FieldForm>
+                    <FieldForm v-model="data" @submit="submit" class="mt-3"></FieldForm>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -21,6 +21,7 @@
 
 <script>
     import api from '../../api';
+    import cloneDeep from 'clone-deep';
     import FieldForm from './FieldForm';
 
     export default {
@@ -33,19 +34,23 @@
                 default: () => ({}),
             },
         },
-        computed: {
-            isNew() {
-                return !this.value.id;
-            },
-            headline() {
-                return (this.isNew ? 'Create' : 'Update') + ' Field';
-            },
-        },
         data() {
             return {
                 visible: false,
                 isValid: false,
+                data: {},
             };
+        },
+        computed: {
+            id() {
+                return this.data?.id;
+            },
+            isNew() {
+                return !this.id;
+            },
+            headline() {
+                return (this.isNew ? 'Create' : 'Update') + ' Field';
+            },
         },
         watch: {
             visible(value) {
@@ -53,13 +58,28 @@
                     this.$emit('close');
                 }
             },
+            value: {
+                immediate: true,
+                handler(value) {
+                    this.setData(cloneDeep(value));
+                    this.fetch();
+                },
+            },
         },
         methods: {
+            setData(data) {
+                this.data = data;
+            },
+            fetch() {
+                if (this.id) {
+                    api.fields.show(this.id).then(this.setData);
+                }
+            },
             remove() {
                 this.$root.confirm(`Delete Field?`).then(() => {
-                    api.fields.destroy(this.value.id).then(response => {
-                        this.$emit('delete', this.value);
-                        this.$store.dispatch('deleteField', this.value);
+                    api.fields.destroy(this.id).then(response => {
+                        this.$emit('delete', this.data);
+                        this.$store.dispatch('deleteField', this.data);
                         this.close();
                     });
                 });
@@ -70,7 +90,7 @@
                     return;
                 }
 
-                api.fields.save(this.value.id, this.value).then(field => {
+                api.fields.save(this.id, this.data).then(field => {
                     this.$emit('input', field);
                     this.$store.dispatch('saveField', field);
                     this.close();

@@ -32,7 +32,6 @@
 </template>
 
 <script>
-    import cloneDeep from 'clone-deep';
     import updateItem from '../../functions/updateItem';
     import stringifySort from '../../functions/stringifySort';
     import CrudDialog from './CrudDialog';
@@ -135,7 +134,8 @@
                     form: this.form,
                     api: this.api,
                     editable: this.editable,
-                    value: cloneDeep(item),
+                    processItem: this.processItem,
+                    value: item,
                 }, {
                     input: this.saveItem,
                     delete: this.deleteItem,

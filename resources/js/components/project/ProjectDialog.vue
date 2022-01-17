@@ -1,12 +1,12 @@
 <template>
-    <v-dialog v-if="value" v-model="visible" max-width="560px" scrollable>
+    <v-dialog v-model="visible" max-width="560px" scrollable>
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
                     {{ headline }}
                 </v-card-title>
                 <v-card-text>
-                    <ProjectForm v-model="value" :errors="errors" @submit="submit" class="mt-3"></ProjectForm>
+                    <ProjectForm v-model="data" :errors="errors" @submit="submit" class="mt-3"></ProjectForm>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew && deletable" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -21,6 +21,7 @@
 
 <script>
     import api from '../../api';
+    import cloneDeep from 'clone-deep';
     import ProjectForm from './ProjectForm';
 
     export default {
@@ -37,9 +38,17 @@
                 default: () => ({}),
             },
         },
+        data() {
+            return {
+                visible: false,
+                isValid: false,
+                data: {},
+                errors: {},
+            };
+        },
         computed: {
             id() {
-                return this.value.id;
+                return this.data?.id;
             },
             isNew() {
                 return !this.id;
@@ -48,26 +57,34 @@
                 return (this.isNew ? 'Create' : 'Update') + ' Project';
             },
         },
-        data() {
-            return {
-                visible: false,
-                isValid: false,
-                errors: {},
-            };
-        },
         watch: {
             visible(value) {
                 if (!value) {
                     this.$emit('close');
                 }
             },
+            value: {
+                immediate: true,
+                handler(value) {
+                    this.setData(cloneDeep(value));
+                    this.fetch();
+                },
+            },
         },
         methods: {
+            setData(data) {
+                this.data = data;
+            },
+            fetch() {
+                if (this.id) {
+                    api.projects.show(this.id).then(this.setData);
+                }
+            },
             remove() {
                 this.$root.confirm(`Delete Project?`).then(() => {
                     api.projects.destroy(this.id).then(response => {
-                        this.$emit('delete', this.value);
-                        this.$store.dispatch('deleteProject', this.value);
+                        this.$emit('delete', this.data);
+                        this.$store.dispatch('deleteProject', this.data);
                         this.close();
                     });
                 });
@@ -78,7 +95,7 @@
                     return;
                 }
 
-                return api.projects.save(this.id, this.value).then(project => {
+                return api.projects.save(this.id, this.data).then(project => {
                     this.$emit('input', project);
                     this.$store.dispatch('saveProject', project);
                     this.close();

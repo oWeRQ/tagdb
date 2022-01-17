@@ -1,12 +1,12 @@
 <template>
-    <v-dialog v-if="value" v-model="visible" max-width="560px" scrollable>
+    <v-dialog v-model="visible" max-width="560px" scrollable>
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
                     {{ headline }}
                 </v-card-title>
                 <v-card-text>
-                    <TagForm v-model="value" @submit="submit" class="mt-3"></TagForm>
+                    <TagForm v-model="data" @submit="submit" class="mt-3"></TagForm>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -21,6 +21,7 @@
 
 <script>
     import api from '../../api';
+    import cloneDeep from 'clone-deep';
     import TagForm from './TagForm';
 
     export default {
@@ -33,19 +34,23 @@
                 default: () => ({}),
             },
         },
-        computed: {
-            isNew() {
-                return !this.value.id;
-            },
-            headline() {
-                return (this.isNew ? 'Create' : 'Update') + ' Tag';
-            },
-        },
         data() {
             return {
                 visible: false,
                 isValid: false,
+                data: {},
             };
+        },
+        computed: {
+            id() {
+                return this.data?.id;
+            },
+            isNew() {
+                return !this.id;
+            },
+            headline() {
+                return (this.isNew ? 'Create' : 'Update') + ' Tag';
+            },
         },
         watch: {
             visible(value) {
@@ -53,13 +58,28 @@
                     this.$emit('close');
                 }
             },
+            value: {
+                immediate: true,
+                handler(value) {
+                    this.setData(cloneDeep(value));
+                    this.fetch();
+                },
+            },
         },
         methods: {
+            setData(data) {
+                this.data = data;
+            },
+            fetch() {
+                if (this.id) {
+                    api.tags.show(this.id).then(this.setData);
+                }
+            },
             remove() {
                 this.$root.confirm(`Delete Tag?`).then(() => {
-                    api.tags.destroy(this.value.id).then(response => {
-                        this.$emit('delete', this.value);
-                        this.$store.dispatch('deleteTag', this.value);
+                    api.tags.destroy(this.id).then(response => {
+                        this.$emit('delete', this.data);
+                        this.$store.dispatch('deleteTag', this.data);
                         this.close();
                     });
                 });
@@ -70,7 +90,7 @@
                     return;
                 }
 
-                api.tags.save(this.value.id, this.value).then(tag => {
+                api.tags.save(this.id, this.data).then(tag => {
                     this.$emit('input', tag);
                     this.$store.dispatch('saveTag', tag);
                     this.close();

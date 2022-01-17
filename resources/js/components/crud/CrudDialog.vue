@@ -1,12 +1,12 @@
 <template>
-    <v-dialog v-if="value" v-model="visible" :max-width="maxWidth" scrollable>
+    <v-dialog v-model="visible" :max-width="maxWidth" scrollable>
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
                     {{ headline }}
                 </v-card-title>
                 <v-card-text>
-                    <component :is="form" :editable="editable" v-model="value" @submit="submit" class="mt-3"></component>
+                    <component :is="form" :editable="editable" v-model="data" @submit="submit" class="mt-3"></component>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew && deletable" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+    import cloneDeep from 'clone-deep';
     import CrudForm from './CrudForm';
 
     export default {
@@ -43,6 +44,10 @@
             editable: {
                 type: Array,
             },
+            processItem: {
+                type: Function,
+                default: value => value,
+            },
             value: {
                 type: Object,
                 default: () => ({}),
@@ -52,19 +57,23 @@
                 default: '560px',
             },
         },
-        computed: {
-            isNew() {
-                return !this.value.id;
-            },
-            headline() {
-                return (this.isNew ? 'Create' : 'Update') + ' ' + this.title;
-            },
-        },
         data() {
             return {
                 visible: false,
                 isValid: false,
+                data: {},
             };
+        },
+        computed: {
+            id() {
+                return this.data?.id;
+            },
+            isNew() {
+                return !this.id;
+            },
+            headline() {
+                return (this.isNew ? 'Create' : 'Update') + ' ' + this.title;
+            },
         },
         watch: {
             visible(value) {
@@ -72,12 +81,27 @@
                     this.$emit('close');
                 }
             },
+            value: {
+                immediate: true,
+                handler(value) {
+                    this.setData(cloneDeep(value));
+                    this.fetch();
+                },
+            },
         },
         methods: {
+            setData(data) {
+                this.data = this.processItem(data);
+            },
+            fetch() {
+                if (this.id) {
+                    this.api.show(this.id).then(this.setData);
+                }
+            },
             remove() {
                 this.$root.confirm(`Delete ${this.title}?`).then(() => {
-                    this.api.destroy(this.value.id).then(response => {
-                        this.$emit('delete', this.value);
+                    this.api.destroy(this.id).then(response => {
+                        this.$emit('delete', this.data);
                         this.close();
                     });
                 });
@@ -88,7 +112,7 @@
                     return;
                 }
 
-                this.api.save(this.value.id, this.value).then(result => {
+                this.api.save(this.id, this.data).then(result => {
                     this.$emit('input', result);
                     this.close();
                 });
