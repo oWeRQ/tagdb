@@ -231,7 +231,7 @@
             },
             editItem(item) {
                 this.$root.showDialog(EntityDialog, {
-                    value: cloneDeep(item),
+                    value: item,
                 }, {
                     input: this.saveItem,
                     delete: this.deleteItem,

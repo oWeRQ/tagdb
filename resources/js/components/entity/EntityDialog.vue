@@ -1,12 +1,12 @@
 <template>
-    <v-dialog v-if="value" v-model="visible" max-width="560px" scrollable>
+    <v-dialog v-model="visible" max-width="560px" scrollable>
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
                     {{ headline }}
                 </v-card-title>
                 <v-card-text>
-                    <EntityForm v-model="value" @submit="submit" class="mt-3"></EntityForm>
+                    <EntityForm v-model="data" @submit="submit" class="mt-3"></EntityForm>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -21,6 +21,7 @@
 
 <script>
     import api from '../../api';
+    import cloneDeep from 'clone-deep';
     import EntityForm from './EntityForm';
 
     export default {
@@ -35,7 +36,7 @@
         },
         computed: {
             isNew() {
-                return !this.value.id;
+                return !this.data.id;
             },
             headline() {
                 return (this.isNew ? 'Create' : 'Update') + ' Entity';
@@ -45,6 +46,7 @@
             return {
                 visible: false,
                 isValid: false,
+                data: {},
             };
         },
         watch: {
@@ -53,13 +55,32 @@
                     this.$emit('close');
                 }
             },
+            value: {
+                immediate: true,
+                handler(value) {
+                    this.setData(cloneDeep(value));
+                    this.fetch();
+                },
+            },
         },
         methods: {
+            setData(entity) {
+                const contents = {};
+                for (let value of entity.values) {
+                    contents[value.field.id] = value.content;
+                }
+                this.data = { ...entity, contents };
+            },
+            fetch() {
+                if (this.data.id) {
+                    api.entities.show(this.data.id).then(this.setData);
+                }
+            },
             remove() {
                 this.$root.confirm(`Delete Entity?`).then(() => {
-                    api.entities.destroy(this.value.id).then(response => {
-                        this.$emit('delete', this.value);
-                        this.$store.dispatch('deleteEntity', this.value);
+                    api.entities.destroy(this.data.id).then(response => {
+                        this.$emit('delete', this.data);
+                        this.$store.dispatch('deleteEntity', this.data);
                         this.close();
                     });
                 });
@@ -70,7 +91,7 @@
                     return;
                 }
 
-                api.entities.save(this.value.id, this.value).then(entity => {
+                api.entities.save(this.data.id, this.data).then(entity => {
                     this.$emit('input', entity);
                     this.$store.dispatch('saveEntity', entity);
                     this.close();
