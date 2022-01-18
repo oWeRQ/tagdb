@@ -117,7 +117,7 @@
         methods: {
             fetchTags() {
                 api.tags.index({
-                    with_tags: this.queryTagNames,
+                    with_tags: this.queryTagNames.filter(name => name[0] !== '-'),
                 }).then(tags => {
                     this.tags = tags;
                 });
