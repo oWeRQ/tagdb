@@ -253,7 +253,7 @@
             addItem() {
                 this.editItem({
                     tags: this.allQueryTags,
-                    contents: {}
+                    values: [],
                 });
             },
             editItem(item) {
