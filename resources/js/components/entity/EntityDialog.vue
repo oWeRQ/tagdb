@@ -1,5 +1,5 @@
 <template>
-    <v-dialog v-model="visible" max-width="560px" scrollable>
+    <v-dialog v-model="visible" :persistent="persistent" max-width="560px" scrollable>
         <v-form ref="form" v-model="isValid" @submit.prevent="submit">
             <v-card>
                 <v-card-title>
@@ -37,6 +37,7 @@
         data() {
             return {
                 visible: false,
+                persistent: true,
                 isValid: false,
                 data: {},
             };
