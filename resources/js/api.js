@@ -14,23 +14,23 @@ function apiResource(resource) {
         resourceId(id) {
             return `${this.resource}/${id}`;
         },
-        index(params) {
-            return axios.get(this.resource, { params }).then(resolveData);
+        index(params, config) {
+            return axios.get(this.resource, { params, ...config }).then(resolveData);
         },
-        show(id) {
-            return axios.get(this.resourceId(id)).then(resolveData);
+        show(id, config) {
+            return axios.get(this.resourceId(id), config).then(resolveData);
         },
-        store(data) {
-            return axios.post(this.resource, data).then(resolveData);
+        store(data, config) {
+            return axios.post(this.resource, data, config).then(resolveData);
         },
-        update(id, data) {
-            return axios.put(this.resourceId(id), data).then(resolveData);
+        update(id, data, config) {
+            return axios.put(this.resourceId(id), data, config).then(resolveData);
         },
-        save(id, data) {
-            return (id ? this.update(id, data) : this.store(data));
+        save(id, data, config) {
+            return (id ? this.update(id, data, config) : this.store(data, config));
         },
-        destroy(id) {
-            return axios.delete(this.resourceId(id));
+        destroy(id, config) {
+            return axios.delete(this.resourceId(id), config);
         },
     };
 };

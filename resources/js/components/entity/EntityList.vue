@@ -75,6 +75,7 @@
     import { mapState } from 'vuex';
     import api from '../../api';
     import cloneDeep from 'clone-deep';
+    import cancelSignalFactory from '../../functions/cancelSignalFactory';
     import updateItem from '../../functions/updateItem';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
@@ -202,6 +203,7 @@
                 this.options = options;
                 this.getItems();
             },
+            cancelGetItems: cancelSignalFactory(),
             getItems() {
                 const params = {
                     query: this.query,
@@ -212,7 +214,7 @@
 
                 this.loading = true;
                 console.time('get items');
-                api.entities.index(params).then(items => {
+                api.entities.index(params, { signal: this.cancelGetItems() }).then(items => {
                     console.timeEnd('get items');
                     console.time('render items');
                     this.items = items;
@@ -226,6 +228,7 @@
             addItem() {
                 this.editItem({
                     tags: this.queryTags,
+                    name: this.query.search,
                     values: [],
                 });
             },
