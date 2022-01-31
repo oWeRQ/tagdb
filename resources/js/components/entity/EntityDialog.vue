@@ -66,6 +66,12 @@
                     this.fetch();
                 },
             },
+            data: {
+                deep: true,
+                handler() {
+                    this.persistent = true;
+                },
+            },
         },
         methods: {
             setData(data) {
@@ -74,6 +80,9 @@
                     contents[value.field.id] = value.content;
                 }
                 this.data = { ...data, contents };
+                this.$nextTick(() => {
+                    this.persistent = false;
+                });
             },
             fetch() {
                 if (this.id) {
