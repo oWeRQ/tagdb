@@ -35,24 +35,49 @@ function apiResource(resource) {
     };
 };
 
-export default {
-    auth: {
+function entitiesResource(resource) {
+    return {
+        ...apiResource(resource),
+        destroyMany(data, config) {
+            return axios.delete(this.resource, { data, ...config });
+        },
+    };
+}
+
+function tagsResource(resource) {
+    return {
+        ...apiResource(resource),
+        attachEntities(id, data, config) {
+            return axios.post(`${this.resourceId(id)}/entities`, data, config);
+        },
+        detachEntities(id, data, config) {
+            return axios.delete(`${this.resourceId(id)}/entities`, { data, ...config });
+        },
+    };
+}
+
+function authResource(resource) {
+    return {
+        resource,
         register(data) {
-            return axios.post('/register', data, {
+            return axios.post(`${this.resource}/register`, data, {
                 headers: { Accept: 'application/json' },
             });
         },
         login(data) {
-            return axios.post('/login', data, {
+            return axios.post(`${this.resource}/login`, data, {
                 headers: { Accept: 'application/json' },
             });
         },
         logout() {
-            return axios.post('/logout');
+            return axios.post(`${this.resource}/logout`);
         },
-    },
-    account: {
-        resource: `/api/v1/account`,
+    };
+}
+
+function accountResource(resource) {
+    return {
+        resource,
         index() {
             return axios.get(this.resource).then(resolveData);
         },
@@ -67,26 +92,18 @@ export default {
         switchProject(data) {
             return axios.post(`${this.resource}/switch-project`, data);
         },
-    },
-    entities: {
-        ...apiResource(`/api/v1/entities`),
-        destroyMany(data) {
-            return axios.delete(this.resource, { data });
-        },
-    },
+    };
+}
+
+export default {
+    auth: authResource(''),
+    account: accountResource(`/api/v1/account`),
+    entities: entitiesResource(`/api/v1/entities`),
     fields: apiResource(`/api/v1/fields`),
     import: apiResource(`/api/v1/import`),
     presets: apiResource(`/api/v1/presets`),
     projects: apiResource(`/api/v1/projects`),
-    tags: {
-        ...apiResource(`/api/v1/tags`),
-        attachEntities(id, data) {
-            return axios.post(`${this.resourceId(id)}/entities`, data);
-        },
-        detachEntities(id, data) {
-            return axios.delete(`${this.resourceId(id)}/entities`, { data });
-        },
-    },
+    tags: tagsResource(`/api/v1/tags`),
     tagsImport: apiResource(`/api/v1/tags-import`),
     users: apiResource(`/api/v1/users`),
     values: apiResource(`/api/v1/values`),
