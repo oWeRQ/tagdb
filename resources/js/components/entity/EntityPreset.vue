@@ -204,6 +204,7 @@
                 this.items = [];
                 this.total = 0;
                 this.options = {};
+                this.queryTags = [];
                 this.query = {
                     tags: [],
                     filter: {},
