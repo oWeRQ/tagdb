@@ -1,7 +1,10 @@
 <template>
     <v-combobox
+        ref="combobox"
         @input="input"
+        @change="change"
         :search-input.sync="search"
+        :loading="loading"
         :value="value"
         :rules="rules"
         :items="tags"
@@ -10,11 +13,12 @@
         item-value="name"
         chips
         multiple
-        clearable
-        dense
         hide-selected
         hide-no-data
         deletable-chips
+        auto-select-first
+        :clearable="solo"
+        :dense="solo"
         :solo="solo"
         :hide-details="solo"
         :return-object="returnObject"
@@ -96,6 +100,7 @@
             return {
                 tags: [],
                 search: '',
+                loading: false,
             };
         },
         watch: {
@@ -132,9 +137,16 @@
                 const params = {
                     with_tags: this.returnObject ? allTags.map(tag => tag.name) : allTags,
                 };
+                this.loading = true;
                 api.tags.index(params).then(tags => {
                     this.tags = tags;
+                    this.loading = false;
                 });
+            },
+            change() {
+                if (!this.solo) {
+                    this.$refs.combobox.isMenuActive = false;
+                }
             },
             input(value) {
                 this.$emit('input', value.map(item => {
