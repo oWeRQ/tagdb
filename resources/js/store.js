@@ -147,6 +147,12 @@ export default new Vuex.Store({
         deletePreset({ dispatch }, preset) {
             dispatch('fetchPresets');
         },
+        createTag({ dispatch }, tag) {
+            return api.tags.store(tag).then((response) => {
+                dispatch('saveTag', response);
+                return response;
+            });
+        },
         saveTag({ dispatch }, tag) {
             dispatch('fetchTagsAndFields');
         },

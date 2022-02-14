@@ -7,6 +7,7 @@
             <v-text-field
                 placeholder="Tag"
                 v-model="search"
+                @keyup.enter="enter"
                 autofocus
                 hide-details
                 filled
@@ -18,7 +19,7 @@
             <v-card-text class="pa-0">
                 <v-list>
                     <v-list-item
-                        v-for="item in filtedTags"
+                        v-for="item in filteredTags"
                         :key="item.id"
                         @click="select(item)"
                     >
@@ -26,6 +27,13 @@
                         <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
                         <v-spacer></v-spacer>
                         <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+                    </v-list-item>
+                    <v-list-item v-if="canCreate" @click="create">
+                        <v-icon left>mdi-plus</v-icon>
+                        Create "{{ this.search }}" tag
+                    </v-list-item>
+                    <v-list-item v-else-if="!filteredTags.length">
+                        Not found
                     </v-list-item>
                 </v-list>
             </v-card-text>
@@ -49,6 +57,10 @@ export default {
         tags: {
             type: Array,
         },
+        hasCreate: {
+            type: Boolean,
+            default: false,
+        },
     },
     data() {
         return {
@@ -57,8 +69,14 @@ export default {
         };
     },
     computed: {
-        filtedTags() {
+        filteredTags() {
             return this.tags.filter(tag => fuzzyMatch(tag.name, this.search));
+        },
+        isStrictMatch() {
+            return this.$store.state.tags.some(tag => tag.name === this.search);
+        },
+        canCreate() {
+            return this.hasCreate && !this.isStrictMatch;
         },
     },
     watch: {
@@ -72,6 +90,18 @@ export default {
         select(tag) {
             this.$emit('select', tag);
             this.close();
+        },
+        enter() {
+            if (this.filteredTags.length) {
+                this.select(this.filteredTags[0]);
+            } else if (this.canCreate) {
+                this.create();
+            }
+        },
+        create() {
+            this.$store.dispatch('createTag', {
+                name: this.search,
+            }).then(tag => this.select(tag));
         },
         show() {
             this.search = '';

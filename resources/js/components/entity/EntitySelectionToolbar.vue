@@ -61,6 +61,7 @@
                     this.$root.showDialog(TagSelectDialog, {
                         title: 'Add',
                         tags,
+                        hasCreate: true,
                     }, {
                         select: this.addTag,
                     });
