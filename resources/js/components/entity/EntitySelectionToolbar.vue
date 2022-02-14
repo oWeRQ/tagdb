@@ -19,67 +19,13 @@
         <v-btn icon @click="deleteItems">
             <v-icon>mdi-delete</v-icon>
         </v-btn>
-
-        <v-dialog v-model="visibleAddTag" max-width="320px" scrollable>
-            <v-card>
-                <v-card-title>
-                    Add Tag
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text class="pa-0">
-                    <v-list>
-                        <v-list-item
-                            v-for="item in tags"
-                            :key="item.id"
-                            @click="addTag(item)"
-                        >
-                            <v-avatar :color="item.color" size="8" class="mr-2"></v-avatar>
-                            <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
-                            <v-spacer></v-spacer>
-                            <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="visibleAddTag = false">Cancel</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-
-        <v-dialog v-model="visibleRemoveTag" max-width="320px" scrollable>
-            <v-card>
-                <v-card-title>
-                    Remove Tag
-                </v-card-title>
-                <v-divider></v-divider>
-                <v-card-text class="pa-0">
-                    <v-list>
-                        <v-list-item
-                            v-for="item in availableTags"
-                            :key="item.id"
-                            @click="removeTag(item)"
-                        >
-                            <v-avatar :color="item.color" size="8" class="mr-2"></v-avatar>
-                            <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
-                            <v-spacer></v-spacer>
-                            <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-                <v-divider></v-divider>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="visibleRemoveTag = false">Cancel</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
     </v-toolbar>
 </template>
 
 <script>
     import api from '../../api';
+    import TagAddDialog from './TagAddDialog.vue';
+    import TagRemoveDialog from './TagRemoveDialog.vue';
 
     export default {
         props: {
@@ -91,13 +37,6 @@
                 type: Array,
                 default: () => [],
             },
-        },
-        data() {
-            return {
-                tags: [],
-                visibleAddTag: false,
-                visibleRemoveTag: false,
-            };
         },
         computed: {
             selectedId() {
@@ -115,19 +54,23 @@
             },
         },
         methods: {
-            fetchTags() {
+            showAddTag() {
                 api.tags.index({
                     with_tags: this.queryTagNames.filter(name => name[0] !== '-'),
-                }).then(tags => {
-                    this.tags = tags;
+                }).then((tags) => {
+                    this.$root.showDialog(TagAddDialog, {
+                        tags,
+                    }, {
+                        select: this.addTag,
+                    });
                 });
             },
-            showAddTag() {
-                this.fetchTags();
-                this.visibleAddTag = true;
-            },
             showRemoveTag() {
-                this.visibleRemoveTag = true;
+                this.$root.showDialog(TagRemoveDialog, {
+                    tags: this.availableTags,
+                }, {
+                    select: this.removeTag,
+                });
             },
             addTag(tag) {
                 api.tags.attachEntities(tag.id, { id: this.selectedId }).then(() => {
