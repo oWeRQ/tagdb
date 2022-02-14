@@ -76,7 +76,7 @@ export default {
             return this.$store.state.tags.some(tag => tag.name === this.search);
         },
         canCreate() {
-            return this.hasCreate && !this.isStrictMatch;
+            return this.hasCreate && !this.isStrictMatch && !!this.search;
         },
     },
     watch: {
