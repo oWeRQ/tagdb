@@ -41,13 +41,16 @@
             },
             availableTags() {
                 const tags = [];
+                let found;
                 for (let item of this.value) {
                     for (let tag of item.tags) {
-                        if (!tags.some(t => t.id === tag.id))
-                            tags.push(tag);
+                        if (found = tags.find(t => t.id === tag.id))
+                            found.entities_count++;
+                        else
+                            tags.push({ ...tag, entities_count: 1 });
                     }
                 }
-                return tags.sort((a, b) => a.name.localeCompare(b.name));
+                return tags.sort((a, b) => b.entities_count - a.entities_count || a.name.localeCompare(b.name));
             },
         },
         methods: {
