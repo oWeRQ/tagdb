@@ -2,13 +2,23 @@
     <v-dialog v-model="visible" max-width="320px" scrollable>
         <v-card>
             <v-card-title>
-                Add Tag
+                {{ title }}
             </v-card-title>
+            <v-text-field
+                placeholder="Tag"
+                v-model="search"
+                autofocus
+                hide-details
+                filled
+                rounded
+                dense
+                class="mx-2 mb-2"
+            ></v-text-field>
             <v-divider></v-divider>
             <v-card-text class="pa-0">
                 <v-list>
                     <v-list-item
-                        v-for="item in tags"
+                        v-for="item in filtedTags"
                         :key="item.id"
                         @click="select(item)"
                     >
@@ -29,6 +39,8 @@
 </template>
 
 <script>
+import fuzzyMatch from '../../functions/fuzzyMatch';
+
 export default {
     props: {
         title: {
@@ -41,7 +53,13 @@ export default {
     data() {
         return {
             visible: false,
+            search: '',
         };
+    },
+    computed: {
+        filtedTags() {
+            return this.tags.filter(tag => fuzzyMatch(tag.name, this.search));
+        },
     },
     watch: {
         visible(value) {
@@ -56,6 +74,7 @@ export default {
             this.close();
         },
         show() {
+            this.search = '';
             this.visible = true;
         },
         close() {

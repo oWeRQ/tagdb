@@ -4,9 +4,7 @@
             <v-icon>mdi-close</v-icon>
         </v-btn>
 
-        <v-toolbar-title>{{ value.length }} selected</v-toolbar-title>
-
-        <v-spacer></v-spacer>
+        <v-toolbar-title class="mr-6">{{ value.length }} selected</v-toolbar-title>
 
         <v-btn icon @click="showAddTag">
             <v-icon>mdi-tag-plus</v-icon>
@@ -24,8 +22,7 @@
 
 <script>
     import api from '../../api';
-    import TagAddDialog from './TagAddDialog.vue';
-    import TagRemoveDialog from './TagRemoveDialog.vue';
+    import TagSelectDialog from './TagSelectDialog.vue';
 
     export default {
         props: {
@@ -58,7 +55,8 @@
                 api.tags.index({
                     with_tags: this.queryTagNames.filter(name => name[0] !== '-'),
                 }).then((tags) => {
-                    this.$root.showDialog(TagAddDialog, {
+                    this.$root.showDialog(TagSelectDialog, {
+                        title: 'Add',
                         tags,
                     }, {
                         select: this.addTag,
@@ -66,7 +64,8 @@
                 });
             },
             showRemoveTag() {
-                this.$root.showDialog(TagRemoveDialog, {
+                this.$root.showDialog(TagSelectDialog, {
+                    title: 'Remove',
                     tags: this.availableTags,
                 }, {
                     select: this.removeTag,
