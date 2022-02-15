@@ -123,7 +123,7 @@ export default new Vuex.Store({
             });
         },
         fetchPresets({ commit }) {
-            return api.presets.index().then(presets => {
+            return api.presets.index({ sort: 'name' }).then(presets => {
                 commit('presets', presets);
             });
         },

@@ -72,11 +72,11 @@ export default {
         filteredTags() {
             return this.tags.filter(tag => fuzzyMatch(tag.name, this.search));
         },
-        isStrictMatch() {
+        isExists() {
             return this.$store.state.tags.some(tag => tag.name === this.search);
         },
         canCreate() {
-            return this.hasCreate && !this.isStrictMatch && !!this.search;
+            return this.hasCreate && !this.isExists && !!this.search.trim();
         },
     },
     watch: {

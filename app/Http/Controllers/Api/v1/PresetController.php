@@ -11,9 +11,12 @@ class PresetController extends Controller
 {
     public function index(Request $request)
     {
+        $query = Preset::query();
+        $query->sort($request->get('sort'));
+
         $perPage = $request->get('per_page', 100);
 
-        return PresetResource::collection(Preset::paginate($perPage));
+        return PresetResource::collection($query->paginate($perPage));
     }
 
     public function show($id)
