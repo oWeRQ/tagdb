@@ -24,7 +24,7 @@ class Entity extends Model
     public function __construct(array $attributes = [])
     {
         $this->setRawAttributes(array(
-            'project_id' => auth()->user()->currentProject->id,
+            'project_id' => auth()->user()->currentProjectId,
         ), true);
         parent::__construct($attributes);
     }

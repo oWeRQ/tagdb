@@ -21,12 +21,12 @@ class EntityImport implements ToCollection, WithHeadingRow
     /** @var array */
     protected $attributes;
 
-    public function __construct(Collection $tags, Collection $fields)
+    public function __construct(Collection $tags, Collection $fields, $projectId)
     {
         $this->tags = $tags;
         $this->fields = $fields;
         $this->attributes = [
-            'project_id' => auth()->user()->currentProject->id,
+            'project_id' => $projectId,
             'created_at' => DB::raw('NOW()'),
             'updated_at' => DB::raw('NOW()'),
         ];

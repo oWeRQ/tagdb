@@ -39,6 +39,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function getCurrentProjectIdAttribute() {
+        $value = $this->getAttributeFromArray('current_project_id');
+        return $value;
+    }
+
     public function currentProject()
     {
         if (is_null($this->current_project_id) && $this->id) {

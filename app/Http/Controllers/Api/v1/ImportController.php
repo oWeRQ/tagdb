@@ -15,6 +15,7 @@ class ImportController extends Controller
 {
     public function store(Request $request)
     {
+        $projectId = auth()->user()->currentProjectId;
         $importFile = $request->file('importFile');
         $tags = collect();
         $fields = collect($request->get('fields'))->map(function($field_id) {
@@ -24,7 +25,7 @@ class ImportController extends Controller
         if ($request->has('preview')) {
             $preview = $request->get('preview');
             $headings = (new HeadingRowImport)->toArray($importFile);
-            $rows = Excel::toCollection(new EntityImport($tags, $fields), $importFile)->first();
+            $rows = Excel::toCollection(new EntityImport($tags, $fields, $projectId), $importFile)->first();
             $tags = EntityImport::collectionTags($rows, $fields);
             return response([
                 'data' => [
@@ -43,6 +44,6 @@ class ImportController extends Controller
             $tags = $tags->concat(Tag::whereIn('name', $request->get('tags'))->get());
         }
 
-        Excel::import(new EntityImport($tags, $fields), $importFile);
+        Excel::import(new EntityImport($tags, $fields, $projectId), $importFile);
     }
 }
