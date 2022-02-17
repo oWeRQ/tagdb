@@ -77,7 +77,7 @@
             setData(data) {
                 const contents = {};
                 for (let value of data.values) {
-                    contents[value.field.id] = value.content;
+                    contents[value.field?.id] = value.content;
                 }
                 this.data = { ...data, contents };
                 this.$nextTick(() => {

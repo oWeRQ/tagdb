@@ -170,7 +170,7 @@
                 return this.items.map(item => {
                     const contents = {};
                     for (let value of item.values) {
-                        contents[value.field.id] = value.content;
+                        contents[value.field?.id] = value.content;
                     }
                     return { ...item, contents };
                 });
