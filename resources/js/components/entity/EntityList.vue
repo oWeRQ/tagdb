@@ -114,7 +114,7 @@
                     filter: {},
                     search: '',
                 },
-            }
+            };
         },
         computed: {
             ...mapState([
@@ -161,9 +161,6 @@
                     { text: 'Name', value: 'name', type: 'text' },
                     ...this.displayFields,
                 ];
-            },
-            sortable() {
-                return this.headers.filter(header => header.sortable !== false).map(header => header.value);
             },
             sort() {
                 return stringifySort(this.options.sortBy, this.options.sortDesc);

@@ -24,7 +24,10 @@
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title class="mr-2">{{ title }}</v-toolbar-title>
-                <v-btn icon @click="editPreset(preset)" class="mr-2">
+                <v-btn v-if="!isPreset" icon @click="addPreset" class="mr-2">
+                    <v-icon>mdi-database-plus</v-icon>
+                </v-btn>
+                <v-btn v-if="isPreset" icon @click="editPreset(preset)" class="mr-2">
                     <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
                 <TagsField
@@ -78,7 +81,9 @@
     import cloneDeep from 'clone-deep';
     import cancelSignalFactory from '../../functions/cancelSignalFactory';
     import updateItem from '../../functions/updateItem';
+    import parseSort from '../../functions/parseSort';
     import stringifySort from '../../functions/stringifySort';
+    import ucwords from '../../functions/ucwords';
 
     import EntityDialog from './EntityDialog';
     import EntityFilter from './EntityFilter';
@@ -103,9 +108,11 @@
                 loading: true,
                 total: 0,
                 items: [],
-                options: {},
+                options: {
+                    sortBy: ['created_at'],
+                    sortDesc: [true],
+                },
                 selected: [],
-                editedPreset: null,
                 queryTags: [],
                 query: {
                     tags: [],
@@ -116,18 +123,25 @@
         },
         computed: {
             ...mapState([
+                'currentProject',
                 'tags',
                 'presets',
             ]),
             title() {
-                return this.preset?.name;
+                return this.presetName;
             },
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
+            isPreset() {
+                return !!this.preset;
+            },
             preset() {
                 const name = this.$route.params.name;
                 return this.presets.find(preset => preset.name === name);
+            },
+            presetName() {
+                return this.preset?.name;
             },
             presetQuery() {
                 return (this.preset ? JSON.parse(this.preset.query) : undefined);
@@ -188,14 +202,14 @@
             exportParams() {
                 return {
                     query: JSON.stringify(this.query),
-                    preset: this.preset?.name,
+                    preset: this.presetName,
                     sort: this.sort,
                 };
             },
             importParams() {
                 return {
-                    tags: this.allQueryTagNames,
-                    preset: this.preset?.name,
+                    tags: this.queryTagNames,
+                    preset: this.presetName,
                 };
             },
         },
@@ -203,7 +217,7 @@
             preset() {
                 this.items = [];
                 this.total = 0;
-                this.options = {};
+                this.options = parseSort(this.preset.sort);
                 this.queryTags = [];
                 this.query = {
                     tags: [],
@@ -229,12 +243,9 @@
             },
             cancelGetItems: cancelSignalFactory(),
             getItems() {
-                if (!this.preset)
-                    return;
-
                 const params = {
                     query: this.query,
-                    preset: this.preset.name,
+                    preset: this.presetName,
                     sort: this.sort,
                     page: this.options.page,
                     per_page: this.options.itemsPerPage,
@@ -274,6 +285,13 @@
             deleteItem(result) {
                 this.items = this.items.filter(item => item.id !== result.id)
             },
+            addPreset() {
+                this.editPreset({
+                    name: ucwords(this.queryTagNames.join(' ')),
+                    sort: this.sort || '-created_at',
+                    query: JSON.stringify(this.query),
+                });
+            },
             editPreset(preset) {
                 this.$root.showDialog(PresetDialog, {
                     value: cloneDeep(preset),
@@ -283,7 +301,7 @@
                 });
             },
             savePreset(rawPreset) {
-                if (this.preset.name !== rawPreset.name) {
+                if (this.presetName !== rawPreset.name) {
                     this.$router.push({name: 'preset', params: { name: rawPreset.name }});
                 }
             },
