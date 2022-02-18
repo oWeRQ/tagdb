@@ -84,6 +84,7 @@
     import parseSort from '../../functions/parseSort';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
+    import isObjectChange from '../../functions/isObjectChange';
 
     import EntityDialog from './EntityDialog';
     import EntityFilter from './EntityFilter';
@@ -105,7 +106,7 @@
         },
         data() {
             return {
-                loading: true,
+                loading: false,
                 total: 0,
                 items: [],
                 options: {
@@ -214,22 +215,26 @@
             },
         },
         watch: {
-            preset() {
-                this.items = [];
-                this.total = 0;
-                this.options = parseSort(this.preset.sort);
-                this.queryTags = [];
-                this.query = {
-                    tags: [],
-                    filter: {},
-                    search: '',
-                };
+            preset: {
+                immediate: true,
+                handler() {
+                    this.items = [];
+                    this.total = 0;
+                    this.options = parseSort(this.preset?.sort);
+                    this.queryTags = [];
+                    this.query = {
+                        tags: [],
+                        filter: {},
+                        search: '',
+                    };
+                },
             },
             queryTags() {
                 this.query.tags = this.queryTagNames;
             },
             query: {
                 deep: true,
+                immediate: true,
                 handler: 'getItems',
             },
         },
@@ -239,7 +244,9 @@
             },
             updateOptions(options) {
                 this.options = options;
-                this.getItems();
+                if (isObjectChange(this.options, options)) {
+                    this.getItems();
+                }
             },
             cancelGetItems: cancelSignalFactory(),
             getItems() {

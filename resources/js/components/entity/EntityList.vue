@@ -79,6 +79,7 @@
     import updateItem from '../../functions/updateItem';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
+    import isObjectChange from '../../functions/isObjectChange';
 
     import EntityDialog from './EntityDialog';
     import EntityFilter from './EntityFilter';
@@ -192,13 +193,18 @@
                 handler: 'getItems',
             },
         },
+        mounted() {
+            this.getItems();
+        },
         methods: {
             addQueryTag(tag) {
                 this.queryTags.push(tag);
             },
             updateOptions(options) {
                 this.options = options;
-                this.getItems();
+                if (isObjectChange(this.options, options)) {
+                    this.getItems();
+                }
             },
             cancelGetItems: cancelSignalFactory(),
             getItems() {
