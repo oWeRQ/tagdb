@@ -201,8 +201,9 @@
                 this.queryTags.push(tag);
             },
             updateOptions(options) {
+                const isChange = isObjectChange(this.options, options);
                 this.options = options;
-                if (isObjectChange(this.options, options)) {
+                if (isChange) {
                     this.getItems();
                 }
             },
