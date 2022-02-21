@@ -58,7 +58,6 @@
 
 <script>
     import api from '../../api';
-    import cloneDeep from 'clone-deep';
     import updateItem from '../../functions/updateItem';
     import date from '../../functions/date';
     import stringifySort from '../../functions/stringifySort';
@@ -129,7 +128,7 @@
             },
             editItem(item) {
                 this.$root.showDialog(TagDialog, {
-                    value: cloneDeep(item),
+                    value: item,
                 }, {
                     input: this.saveItem,
                     delete: this.deleteItem,
@@ -143,7 +142,7 @@
             },
             editField(item) {
                 this.$root.showDialog(FieldDialog, {
-                    value: cloneDeep(item),
+                    value: item,
                 }, {
                     input: this.getItems,
                     delete: this.getItems,

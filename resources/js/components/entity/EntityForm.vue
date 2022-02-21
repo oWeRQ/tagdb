@@ -102,7 +102,6 @@
 </template>
 
 <script>
-    import cloneDeep from 'clone-deep';
     import FieldDialog from '../field/FieldDialog';
     import TagDialog from '../tag/TagDialog';
     import TagsField from './TagsField';
@@ -143,7 +142,7 @@
             showTag(tag) {
                 this.originalTag = tag;
                 this.$root.showDialog(TagDialog, {
-                    value: cloneDeep(tag),
+                    value: tag,
                 }, {
                     input: this.saveTag,
                     delete: this.deleteTag,
@@ -165,7 +164,7 @@
             },
             editField(field) {
                 this.$root.showDialog(FieldDialog, {
-                    value: cloneDeep(field),
+                    value: field,
                 }, {
                     input: this.saveField,
                 });

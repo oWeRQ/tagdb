@@ -70,7 +70,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import cloneDeep from 'clone-deep';
 import api from '../../api';
 import toFormData from '../../functions/toFormData';
 import makeCode from '../../functions/makeCode';
@@ -142,7 +141,7 @@ export default {
         },
         editField(field) {
             this.$root.showDialog(FieldDialog, {
-                value: cloneDeep(field),
+                value: field,
             }, {
                 input: (result) => {
                     this.fieldsMap[field.name] = result.id;
@@ -159,7 +158,7 @@ export default {
         },
         editTag(tag) {
             this.$root.showDialog(TagDialog, {
-                value: cloneDeep(tag),
+                value: tag,
             }, {
                 input: this.saveTag,
                 delete: this.deleteTag,

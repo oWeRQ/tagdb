@@ -55,7 +55,6 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import cloneDeep from 'clone-deep';
 import ProjectDialog from '../project/ProjectDialog.vue';
 
 export default {
@@ -83,7 +82,7 @@ export default {
         editProject(item) {
             this.$root.showDialog(ProjectDialog, {
                 deletable: this.projectDeletable,
-                value: cloneDeep(item),
+                value: item,
             }, {
                 input: this.saveProject,
                 delete: this.deleteProject,

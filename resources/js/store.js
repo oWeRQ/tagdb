@@ -92,7 +92,7 @@ export default new Vuex.Store({
             });
         },
         switchProject({ dispatch, commit }, project) {
-            commit('currentProject', project)
+            commit('currentProject', project);
             return api.account.switchProject(project).then(response => {
                 dispatch('fetchProjectData');
                 dispatch('reloadContent');

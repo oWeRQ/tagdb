@@ -78,7 +78,6 @@
 <script>
     import { mapState } from 'vuex';
     import api from '../../api';
-    import cloneDeep from 'clone-deep';
     import cancelSignalFactory from '../../functions/cancelSignalFactory';
     import updateItem from '../../functions/updateItem';
     import parseSort from '../../functions/parseSort';
@@ -285,7 +284,7 @@
             },
             editPreset(preset) {
                 this.$root.showDialog(PresetDialog, {
-                    value: cloneDeep(preset),
+                    value: preset,
                 }, {
                     input: this.savePreset,
                     delete: this.deletePreset,
