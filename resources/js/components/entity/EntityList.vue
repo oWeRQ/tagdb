@@ -19,17 +19,21 @@
             <EntitySelectionToolbar v-if="selected.length"
                 v-model="selected"
                 @update="getItems"
-                :query-tag-names="queryTagNames"
+                :query-tag-names="allQueryTagNames"
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
                 <v-toolbar-title class="mr-2">{{ title }}</v-toolbar-title>
-                <v-btn icon @click="addPreset" class="mr-2">
+                <v-btn v-if="!isPreset" icon @click="addPreset" class="mr-2">
                     <v-icon>mdi-database-plus</v-icon>
+                </v-btn>
+                <v-btn v-if="isPreset" icon @click="editPreset(preset)" class="mr-2">
+                    <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
                 <TagsField
                     v-model="queryTags"
                     return-object
+                    :hidden-tags="presetQueryTags"
                     solo
                     hyphen
                     class="shrink mr-2"
@@ -44,7 +48,7 @@
         </template>
         <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
             <EntityRow
-                :tags="queryTagNames"
+                :tags="allQueryTagNames"
                 @click:tag="addQueryTag"
                 :item="item"
                 :headers="headers"
@@ -77,6 +81,7 @@
     import cloneDeep from 'clone-deep';
     import cancelSignalFactory from '../../functions/cancelSignalFactory';
     import updateItem from '../../functions/updateItem';
+    import parseSort from '../../functions/parseSort';
     import stringifySort from '../../functions/stringifySort';
     import ucwords from '../../functions/ucwords';
     import isObjectChange from '../../functions/isObjectChange';
@@ -101,7 +106,7 @@
         },
         data() {
             return {
-                loading: true,
+                loading: false,
                 total: 0,
                 items: [],
                 options: {
@@ -121,15 +126,38 @@
             ...mapState([
                 'currentProject',
                 'tags',
+                'presets',
             ]),
             title() {
-                return this.currentProject?.name;
+                return (this.isPreset ? this.presetName : this.currentProject?.name);
             },
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
+            isPreset() {
+                return !!this.preset;
+            },
+            preset() {
+                const name = this.$route.params.name;
+                return this.presets.find(preset => preset.name === name);
+            },
+            presetName() {
+                return this.preset?.name;
+            },
+            presetQuery() {
+                return (this.preset ? JSON.parse(this.preset.query) : undefined);
+            },
+            presetQueryTagNames() {
+                return (this.presetQuery ? this.presetQuery.tags : []);
+            },
+            presetQueryTags() {
+                return this.tags.filter(tag => this.presetQueryTagNames.includes(tag.name));
+            },
+            allQueryTagNames() {
+                return this.presetQueryTagNames.concat(this.queryTagNames);
+            },
             allQueryTags() {
-                return this.queryTags.filter(tag => tag.name[0] !== '-');
+                return this.tags.filter(tag => this.allQueryTagNames.includes(tag.name));
             },
             queryTagNames() {
                 return this.queryTags.map(tag => tag.name);
@@ -166,25 +194,22 @@
             sort() {
                 return stringifySort(this.options.sortBy, this.options.sortDesc);
             },
-            exportHeaders() {
-                return this.headers.slice(0, -2);
-            },
-            exportFilename() {
-                return (this.queryTagNames.join(' ') || this.title);
-            },
-            exportParams() {
-                return {
-                    query: JSON.stringify(this.query),
-                    sort: this.sort,
-                };
-            },
-            importParams() {
-                return {
-                    tags: this.queryTagNames,
-                };
-            },
         },
         watch: {
+            preset: {
+                immediate: true,
+                handler() {
+                    this.items = [];
+                    this.total = 0;
+                    this.options = parseSort(this.preset?.sort);
+                    this.queryTags = [];
+                    this.query = {
+                        tags: [],
+                        filter: {},
+                        search: '',
+                    };
+                },
+            },
             queryTags() {
                 this.query.tags = this.queryTagNames;
             },
@@ -211,6 +236,7 @@
             getItems() {
                 const params = {
                     query: this.query,
+                    preset: this.presetName,
                     sort: this.sort,
                     page: this.options.page,
                     per_page: this.options.itemsPerPage,
@@ -231,7 +257,7 @@
             },
             addItem() {
                 this.editItem({
-                    tags: this.queryTags,
+                    tags: this.allQueryTags,
                     name: this.query.search,
                     values: [],
                 });
@@ -266,21 +292,30 @@
                 });
             },
             savePreset(rawPreset) {
-                this.$router.push({name: 'preset', params: { name: rawPreset.name }});
+                if (this.presetName !== rawPreset.name) {
+                    this.$router.push({name: 'preset', params: { name: rawPreset.name }});
+                }
             },
             deletePreset() {
                 this.$router.push({name: 'index'});
             },
             showExport() {
                 this.$root.showDialog(ExportDialog, {
-                    filename: this.exportFilename,
-                    headers: this.exportHeaders,
-                    params: this.exportParams,
+                    filename: this.title + (this.queryTagNames.length ? ' - ' + ucwords(this.queryTagNames.join(' ')) : ''),
+                    headers: this.headers.slice(0, -2),
+                    params: {
+                        query: JSON.stringify(this.query),
+                        preset: this.presetName,
+                        sort: this.sort,
+                    },
                 });
             },
             showImport() {
                 this.$root.showDialog(ImportDialog, {
-                    params: this.importParams,
+                    params: {
+                        tags: this.queryTagNames,
+                        preset: this.presetName,
+                    },
                 }, {
                     done: this.getItems,
                 });

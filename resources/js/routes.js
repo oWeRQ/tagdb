@@ -1,5 +1,4 @@
 import EntityList from './components/entity/EntityList.vue';
-import EntityPreset from './components/entity/EntityPreset.vue';
 import TagList from './components/tag/TagList.vue';
 import FieldList from './components/field/FieldList.vue';
 import Crud from './components/crud/CrudList.vue';
@@ -17,7 +16,7 @@ export default [
     {
         path: '/presets/:name',
         name: 'preset',
-        component: EntityPreset,
+        component: EntityList,
     },
     {
         path: '/tags',
