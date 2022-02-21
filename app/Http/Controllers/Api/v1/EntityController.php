@@ -37,7 +37,7 @@ class EntityController extends Controller
 
     public function show($id)
     {
-        return new EntityResource(Entity::find($id));
+        return new EntityResource(Entity::findOrFail($id));
     }
 
     public function store(Request $request)

@@ -151,7 +151,9 @@
             input(value) {
                 this.$emit('input', value.map(item => {
                     if (this.returnObject && typeof item === 'string') {
-                        return this.tags.find(tag => tag.name === item) || { name: item, fields: [] };
+                        const name = item.replace(/^[+-]/, '');
+                        const tag = this.tags.find(tag => tag.name === name);
+                        return { ...tag, name: item } || { name: item, fields: [] };
                     }
 
                     return item;
