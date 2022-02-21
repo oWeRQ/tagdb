@@ -88,7 +88,9 @@
                 if (this.id) {
                     api.entities.show(this.id).then(this.setData).catch(error => {
                         if (error.response?.status === 404) {
-                            this.setData({ ...data, id: undefined });
+                            this.$emit('delete', this.data);
+                            this.$store.dispatch('deleteEntity', this.data);
+                            this.setData({ ...this.data, id: undefined });
                         }
                     });
                 }
