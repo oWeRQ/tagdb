@@ -153,7 +153,7 @@
                     if (this.returnObject && typeof item === 'string') {
                         const name = item.replace(/^[+-]/, '');
                         const tag = this.tags.find(tag => tag.name === name);
-                        return { ...tag, name: item } || { name: item, fields: [] };
+                        return { fields: [], ...tag, name: item };
                     }
 
                     return item;
