@@ -156,7 +156,7 @@
                 return this.presetQueryTagNames.concat(this.queryTagNames);
             },
             allQueryTags() {
-                return this.tags.filter(tag => this.allQueryTagNames.includes(tag.name));
+                return this.presetQueryTags.concat(this.queryTags).filter(tag => tag.name[0] !== '-');
             },
             queryTagNames() {
                 return this.queryTags.map(tag => tag.name);
