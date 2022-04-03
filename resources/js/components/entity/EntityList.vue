@@ -33,7 +33,7 @@
                 <TagsField
                     v-model="queryTags"
                     return-object
-                    :hidden-tags="presetQueryTags"
+                    :hidden-tags="presetQueryTagNames"
                     solo
                     hyphen
                     class="shrink mr-2"
