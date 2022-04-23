@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\Entity;
 use App\Field;
 use App\Http\Resources\FieldResource;
 use Illuminate\Routing\Controller;
@@ -35,6 +36,20 @@ class FieldController extends Controller
         $field->update($request->all());
 
         return new FieldResource($field);
+    }
+
+    public function updateValues(Request $request, $id)
+    {
+        $field = Field::findOrFail($id);
+        $contents = [
+            $field->id => $request->get('content'),
+        ];
+
+        Entity::find($request->get('id'))->each(function($entity) use($contents) {
+            $entity->updateContents($contents);
+        });
+
+        return response()->noContent();
     }
 
     public function destroy($id)

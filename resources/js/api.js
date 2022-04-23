@@ -33,13 +33,22 @@ function apiResource(resource) {
             return axios.delete(this.resourceId(id), config);
         },
     };
-};
+}
 
 function entitiesResource(resource) {
     return {
         ...apiResource(resource),
         destroyMany(data, config) {
             return axios.delete(this.resource, { data, ...config });
+        },
+    };
+}
+
+function fieldsResource(resource) {
+    return {
+        ...apiResource(resource),
+        updateValues(id, data, config) {
+            return axios.put(`${this.resourceId(id)}/values`, data, config);
         },
     };
 }
@@ -99,7 +108,7 @@ export default {
     auth: authResource(''),
     account: accountResource(`/api/v1/account`),
     entities: entitiesResource(`/api/v1/entities`),
-    fields: apiResource(`/api/v1/fields`),
+    fields: fieldsResource(`/api/v1/fields`),
     import: apiResource(`/api/v1/import`),
     presets: apiResource(`/api/v1/presets`),
     projects: apiResource(`/api/v1/projects`),

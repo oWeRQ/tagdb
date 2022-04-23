@@ -14,6 +14,10 @@
             <v-icon>mdi-tag-minus</v-icon>
         </v-btn>
 
+        <v-btn icon @click="showUpdateValues">
+            <v-icon>mdi-form-textbox</v-icon>
+        </v-btn>
+
         <v-btn icon @click="deleteItems">
             <v-icon>mdi-delete</v-icon>
         </v-btn>
@@ -23,6 +27,7 @@
 <script>
     import api from '../../api';
     import TagSelectDialog from './TagSelectDialog.vue';
+    import UpdateValuesDialog from './UpdateValuesDialog.vue';
 
     export default {
         props: {
@@ -75,25 +80,28 @@
                     select: this.removeTag,
                 });
             },
-            addTag(tag) {
-                api.tags.attachEntities(tag.id, { id: this.selectedId }).then(() => {
-                    this.$emit('update');
-                    this.$emit('input', []);
+            showUpdateValues() {
+                this.$root.showDialog(UpdateValuesDialog, {
+                    selectedId: this.selectedId,
+                    queryTagNames: this.queryTagNames,
+                }, {
+                    done: this.done,
                 });
             },
+            addTag(tag) {
+                api.tags.attachEntities(tag.id, { id: this.selectedId }).then(this.done);
+            },
             removeTag(tag) {
-                api.tags.detachEntities(tag.id, { id: this.selectedId }).then(() => {
-                    this.$emit('update');
-                    this.$emit('input', []);
-                });
+                api.tags.detachEntities(tag.id, { id: this.selectedId }).then(this.done);
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {
-                    api.entities.destroyMany({ id: this.selectedId }).then(() => {
-                        this.$emit('update');
-                        this.$emit('input', []);
-                    });
+                    api.entities.destroyMany({ id: this.selectedId }).then(this.done);
                 });
+            },
+            done() {
+                this.$emit('update');
+                this.$emit('input', []);
             },
         },
     }
