@@ -93,7 +93,7 @@
         },
         methods: {
             fieldFilter(item, queryText) {
-                return fuzzyMatch(`${item.tag?.name} ${item.name}`, queryText);
+                return fuzzyMatch(queryText, `${item.tag?.name} ${item.name}`);
             },
             show() {
                 this.field = this.fieldItems[0];

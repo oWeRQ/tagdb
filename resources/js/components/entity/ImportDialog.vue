@@ -127,7 +127,7 @@ export default {
     },
     methods: {
         fieldFilter(item, queryText) {
-            return fuzzyMatch(`${item.tag?.name} ${item.name}`, queryText);
+            return fuzzyMatch(queryText, `${item.tag?.name} ${item.name}`);
         },
         updatePreviewTags() {
             this.previewTags = this.previewData.tags.map(name => (this.tags.find(tag => tag.name === name) || { name, id: null, color: null, fields: [] }));

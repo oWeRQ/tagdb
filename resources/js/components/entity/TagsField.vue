@@ -7,10 +7,11 @@
         :loading="loading"
         :value="value"
         :rules="rules"
-        :items="tags"
+        :items="filteredTags"
         :label="label"
         item-text="name"
         item-value="name"
+        no-filter
         chips
         multiple
         hide-selected
@@ -48,6 +49,7 @@
 
 <script>
     import api from '../../api';
+    import fuzzyFilter from '../../functions/fuzzyFilter';
 
     function toggleHyphen(value) {
         if (value[0] === '-') {
@@ -102,6 +104,11 @@
                 search: '',
                 loading: false,
             };
+        },
+        computed: {
+            filteredTags() {
+                return fuzzyFilter(this.search, this.tags, 'name');
+            },
         },
         watch: {
             hiddenTags: 'fetchTags',

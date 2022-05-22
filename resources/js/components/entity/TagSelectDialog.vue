@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import fuzzyMatch from '../../functions/fuzzyMatch';
+import fuzzyFilter from '../../functions/fuzzyFilter';
 
 export default {
     props: {
@@ -70,7 +70,7 @@ export default {
     },
     computed: {
         filteredTags() {
-            return this.tags.filter(tag => fuzzyMatch(tag.name, this.search));
+            return fuzzyFilter(this.search, this.tags, 'name');
         },
         isExists() {
             return this.$store.state.tags.some(tag => tag.name === this.search);
