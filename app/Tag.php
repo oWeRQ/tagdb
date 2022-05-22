@@ -26,6 +26,13 @@ class Tag extends Model
         static::addGlobalScope(new ProjectScope);
     }
 
+    public static function fromNames($names)
+    {
+        return collect($names)->map(function($name) {
+            return static::firstOrCreate(['name' => $name]);
+        });
+    }
+
     public static function parseString($tagsString)
     {
         return preg_split('/\s*,\s*/', trim($tagsString), -1, PREG_SPLIT_NO_EMPTY);

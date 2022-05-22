@@ -35,9 +35,10 @@ class EntityImport implements ToCollection, WithHeadingRow
     public static function collectionTags(Collection $rows, Collection $fields)
     {
         $tagsField = $fields->filter(fn($field) => is_string($field))->flip()->get('tags', 'Tags');
-        return $rows->flatMap(function($row) use($tagsField) {
+        $tagNames = $rows->flatMap(function($row) use($tagsField) {
             return Tag::parseString($row->get($tagsField));
         })->unique();
+        return Tag::fromNames($tagNames);
     }
 
     public function createEntity($attributes, $tags, $contents)
@@ -58,9 +59,7 @@ class EntityImport implements ToCollection, WithHeadingRow
     {
         $importTags = $this->tags->pluck('id')->values();
 
-        $tags = static::collectionTags($rows, $this->fields)->map(function($name) {
-            return Tag::firstOrCreate(['name' => $name]);
-        });
+        $tags = static::collectionTags($rows, $this->fields);
         $tagsByName = $tags->pluck('id', 'name');
 
         foreach ($rows as $row) {

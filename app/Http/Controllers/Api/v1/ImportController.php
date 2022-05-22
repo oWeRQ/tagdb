@@ -41,7 +41,7 @@ class ImportController extends Controller
         }
 
         if ($request->has('tags')) {
-            $tags = $tags->concat(Tag::whereIn('name', $request->get('tags'))->get());
+            $tags = $tags->concat(Tag::fromNames($request->get('tags')));
         }
 
         Excel::import(new EntityImport($tags, $fields, $projectId), $importFile);
