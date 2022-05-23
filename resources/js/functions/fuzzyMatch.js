@@ -1,7 +1,23 @@
 import memoize from './memoize';
 
+const escapeChars = {
+    '\\': '\\\\',
+    '?': '\\?',
+    '*': '\\*',
+    '+': '\\+',
+    '.': '\\.',
+    '[': '\\[',
+    ']': '\\]',
+    '(': '\\(',
+    ')': '\\)',
+    '<': '\\<',
+    '>': '\\>',
+    '{': '\\{',
+    '}': '\\}',
+};
+
 const patternRegExp = memoize(pattern => {
-    return new RegExp('(.?)' + pattern.split('').join('(.*?)') + '(.?)', 'i');
+    return new RegExp('(.?)' + pattern.split('').map(chr => escapeChars[chr] || chr).join('(.*?)') + '(.?)', 'i');
 });
 
 export default function(pattern, str) {
