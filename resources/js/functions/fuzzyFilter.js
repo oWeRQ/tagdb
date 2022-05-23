@@ -1,9 +1,8 @@
 import fuzzyMatch from './fuzzyMatch';
 
 export default function(pattern, arr, prop) {
-    if (!pattern)
-        return arr;
-
-    const result = arr.filter(item => fuzzyMatch(pattern, item[prop]));
-    return [...result].sort((a, b) => a[prop].length - b[prop].length);
+    return arr.map(obj => ({
+        obj,
+        match: fuzzyMatch(pattern, obj[prop]),
+    })).filter(item => item.match > 0).sort((a, b) => b.match - a.match).map(item => item.obj);
 }
