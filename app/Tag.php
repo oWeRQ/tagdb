@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use App\Scopes\ProjectScope;
 
 class Tag extends Model
@@ -48,19 +49,30 @@ class Tag extends Model
         return $this->hasMany('App\Field');
     }
 
-    public function scopeSort($query, $sort = null)
+    protected function escapeLike($value)
+    {
+        return preg_replace('/[%_]/', '\\\\$0', $value);
+    }
+
+    public function scopeSearch(Builder $builder, $search)
+    {
+        if ($search == '')
+            return;
+
+        $builder->where('name', 'like', '%'.$this->escapeLike($search).'%');
+    }
+
+    public function scopeSort(Builder $builder, $sort = null)
     {
         if (!$sort)
-            return $query->orderBy('entities_count', 'desc')->orderBy('name', 'asc');
+            return $builder->orderBy('entities_count', 'desc')->orderBy('name', 'asc');
 
         foreach (explode(',', $sort) as $i => $part) {
             $column = explode('.', trim($part, '+-'));
             $direction = $part[0] === '-' ? 'desc' : 'asc';
 
-            $query->orderBy($column[0], $direction);
+            $builder->orderBy($column[0], $direction);
         }
-
-        return $query;
     }
 
     public function updateFields(array $fields = null)

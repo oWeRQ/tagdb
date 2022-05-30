@@ -132,9 +132,9 @@ class Entity extends Model
         }
     }
 
-    public function scopeSearch(Builder $builder, $search = null)
+    public function scopeSearch(Builder $builder, $search)
     {
-        if (!$search)
+        if ($search == '')
             return;
 
         $builder->where('name', 'like', '%'.$this->escapeLike($search).'%')->orWhereHas('values', function($builder) use($search) {

@@ -14,7 +14,8 @@
     >
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
-                <v-toolbar-title v-title>Tags</v-toolbar-title>
+                <v-toolbar-title class="mr-2" v-title>Tags</v-toolbar-title>
+                <EntitySearch v-model="search"></EntitySearch>
             </v-toolbar>
         </template>
         <template v-slot:item.name="{ item }">
@@ -66,10 +67,12 @@
     import TagDialog from './TagDialog.vue';
     import TagImportDialog from './TagImportDialog.vue';
     import FieldDialog from '../field/FieldDialog.vue';
+    import EntitySearch from '../entity/EntitySearch.vue';
 
     export default {
         components: {
             TagChip,
+            EntitySearch,
         },
         filters: {
             date,
@@ -77,6 +80,7 @@
         data() {
             return {
                 loading: true,
+                search: '',
                 total: 0,
                 items: [],
                 options: {
@@ -103,11 +107,13 @@
             },
         },
         watch: {
+            search: 'getItems',
             options: 'getItems',
         },
         methods: {
             getItems() {
                 const params = {
+                    search: this.search,
                     sort: this.sort,
                     page: this.options.page,
                     per_page: this.options.itemsPerPage,

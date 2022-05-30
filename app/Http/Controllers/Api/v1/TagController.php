@@ -25,6 +25,7 @@ class TagController extends Controller
             }, $with_tags));
         }
 
+        $query->search($request->get('search'));
         $query->sort($request->get('sort'));
 
         if ($export = $request->get('export')) {
