@@ -23,7 +23,7 @@
                 class="flex-grow-0"
             ></EntitySelectionToolbar>
             <v-toolbar v-show="!selected.length" flat color="white" class="flex-grow-0">
-                <v-toolbar-title class="mr-2">{{ title }}</v-toolbar-title>
+                <v-toolbar-title class="mr-2" v-title>{{ title }}</v-toolbar-title>
                 <v-btn v-if="!isPreset" icon @click="addPreset" class="mr-2">
                     <v-icon>mdi-database-plus</v-icon>
                 </v-btn>

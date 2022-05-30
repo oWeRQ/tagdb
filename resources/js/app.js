@@ -11,6 +11,10 @@ import AuthDialog from './components/common/AuthDialog.vue';
 import ConfirmDialog from './components/common/ConfirmDialog.vue';
 import DialogStack from './components/common/DialogStack.vue';
 
+import title from './directives/title';
+
+Vue.directive('title', title);
+
 const app = new Vue({
     store,
     router,

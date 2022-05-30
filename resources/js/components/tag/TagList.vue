@@ -14,7 +14,7 @@
     >
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
-                <v-toolbar-title>Tags</v-toolbar-title>
+                <v-toolbar-title v-title>Tags</v-toolbar-title>
             </v-toolbar>
         </template>
         <template v-slot:item.name="{ item }">
