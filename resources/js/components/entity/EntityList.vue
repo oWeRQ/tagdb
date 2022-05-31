@@ -114,11 +114,7 @@
                 },
                 selected: [],
                 queryTags: [],
-                query: {
-                    tags: [],
-                    filter: {},
-                    search: '',
-                },
+                query: this.defaultQuery(),
             };
         },
         computed: {
@@ -142,6 +138,12 @@
             },
             presetName() {
                 return this.preset?.name;
+            },
+            routeQuery() {
+                return {
+                    ...this.defaultQuery(),
+                    ...(this.$route.query.query ? JSON.parse(this.$route.query.query) : undefined),
+                };
             },
             presetQuery() {
                 return (this.preset ? JSON.parse(this.preset.query) : undefined);
@@ -196,31 +198,45 @@
         },
         watch: {
             preset: {
-                immediate: true,
                 handler() {
-                    this.items = [];
-                    this.total = 0;
-                    this.options = parseSort(this.preset?.sort);
+                    this.resetItems();
                     this.queryTags = [];
-                    this.query = {
-                        tags: [],
-                        filter: {},
-                        search: '',
-                    };
+                    this.query = this.defaultQuery();
                 },
+            },
+            tags() {
+                this.queryTags = this.tags.filter(tag => this.query.tags.includes(tag.name));
             },
             queryTags() {
                 this.query.tags = this.queryTagNames;
             },
             query: {
                 deep: true,
-                handler: 'getItems',
+                handler() {
+                    this.pushQuery(this.query, this.presetName);
+                    this.getItems();
+                },
             },
         },
         mounted() {
-            this.getItems();
+            this.query = this.routeQuery;
         },
         methods: {
+            defaultQuery() {
+                return {
+                    tags: [],
+                    filter: {},
+                    search: '',
+                };
+            },
+            pushQuery(query, presetName = null) {
+                const route = (presetName ? {name: 'preset', params: { name: presetName }} : {name: 'index'});
+                this.pushState({...route, query: {query: JSON.stringify(query)}})
+            },
+            pushState(route) {
+                const { href } = this.$router.resolve(route);
+                window.history.pushState({}, null, href);
+            },
             addQueryTag(tag) {
                 this.queryTags.push(tag);
             },
@@ -253,6 +269,11 @@
                         console.timeEnd('render items');
                     });
                 });
+            },
+            resetItems() {
+                this.items = [];
+                this.total = 0;
+                this.options = parseSort(this.preset?.sort);
             },
             addItem() {
                 this.editItem({
