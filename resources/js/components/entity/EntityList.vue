@@ -30,17 +30,11 @@
                 <v-btn v-if="isPreset" icon @click="editPreset(preset)" class="mr-2">
                     <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
-                <TagsField
-                    v-model="queryTags"
-                    return-object
+                <EntityQuery
+                    v-model="query"
                     :hidden-tags="presetQueryTagNames"
-                    solo
-                    hyphen
-                    class="shrink mr-2"
-                    prepend-inner-icon="mdi-tag-multiple-outline"
-                ></TagsField>
-                <EntityFilter v-model="query.filter" :fields="filterFields"></EntityFilter>
-                <EntitySearch v-model="query.search"></EntitySearch>
+                    :fields="filterFields"
+                ></EntityQuery>
                 <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
@@ -86,22 +80,18 @@
     import isObjectChange from '../../functions/isObjectChange';
 
     import EntityDialog from './EntityDialog';
-    import EntityFilter from './EntityFilter';
+    import EntityQuery from './EntityQuery';
     import EntityRow from './EntityRow';
-    import EntitySearch from './EntitySearch';
     import EntitySelectionToolbar from './EntitySelectionToolbar';
     import ExportDialog from './ExportDialog';
     import ImportDialog from './ImportDialog';
     import PresetDialog from '../preset/PresetDialog';
-    import TagsField from './TagsField';
 
     export default {
         components: {
-            EntityFilter,
             EntityRow,
-            EntitySearch,
+            EntityQuery,
             EntitySelectionToolbar,
-            TagsField,
         },
         data() {
             return {
@@ -113,7 +103,6 @@
                     sortDesc: [true],
                 },
                 selected: [],
-                queryTags: [],
                 query: this.defaultQuery(),
             };
         },
@@ -160,8 +149,11 @@
             allQueryTags() {
                 return this.presetQueryTags.concat(this.queryTags).filter(tag => tag.name[0] !== '-');
             },
+            queryTags() {
+                return this.tags.filter(tag => this.queryTagNames.includes(tag.name));
+            },
             queryTagNames() {
-                return this.queryTags.map(tag => tag.name);
+                return this.query.tags;
             },
             displayFields() {
                 return this.allQueryTags.flatMap(item => item.fields).map((field) => {
@@ -200,15 +192,8 @@
             preset: {
                 handler() {
                     this.resetItems();
-                    this.queryTags = [];
                     this.query = this.defaultQuery();
                 },
-            },
-            tags() {
-                this.queryTags = this.tags.filter(tag => this.query.tags.includes(tag.name));
-            },
-            queryTags() {
-                this.query.tags = this.queryTagNames;
             },
             query: {
                 deep: true,
@@ -238,7 +223,7 @@
                 window.history.pushState({}, null, href);
             },
             addQueryTag(tag) {
-                this.queryTags.push(tag);
+                this.query.tags.push(tag.name);
             },
             updateOptions(options) {
                 const isChange = isObjectChange(this.options, options);
