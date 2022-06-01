@@ -161,6 +161,9 @@
             queryTagNames() {
                 return this.queryTags.map(tag => tag.name);
             },
+            queryTagsString() {
+                return ucwords(this.queryTagNames.join(' ')).replace(/\B-/g, 'Without ');
+            },
             displayFields() {
                 return this.allQueryTags.flatMap(item => item.fields).map((field) => {
                     return { text: field.name, value: 'contents.' + field.id, type: field.type };
@@ -277,7 +280,7 @@
             },
             addPreset() {
                 this.editPreset({
-                    name: ucwords(this.queryTagNames.join(' ')),
+                    name: this.queryTagsString,
                     sort: this.sort || '-created_at',
                     query: JSON.stringify(this.query),
                 });
@@ -300,7 +303,7 @@
             },
             showExport() {
                 this.$root.showDialog(ExportDialog, {
-                    filename: this.title + (this.queryTagNames.length ? ' - ' + ucwords(this.queryTagNames.join(' ')) : ''),
+                    filename: this.title + (this.queryTagsString && ' - ' + this.queryTagsString),
                     headers: this.headers.slice(0, -2),
                     params: {
                         query: JSON.stringify(this.query),
