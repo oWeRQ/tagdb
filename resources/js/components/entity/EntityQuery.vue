@@ -1,8 +1,8 @@
 <template>
-    <div class="d-flex">
+    <div class="d-flex align-center">
         <TagsField
-            :value="queryTags"
-            @input="updateQueryTags"
+            v-model="tags"
+            @input="onInput"
             return-object
             :hidden-tags="hiddenTags"
             solo
@@ -10,8 +10,8 @@
             class="shrink mr-2"
             prepend-inner-icon="mdi-tag-multiple-outline"
         ></TagsField>
-        <EntityFilter v-model="query.filter" :fields="fields"></EntityFilter>
-        <EntitySearch v-model="query.search"></EntitySearch>
+        <EntityFilter v-model="filter" @input="onInput" :fields="fields"></EntityFilter>
+        <EntitySearch v-model="search" @input="onInput"></EntitySearch>
     </div>
 </template>
 
@@ -44,41 +44,38 @@
         },
         data() {
             return {
-                query: this.defaultQuery(),
-                queryTags: [],
+                tags: [],
+                filter: {},
+                search: '',
             };
         },
         computed: {
-            ...mapState([
-                'tags',
-            ]),
+            ...mapState({
+                allTags: 'tags',
+            }),
         },
         watch: {
-            value() {
-                console.log('prop value', this.value);
-                this.query = this.value;
+            value(query) {
+                this.tags = query.tags.map(this.getTag);
+                this.filter = query.filter;
+                this.search = query.search;
             },
-            tags() {
-                this.fetchQueryTags();
-            },
-            'query.tags'() {
-                this.fetchQueryTags();
+            allTags() {
+                this.tags = this.tags.map(tag => this.getTag(tag.name));
             },
         },
         methods: {
-            defaultQuery() {
-                return {
-                    tags: [],
-                    filter: {},
-                    search: '',
-                };
+            getTag(item) {
+                const name = item.replace(/^[+-]/, '');
+                const tag = this.allTags.find(tag => tag.name === name);
+                return { fields: [], ...tag, name: item };
             },
-            fetchQueryTags() {
-                this.queryTags = this.tags.filter(tag => this.query.tags.includes(tag.name));
-            },
-            updateQueryTags(value) {
-                this.queryTags = value;
-                this.query.tags = this.queryTags.map(tag => tag.name);
+            onInput() {
+                this.$emit('input', {
+                    tags: this.tags.map(tag => tag.name),
+                    filter: this.filter,
+                    search: this.search,
+                });
             },
         },
     };

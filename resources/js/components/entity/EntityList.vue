@@ -192,11 +192,10 @@
             preset: {
                 handler() {
                     this.resetItems();
-                    this.query = this.defaultQuery();
+                    this.resetQuery();
                 },
             },
             query: {
-                deep: true,
                 handler() {
                     this.pushQuery(this.query, this.presetName);
                     this.getItems();
@@ -223,7 +222,13 @@
                 window.history.pushState({}, null, href);
             },
             addQueryTag(tag) {
-                this.query.tags.push(tag.name);
+                this.query = {
+                    ...this.query,
+                    tags: [
+                        ...this.query.tags,
+                        tag.name,
+                    ],
+                };
             },
             updateOptions(options) {
                 const isChange = isObjectChange(this.options, options);
@@ -258,7 +263,10 @@
             resetItems() {
                 this.items = [];
                 this.total = 0;
+            },
+            resetQuery() {
                 this.options = parseSort(this.preset?.sort);
+                this.query = this.defaultQuery();
             },
             addItem() {
                 this.editItem({
