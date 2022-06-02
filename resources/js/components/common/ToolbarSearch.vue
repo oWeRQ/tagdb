@@ -20,11 +20,18 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import { debounce } from 'lodash';
 
 export default {
     props: {
-        value: {},
+        value: {
+            type: String,
+            default: '',
+        },
+        wait: {
+            type: Number,
+            default: 500,
+        },
     },
     data() {
         return {
@@ -44,6 +51,11 @@ export default {
     watch: {
         value: 'blur',
     },
+    mounted() {
+        this.emitInput = debounce(function(value) {
+            this.$emit('input', value);
+        }, this.wait);
+    },
     methods: {
         show() {
             this.isShow = true;
@@ -57,9 +69,6 @@ export default {
                 this.$emit('input', '');
             }
         },
-        emitInput: _.debounce(function(value) {
-            this.$emit('input', value);
-        }, 500),
     },
 };
 </script>
