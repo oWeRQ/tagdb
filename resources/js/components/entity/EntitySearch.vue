@@ -10,11 +10,12 @@
         solo
         single-line
         hide-details
-        clearable
         prepend-inner-icon="mdi-magnify"
+        append-icon="mdi-close"
         class="shrink mx-2"
         autofocus
         @blur="blur"
+        @click:append="clear"
     ></v-text-field>
 </template>
 
@@ -40,12 +41,21 @@ export default {
             },
         },
     },
+    watch: {
+        value: 'blur',
+    },
     methods: {
         show() {
             this.isShow = true;
         },
         blur() {
             this.isShow = !!this.value;
+        },
+        clear() {
+            this.isShow = false;
+            if (this.value) {
+                this.$emit('input', '');
+            }
         },
         emitInput: _.debounce(function(value) {
             this.$emit('input', value);
