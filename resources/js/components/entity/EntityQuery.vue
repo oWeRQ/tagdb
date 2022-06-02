@@ -11,7 +11,7 @@
             prepend-inner-icon="mdi-tag-multiple-outline"
         ></TagsField>
         <EntityFilter v-model="filter" @input="onInput" :fields="fields"></EntityFilter>
-        <EntitySearch v-model="search" @input="onInput"></EntitySearch>
+        <ToolbarSearch v-model="search" @input="onInput"></ToolbarSearch>
     </div>
 </template>
 
@@ -19,14 +19,14 @@
     import { mapState } from 'vuex';
 
     import EntityFilter from './EntityFilter';
-    import EntitySearch from './EntitySearch';
+    import ToolbarSearch from '../common/ToolbarSearch';
     import TagsField from './TagsField';
 
     export default {
         components: {
             TagsField,
             EntityFilter,
-            EntitySearch,
+            ToolbarSearch,
         },
         props: {
             value: {

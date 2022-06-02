@@ -15,7 +15,7 @@
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
                 <v-toolbar-title class="mr-2" v-title>Tags</v-toolbar-title>
-                <EntitySearch v-model="search"></EntitySearch>
+                <ToolbarSearch v-model="search"></ToolbarSearch>
             </v-toolbar>
         </template>
         <template v-slot:item.name="{ item }">
@@ -67,12 +67,12 @@
     import TagDialog from './TagDialog.vue';
     import TagImportDialog from './TagImportDialog.vue';
     import FieldDialog from '../field/FieldDialog.vue';
-    import EntitySearch from '../entity/EntitySearch.vue';
+    import ToolbarSearch from '../common/ToolbarSearch.vue';
 
     export default {
         components: {
             TagChip,
-            EntitySearch,
+            ToolbarSearch,
         },
         filters: {
             date,
