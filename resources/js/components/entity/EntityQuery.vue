@@ -3,6 +3,7 @@
         <TagsField
             v-model="tags"
             @input="onInput"
+            @click:plus="showTag"
             return-object
             :hidden-tags="hiddenTags"
             solo
@@ -21,6 +22,7 @@
     import EntityFilter from './EntityFilter';
     import ToolbarSearch from '../common/ToolbarSearch';
     import TagsField from './TagsField';
+    import TagDialog from '../tag/TagDialog';
 
     export default {
         components: {
@@ -65,6 +67,17 @@
             },
         },
         methods: {
+            showTag(tag) {
+                this.originalTag = tag;
+                this.$root.showDialog(TagDialog, {
+                    value: tag,
+                }, {
+                    input: this.saveTag,
+                });
+            },
+            saveTag(tag) {
+                Object.assign(this.originalTag, tag);
+            },
             getTag(item) {
                 const name = item.replace(/^[+-]/, '');
                 const tag = this.allTags.find(tag => tag.name === name);
