@@ -264,6 +264,7 @@
                 });
             },
             resetItems() {
+                this.selected = [];
                 this.items = [];
                 this.total = 0;
             },
