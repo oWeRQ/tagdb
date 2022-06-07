@@ -138,6 +138,15 @@
                 return this.value.tags.find(tag => tag.id);
             },
         },
+        watch: {
+            editedFields(fields) {
+                const contents = {};
+                for (const field of fields) {
+                    contents[field.id] = this.value.contents[field.id];
+                }
+                this.value.contents = contents;
+            },
+        },
         methods: {
             showTag(tag) {
                 this.originalTag = tag;
