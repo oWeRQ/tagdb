@@ -12,7 +12,14 @@
                     <v-btn v-if="!isNew" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text type="submit">{{ isNew ? 'Create' : 'Update' }}</v-btn>
+                    <v-btn
+                        color="blue darken-1"
+                        :class="persistent ? 'blue lighten-5 text--darken-3' : ''"
+                        text
+                        type="submit"
+                    >
+                        {{ isNew ? 'Create' : 'Update' }}
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
