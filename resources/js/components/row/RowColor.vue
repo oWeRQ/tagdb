@@ -1,5 +1,5 @@
 <template>
-    <v-chip v-if="value">
+    <v-chip v-if="value" @click="$emit('edit')">
         <v-avatar left :color="value"></v-avatar>
         {{ value }}
     </v-chip>

@@ -4,7 +4,7 @@
             return-object
             v-model="value.tags"
             :rules="rules.tags"
-            :autofocus="!value.tags.length"
+            :autofocus="autofocus == 'tags'"
             @click:tag="showTag($event)"
             prepend-icon="mdi-tag-multiple-outline"
         ></TagsField>
@@ -12,7 +12,7 @@
         <v-textarea
             v-model="value.name"
             :rules="rules.name"
-            :autofocus="!!value.tags.length"
+            :autofocus="autofocus == 'name'"
             spellcheck="false"
             label="Name"
             auto-grow
@@ -26,6 +26,7 @@
                 <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                         v-model="value.contents[field.id]"
+                        :autofocus="autofocus == field.id"
                         :label="field.name"
                         readonly
                         clearable
@@ -41,6 +42,7 @@
                 <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                         v-model="value.contents[field.id]"
+                        :autofocus="autofocus == field.id"
                         :label="field.name"
                         readonly
                         clearable
@@ -70,6 +72,7 @@
             <v-textarea
                 v-else-if="field.type === 'text'"
                 v-model="value.contents[field.id]"
+                :autofocus="autofocus == field.id"
                 :type="field.type"
                 :label="field.name"
                 filled
@@ -79,6 +82,7 @@
             <v-text-field
                 v-else-if="field.type === 'url'"
                 v-model="value.contents[field.id]"
+                :autofocus="autofocus == field.id"
                 :type="field.type"
                 :label="field.name"
                 prepend-icon="mdi-link"
@@ -88,6 +92,7 @@
             <v-text-field
                 v-else
                 v-model="value.contents[field.id]"
+                :autofocus="autofocus == field.id"
                 :type="field.type"
                 :label="field.name"
                 prepend-icon="mdi-form-textbox"
@@ -114,6 +119,9 @@
             value: {
                 type: Object,
             },
+            focus: {
+                type: String,
+            },
         },
         data() {
             return {
@@ -136,6 +144,9 @@
             },
             firstSavedTag() {
                 return this.value.tags.find(tag => tag.id);
+            },
+            autofocus() {
+                return this.focus ? this.focus.replace(/^contents\./, '') : (value.tags.length ? 'name' : 'tags');
             },
         },
         watch: {

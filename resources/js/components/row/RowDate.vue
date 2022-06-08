@@ -1,5 +1,5 @@
 <template>
-    <span v-text="value"></span>
+    <span v-text="value" @click="$emit('edit')"></span>
 </template>
 
 <script>

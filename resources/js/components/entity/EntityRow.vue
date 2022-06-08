@@ -21,7 +21,7 @@
                     :is="getComponent(header)"
                     :header="header"
                     :item="item"
-                    @edit="$emit('edit')"
+                    @edit="$emit('edit', header.value)"
                 ></component>
             </span>
         </td>

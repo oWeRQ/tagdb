@@ -49,7 +49,7 @@
                 :isSelected="isSelected"
                 :isMobile="isMobile"
                 :select="select"
-                @edit="editItem(item)"
+                @edit="editItem(item, $event)"
             ></EntityRow>
         </template>
         <template v-slot:footer.prepend>
@@ -279,9 +279,10 @@
                     values: [],
                 });
             },
-            editItem(item) {
+            editItem(item, field) {
                 this.$root.showDialog(EntityDialog, {
                     value: item,
+                    focus: field,
                 }, {
                     input: this.saveItem,
                     delete: this.deleteItem,

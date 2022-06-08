@@ -6,7 +6,7 @@
                     {{ headline }}
                 </v-card-title>
                 <v-card-text>
-                    <EntityForm v-model="data" @submit="submit" class="mt-3"></EntityForm>
+                    <EntityForm v-model="data" @submit="submit" :focus="focus" class="mt-3"></EntityForm>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn v-if="!isNew" color="grey" icon @click="remove"><v-icon>mdi-delete</v-icon></v-btn>
@@ -39,6 +39,9 @@
             value: {
                 type: Object,
                 default: () => ({}),
+            },
+            focus: {
+                type: String,
             },
         },
         data() {
