@@ -2,7 +2,7 @@
     <v-menu v-model="isShow" offset-y :close-on-content-click="false" max-width="360px">
         <template v-slot:activator="{ on, attrs }">
             <span>
-                <v-btn icon v-bind="attrs" v-on="on">
+                <v-btn icon v-bind="attrs" v-on="on" @click="focus = 0">
                     <v-icon>mdi-filter-variant</v-icon>
                 </v-btn>
                 <span
