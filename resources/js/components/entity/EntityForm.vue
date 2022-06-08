@@ -146,7 +146,7 @@
                 return this.value.tags.find(tag => tag.id);
             },
             autofocus() {
-                return this.focus ? this.focus.replace(/^contents\./, '') : (value.tags.length ? 'name' : 'tags');
+                return this.focus ? this.focus.replace(/^contents\./, '') : (this.value.tags.length ? 'name' : 'tags');
             },
         },
         watch: {
