@@ -30,7 +30,7 @@
                 <v-card-title class="pb-0">
                     Filter
                 </v-card-title>
-                <v-card-text>
+                <v-card-text v-if="isShow">
                     <v-row v-for="(filter, i) in filters" :key="i" no-gutters>
                         <v-col>
                             <v-text-field v-model="filter.value" :label="filter.text" v-autoselect="focus === i" hide-details clearable></v-text-field>
