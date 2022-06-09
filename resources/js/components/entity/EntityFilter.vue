@@ -33,7 +33,7 @@
                 <v-card-text>
                     <v-row v-for="(filter, i) in filters" :key="i" no-gutters>
                         <v-col>
-                            <v-text-field v-model="filter.value" :label="filter.text" :autofocus="focus === i" hide-details clearable></v-text-field>
+                            <v-text-field v-model="filter.value" :label="filter.text" v-autoselect="focus === i" hide-details clearable></v-text-field>
                         </v-col>
                         <v-col cols="5">
                             <v-select :items="operators" v-model="filter.operator" hide-details class="ml-2"></v-select>

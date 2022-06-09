@@ -12,8 +12,10 @@ import ConfirmDialog from './components/common/ConfirmDialog.vue';
 import DialogStack from './components/common/DialogStack.vue';
 
 import title from './directives/title';
+import autoselect from './directives/autoselect';
 
 Vue.directive('title', title);
+Vue.directive('autoselect', autoselect);
 
 const app = new Vue({
     store,
