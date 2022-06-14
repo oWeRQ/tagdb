@@ -39,13 +39,12 @@
             </v-chip>
         </template>
         <template v-slot:item="{ item }">
-            <v-avatar :color="item.color" size="8" class="mr-2"></v-avatar>
-            <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
+            <v-icon @click="keepActive" class="mr-2" :class="iconColor(item)">
+                mdi-tag-plus-outline
+            </v-icon>
+            <span :class="textColor(item)">{{ item.name }}</span>
             <v-spacer></v-spacer>
             <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
-            <v-icon @click="keepActive" color="grey lighten-2" class="ml-3">
-                mdi-check-circle-outline
-            </v-icon>
         </template>
     </v-combobox>
 </template>
@@ -122,6 +121,22 @@
             this.fetchTags();
         },
         methods: {
+            iconColor(item) {
+                const prefix = (item.color || 'grey') + '--text text--';
+                if (item.color) {
+                    return prefix + (item.entities_count ? 'lighten-2' : 'lighten-4');
+                } else {
+                    return prefix + (item.entities_count ? 'lighten-0' : 'lighten-1');
+                }
+            },
+            textColor(item) {
+                const prefix = (item.color || 'grey') + '--text text--';
+                if (item.color) {
+                    return prefix + (item.entities_count ? 'darken-2' : 'lighten-2');
+                } else {
+                    return prefix + (item.entities_count ? 'darken-2' : 'lighten-0');
+                }
+            },
             isHyphen(item) {
                 return (this.returnObject ? item.name : item)[0] === '-';
             },
