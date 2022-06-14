@@ -5,19 +5,18 @@ namespace App\Http\Controllers\Api\v1;
 use App\Entity;
 use App\Field;
 use App\Http\Resources\FieldResource;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
-class FieldController extends Controller
+class FieldController extends ApiController
 {
     public function index(Request $request)
     {
         $query = Field::query();
         $query->sort($request->get('sort'));
 
-        $perPage = $request->get('per_page', 100);
+        $perPage = $request->get('per_page', -1);
 
-        return FieldResource::collection($query->paginate($perPage));
+        return FieldResource::collection($this->paginate($query, $perPage));
     }
 
     public function show($id)

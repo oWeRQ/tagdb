@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Tag;
 use App\Http\Resources\TagResource;
-use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 
-class TagController extends Controller
+class TagController extends ApiController
 {
     public function index(Request $request)
     {
@@ -34,9 +33,9 @@ class TagController extends Controller
             return response()->streamDownload(function() use($json) { echo $json; }, $export);
         }
 
-        $perPage = $request->get('per_page', 1000);
+        $perPage = $request->get('per_page', -1);
 
-        return TagResource::collection($query->paginate($perPage));
+        return TagResource::collection($this->paginate($query, $perPage));
     }
 
     public function show($id)
