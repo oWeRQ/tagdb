@@ -34,7 +34,7 @@ class TagController extends Controller
             return response()->streamDownload(function() use($json) { echo $json; }, $export);
         }
 
-        $perPage = $request->get('per_page', 100);
+        $perPage = $request->get('per_page', 1000);
 
         return TagResource::collection($query->paginate($perPage));
     }
