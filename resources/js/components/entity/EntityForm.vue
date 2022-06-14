@@ -5,7 +5,8 @@
             v-model="value.tags"
             :rules="rules.tags"
             :autofocus="autofocus == 'tags'"
-            @click:tag="showTag($event)"
+            @click:tag="showTag"
+            @click:plus="showTag"
             prepend-icon="mdi-tag-multiple-outline"
         ></TagsField>
 
