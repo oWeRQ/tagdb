@@ -43,6 +43,9 @@
             <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
             <v-spacer></v-spacer>
             <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+            <v-icon @click="keepActive" color="grey lighten-2" class="ml-3">
+                mdi-check-circle-outline
+            </v-icon>
         </template>
     </v-combobox>
 </template>
@@ -103,6 +106,7 @@
                 tags: [],
                 search: '',
                 loading: false,
+                isKeepActive: false,
             };
         },
         computed: {
@@ -152,9 +156,14 @@
                     this.loading = false;
                 });
             },
+            keepActive() {
+                this.isKeepActive = true;
+            },
             change() {
-                if (!this.solo) {
+                if (!this.isKeepActive) {
                     this.$refs.combobox.isMenuActive = false;
+                } else {
+                    this.isKeepActive = false;
                 }
             },
             input(value) {
