@@ -126,7 +126,7 @@
                 if (item.color) {
                     return prefix + (item.entities_count ? 'lighten-2' : 'lighten-4');
                 } else {
-                    return prefix + (item.entities_count ? 'lighten-0' : 'lighten-1');
+                    return prefix + (item.entities_count ? 'lighten-0' : 'lighten-2');
                 }
             },
             textColor(item) {
@@ -134,7 +134,7 @@
                 if (item.color) {
                     return prefix + (item.entities_count ? 'darken-2' : 'lighten-2');
                 } else {
-                    return prefix + (item.entities_count ? 'darken-2' : 'lighten-0');
+                    return prefix + (item.entities_count ? 'darken-3' : 'lighten-0');
                 }
             },
             isHyphen(item) {
