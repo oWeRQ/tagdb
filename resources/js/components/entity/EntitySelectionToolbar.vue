@@ -68,7 +68,7 @@
                         tags,
                         hasCreate: true,
                     }, {
-                        select: this.addTag,
+                        select: this.addTags,
                     });
                 });
             },
@@ -77,7 +77,7 @@
                     title: 'Remove',
                     tags: this.availableTags,
                 }, {
-                    select: this.removeTag,
+                    select: this.removeTags,
                 });
             },
             showUpdateValues() {
@@ -88,11 +88,13 @@
                     done: this.done,
                 });
             },
-            addTag(tag) {
-                api.tags.attachEntities(tag.id, { id: this.selectedId }).then(this.done);
+            addTags(tags) {
+                const requests = tags.map(tag => api.tags.attachEntities(tag.id, { id: this.selectedId }));
+                Promise.all(requests).then(this.done);
             },
-            removeTag(tag) {
-                api.tags.detachEntities(tag.id, { id: this.selectedId }).then(this.done);
+            removeTags(tags) {
+                const requests = tags.map(tag => api.tags.detachEntities(tag.id, { id: this.selectedId }));
+                Promise.all(requests).then(this.done);
             },
             deleteItems() {
                 this.$root.confirm('Delete selected items?').then(() => {

@@ -88,7 +88,7 @@ export default {
     },
     methods: {
         select(tag) {
-            this.$emit('select', tag);
+            this.$emit('select', [tag]);
             this.close();
         },
         enter() {
