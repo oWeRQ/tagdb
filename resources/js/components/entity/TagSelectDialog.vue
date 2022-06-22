@@ -16,17 +16,18 @@
                 class="mx-2 mb-2"
             ></v-text-field>
             <v-divider></v-divider>
-            <v-card-text class="pa-0">
+            <v-card-text class="pa-0 subtitle-1">
                 <v-list>
                     <v-list-item
                         v-for="item in filteredTags"
                         :key="item.id"
                         @click="select(item)"
                     >
-                        <v-avatar :color="item.color" size="8" class="mr-2"></v-avatar>
-                        <span :class="{'grey--text text--darken-2': !item.entities_count}">{{ item.name }}</span>
-                        <v-spacer></v-spacer>
-                        <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+                        <v-icon @click="keepActive" left :class="iconColor(item)">
+                            mdi-tag-plus-outline
+                        </v-icon>
+                        <span :class="textColor(item)">{{ item.name }}</span>
+                        <span v-if="item.entities_count" class="caption grey--text text--lighten-1 ml-2">({{ item.entities_count }})</span>
                     </v-list-item>
                     <v-list-item v-if="canCreate" @click="create">
                         <v-icon left>mdi-plus</v-icon>
@@ -87,6 +88,25 @@ export default {
         },
     },
     methods: {
+        iconColor(item) {
+            const prefix = (item.color || 'grey') + '--text text--';
+            if (item.color) {
+                return prefix + (item.entities_count ? 'lighten-1' : 'lighten-3');
+            } else {
+                return prefix + (item.entities_count ? 'darken-1' : 'lighten-1');
+            }
+        },
+        textColor(item) {
+            const prefix = (item.color || 'grey') + '--text text--';
+            if (item.color) {
+                return prefix + (item.entities_count ? 'darken-2' : 'lighten-2');
+            } else {
+                return prefix + (item.entities_count ? 'darken-3' : 'lighten-0');
+            }
+        },
+        keepActive() {
+
+        },
         select(tag) {
             this.$emit('select', [tag]);
             this.close();
