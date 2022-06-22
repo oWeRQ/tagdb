@@ -124,9 +124,9 @@
             iconColor(item) {
                 const prefix = (item.color || 'grey') + '--text text--';
                 if (item.color) {
-                    return prefix + (item.entities_count ? 'lighten-2' : 'lighten-4');
+                    return prefix + (item.entities_count ? 'lighten-1' : 'lighten-3');
                 } else {
-                    return prefix + (item.entities_count ? 'lighten-0' : 'lighten-2');
+                    return prefix + (item.entities_count ? 'darken-1' : 'lighten-1');
                 }
             },
             textColor(item) {
