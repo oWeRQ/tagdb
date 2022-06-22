@@ -1,5 +1,5 @@
 <template>
-    <span v-text="value" @click="$emit('edit')"></span>
+    <span v-text="value" @click="$emit('edit')" class="column"></span>
 </template>
 
 <script>
@@ -22,3 +22,14 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+    .column {
+        cursor: pointer;
+        display: inline-block;
+
+        &:hover {
+            color: rgba(0, 0, 0, .7);
+        }
+    }
+</style>
