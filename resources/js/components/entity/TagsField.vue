@@ -43,8 +43,7 @@
                 mdi-tag-plus-outline
             </v-icon>
             <span :class="textColor(item)">{{ item.name }}</span>
-            <v-spacer></v-spacer>
-            <span v-if="item.entities_count" class="caption grey--text text--darken-1">{{ item.entities_count }}</span>
+            <span v-if="item.entities_count" class="caption grey--text text--lighten-1 ml-2">({{ item.entities_count }})</span>
         </template>
     </v-combobox>
 </template>
