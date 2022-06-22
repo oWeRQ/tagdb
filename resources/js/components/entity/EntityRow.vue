@@ -15,6 +15,7 @@
                     :item="item"
                     :tags="tags"
                     @click:tag="$emit('click:tag', $event)"
+                    @edit="$emit('edit', header.value)"
                 ></RowTags>
                 <component
                     v-else

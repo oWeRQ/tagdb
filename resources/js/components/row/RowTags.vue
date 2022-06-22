@@ -2,6 +2,7 @@
     <div class="d-flex my-n1">
         <span
             v-if="invisibleTags.length"
+            @click="$emit('edit')"
             tabindex="0"
             class="grey--text v-chip v-chip--clickable v-chip--no-color v-chip--outlined theme--light v-size--small mr-2 my-1"
         >
