@@ -1,15 +1,5 @@
 <template>
     <div>
-        <TagsField
-            return-object
-            v-model="value.tags"
-            :rules="rules.tags"
-            :autofocus="autofocus == 'tags'"
-            @click:tag="showTag"
-            @click:plus="showTag"
-            prepend-icon="mdi-tag-multiple-outline"
-        ></TagsField>
-
         <v-textarea
             v-model="value.name"
             :rules="rules.name"
@@ -99,6 +89,16 @@
                 prepend-icon="mdi-form-textbox"
             ></v-text-field>
         </div>
+
+        <TagsField
+            return-object
+            v-model="value.tags"
+            :rules="rules.tags"
+            :autofocus="autofocus == 'tags'"
+            @click:tag="showTag"
+            @click:plus="showTag"
+            prepend-icon="mdi-tag-multiple-outline"
+        ></TagsField>
 
         <v-btn @click="addField" :disabled="!firstSavedTag" text x-small color="blue darken-1">
             <v-icon left>mdi-plus</v-icon>
