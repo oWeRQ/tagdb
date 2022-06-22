@@ -30,7 +30,7 @@
                         <span v-if="item.entities_count" class="caption grey--text text--lighten-1 ml-2">({{ item.entities_count }})</span>
                     </v-list-item>
                     <v-list-item v-if="canCreate" @click="create">
-                        <v-icon left>mdi-plus</v-icon>
+                        <v-icon @click="keepActive" left>mdi-plus</v-icon>
                         Create "{{ this.search }}" tag
                     </v-list-item>
                     <v-list-item v-else-if="!filteredTags.length">
@@ -39,9 +39,21 @@
                 </v-list>
             </v-card-text>
             <v-divider></v-divider>
+            <v-chip-group v-if="isSelected" column class="mx-2">
+                <v-chip
+                    v-for="tag in selected"
+                    :key="tag.name"
+                    close
+                    @click:close="removeSelected(tag)"
+                    class="lighten-2"
+                    :color="tag.color"
+                    :dark="!!tag.color"
+                >{{ tag.name }}</v-chip>
+            </v-chip-group>
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+                <v-btn v-if="isSelected" color="blue darken-1" text @click="confirm">Confirm</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
@@ -67,11 +79,19 @@ export default {
         return {
             visible: false,
             search: '',
+            selected: [],
+            isKeepActive: false,
         };
     },
     computed: {
+        isSelected() {
+            return Boolean(this.selected.length);
+        },
+        unselectedTags() {
+            return this.tags.filter(tag => !this.selected.includes(tag));
+        },
         filteredTags() {
-            return fuzzyFilter(this.search, this.tags, 'name');
+            return fuzzyFilter(this.search, this.unselectedTags, 'name');
         },
         isExists() {
             return this.$store.state.tags.some(tag => tag.name === this.search);
@@ -104,11 +124,23 @@ export default {
                 return prefix + (item.entities_count ? 'darken-3' : 'lighten-0');
             }
         },
+        removeSelected(tag) {
+            this.selected = this.selected.filter(t => t !== tag);
+        },
         keepActive() {
-
+            this.isKeepActive = true;
         },
         select(tag) {
-            this.$emit('select', [tag]);
+            if (this.isKeepActive || this.isSelected) {
+                this.selected.push(tag);
+                this.isKeepActive = false;
+            } else {
+                this.$emit('select', [tag]);
+                this.close();
+            }
+        },
+        confirm() {
+            this.$emit('select', this.selected);
             this.close();
         },
         enter() {
