@@ -31,7 +31,7 @@ class ImportController extends Controller
                 'data' => [
                     'headers' => $headings[0][0],
                     'rows' => ($preview ? $rows->take($preview)->all() : []),
-                    'tags' => $tags->sort()->values()->all(),
+                    'tags' => $tags->pluck('name')->sort()->values()->all(),
                 ],
             ]);
         }
