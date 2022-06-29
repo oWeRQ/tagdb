@@ -18,6 +18,10 @@
             <v-icon>mdi-form-textbox</v-icon>
         </v-btn>
 
+        <v-btn icon @click="showMerge">
+            <v-icon>mdi-merge</v-icon>
+        </v-btn>
+
         <v-btn icon @click="deleteItems">
             <v-icon>mdi-delete</v-icon>
         </v-btn>
@@ -28,6 +32,7 @@
     import api from '../../api';
     import TagSelectDialog from './TagSelectDialog.vue';
     import UpdateValuesDialog from './UpdateValuesDialog.vue';
+    import EntityMergeDialog from './EntityMergeDialog.vue';
 
     export default {
         props: {
@@ -84,6 +89,13 @@
                 this.$root.showDialog(UpdateValuesDialog, {
                     selectedId: this.selectedId,
                     queryTagNames: this.queryTagNames,
+                }, {
+                    done: this.done,
+                });
+            },
+            showMerge() {
+                this.$root.showDialog(EntityMergeDialog, {
+                    selectedId: this.selectedId,
                 }, {
                     done: this.done,
                 });

@@ -122,7 +122,9 @@ class Entity extends Model
                         $field_column = $column[0];
                     }
 
-                    if ($operator === 'like') {
+                    if ($operator === 'in') {
+                        $builder->whereIn($field_column, $value);
+                    } elseif ($operator === 'like') {
                         $builder->where($field_column, 'like', '%'.$this->escapeLike($value).'%');
                     } else {
                         $builder->where($field_column, $operatorMap[$operator], $value);
