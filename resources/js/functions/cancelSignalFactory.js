@@ -1,7 +1,7 @@
-export default function(reason) {
+export default function() {
     let controller;
 
-    return function() {
+    return function(reason) {
         if (controller) {
             controller.abort(reason);
         }

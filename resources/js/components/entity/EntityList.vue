@@ -225,7 +225,7 @@
                     search: '',
                 };
             },
-            pushQuery(query, presetName = null, sort = null) {
+            pushQuery(query, presetName, sort) {
                 const route = (presetName ? {name: 'preset', params: { name: presetName }} : {name: 'index'});
                 this.pushState({...route, query: {query: JSON.stringify(query), sort}})
             },
