@@ -134,6 +134,9 @@
                     ...(this.$route.query.query ? JSON.parse(this.$route.query.query) : undefined),
                 };
             },
+            routeSort() {
+                return this.$route.query.sort;
+            },
             presetQuery() {
                 return (this.preset ? JSON.parse(this.preset.query) : undefined);
             },
@@ -200,12 +203,18 @@
             },
             query: {
                 handler() {
-                    this.pushQuery(this.query, this.presetName);
+                    this.pushQuery(this.query, this.presetName, this.sort);
                     this.getItems();
+                },
+            },
+            sort: {
+                handler() {
+                    this.pushQuery(this.query, this.presetName, this.sort);
                 },
             },
         },
         mounted() {
+            this.options = parseSort(this.routeSort);
             this.query = this.routeQuery;
         },
         methods: {
@@ -216,9 +225,9 @@
                     search: '',
                 };
             },
-            pushQuery(query, presetName = null) {
+            pushQuery(query, presetName = null, sort = null) {
                 const route = (presetName ? {name: 'preset', params: { name: presetName }} : {name: 'index'});
-                this.pushState({...route, query: {query: JSON.stringify(query)}})
+                this.pushState({...route, query: {query: JSON.stringify(query), sort}})
             },
             pushState(route) {
                 const { href } = this.$router.resolve(route);
