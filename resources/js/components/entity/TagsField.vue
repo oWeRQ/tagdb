@@ -5,7 +5,7 @@
         @change="change"
         :search-input.sync="search"
         :loading="loading"
-        :value="value"
+        :value="valueSorted"
         :rules="rules"
         :items="filteredTags"
         :label="label"
@@ -51,6 +51,7 @@
 <script>
     import api from '../../api';
     import fuzzyFilter from '../../functions/fuzzyFilter';
+    import tagsCompare from '../../functions/tagsCompare';
 
     function toggleHyphen(value) {
         if (value[0] === '-') {
@@ -110,6 +111,9 @@
         computed: {
             filteredTags() {
                 return fuzzyFilter(this.search, this.tags, 'name');
+            },
+            valueSorted() {
+                return [...this.value].sort(tagsCompare);
             },
         },
         watch: {

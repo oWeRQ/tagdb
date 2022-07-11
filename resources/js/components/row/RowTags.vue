@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import tagsCompare from '../../functions/tagsCompare';
+
 export default {
     props: {
         tags: {
@@ -37,7 +39,7 @@ export default {
     },
     computed: {
         visibleTags() {
-            return this.item.tags.filter(tag => !this.tags.includes(tag.name));
+            return this.item.tags.filter(tag => !this.tags.includes(tag.name)).sort(tagsCompare);
         },
         invisibleTags() {
             return this.item.tags.filter(tag => this.tags.includes(tag.name));
