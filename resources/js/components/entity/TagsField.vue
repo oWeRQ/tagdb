@@ -150,7 +150,7 @@
                 this.$emit('click:tag', item);
 
                 if (this.hyphen) {
-                    this.$emit('input', this.value.map((v, i) => {
+                    this.$emit('input', this.valueSorted.map((v, i) => {
                         if (i === index)
                             return this.returnObject ? { ...v, name: toggleHyphen(v.name) } : toggleHyphen(v);
 
@@ -162,11 +162,11 @@
                 this.$emit('click:plus', item);
             },
             remove(index) {
-                this.$emit('input', this.value.filter((v, i) => i !== index));
+                this.$emit('input', this.valueSorted.filter((v, i) => i !== index));
             },
             fetchTags() {
                 const params = {
-                    with_tags: (this.returnObject ? this.value.map(tag => tag.name) : this.value).concat(this.hiddenTags),
+                    with_tags: (this.returnObject ? this.valueSorted.map(tag => tag.name) : this.valueSorted).concat(this.hiddenTags),
                 };
                 this.loading = true;
                 api.tags.index(params).then(tags => {

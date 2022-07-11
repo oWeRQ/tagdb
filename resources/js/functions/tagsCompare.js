@@ -1,5 +1,9 @@
+function normalizeName(name) {
+    return name.replace(/^-/, '');
+}
+
 export default function (a, b) {
-    if (a.color !== b.color) {
+    if ((a.color || b.color) && a.color != b.color) {
         if (!a.color)
             return 1;
 
@@ -9,5 +13,5 @@ export default function (a, b) {
         return a.color.localeCompare(b.color);
     }
 
-    return a.name.localeCompare(b.name);
+    return normalizeName(a.name).localeCompare(normalizeName(b.name));
 }
