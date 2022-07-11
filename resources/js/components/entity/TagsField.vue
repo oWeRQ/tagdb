@@ -113,7 +113,7 @@
                 return fuzzyFilter(this.search, this.tags, 'name');
             },
             valueSorted() {
-                return [...this.value].sort(tagsCompare);
+                return this.returnObject ? [...this.value].sort(tagsCompare) : this.value;
             },
         },
         watch: {
