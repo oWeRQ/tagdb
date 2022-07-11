@@ -68,6 +68,7 @@
                 :label="field.name"
                 filled
                 auto-grow
+                prepend-icon="mdi-text-box-outline"
             ></v-textarea>
 
             <v-text-field
