@@ -109,6 +109,7 @@
 </template>
 
 <script>
+    import tagsCompare from '../../functions/tagsCompare';
     import FieldDialog from '../field/FieldDialog';
     import TagDialog from '../tag/TagDialog';
     import TagsField from './TagsField';
@@ -141,14 +142,17 @@
                     ],
                 };
             },
+            sortedTags() {
+                return [...this.value.tags].sort(tagsCompare);
+            },
             editedFields() {
-                return this.value.tags.flatMap(item => item.fields);
+                return this.sortedTags.flatMap(item => item.fields);
             },
             firstSavedTag() {
                 return this.value.tags.find(tag => tag.id);
             },
             autofocus() {
-                return this.focus ? this.focus.replace(/^contents\./, '') : (this.value.tags.length ? 'name' : 'tags');
+                return this.focus ? this.focus.replace(/^contents\./, '') : 'name';
             },
         },
         watch: {
