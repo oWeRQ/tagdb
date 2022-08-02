@@ -2,8 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import axios from 'axios';
-import api, { setProjectId } from './api';
-import router from './router';
+import api, { setProjectId } from '../api';
+import router from '../router';
 
 Vue.use(Vuex);
 
