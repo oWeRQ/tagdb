@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Project;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Http\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +18,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Request::macro('project', function() {
+            static $project;
+
+            if ($project === null) {
+                $project = $this->user()->currentProject;
+            }
+
+            if ($project === null) {
+                $project = new Project;
+            }
+
+            return $project;
+        });
     }
 
     /**

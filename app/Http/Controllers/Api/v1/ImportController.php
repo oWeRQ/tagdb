@@ -15,7 +15,7 @@ class ImportController extends Controller
 {
     public function store(Request $request)
     {
-        $projectId = auth()->user()->currentProjectId;
+        $projectId = request()->project()->id;
         $importFile = $request->file('importFile');
         $tags = collect();
         $fields = collect($request->get('fields'))->map(function($field_id) {
