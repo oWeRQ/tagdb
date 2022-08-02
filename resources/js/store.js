@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import axios from 'axios';
-import api from './api';
+import api, { setProjectId } from './api';
 import router from './router';
 
 Vue.use(Vuex);
@@ -21,6 +21,7 @@ export default new Vuex.Store({
     mutations: {
         currentProject(state, value) {
             state.currentProject = value;
+            setProjectId(value?.id);
         },
         projects(state, value) {
             state.projects = value;
@@ -42,13 +43,13 @@ export default new Vuex.Store({
             state.isReady = !!currentProject;
             state.isAuth = false;
             state.account = account;
-            state.currentProject = currentProject;
+            this.commit('currentProject', currentProject);
         },
         authRejected(state) {
             state.isReady = false;
             state.isAuth = true;
             state.account = null;
-            state.currentProject = null;
+            this.commit('currentProject', null);
         },
     },
     actions: {

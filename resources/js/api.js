@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+export function setProjectId(value) {
+    console.log('setProjectId', value);
+    axios.defaults.headers.common['X-Project-Id'] = value;
+}
+
 function resolveData(response) {
     if (response.data) {
         const data = response.data.data;

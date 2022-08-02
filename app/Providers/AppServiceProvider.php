@@ -21,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
         Request::macro('project', function() {
             static $project;
 
+            if ($project === null && $this->hasHeader('X-Project-Id')) {
+                $requestProject = Project::find($this->header('X-Project-Id'));
+                if ($this->user()->belongsToProject($requestProject)) {
+                    $project = $requestProject;
+                }
+            }
+
             if ($project === null) {
                 $project = $this->user()->currentProject;
             }
