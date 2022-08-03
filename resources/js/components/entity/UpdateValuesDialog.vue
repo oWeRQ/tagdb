@@ -73,10 +73,10 @@
             };
         },
         computed: {
-            ...mapState([
-                'tags',
-                'fields',
-            ]),
+            ...mapState({
+                tags: state => state.project.tags,
+                fields: state => state.project.fields,
+            }),
             fieldItems() {
                 return this.tags.filter(tag => this.queryTagNames.includes(tag.name)).flatMap(item => item.fields).map(field => ({
                     ...field,

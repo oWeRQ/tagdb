@@ -31,9 +31,9 @@
             },
         },
         computed: {
-            ...mapState([
-                'tags',
-            ]),
+            ...mapState({
+                tags: state => state.project.tags,
+            }),
             rules() {
                 return {
                     tags: [

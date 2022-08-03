@@ -106,7 +106,7 @@
         },
         computed: {
             visible() {
-                return this.$store.state.isAuth;
+                return this.$store.state.auth.isAuth;
             },
             passwordType() {
                 return (this.show_password ? 'text' : 'password');

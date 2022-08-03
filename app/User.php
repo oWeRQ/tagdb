@@ -53,7 +53,7 @@ class User extends Authenticatable
         return $this->belongsTo(Project::class, 'current_project_id');
     }
 
-    public function switchProject(Project $project)
+    public function switchProject(?Project $project)
     {
         if (!$this->belongsToProject($project)) {
             return false;
@@ -86,7 +86,7 @@ class User extends Authenticatable
             ->as('membership');
     }
 
-    public function ownsProject(Project $project)
+    public function ownsProject(?Project $project)
     {
         if (is_null($project)) {
             return false;
@@ -95,7 +95,7 @@ class User extends Authenticatable
         return $this->id == $project->user_id;
     }
 
-    public function belongsToProject(Project $project)
+    public function belongsToProject(?Project $project)
     {
         if (is_null($project)) {
             return false;

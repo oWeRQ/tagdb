@@ -50,9 +50,9 @@ export default {
         };
     },
     computed: {
-        ...mapState([
-            'presets',
-        ]),
+        ...mapState({
+            presets: state => state.project.presets,
+        }),
         queryTags() {
             const queryJson = (
                 this.params.preset

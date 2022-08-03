@@ -74,9 +74,9 @@
             }
         },
         computed: {
-            ...mapState([
-                'tags',
-            ]),
+            ...mapState({
+                tags: state => state.project.tags,
+            }),
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },

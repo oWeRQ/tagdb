@@ -71,9 +71,6 @@
             },
         },
         computed: {
-            accountId() {
-                return this.$store.state.account?.id;
-            },
             roles: () => [
                 { text: 'Owner', value: 'owner' },
                 { text: 'Update', value: 'update' },

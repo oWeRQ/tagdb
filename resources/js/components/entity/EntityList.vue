@@ -107,11 +107,11 @@
             };
         },
         computed: {
-            ...mapState([
-                'currentProject',
-                'tags',
-                'presets',
-            ]),
+            ...mapState({
+                currentProject: state => state.auth.currentProject,
+                tags: state => state.project.tags,
+                presets: state => state.project.presets,
+            }),
             title() {
                 return (this.isPreset ? this.presetName : this.currentProject?.name);
             },

@@ -22,9 +22,9 @@
             },
         },
         computed: {
-            ...mapState([
-                'tags',
-            ]),
+            ...mapState({
+                tags: state => state.project.tags,
+            }),
             rules: () => ({
                 name: [
                     v => !!v || 'Required',

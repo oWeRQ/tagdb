@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+export function setErrorHandler(handler) {
+    axios.interceptors.response.use(response => response, handler);
+}
+
 export function setProjectId(value) {
-    console.log('setProjectId', value);
     axios.defaults.headers.common['X-Project-Id'] = value;
 }
 

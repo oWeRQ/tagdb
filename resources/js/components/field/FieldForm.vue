@@ -19,9 +19,9 @@
             },
         },
         computed: {
-            ...mapState([
-                'tags',
-            ]),
+            ...mapState({
+                tags: state => state.project.tags,
+            }),
             types: () => [
                 { text: 'String', value: 'string' },
                 { text: 'Text', value: 'text' },

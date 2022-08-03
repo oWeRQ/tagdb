@@ -45,9 +45,9 @@ import { mapState } from 'vuex';
 
 export default {
     computed: {
-        ...mapState([
-            'presets',
-        ]),
+        ...mapState({
+            presets: state => state.project.presets,
+        }),
     },
 };
 </script>

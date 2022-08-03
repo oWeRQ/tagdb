@@ -90,6 +90,9 @@
             }
         },
         computed: {
+            currentProject() {
+                return this.$store.state.auth.currentProject;
+            },
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
@@ -156,7 +159,7 @@
             },
             exportTags() {
                 const params = {
-                    export: this.$store.state.currentProject.name + '.json',
+                    export: this.currentProject.name + '.json',
                 };
                 window.open(api.tags.resource + '?' + toQueryString(params));
             },

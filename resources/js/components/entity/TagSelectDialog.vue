@@ -84,6 +84,9 @@ export default {
         };
     },
     computed: {
+        allTags() {
+            return this.$store.state.project.tags;
+        },
         isSelected() {
             return Boolean(this.selected.length);
         },
@@ -94,7 +97,7 @@ export default {
             return fuzzyFilter(this.search, this.unselectedTags, 'name');
         },
         isExists() {
-            return this.$store.state.tags.some(tag => tag.name === this.search);
+            return this.allTags.some(tag => tag.name === this.search);
         },
         canCreate() {
             return this.hasCreate && !this.isExists && !!this.search.trim();

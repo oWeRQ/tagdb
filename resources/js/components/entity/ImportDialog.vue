@@ -95,10 +95,10 @@ export default {
         };
     },
     computed: {
-        ...mapState([
-            'tags',
-            'fields',
-        ]),
+        ...mapState({
+            tags: state => state.project.tags,
+            fields: state => state.project.fields,
+        }),
         fieldItems() {
             return [
                 { id: 'tags', name: 'Tags' },

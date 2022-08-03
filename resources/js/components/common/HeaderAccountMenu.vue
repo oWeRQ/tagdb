@@ -34,9 +34,9 @@ import { mapActions, mapState } from 'vuex';
 
 export default {
     computed: {
-        ...mapState([
-            'account',
-        ]),
+        ...mapState({
+            account: state => state.auth.account,
+        }),
     },
     methods: {
         ...mapActions([

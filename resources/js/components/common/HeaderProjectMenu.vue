@@ -59,12 +59,12 @@ import ProjectDialog from '../project/ProjectDialog.vue';
 
 export default {
     computed: {
-        ...mapState([
-            'isReady',
-            'account',
-            'currentProject',
-            'projects',
-        ]),
+        ...mapState({
+            isReady: state => state.auth.isReady,
+            account: state => state.auth.account,
+            currentProject: state => state.auth.currentProject,
+            projects: state => state.auth.projects,
+        }),
         projectDeletable() {
             return this.projects.length > 1;
         },

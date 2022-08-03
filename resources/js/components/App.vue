@@ -35,9 +35,9 @@
             drawer: null,
         }),
         computed: {
-            ...mapState([
-                'isReady',
-            ]),
+            ...mapState({
+                isReady: state => state.auth.isReady,
+            }),
         },
     }
 </script>
