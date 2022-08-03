@@ -4,6 +4,7 @@ import entitiesResource from './entitiesResource';
 import fieldsResource from './fieldsResource';
 import tagsResource from './tagsResource';
 import accountResource from './accountResource';
+import authResource from './authResource';
 
 export function setErrorHandler(handler) {
     axios.interceptors.response.use(response => response, handler);
