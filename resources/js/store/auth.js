@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import api, { setErrorHandler, setProjectId } from '../api';
 import router from '../router';
 

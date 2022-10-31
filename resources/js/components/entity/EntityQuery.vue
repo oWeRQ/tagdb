@@ -53,7 +53,7 @@
         },
         computed: {
             ...mapState({
-                allTags: 'tags',
+                allTags: state => state.project.tags,
             }),
         },
         watch: {
