@@ -37,6 +37,7 @@ export default {
 
             api.tagsImport.store(data).then(response => {
                 this.$emit('done');
+                this.$store.dispatch('fetchTagsAndFields');
                 this.close();
             });
         },
