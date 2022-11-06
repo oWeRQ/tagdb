@@ -27,9 +27,14 @@ class Token extends Model
         return $this->belongsTo('App\project');
     }
 
+    public function access()
+    {
+        return $this->hasMany('App\TokenAccess');
+    }
+
     public function presets()
     {
-        return $this->belongsToMany('App\Preset', 'token_preset');
+        return $this->belongsToMany('App\Preset', 'token_preset')->as('access')->withPivot('can_create', 'can_read', 'can_update', 'can_delete');
     }
 
     public function scopeSort($query, $sort = null)
