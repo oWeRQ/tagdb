@@ -13,7 +13,9 @@ services:
     volumes:
       - storage:/var/www/html/storage
       - ./app:/var/www/html/app
+      - ./database:/var/www/html/database
       - ./public:/var/www/html/public
+      - ./routes:/var/www/html/routes
     environment:
       APP_URL: '${APP_URL}'
     depends_on:
