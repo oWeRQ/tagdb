@@ -9,7 +9,7 @@ services:
     build: .
     restart: on-failure:3
     ports:
-      - 8000:80
+      - 80:80
     volumes:
       - storage:/var/www/html/storage
       - ./app:/var/www/html/app
@@ -23,6 +23,8 @@ services:
   db:
     image: mariadb
     restart: on-failure:3
+    ports:
+      - 3306:3306
     volumes:
       - db:/var/lib/mysql
     environment:
