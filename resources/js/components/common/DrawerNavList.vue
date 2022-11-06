@@ -25,6 +25,14 @@
                     <v-list-item-title>Fields</v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
+            <v-list-item link to="/tokens">
+                <v-list-item-action>
+                    <v-icon>mdi-folder-key</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                    <v-list-item-title>Tokens</v-list-item-title>
+                </v-list-item-content>
+            </v-list-item>
         </v-list-item-group>
         <v-list-item-group color="primary" v-if="presets.length">
             <v-subheader>Presets</v-subheader>

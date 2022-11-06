@@ -5,6 +5,7 @@ import FieldList from '../components/field/FieldList.vue';
 import valuesRoute from './valuesRoute';
 import presetsRoute from './presetsRoute';
 import projectsRoute from './projectsRoute';
+import tokensRoute from './tokensRoute';
 import usersRoute from './usersRoute';
 
 export default [
@@ -37,6 +38,10 @@ export default [
     {
         path: '/projects',
         ...projectsRoute,
+    },
+    {
+        path: '/tokens',
+        ...tokensRoute,
     },
     {
         path: '/users',
