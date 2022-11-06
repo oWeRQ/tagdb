@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
     props: {
         value: {
@@ -71,6 +73,9 @@ export default {
         };
     },
     computed: {
+        ...mapState({
+            allFields: state => state.project.fields,
+        }),
         rules() {
             return {
                 required: v => !!v,
@@ -97,6 +102,10 @@ export default {
         },
     },
     watch: {
+        allFields: {
+            immediate: true,
+            handler: 'valueUpdate',
+        },
         value: {
             immediate: true,
             handler: 'valueUpdate',
@@ -107,6 +116,23 @@ export default {
         },
     },
     methods: {
+        getFieldText(fieldName) {
+            const field = this.fields.find(field => field.value === fieldName);
+            if (field) {
+                return field.text;
+            }
+
+            const match = fieldName.match(/^contents\.(\d+)$/);
+            if (match) {
+                const fieldId = +match[1];
+                const field = this.allFields.find(field => field.id === fieldId);
+                if (field) {
+                    return field.name;
+                }
+            }
+
+            return fieldName;
+        },
         getOperatorIcon(filter) {
             return {
                 eq: 'mdi-equal',
@@ -118,17 +144,21 @@ export default {
             }[filter.operator];
         },
         valueUpdate() {
-            this.valueFilters = this.fields.map(field => {
-                for (const operator in this.value[field.value]) {
-                    const value = this.value[field.value][operator];
-                    return {
-                        text: field.text,
-                        name: field.value,
+            const filters = [];
+
+            for (const fieldName in this.value) {
+                for (const operator in this.value[fieldName]) {
+                    const value = this.value[fieldName][operator];
+                    filters.push({
+                        text: this.getFieldText(fieldName),
+                        name: fieldName,
                         operator,
                         value,
-                    };
+                    });
                 }
-            }).filter(Boolean);
+            }
+
+            this.valueFilters = filters;
         },
         fieldsUpdate() {
             this.focus = 0;
