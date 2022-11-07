@@ -1,34 +1,38 @@
 <template>
     <div>
-        <v-text-field v-model="value.name" label="Name" autofocus />
+        <v-text-field :value="value.name" @input="changeName($event)" label="Name" autofocus />
 
         <v-text-field :value="value.apikey" label="Api Key" disabled />
 
         <div v-for="(item, i) in items" :key="i">
             <div class="caption">
-                {{ getPresetName(item.presetId) }}
+                {{ getPresetName(item.preset_id) }}
             </div>
             <v-row justify="space-between" class="ml-0 mr-4">
                 <v-checkbox
                     label="Create"
+                    @change="changeAccess(item.preset_id, 'can_create', $event)"
                     :input-value="item.can_create"
                     :true-value="1"
                     :false-value="0"
                 />
                 <v-checkbox
                     label="Read"
+                    @change="changeAccess(item.preset_id, 'can_read', $event)"
                     :input-value="item.can_read"
                     :true-value="1"
                     :false-value="0"
                 />
                 <v-checkbox
                     label="Update"
+                    @change="changeAccess(item.preset_id, 'can_update', $event)"
                     :input-value="item.can_update"
                     :true-value="1"
                     :false-value="0"
                 />
                 <v-checkbox
                     label="Delete"
+                    @change="changeAccess(item.preset_id, 'can_delete', $event)"
                     :input-value="item.can_delete"
                     :true-value="1"
                     :false-value="0"
@@ -44,11 +48,6 @@ import { mapState } from 'vuex';
 import keyBy from '../../functions/keyBy';
 
 export default {
-    data() {
-        return {
-            test: true,
-        };
-    },
     props: {
         editable: {
             type: Array,
@@ -65,24 +64,52 @@ export default {
         presetsById() {
             return keyBy(this.presets ?? [], v => v.id);
         },
+        accessById() {
+            return keyBy(this.value?.access ?? [], v => v.preset_id);
+        },
         items() {
-            const accessByPresetId = keyBy(this.value?.access ?? [], v => v.preset_id);
-
-            return this.presets.map(preset => {
-                return {
-                    presetId: preset.id,
-                    can_create: 0,
-                    can_read: 0,
-                    can_update: 0,
-                    can_delete: 0,
-                    ...(accessByPresetId[preset.id] ?? {}),
-                };
-            });
+            return this.getItems();
         },
     },
     methods: {
-        getPresetName(presetId) {
-            return this.presetsById[presetId]?.name;
+        changeName(name) {
+            this.$emit('input', {
+                ...this.value,
+                name,
+            });
+        },
+        changeAccess(preset_id, perm, value) {
+            const access = this.items.map(item => {
+                if (item.preset_id === preset_id) {
+                    return {
+                        ...item,
+                        [perm]: value,
+                    };
+                }
+
+                return item;
+            });
+
+            this.$emit('input', {
+                ...this.value,
+                access,
+            });
+        },
+        getItems() {
+            return this.presets.map(preset => this.getAccessById(preset.id));
+        },
+        getAccessById(preset_id) {
+            return {
+                preset_id,
+                can_create: 0,
+                can_read: 0,
+                can_update: 0,
+                can_delete: 0,
+                ...(this.accessById[preset_id] ?? {}),
+            };
+        },
+        getPresetName(preset_id) {
+            return this.presetsById[preset_id]?.name;
         },
     },
 };
