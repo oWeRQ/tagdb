@@ -58,16 +58,21 @@ class Project extends Model
 
     public function entities()
     {
-        return $this->belongsToMany('App\Entity');
+        return $this->hasMany('App\Entity');
     }
 
     public function tags()
     {
-        return $this->belongsToMany('App\Tag');
+        return $this->hasMany('App\Tag');
     }
 
     public function presets()
     {
-        return $this->belongsToMany('App\Preset');
+        return $this->hasMany('App\Preset');
+    }
+
+    public function hasPresetId($preset_id)
+    {
+        return $this->presets()->where('id', $preset_id)->exists();
     }
 }

@@ -51,4 +51,25 @@ class Token extends Model
 
         return $query;
     }
+
+    public function updateAccess(array $access = null)
+    {
+        if (!is_array($access))
+            return;
+
+        foreach ($access as $data) {
+            if (!$this->project->hasPresetId($data['preset_id']))
+                continue;
+
+            TokenAccess::updateOrCreate([
+                'token_id' => $this->id,
+                'preset_id' => $data['preset_id'],
+            ], [
+                'can_create' => $data['can_create'],
+                'can_read' => $data['can_read'],
+                'can_update' => $data['can_update'],
+                'can_delete' => $data['can_delete'],
+            ]);
+        }
+    }
 }

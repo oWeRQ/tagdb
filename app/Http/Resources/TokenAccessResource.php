@@ -15,8 +15,7 @@ class TokenAccessResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'preset_id' => $this->id,
+            'preset_id' => $this->preset_id,
             'can_create' => $this->can_create,
             'can_read' => $this->can_read,
             'can_update' => $this->can_update,

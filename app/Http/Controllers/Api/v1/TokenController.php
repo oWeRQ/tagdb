@@ -25,15 +25,19 @@ class TokenController extends ApiController
 
     public function store(Request $request)
     {
-        return new TokenResource(Token::create($request->all()));
+        $token = Token::create($request->all());
+        $token->updateAccess($request->get('access'));
+
+        return new TokenResource($token);
     }
 
     public function update(Request $request, $id)
     {
-        $Token = Token::findOrFail($id);
-        $Token->update($request->all());
+        $token = Token::findOrFail($id);
+        $token->update($request->all());
+        $token->updateAccess($request->get('access'));
 
-        return new TokenResource($Token);
+        return new TokenResource($token);
     }
 
     public function destroy($id)
