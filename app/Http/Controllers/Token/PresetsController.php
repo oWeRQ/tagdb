@@ -6,16 +6,30 @@ use Illuminate\Support\Arr;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Entity;
-use App\Preset;
+use App\Token;
 
 class PresetsController extends Controller
 {
-    public function index(Request $request, $presetName)
-    {
-        $preset = Preset::where('name', $presetName)->firstOrFail();
-        $presetTags = $preset->tags->pluck('name')->all();
+    protected $preset;
 
-        return $preset->entityQuery($request->get('sort'))->with(['tags', 'values.field'])->get()->map(function($entity) use($presetTags) {
+    public function __construct(Request $request)
+    {
+        $token = Token::findByApiKey($request->bearerToken());
+        if (!$token) {
+            abort(401);
+        }
+        $this->preset = $token->presets()->where('name', $request->route('preset'))->firstOrFail();
+    }
+
+    public function index(Request $request)
+    {
+        if (!$this->preset->access->can_read) {
+            abort(403);
+        }
+
+        $presetTags = $this->preset->tags->pluck('name')->all();
+
+        return $this->preset->entityQuery($request->get('sort'))->with(['tags', 'values.field'])->get()->map(function($entity) use($presetTags) {
             return array_merge([
                 'id' => $entity->id,
                 'name' => $entity->name,
@@ -27,11 +41,14 @@ class PresetsController extends Controller
         });
     }
 
-    public function show(Request $request, $presetName, $entityId)
+    public function show(Request $request)
     {
-        $preset = Preset::where('name', $presetName)->firstOrFail();
-        $presetTags = $preset->tags->pluck('name')->all();
-        $entity = $preset->entityQuery()->with(['tags', 'values.field'])->findOrFail($entityId);
+        if (!$this->preset->access->can_read) {
+            abort(403);
+        }
+
+        $presetTags = $this->preset->tags->pluck('name')->all();
+        $entity = $this->preset->entityQuery()->with(['tags', 'values.field'])->findOrFail($request->route('entity'));
 
         return array_merge([
             'id' => $entity->id,
@@ -43,11 +60,14 @@ class PresetsController extends Controller
         ]);
     }
 
-    public function store(Request $request, $presetName)
+    public function store(Request $request)
     {
-        $preset = Preset::where('name', $presetName)->firstOrFail();
+        if (!$this->preset->access->can_create) {
+            abort(403);
+        }
+
         $entity = Entity::create($request->all());
-        $entity->updateTags($preset->tags->all());
+        $entity->updateTags($this->preset->tags->all());
 
         $values = Arr::except($request->all(), $entity->getVisible());
         $entity->updateValues($values);
@@ -55,10 +75,14 @@ class PresetsController extends Controller
         return ['id' => $entity->id];
     }
 
-    public function update(Request $request, $presetName, $entityId)
+    public function update(Request $request)
     {
-        $query = Preset::where('name', $presetName)->firstOrFail()->entityQuery();
-        $entity = $query->with(['tags', 'values.field'])->findOrFail($entityId);
+        if (!$this->preset->access->can_update) {
+            abort(403);
+        }
+
+        $query = $this->preset->entityQuery();
+        $entity = $query->with(['tags', 'values.field'])->findOrFail($request->route('entity'));
         $entity->update($request->all());
 
         $values = Arr::except($request->all(), $entity->getVisible());
@@ -67,10 +91,14 @@ class PresetsController extends Controller
         return response('', 204);
     }
 
-    public function destroy(Request $request, $presetName, $entityId)
+    public function destroy(Request $request)
     {
-        $query = Preset::where('name', $presetName)->firstOrFail()->entityQuery();
-        $entity = $query->with(['tags', 'values.field'])->findOrFail($entityId);
+        if (!$this->preset->access->can_delete) {
+            abort(403);
+        }
+
+        $query = $this->preset->entityQuery();
+        $entity = $query->with(['tags', 'values.field'])->findOrFail($request->route('entity'));
         $entity->delete();
 
         return response('', 204);
