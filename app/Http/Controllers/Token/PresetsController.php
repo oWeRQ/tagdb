@@ -88,7 +88,7 @@ class PresetsController extends Controller
         $values = Arr::except($request->all(), $entity->getVisible());
         $entity->updateValues($values);
 
-        return response('', 204);
+        return response()->noContent();
     }
 
     public function destroy(Request $request)
@@ -101,6 +101,6 @@ class PresetsController extends Controller
         $entity = $query->with(['tags', 'values.field'])->findOrFail($request->route('entity'));
         $entity->delete();
 
-        return response('', 204);
+        return response()->noContent();
     }
 }
