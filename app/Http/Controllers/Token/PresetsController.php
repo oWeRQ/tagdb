@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Token;
 
 use Illuminate\Support\Arr;
 use Illuminate\Routing\Controller;
@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Entity;
 use App\Preset;
 
-class PublicController extends Controller
+class PresetsController extends Controller
 {
     public function index(Request $request, $presetName)
     {

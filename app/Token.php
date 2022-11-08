@@ -22,6 +22,10 @@ class Token extends Model
         });
     }
 
+    public static function findByApiKey($apikey) {
+        return static::withoutGlobalScope(ProjectScope::class)->where('apikey', $apikey)->first();
+    }
+
     public function project()
     {
         return $this->belongsTo('App\project');

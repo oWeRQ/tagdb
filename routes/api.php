@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1 as ApiV1;
 
@@ -32,7 +31,6 @@ Route::prefix('v1')->middleware('auth')->group(function() {
     Route::apiResource('presets', 'Api\v1\PresetController');
     Route::apiResource('projects', 'Api\v1\ProjectController');
     Route::apiResource('import', 'Api\v1\ImportController', ['only' => ['store']]);
-    Route::apiResource('public/{preset}', 'Api\v1\PublicController', ['parameters' => ['{preset}' => 'entity']]);
 
     Route::middleware('can:admin')->group(function() {
         Route::apiResource('users', 'Api\v1\UserController');
