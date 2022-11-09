@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Project;
+use App\Token;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,17 +20,28 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         Request::macro('project', function() {
+            /** @var Request */
+            $request = $this;
+
             static $project;
 
-            if ($project === null && $this->hasHeader('X-Project-Id')) {
-                $requestProject = Project::find($this->header('X-Project-Id'));
-                if ($this->user()->belongsToProject($requestProject)) {
+            if ($project === null && $request->bearerToken()) {
+                $token = Token::findByApiKey($request->bearerToken());
+                if (!$token) {
+                    abort(401);
+                }
+                return $project = $token->project;
+            }
+
+            if ($project === null && $request->hasHeader('X-Project-Id')) {
+                $requestProject = Project::find($request->header('X-Project-Id'));
+                if ($request->user()->belongsToProject($requestProject)) {
                     $project = $requestProject;
                 }
             }
 
             if ($project === null) {
-                $project = $this->user()->currentProject;
+                $project = $request->user()->currentProject;
             }
 
             if ($project === null) {

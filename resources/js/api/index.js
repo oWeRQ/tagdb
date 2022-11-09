@@ -24,6 +24,7 @@ export default {
     projects: apiResource(`/api/v1/projects`),
     tags: tagsResource(`/api/v1/tags`),
     tagsImport: apiResource(`/api/v1/tags-import`),
+    tokens: apiResource(`/api/v1/tokens`),
     users: apiResource(`/api/v1/users`),
     values: apiResource(`/api/v1/values`),
 };
