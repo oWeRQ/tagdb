@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Token;
 use App\Http\Resources\TokenResource;
+use App\Generators\OpenapiGenerator;
 use Illuminate\Http\Request;
 
 class TokenController extends ApiController
@@ -45,5 +46,12 @@ class TokenController extends ApiController
         Token::find($id)->delete();
 
         return response()->noContent();
+    }
+
+    public function openapi($id)
+    {
+        $token = Token::findOrFail($id);
+        $openapi = (new OpenapiGenerator)->fromToken($token);
+        return response()->json($openapi);
     }
 }

@@ -13,6 +13,7 @@ export default {
             { text: 'ID', value: 'id' },
             { text: 'Name', value: 'name' },
             { text: 'Api Key', value: 'apikey' },
+            { text: 'OpenApi', value: 'openapi' },
         ],
         editable: [
             { text: 'Name', value: 'name' },

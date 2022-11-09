@@ -26,6 +26,7 @@ Route::prefix('v1')->middleware('auth')->group(function() {
     Route::delete('tags/{id}/entities', [ApiV1\TagController::class, 'detachEntities']);
     Route::apiResource('tags-import', 'Api\v1\TagImportController', ['only' => ['store']]);
     Route::apiResource('tokens', 'Api\v1\TokenController');
+    Route::get('tokens/{id}/openapi', [ApiV1\TokenController::class, 'openapi'])->name('openapi');
     Route::apiResource('fields', 'Api\v1\FieldController');
     Route::put('fields/{id}/values', [ApiV1\FieldController::class, 'updateValues']);
     Route::apiResource('presets', 'Api\v1\PresetController');

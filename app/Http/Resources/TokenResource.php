@@ -19,6 +19,7 @@ class TokenResource extends JsonResource
             'name' => $this->name,
             'apikey' => $this->apikey,
             'access' => TokenAccessResource::collection($this->access),
+            'openapi' => route('openapi', ['id' => $this->id]),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
