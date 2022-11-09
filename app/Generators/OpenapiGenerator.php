@@ -63,11 +63,88 @@ class OpenapiGenerator
             ],
         ];
 
+        $idProperty = [
+            'id' => [
+                'type' => 'integer',
+                'example' => 1,
+            ],
+        ];
+
+        $nameProperty = [
+            'name' => [
+                'type' => 'string',
+                'example' => 'Entity Name',
+            ],
+        ];
+
+        $timestampProperties = [
+            'created_at' => [
+                'type' => 'string',
+                'example' => '2000-12-31T23:59:59.000000Z',
+            ],
+            'updated_at' => [
+                'type' => 'string',
+                'example' => '2000-12-31T23:59:59.000000Z',
+            ],
+        ];
+
+        $tagsPropterty = [
+            'tags' => [
+                'type' => 'array',
+                'items' => [
+                    'type' => 'string',
+                ],
+            ],
+        ];
+
+        $presetProperties = [];
+        foreach ($preset->fields as $field) {
+            $presetProperties[$field->code] = [
+                'type' => 'string',
+                'description' => $field->type,
+            ];
+        }
+
+        $readSchema = [
+            'required' => [
+                'id',
+                'name',
+            ],
+            'type' => 'object',
+            'properties' => array_merge($idProperty, $nameProperty, $presetProperties, $timestampProperties, $tagsPropterty),
+        ];
+
+        $updateSchema = [
+            'required' => [
+                'name',
+            ],
+            'type' => 'object',
+            'properties' => array_merge($nameProperty, $presetProperties),
+        ];
+
+        $createdSchema = [
+            'required' => [
+                'id',
+            ],
+            'type' => 'object',
+            'properties' => array_merge($idProperty),
+        ];
+
         if ($access->can_read) {
             $this->addMethod('get', $resource, [
                 'summary' => "List $name",
                 'responses' => [
-                    '200' => ['description' => 'List entities'],
+                    '200' => [
+                        'description' => 'List entities',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'array',
+                                    'items' => $readSchema,
+                                ],
+                            ],
+                        ],
+                    ],
                     '401' => ['description' => 'Bad api key'],
                     '403' => ['description' => 'Method not allowed'],
                     '404' => ['description' => 'Preset not found'],
@@ -80,7 +157,14 @@ class OpenapiGenerator
                     $parameterId,
                 ],
                 'responses' => [
-                    '200' => ['description' => 'Single entity'],
+                    '200' => [
+                        'description' => 'Single entity',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => $readSchema,
+                            ],
+                        ],
+                    ],
                     '401' => ['description' => 'Bad api key'],
                     '403' => ['description' => 'Method not allowed'],
                     '404' => ['description' => 'Preset or entity not found'],
@@ -91,8 +175,23 @@ class OpenapiGenerator
         if ($access->can_create) {
             $this->addMethod('post', $resource, [
                 'summary' => "Create $name",
+                'requestBody' => [
+                    'required' => true,
+                    'content' => [
+                        'application/json' => [
+                            'schema' => $updateSchema,
+                        ],
+                    ],
+                ],
                 'responses' => [
-                    '200' => ['description' => 'Created entity'],
+                    '200' => [
+                        'description' => 'Created entity',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => $createdSchema,
+                            ],
+                        ],
+                    ],
                     '401' => ['description' => 'Bad api key'],
                     '403' => ['description' => 'Method not allowed'],
                     '404' => ['description' => 'Preset not found'],
@@ -105,6 +204,14 @@ class OpenapiGenerator
                 'summary' => "Update $name",
                 'parameters' => [
                     $parameterId,
+                ],
+                'requestBody' => [
+                    'required' => true,
+                    'content' => [
+                        'application/json' => [
+                            'schema' => $updateSchema,
+                        ],
+                    ],
                 ],
                 'responses' => [
                     '204' => ['description' => 'Success'],

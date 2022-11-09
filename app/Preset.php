@@ -54,4 +54,11 @@ class Preset extends Model
     {
         return Tag::whereIn('name', json_decode($this->query)->tags)->get();
     }
+
+    public function getFieldsAttribute()
+    {
+        return $this->tags->flatMap(function($tag) {
+            return $tag->fields;
+        });
+    }
 }
