@@ -2,9 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Relations\Pivot;
-
-class Membership extends Pivot
+class Membership extends \App\Models\v1\Membership
 {
-    protected $table = 'project_user';
 }
