@@ -4,6 +4,8 @@ namespace App\Generators;
 
 use App\Models\v1\Preset;
 use App\Models\v1\Token;
+use Symfony\Component\HttpFoundation\HeaderUtils;
+use Symfony\Component\Yaml\Yaml;
 
 class OpenapiGenerator
 {
@@ -41,7 +43,16 @@ class OpenapiGenerator
         $this->addMethod('get', '/openapi', [
             'summary' => 'Get this document',
             'responses' => [
-                '200' => ['description' => 'Success'],
+                '200' => [
+                    'description' => 'Success',
+                    'content' => [
+                        'application/yaml' => [
+                            'schema' => [
+                                'type' => 'string',
+                            ],
+                        ],
+                    ],
+                ],
                 '401' => ['description' => 'Bad api key'],
             ],
         ]);
@@ -266,5 +277,17 @@ class OpenapiGenerator
                 ],
             ],
         ];
+    }
+
+    public function generateYaml()
+    {
+        return str_replace('{  }', '[]', Yaml::dump($this->generate(), 16, 2));
+    }
+
+    public function responseYaml()
+    {
+        return response($this->generateYaml())
+            ->header('Content-Type', 'application/yaml')
+            ->header('Content-Disposition', HeaderUtils::makeDisposition('inline', $this->title.'.yaml'));
     }
 }

@@ -23,7 +23,9 @@ class OpenapiController extends Controller
 
     public function index(Request $request)
     {
-        $openapi = (new OpenapiGenerator)->fromToken($this->token);
-        return response()->json($openapi);
+        $generator = new OpenapiGenerator;
+        $generator->addOpenapiMethods();
+        $generator->loadToken($this->token);
+        return $generator->responseYaml();
     }
 }

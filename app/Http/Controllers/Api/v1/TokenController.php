@@ -51,7 +51,9 @@ class TokenController extends ApiController
     public function openapi($id)
     {
         $token = Token::findOrFail($id);
-        $openapi = (new OpenapiGenerator)->fromToken($token);
-        return response()->json($openapi);
+        $generator = new OpenapiGenerator;
+        $generator->addOpenapiMethods();
+        $generator->loadToken($token);
+        return $generator->responseYaml();
     }
 }
