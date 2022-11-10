@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Token;
+use App\Models\v1\Token;
 use App\Http\Resources\TokenResource;
 use App\Generators\OpenapiGenerator;
 use Illuminate\Http\Request;

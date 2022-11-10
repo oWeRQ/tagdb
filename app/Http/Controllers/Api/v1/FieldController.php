@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Entity;
-use App\Field;
+use App\Models\v1\Entity;
+use App\Models\v1\Field;
 use App\Http\Resources\FieldResource;
 use Illuminate\Http\Request;
 

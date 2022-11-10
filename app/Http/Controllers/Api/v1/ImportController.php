@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Tag;
-use App\Field;
-use App\Preset;
+use App\Models\v1\Tag;
+use App\Models\v1\Field;
+use App\Models\v1\Preset;
 use App\Imports\EntityImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;

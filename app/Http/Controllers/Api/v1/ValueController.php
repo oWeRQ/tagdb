@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Value;
+use App\Models\v1\Value;
 use App\Http\Resources\ValueResource;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;

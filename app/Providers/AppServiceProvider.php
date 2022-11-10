@@ -2,8 +2,8 @@
 
 namespace App\Providers;
 
-use App\Project;
-use App\Token;
+use App\Models\v1\Project;
+use App\Models\v1\Token;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

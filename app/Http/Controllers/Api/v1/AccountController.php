@@ -6,7 +6,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserResource;
-use App\Project;
+use App\Models\v1\Project;
 
 class AccountController extends Controller
 {

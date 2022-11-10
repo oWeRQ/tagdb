@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Token;
 use Illuminate\Support\Arr;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
-use App\Entity;
-use App\Token;
+use App\Models\v1\Entity;
+use App\Models\v1\Token;
 
 class PresetsController extends Controller
 {

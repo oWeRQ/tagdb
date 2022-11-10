@@ -2,8 +2,8 @@
 
 namespace App\Actions\Fortify;
 
-use App\User;
-use App\Project;
+use App\Models\v1\User;
+use App\Models\v1\Project;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +18,7 @@ class CreateNewUser implements CreatesNewUsers
      * Validate and create a newly registered user.
      *
      * @param  array  $input
-     * @return \App\User
+     * @return \App\Models\v1\User
      */
     public function create(array $input)
     {
@@ -48,7 +48,7 @@ class CreateNewUser implements CreatesNewUsers
     /**
      * Create a personal project for the user.
      *
-     * @param  \App\User  $user
+     * @param  \App\Models\v1\User  $user
      * @return void
      */
     protected function createProject(User $user)

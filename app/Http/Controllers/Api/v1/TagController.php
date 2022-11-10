@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Tag;
+use App\Models\v1\Tag;
 use App\Http\Resources\TagResource;
 use Illuminate\Http\Request;
 

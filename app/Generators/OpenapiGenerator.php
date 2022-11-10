@@ -2,8 +2,8 @@
 
 namespace App\Generators;
 
-use App\Preset;
-use App\Token;
+use App\Models\v1\Preset;
+use App\Models\v1\Token;
 
 class OpenapiGenerator
 {

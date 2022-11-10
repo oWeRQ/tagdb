@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Preset;
+use App\Models\v1\Preset;
 use App\Http\Resources\PresetResource;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;

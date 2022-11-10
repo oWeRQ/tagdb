@@ -2,9 +2,9 @@
 
 namespace App\Imports;
 
-use App\Entity;
-use App\Field;
-use App\Tag;
+use App\Models\v1\Entity;
+use App\Models\v1\Field;
+use App\Models\v1\Tag;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;

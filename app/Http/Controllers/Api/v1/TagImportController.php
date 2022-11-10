@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Tag;
-use App\Field;
+use App\Models\v1\Tag;
+use App\Models\v1\Field;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 

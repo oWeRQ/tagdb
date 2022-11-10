@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Token;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use App\Generators\OpenapiGenerator;
-use App\Token;
+use App\Models\v1\Token;
 
 class OpenapiController extends Controller
 {

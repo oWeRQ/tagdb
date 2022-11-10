@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Field;
+use App\Models\v1\Field;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;

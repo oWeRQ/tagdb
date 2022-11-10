@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Entity;
-use App\Preset;
+use App\Models\v1\Entity;
+use App\Models\v1\Preset;
 use App\Exports\EntitiesExport;
 use App\Http\Resources\EntityResource;
 use Illuminate\Routing\Controller;
