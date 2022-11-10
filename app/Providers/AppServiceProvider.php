@@ -63,6 +63,10 @@ class AppServiceProvider extends ServiceProvider
     {
         URL::forceRootUrl(config('app.url'));
 
+        if (request()->header('X-Forwarded-Proto') === 'https') {
+            URL::forceScheme('https');
+        }
+
         if (env('DB_LOG', false)) {
             $this->enableDBLog();
         }
