@@ -5,8 +5,10 @@ namespace App\Providers;
 use App\Models\v1\Project;
 use App\Models\v1\Token;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
 
@@ -59,6 +61,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        URL::forceRootUrl(config('app.url'));
+
         if (env('DB_LOG', false)) {
             $this->enableDBLog();
         }

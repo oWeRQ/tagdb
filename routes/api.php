@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Api;
 
 /*
@@ -16,8 +15,6 @@ use App\Http\Controllers\Api;
 */
 
 Route::prefix('v1')->middleware('auth')->group(function() {
-    URL::forceRootUrl(config('app.url'));
-
     Route::get('account', [Api\v1\AccountController::class, 'index']);
     Route::get('account/projects', [Api\v1\AccountController::class, 'projects']);
     Route::get('account/current-project', [Api\v1\AccountController::class, 'currentProject']);
