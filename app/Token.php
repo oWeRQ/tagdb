@@ -28,7 +28,7 @@ class Token extends Model
 
     public function project()
     {
-        return $this->belongsTo('App\project');
+        return $this->belongsTo('App\Project');
     }
 
     public function access()
