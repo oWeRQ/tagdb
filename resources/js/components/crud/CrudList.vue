@@ -17,6 +17,9 @@
                 <v-toolbar-title v-title>{{ title }}</v-toolbar-title>
             </v-toolbar>
         </template>
+        <template v-for="column in slotColumn" v-slot:[column.slot]="{ item, header, value }">
+            <component :is="column.component" :item="item" :header="header" :value="value" />
+        </template>
         <template v-slot:item.actions="{ item }">
             <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
@@ -86,6 +89,12 @@
             }
         },
         computed: {
+            slotColumn() {
+                return this.columns.filter(column => column.component).map(column => ({
+                    slot: 'item.' + column.value,
+                    component: column.component,
+                }));
+            },
             serverItemsLength() {
                 return Math.max(this.items.length, this.total);
             },
