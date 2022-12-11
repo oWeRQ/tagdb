@@ -22,7 +22,7 @@ class AccountController extends Controller
 
     public function currentProject(Request $request)
     {
-        return new ProjectResource($request->user()->currentProject);
+        return new ProjectResource($request->project());
     }
 
     public function switchProject(Request $request)

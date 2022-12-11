@@ -77,6 +77,7 @@ export default {
             });
         },
         switchProject({ dispatch, commit }, project) {
+            window.sessionStorage.setItem('projectId', project.id);
             commit('currentProject', project);
             return api.account.switchProject(project).then(response => {
                 dispatch('fetchProjectData');
@@ -85,6 +86,7 @@ export default {
             });
         },
         fetchAccount({ dispatch, commit }) {
+            setProjectId(window.sessionStorage.getItem('projectId'));
             return Promise.all([
                 api.account.index(),
                 api.account.currentProject(),
