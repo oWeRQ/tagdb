@@ -1,6 +1,6 @@
 import './bootstrap';
 
-import Vue from 'vue';
+import { createApp, h } from 'vue';
 
 import store from './store';
 import router from './router';
@@ -14,14 +14,8 @@ import DialogStack from './components/common/DialogStack.vue';
 import title from './directives/title';
 import autoselect from './directives/autoselect';
 
-Vue.directive('title', title);
-Vue.directive('autoselect', autoselect);
-
-const app = new Vue({
-    store,
-    router,
-    vuetify,
-    render(h) {
+const app = createApp({
+    render() {
         return h(App, [
             h(AuthDialog),
             h(DialogStack, { ref: 'dialogStack' }),
@@ -38,4 +32,13 @@ const app = new Vue({
             return this.$refs.dialogStack.show(component, bind, on);
         },
     },
-}).$mount('#app');
+});
+
+app.use(store);
+app.use(router);
+app.use(vuetify);
+
+app.directive('title', title);
+app.directive('autoselect', autoselect);
+
+app.mount('#app');

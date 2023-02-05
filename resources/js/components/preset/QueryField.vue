@@ -13,7 +13,6 @@
 
 <script>
     import { mapState } from 'vuex';
-    import Vue from 'vue';
     import TagsField from '../entity/TagsField';
     import EntityFilter from '../entity/EntityFilter';
 
@@ -42,12 +41,12 @@
                 };
             },
             query() {
-                return Vue.observable({
+                return {
                     tags: [],
                     filter: {},
                     search: '',
                     ...JSON.parse(this.value || '{}'),
-                });
+                };
             },
             queryTags() {
                 return this.tags.filter(tag => this.query.tags.includes(tag.name));

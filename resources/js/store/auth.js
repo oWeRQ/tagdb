@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { nextTick } from 'vue';
 import api, { setErrorHandler, setProjectId } from '../api';
 import router from '../router';
 
@@ -57,7 +57,7 @@ export default {
         },
         reloadContent({ commit }) {
             commit('pending');
-            Vue.nextTick(() => {
+            nextTick(() => {
                 commit('ready');
             });
         },
