@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-text-field
-            v-model="value.name"
+            v-model="modelValue.name"
             :error-messages="errors.name"
             :rules="rules.required"
             label="Name"
@@ -9,8 +9,8 @@
         ></v-text-field>
 
         <v-text-field
-            v-if="value.owner"
-            v-model="value.owner.email"
+            v-if="modelValue.owner"
+            v-model="modelValue.owner.email"
             :error-messages="errors.owner"
             label="Owner"
             disabled
@@ -18,7 +18,7 @@
 
          <v-card>
             <v-list>
-                <v-list-item v-for="(user, i) in value.users" :key="i">
+                <v-list-item v-for="(user, i) in modelValue.users" :key="i">
                     <v-list-item-action>
                         <v-icon @click="remove(user)" color="grey lighten-1">mdi-close</v-icon>
                     </v-list-item-action>
@@ -61,7 +61,7 @@
 <script>
     export default {
         props: {
-            value: {
+            modelValue: {
                 type: Object,
                 default: () => {},
             },
@@ -84,7 +84,7 @@
         },
         methods: {
             add() {
-                this.value.users.push({
+                this.modelValue.users.push({
                     email: '',
                     membership: {
                         role: 'update',
@@ -92,7 +92,7 @@
                 });
             },
             remove(user) {
-                this.value.users = this.value.users.filter(item => item !== user);
+                this.modelValue.users = this.modelValue.users.filter(item => item !== user);
             },
         },
     }

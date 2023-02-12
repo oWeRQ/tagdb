@@ -1,9 +1,9 @@
 <template>
     <div>
-        <v-text-field v-model="value.name" @change="nameChanged(value)" :rules="rules.required" label="Name" autofocus />
-        <v-text-field v-model="value.code" @change="nameChanged(value)" :rules="rules.required" label="Code" />
-        <v-autocomplete :items="types" v-model="value.type" :rules="rules.required" label="Type" />
-        <v-autocomplete :items="tags" item-value="id" item-text="name" v-model="value.tag_id" :rules="rules.required" label="Tag" chips />
+        <v-text-field v-model="modelValue.name" @change="nameChanged(modelValue)" :rules="rules.required" label="Name" autofocus />
+        <v-text-field v-model="modelValue.code" @change="nameChanged(modelValue)" :rules="rules.required" label="Code" />
+        <v-autocomplete :items="types" v-model="modelValue.type" :rules="rules.required" label="Type" />
+        <v-autocomplete :items="tags" item-value="id" item-text="name" v-model="modelValue.tag_id" :rules="rules.required" label="Tag" chips />
     </div>
 </template>
 
@@ -13,7 +13,7 @@
 
     export default {
         props: {
-            value: {
+            modelValue: {
                 type: Object,
                 default: () => {},
             },

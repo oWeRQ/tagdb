@@ -1,12 +1,12 @@
 <template>
     <div>
-        <v-text-field v-model="value.name" :rules="rules.required" label="Tag" autofocus></v-text-field>
+        <v-text-field v-model="modelValue.name" :rules="rules.required" label="Tag" autofocus></v-text-field>
 
-        <ColorSwitcher v-model="value.color" label="Color"></ColorSwitcher>
+        <ColorSwitcher v-model="modelValue.color" label="Color"></ColorSwitcher>
 
         <v-card>
             <v-list>
-                <v-list-item v-for="(field, i) in value.fields" :key="'item' + i">
+                <v-list-item v-for="(field, i) in modelValue.fields" :key="'item' + i">
                     <v-list-item-action>
                         <v-icon @click="remove(field)" color="grey lighten-1">mdi-close</v-icon>
                     </v-list-item-action>
@@ -47,7 +47,7 @@
             ColorSwitcher,
         },
         props: {
-            value: {
+            modelValue: {
                 type: Object,
             },
         },

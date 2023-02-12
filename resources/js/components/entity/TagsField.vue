@@ -63,7 +63,7 @@
 
     export default {
         props: {
-            value: {
+            modelValue: {
                 type: Array,
             },
             hiddenTags: {
@@ -113,7 +113,7 @@
                 return fuzzyFilter(this.search, this.tags, 'name');
             },
             valueSorted() {
-                return this.returnObject ? [...this.value].sort(tagsCompare) : this.value;
+                return this.returnObject ? [...this.modelValue].sort(tagsCompare) : this.modelValue;
             },
         },
         watch: {
@@ -150,7 +150,7 @@
                 this.$emit('click:tag', item);
 
                 if (this.hyphen) {
-                    this.$emit('input', this.valueSorted.map((v, i) => {
+                    this.$emit('update:modelValue', this.valueSorted.map((v, i) => {
                         if (i === index)
                             return this.returnObject ? { ...v, name: toggleHyphen(v.name) } : toggleHyphen(v);
 
@@ -162,7 +162,7 @@
                 this.$emit('click:plus', item);
             },
             remove(index) {
-                this.$emit('input', this.valueSorted.filter((v, i) => i !== index));
+                this.$emit('update:modelValue', this.valueSorted.filter((v, i) => i !== index));
             },
             fetchTags() {
                 const params = {
@@ -185,7 +185,7 @@
                 }
             },
             input(value) {
-                this.$emit('input', value.map(item => {
+                this.$emit('update:modelValue', value.map(item => {
                     if (this.returnObject && typeof item === 'string') {
                         const name = item.replace(/^[+-]/, '');
                         const tag = this.tags.find(tag => tag.name === name);

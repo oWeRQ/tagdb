@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-textarea
-            v-model="value.name"
+            v-model="modelValue.name"
             :rules="rules.name"
             v-autoselect="autofocus == 'name'"
             spellcheck="false"
@@ -16,7 +16,7 @@
             <v-menu v-if="field.type === 'date'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
                 <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                        v-model="value.contents[field.id]"
+                        v-model="modelValue.contents[field.id]"
                         v-autoselect="autofocus == field.id"
                         :label="field.name"
                         readonly
@@ -26,13 +26,13 @@
                         prepend-icon="mdi-calendar"
                     ></v-text-field>
                 </template>
-                <v-date-picker v-model="value.contents[field.id]" @input="menu[field.id] = false" first-day-of-week="1"></v-date-picker>
+                <v-date-picker v-model="modelValue.contents[field.id]" @input="menu[field.id] = false" first-day-of-week="1"></v-date-picker>
             </v-menu>
 
             <v-menu v-else-if="field.type === 'time'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
                 <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                        v-model="value.contents[field.id]"
+                        v-model="modelValue.contents[field.id]"
                         v-autoselect="autofocus == field.id"
                         :label="field.name"
                         readonly
@@ -42,15 +42,15 @@
                         prepend-icon="mdi-clock-outline"
                     ></v-text-field>
                 </template>
-                <v-time-picker v-model="value.contents[field.id]" @click:minute="menu[field.id] = false" format="24hr"></v-time-picker>
+                <v-time-picker v-model="modelValue.contents[field.id]" @click:minute="menu[field.id] = false" format="24hr"></v-time-picker>
             </v-menu>
 
             <div v-else-if="field.type === 'rating'">
                 <div class="text-caption ml-8">{{ field.name }}</div>
-                <v-input prepend-icon="mdi-backspace-reverse-outline" @click:prepend="value.contents[field.id] = 0">
+                <v-input prepend-icon="mdi-backspace-reverse-outline" @click:prepend="modelValue.contents[field.id] = 0">
                     <v-rating
-                        :value="+value.contents[field.id]"
-                        @input="value.contents[field.id] = $event"
+                        :modelValue="+modelValue.contents[field.id]"
+                        @input="modelValue.contents[field.id] = $event"
                         hover
                         half-increments
                         color="orange"
@@ -62,7 +62,7 @@
 
             <v-textarea
                 v-else-if="field.type === 'text'"
-                v-model="value.contents[field.id]"
+                v-model="modelValue.contents[field.id]"
                 v-autoselect="autofocus == field.id"
                 :type="field.type"
                 :label="field.name"
@@ -73,7 +73,7 @@
 
             <v-text-field
                 v-else-if="field.type === 'url'"
-                v-model="value.contents[field.id]"
+                v-model="modelValue.contents[field.id]"
                 v-autoselect="autofocus == field.id"
                 :type="field.type"
                 :label="field.name"
@@ -83,7 +83,7 @@
 
             <v-text-field
                 v-else
-                v-model="value.contents[field.id]"
+                v-model="modelValue.contents[field.id]"
                 v-autoselect="autofocus == field.id"
                 type="text"
                 :label="field.name"
@@ -93,7 +93,7 @@
 
         <TagsField
             return-object
-            v-model="value.tags"
+            v-model="modelValue.tags"
             :rules="rules.tags"
             :autofocus="autofocus == 'tags'"
             @click:tag="showTag"
@@ -119,7 +119,7 @@
             TagsField,
         },
         props: {
-            value: {
+            modelValue: {
                 type: Object,
             },
             focus: {
@@ -143,13 +143,13 @@
                 };
             },
             sortedTags() {
-                return [...this.value.tags].sort(tagsCompare);
+                return [...this.modelValue.tags].sort(tagsCompare);
             },
             editedFields() {
                 return this.sortedTags.flatMap(item => item.fields);
             },
             firstSavedTag() {
-                return this.value.tags.find(tag => tag.id);
+                return this.modelValue.tags.find(tag => tag.id);
             },
             autofocus() {
                 return this.focus ? this.focus.replace(/^contents\./, '') : 'name';
@@ -159,9 +159,9 @@
             editedFields(fields) {
                 const contents = {};
                 for (const field of fields) {
-                    contents[field.id] = this.value.contents[field.id];
+                    contents[field.id] = this.modelValue.contents[field.id];
                 }
-                this.value.contents = contents;
+                this.modelValue.contents = contents;
             },
         },
         methods: {
@@ -178,7 +178,7 @@
                 Object.assign(this.originalTag, tag);
             },
             deleteTag(tag) {
-                this.value.tags = this.value.tags.filter(item => item.id !== tag.id);
+                this.modelValue.tags = this.modelValue.tags.filter(item => item.id !== tag.id);
             },
             addField() {
                 this.editField({
@@ -196,13 +196,13 @@
                 });
             },
             saveField(field) {
-                const tag = this.value.tags.find(tag => tag.id == field.tag_id);
+                const tag = this.modelValue.tags.find(tag => tag.id == field.tag_id);
                 if (tag) {
                     tag.fields.push(field);
                 }
             },
             open(field) {
-                window.open(this.value.contents[field.id], '_blank');
+                window.open(this.modelValue.contents[field.id], '_blank');
             },
         },
     };

@@ -1,8 +1,8 @@
 <template>
     <div>
-        <v-text-field :value="value.name" @input="changeName($event)" label="Name" autofocus />
+        <v-text-field :modelValue="modelValue.name" @update:modelValue="changeName($event)" label="Name" autofocus />
 
-        <v-text-field :value="value.apikey" label="Api Key" disabled />
+        <v-text-field :modelValue="modelValue.apikey" label="Api Key" disabled />
 
         <div v-for="(item, i) in items" :key="i">
             <div class="caption">
@@ -52,7 +52,7 @@ export default {
         editable: {
             type: Array,
         },
-        value: {
+        modelValue: {
             type: Object,
             default: () => {},
         },
@@ -65,7 +65,7 @@ export default {
             return keyBy(this.presets ?? [], v => v.id);
         },
         accessById() {
-            return keyBy(this.value?.access ?? [], v => v.preset_id);
+            return keyBy(this.modelValue?.access ?? [], v => v.preset_id);
         },
         items() {
             return this.getItems();
@@ -73,8 +73,8 @@ export default {
     },
     methods: {
         changeName(name) {
-            this.$emit('input', {
-                ...this.value,
+            this.$emit('update:modelValue', {
+                ...this.modelValue,
                 name,
             });
         },
@@ -90,8 +90,8 @@ export default {
                 return item;
             });
 
-            this.$emit('input', {
-                ...this.value,
+            this.$emit('update:modelValue', {
+                ...this.modelValue,
                 access,
             });
         },

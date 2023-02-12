@@ -1,8 +1,8 @@
 <template>
     <div>
-        <v-text-field v-model="value.name" :rules="rules.name" label="Name" autofocus></v-text-field>
-        <QueryField v-model="value.query" label="Query"></QueryField>
-        <SortField v-model="value.sort" :fields="fields" :rules="rules.sort" label="Sort"></SortField>
+        <v-text-field v-model="modelValue.name" :rules="rules.name" label="Name" autofocus></v-text-field>
+        <QueryField v-model="modelValue.query" label="Query"></QueryField>
+        <SortField v-model="modelValue.sort" :fields="fields" :rules="rules.sort" label="Sort"></SortField>
     </div>
 </template>
 
@@ -17,7 +17,7 @@
             QueryField,
         },
         props: {
-            value: {
+            modelValue: {
                 type: Object,
             },
         },
@@ -35,7 +35,7 @@
             }),
             queryTags() {
                 try {
-                    const tags = JSON.parse(this.value.query).tags;
+                    const tags = JSON.parse(this.modelValue.query).tags;
                     return this.tags.filter(tag => tags.includes(tag.name));
                 } catch (ex) {
                     return [];
