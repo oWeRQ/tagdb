@@ -110,9 +110,9 @@
 
 <script>
     import tagsCompare from '../../functions/tagsCompare';
-    import FieldDialog from '../field/FieldDialog';
-    import TagDialog from '../tag/TagDialog';
-    import TagsField from './TagsField';
+    import FieldDialog from '../field/FieldDialog.vue';
+    import TagDialog from '../tag/TagDialog.vue';
+    import TagsField from './TagsField.vue';
 
     export default {
         components: {

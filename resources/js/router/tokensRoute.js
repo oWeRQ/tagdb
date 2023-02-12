@@ -1,10 +1,10 @@
 import api from '../api';
-import Crud from '../components/crud/CrudList.vue';
+import CrudList from '../components/crud/CrudList.vue';
 import TokenForm from '../components/token/TokenForm.vue';
 import ColumnOpenapi from '../components/token/ColumnOpenapi.vue';
 
 export default {
-    component: Crud,
+    component: CrudList,
     props: {
         form: TokenForm,
         title: 'Tokens',

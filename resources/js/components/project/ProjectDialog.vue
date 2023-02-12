@@ -22,7 +22,7 @@
 <script>
     import api from '../../api';
     import cloneDeep from 'clone-deep';
-    import ProjectForm from './ProjectForm';
+    import ProjectForm from './ProjectForm.vue';
 
     export default {
         components: {

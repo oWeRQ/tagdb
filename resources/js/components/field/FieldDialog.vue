@@ -22,7 +22,7 @@
 <script>
     import api from '../../api';
     import cloneDeep from 'clone-deep';
-    import FieldForm from './FieldForm';
+    import FieldForm from './FieldForm.vue';
 
     export default {
         components: {

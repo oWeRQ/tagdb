@@ -8,8 +8,8 @@
 
 <script>
     import { mapState } from 'vuex';
-    import SortField from './SortField';
-    import QueryField from './QueryField';
+    import SortField from './SortField.vue';
+    import QueryField from './QueryField.vue';
 
     export default {
         components: {

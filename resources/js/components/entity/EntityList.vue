@@ -30,13 +30,11 @@
                 <v-btn v-if="isPreset" icon @click="editPreset(preset)" class="mr-2">
                     <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
-                <!--
                 <EntityQuery
                     v-model="query"
                     :hidden-tags="presetQueryTagNames"
                     :fields="filterFields"
                 ></EntityQuery>
-                -->
                 <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
@@ -78,13 +76,13 @@
     import ucwords from '../../functions/ucwords';
     import isObjectChange from '../../functions/isObjectChange';
 
-    import EntityDialog from './EntityDialog';
-    import EntityQuery from './EntityQuery';
-    import EntityRow from './EntityRow';
-    import EntitySelectionToolbar from './EntitySelectionToolbar';
-    import ExportDialog from './ExportDialog';
-    import ImportDialog from './ImportDialog';
-    import PresetDialog from '../preset/PresetDialog';
+    import EntityDialog from './EntityDialog.vue';
+    import EntityQuery from './EntityQuery.vue';
+    import EntityRow from './EntityRow.vue';
+    import EntitySelectionToolbar from './EntitySelectionToolbar.vue';
+    import ExportDialog from './ExportDialog.vue';
+    import ImportDialog from './ImportDialog.vue';
+    import PresetDialog from '../preset/PresetDialog.vue';
 
     export default {
         components: {
@@ -100,6 +98,8 @@
                 options: {
                     sortBy: ['created_at'],
                     sortDesc: [true],
+                    page: undefined,
+                    itemsPerPage: undefined,
                 },
                 selected: [],
                 query: this.defaultQuery(),
@@ -130,7 +130,7 @@
             routeQuery() {
                 return {
                     ...this.defaultQuery(),
-                    ...(this.$route.query.query ? JSON.parse(this.$route.query.query) : undefined),
+                    ...(this.$route.query.query ? JSON.parse(this.$route.query.query.toString()) : undefined),
                 };
             },
             routeSort() {
@@ -213,7 +213,7 @@
             },
         },
         mounted() {
-            this.options = parseSort(this.routeSort);
+            this.options = { ...parseSort(this.routeSort), page: undefined, itemsPerPage: undefined };
             this.query = this.routeQuery;
         },
         methods: {

@@ -26,7 +26,7 @@
 <script>
     import api from '../../api';
     import cloneDeep from 'clone-deep';
-    import EntityForm from './EntityForm';
+    import EntityForm from './EntityForm.vue';
 
     export default {
         components: {

@@ -21,7 +21,7 @@
 
 <script>
     import cloneDeep from 'clone-deep';
-    import CrudForm from './CrudForm';
+    import CrudForm from './CrudForm.vue';
 
     export default {
         props: {

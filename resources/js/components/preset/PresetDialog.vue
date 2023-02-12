@@ -22,7 +22,7 @@
 <script>
     import api from '../../api';
     import cloneDeep from 'clone-deep';
-    import PresetForm from './PresetForm';
+    import PresetForm from './PresetForm.vue';
 
     export default {
         components: {

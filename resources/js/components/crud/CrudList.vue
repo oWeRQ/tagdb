@@ -37,8 +37,8 @@
 <script>
     import updateItem from '../../functions/updateItem';
     import stringifySort from '../../functions/stringifySort';
-    import CrudDialog from './CrudDialog';
-    import CrudForm from './CrudForm';
+    import CrudDialog from './CrudDialog.vue';
+    import CrudForm from './CrudForm.vue';
 
     export default {
         props: {

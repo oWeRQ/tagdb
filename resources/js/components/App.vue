@@ -21,9 +21,9 @@
 
 <script>
     import { mapState } from 'vuex';
-    import DrawerNavList from './common/DrawerNavList';
-    import HeaderAccountMenu from './common/HeaderAccountMenu';
-    import HeaderProjectMenu from './common/HeaderProjectMenu';
+    import DrawerNavList from './common/DrawerNavList.vue';
+    import HeaderAccountMenu from './common/HeaderAccountMenu.vue';
+    import HeaderProjectMenu from './common/HeaderProjectMenu.vue';
 
     export default {
         components: {

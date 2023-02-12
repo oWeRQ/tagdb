@@ -1,9 +1,9 @@
 import api from '../api';
-import Crud from '../components/crud/CrudList.vue';
+import CrudList from '../components/crud/CrudList.vue';
 import PresetDialog from '../components/preset/PresetDialog.vue';
 
 export default {
-    component: Crud,
+    component: CrudList,
     props: {
         dialog: PresetDialog,
         title: 'Presets',

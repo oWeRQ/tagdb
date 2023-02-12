@@ -13,8 +13,8 @@
 
 <script>
     import { mapState } from 'vuex';
-    import TagsField from '../entity/TagsField';
-    import EntityFilter from '../entity/EntityFilter';
+    import TagsField from '../entity/TagsField.vue';
+    import EntityFilter from '../entity/EntityFilter.vue';
 
     export default {
         components: {

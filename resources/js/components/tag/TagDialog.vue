@@ -22,7 +22,7 @@
 <script>
     import api from '../../api';
     import cloneDeep from 'clone-deep';
-    import TagForm from './TagForm';
+    import TagForm from './TagForm.vue';
 
     export default {
         components: {

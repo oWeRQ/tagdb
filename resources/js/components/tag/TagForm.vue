@@ -40,7 +40,7 @@
 
 <script>
     import makeCode from '../../functions/makeCode';
-    import ColorSwitcher from './ColorSwitcher';
+    import ColorSwitcher from './ColorSwitcher.vue';
 
     export default {
         components: {

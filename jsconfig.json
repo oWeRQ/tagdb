@@ -1,0 +1,8 @@
+{
+    "include": ["resources/js/**/*.js", "./resources/js/**/*.vue"],
+    "compilerOptions": {
+      "moduleResolution": "node",
+      "baseUrl": "resources/js",
+      "checkJs": false
+    },
+  }

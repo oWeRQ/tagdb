@@ -1,8 +1,8 @@
 import api from '../api';
-import Crud from '../components/crud/CrudList.vue';
+import CrudList from '../components/crud/CrudList.vue';
 
 export default {
-    component: Crud,
+    component: CrudList,
     props: {
         title: 'Values',
         api: api.values,

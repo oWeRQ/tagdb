@@ -19,10 +19,10 @@
 <script>
     import { mapState } from 'vuex';
 
-    import EntityFilter from './EntityFilter';
-    import ToolbarSearch from '../common/ToolbarSearch';
-    import TagsField from './TagsField';
-    import TagDialog from '../tag/TagDialog';
+    import EntityFilter from './EntityFilter.vue';
+    import ToolbarSearch from '../common/ToolbarSearch.vue';
+    import TagsField from './TagsField.vue';
+    import TagDialog from '../tag/TagDialog.vue';
 
     export default {
         components: {
@@ -31,7 +31,7 @@
             ToolbarSearch,
         },
         props: {
-            value: {
+            modelValue: {
                 type: Object,
                 default: () => ({}),
             },
@@ -57,7 +57,7 @@
             }),
         },
         watch: {
-            value(query) {
+            modelValue(query) {
                 this.tags = query.tags.map(this.getTag);
                 this.filter = query.filter;
                 this.search = query.search;
@@ -84,7 +84,7 @@
                 return { fields: [], ...tag, name: item };
             },
             onInput() {
-                this.$emit('input', {
+                this.$emit('update:modelValue', {
                     tags: this.tags.map(tag => tag.name),
                     filter: this.filter,
                     search: this.search,

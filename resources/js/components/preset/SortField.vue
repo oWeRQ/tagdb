@@ -20,8 +20,8 @@
 </template>
 
 <script>
-    import parseSort from '../../functions/parseSort'
-    import stringifySort from '../../functions/stringifySort'
+    import parseSort from '../../functions/parseSort';
+    import stringifySort from '../../functions/stringifySort';
 
     export default {
         props: {
