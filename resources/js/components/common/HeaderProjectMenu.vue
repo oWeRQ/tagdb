@@ -4,11 +4,10 @@
         v-if="account"
         offset-y
     >
-        <template v-slot:activator="{ on, attrs }">
+        <template v-slot:activator="{ props }">
             <v-btn
                 text
-                v-bind="attrs"
-                v-on="on"
+                v-bind="props"
                 class="ml-4 text-capitalize"
             >
                 <v-icon class="mr-1">mdi-folder-outline</v-icon>
@@ -24,29 +23,23 @@
                 :class="{'v-list-item--active primary--text': currentProject && currentProject.id === project.id}"
                 @click="switchProject(project)"
             >
-                <v-list-item-icon class="mr-4">
+                <template v-slot:prepend>
                     <v-icon v-if="currentProject && currentProject.id === project.id">mdi-check</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>{{ project.name }}</v-list-item-title>
-                </v-list-item-content>
+                </template>
+                <v-list-item-title>{{ project.name }}</v-list-item-title>
             </v-list-item>
             <v-divider></v-divider>
             <v-list-item @click="editProject(currentProject)">
-                <v-list-item-icon class="mr-4">
+                <template v-slot:prepend>
                     <v-icon>mdi-pencil</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>Edit Project</v-list-item-title>
-                </v-list-item-content>
+                </template>
+                <v-list-item-title>Edit Project</v-list-item-title>
             </v-list-item>
             <v-list-item @click="addProject">
-                <v-list-item-icon class="mr-4">
+                <template v-slot:prepend>
                     <v-icon>mdi-plus</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title>New Project</v-list-item-title>
-                </v-list-item-content>
+                </template>
+                <v-list-item-title>New Project</v-list-item-title>
             </v-list-item>
         </v-list>
     </v-menu>

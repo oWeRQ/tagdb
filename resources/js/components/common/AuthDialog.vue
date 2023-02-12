@@ -5,8 +5,8 @@
                 <v-tab>Login</v-tab>
                 <v-tab>Register</v-tab>
             </v-tabs>
-            <v-tabs-items v-model="tab">
-                <v-tab-item>
+            <v-window v-model="tab">
+                <v-window-item>
                     <v-form @submit.prevent="submitLogin">
                         <v-card-text>
                             <v-text-field
@@ -39,8 +39,8 @@
                             <v-btn color="blue darken-1" text type="submit">Login</v-btn>
                         </v-card-actions>
                     </v-form>
-                </v-tab-item>
-                <v-tab-item>
+                </v-window-item>
+                <v-window-item>
                     <v-form @submit.prevent="submitRegister">
                         <v-card-text>
                             <v-text-field
@@ -83,8 +83,8 @@
                             <v-btn color="blue darken-1" text type="submit">Register</v-btn>
                         </v-card-actions>
                     </v-form>
-                </v-tab-item>
-            </v-tabs-items>
+                </v-window-item>
+            </v-window>
         </v-card>
     </v-dialog>
 </template>
