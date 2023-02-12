@@ -11,10 +11,10 @@ export default {
         api: api.tokens,
         defaultItem: {},
         columns: [
-            { text: 'ID', value: 'id' },
-            { text: 'Name', value: 'name' },
-            { text: 'Api Key', value: 'apikey' },
-            { text: 'OpenApi', value: 'openapi', component: ColumnOpenapi },
+            { title: 'ID', key: 'id' },
+            { title: 'Name', key: 'name' },
+            { title: 'Api Key', key: 'apikey' },
+            { title: 'OpenApi', key: 'openapi', component: ColumnOpenapi },
         ],
         editable: [
             { text: 'Name', value: 'name' },

@@ -8,9 +8,9 @@ export default {
         api: api.users,
         defaultItem: {},
         columns: [
-            { text: 'ID', value: 'id' },
-            { text: 'Name', value: 'name' },
-            { text: 'Email', value: 'email' },
+            { title: 'ID', key: 'id' },
+            { title: 'Name', key: 'name' },
+            { title: 'Email', key: 'email' },
         ],
         editable: [
             { text: 'Name', value: 'name' },

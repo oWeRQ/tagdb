@@ -18,12 +18,12 @@
                 <ToolbarSearch v-model="search"></ToolbarSearch>
             </v-toolbar>
         </template>
-        <template v-slot:item.name="{ item }">
-            <TagChip @click="editItem(item.raw)" :tag="item.raw" small></TagChip>
+        <template v-slot:item.name="{ item: { raw: item } }">
+            <TagChip @click="editItem(item)" :tag="item" small></TagChip>
         </template>
-        <template v-slot:item.fields="{ item }">
+        <template v-slot:item.fields="{ item: { raw: item } }">
             <v-chip
-                v-for="field in item.raw.fields"
+                v-for="field in item.fields"
                 :key="field.id"
                 label
                 outlined
@@ -32,11 +32,11 @@
                 @click="editField(field)"
             >{{ field.name }}</v-chip>
         </template>
-        <template v-slot:item.created_at="{ item }">
-            {{ date(item.raw.created_at) }}
+        <template v-slot:item.created_at="{ item: { raw: item } }">
+            {{ date(item.created_at) }}
         </template>
-        <template v-slot:item.actions="{ item }">
-            <v-icon @click="editItem(item.raw)" color="grey">
+        <template v-slot:item.actions="{ item: { raw: item } }">
+            <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
             </v-icon>
         </template>

@@ -17,10 +17,10 @@
                 <v-toolbar-title v-title>{{ title }}</v-toolbar-title>
             </v-toolbar>
         </template>
-        <template v-for="column in slotColumn" v-slot:[column.slot]="{ item, header, value }">
-            <component :is="column.component" :item="item" :header="header" :value="value" />
+        <template v-for="column in slotColumn" v-slot:[column.slot]="{ item: { raw: item } }">
+            <component :is="column.component" :item="item" :value="item[column.key]" />
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:item.actions="{ item: { raw: item } }">
             <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
             </v-icon>
@@ -65,8 +65,8 @@
             columns: {
                 type: Array,
                 default: () => [
-                    { text: 'ID', value: 'id' },
-                    { text: 'Name', value: 'name' },
+                    { title: 'ID', key: 'id' },
+                    { title: 'Name', key: 'name' },
                 ],
             },
             editable: {
@@ -91,7 +91,8 @@
         computed: {
             slotColumn() {
                 return this.columns.filter(column => column.component).map(column => ({
-                    slot: 'item.' + column.value,
+                    ...column,
+                    slot: 'item.' + column.key,
                     component: column.component,
                 }));
             },
@@ -104,7 +105,7 @@
             headers() {
                 return [
                     ...this.columns,
-                    { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
+                    { title: 'Actions', key: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
             sort() {
@@ -118,6 +119,9 @@
                 this.getItems();
             },
             options: 'getItems',
+        },
+        mounted() {
+            this.getItems();
         },
         methods: {
             getItems() {

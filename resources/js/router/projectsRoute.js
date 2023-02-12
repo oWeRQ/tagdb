@@ -10,9 +10,9 @@ export default {
         api: api.projects,
         defaultItem: {},
         columns: [
-            { text: 'ID', value: 'id' },
-            { text: 'Name', value: 'name' },
-            { text: 'Owner', value: 'owner.email' },
+            { title: 'ID', key: 'id' },
+            { title: 'Name', key: 'name' },
+            { title: 'Owner', key: 'owner.email' },
         ],
     },
 };

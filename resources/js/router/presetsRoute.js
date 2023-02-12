@@ -10,10 +10,10 @@ export default {
         api: api.presets,
         defaultItem: {},
         columns: [
-            { text: 'ID', value: 'id' },
-            { text: 'Name', value: 'name' },
-            { text: 'Sort', value: 'sort' },
-            { text: 'Query', value: 'query' },
+            { title: 'ID', key: 'id' },
+            { title: 'Name', key: 'name' },
+            { title: 'Sort', key: 'sort' },
+            { title: 'Query', key: 'query' },
         ],
     }
 };

@@ -17,10 +17,10 @@
                 <v-toolbar-title v-title>Fields</v-toolbar-title>
             </v-toolbar>
         </template>
-        <template v-slot:item.tag="{ item }">
-            <TagChip @click="editTag(item.tag)" :tag="item.tag" small></TagChip>
+        <template v-slot:item.tag="{ item: { raw: item } }">
+            <TagChip v-if="item.tag" @click="editTag(item.tag)" :tag="item.tag" small></TagChip>
         </template>
-        <template v-slot:item.name="{ item }">
+        <template v-slot:item.name="{ item: { raw: item } }">
             <v-chip
                 label
                 outlined
@@ -28,10 +28,10 @@
                 @click="editItem(item)"
             >{{ item.name }}</v-chip>
         </template>
-        <template v-slot:item.created_at="{ item }">
-            {{ item.created_at | date }}
+        <template v-slot:item.created_at="{ item: { raw: item } }">
+            {{ date(item.created_at) }}
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:item.actions="{ item: { raw: item } }">
             <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
             </v-icon>
@@ -59,9 +59,6 @@
         components: {
             TagChip,
         },
-        filters: {
-            date,
-        },
         data() {
             return {
                 loading: true,
@@ -82,12 +79,12 @@
             },
             headers() {
                 return [
-                    { text: 'Tag', value: 'tag', sortable: false },
-                    { text: 'Name', value: 'name' },
-                    { text: 'Code', value: 'code' },
-                    { text: 'Type', value: 'type' },
-                    { text: 'Created', value: 'created_at' },
-                    { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
+                    { title: 'Tag', key: 'tag', sortable: false },
+                    { title: 'Name', key: 'name' },
+                    { title: 'Code', key: 'code' },
+                    { title: 'Type', key: 'type' },
+                    { title: 'Created', key: 'created_at' },
+                    { title: 'Actions', key: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
             sort() {
@@ -97,7 +94,11 @@
         watch: {
             options: 'getItems',
         },
+        mounted() {
+            this.getItems();  
+        },
         methods: {
+            date,
             processItem(value) {
                 return {
                     ...value,

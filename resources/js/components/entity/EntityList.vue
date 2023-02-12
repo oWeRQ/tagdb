@@ -177,16 +177,16 @@
             },
             headers() {
                 return [
-                    { text: 'Tags', value: 'tags', sortable: false, width: '1%' },
-                    { text: 'Name', value: 'name' },
+                    { title: 'Tags', key: 'tags', sortable: false, width: '1%' },
+                    { title: 'Name', key: 'name' },
                     ...this.displayFields,
-                    { text: 'Created', value: 'created_at', type: 'date', width: '120px' },
-                    { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
+                    { title: 'Created', key: 'created_at', type: 'date', width: '120px' },
+                    { title: 'Actions', key: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
             filterFields() {
                 return [
-                    { text: 'Name', value: 'name', type: 'text' },
+                    { title: 'Name', key: 'name', type: 'text' },
                     ...this.displayFields,
                 ];
             },

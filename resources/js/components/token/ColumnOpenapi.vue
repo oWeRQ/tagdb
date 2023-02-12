@@ -8,9 +8,6 @@ export default {
         item: {
             type: Object,
         },
-        header: {
-            type: Object,
-        },
         value: {
             type: String,
             default: '',
