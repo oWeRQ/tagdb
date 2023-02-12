@@ -1,8 +1,8 @@
 <template>
     <v-menu v-model="isShow" offset-y :close-on-content-click="false" max-width="360px">
-        <template v-slot:activator="{ on, attrs }">
+        <template v-slot:activator="{ props }">
             <span>
-                <v-btn icon v-bind="attrs" v-on="on" @click="focus = 0">
+                <v-btn icon v-bind="props" @click="focus = 0">
                     <v-icon>mdi-filter-variant</v-icon>
                 </v-btn>
                 <span
@@ -55,7 +55,7 @@ import { mapState } from 'vuex';
 
 export default {
     props: {
-        value: {
+        modelValue: {
             type: Object,
             default: () => ({}),
         },
@@ -83,12 +83,12 @@ export default {
         },
         operators() {
             return [
-                { text: 'Contains', value: 'like' },
-                { text: 'Equal', value: 'eq' },
-                { text: 'Greater', value: 'gt' },
-                { text: 'Greater Equal', value: 'gte' },
-                { text: 'Less', value: 'lt' },
-                { text: 'Less Equal', value: 'lte' },
+                { title: 'Contains', value: 'like' },
+                { title: 'Equal', value: 'eq' },
+                { title: 'Greater', value: 'gt' },
+                { title: 'Greater Equal', value: 'gte' },
+                { title: 'Less', value: 'lt' },
+                { title: 'Less Equal', value: 'lte' },
             ];
         },
         typeOperators() {
@@ -106,7 +106,7 @@ export default {
             immediate: true,
             handler: 'valueUpdate',
         },
-        value: {
+        modelValue: {
             immediate: true,
             handler: 'valueUpdate',
         },
@@ -146,9 +146,9 @@ export default {
         valueUpdate() {
             const filters = [];
 
-            for (const fieldName in this.value) {
-                for (const operator in this.value[fieldName]) {
-                    const value = this.value[fieldName][operator];
+            for (const fieldName in this.modelValue) {
+                for (const operator in this.modelValue[fieldName]) {
+                    const value = this.modelValue[fieldName][operator];
                     filters.push({
                         text: this.getFieldText(fieldName),
                         name: fieldName,
@@ -163,8 +163,8 @@ export default {
         fieldsUpdate() {
             this.focus = 0;
             this.filters = this.fields.map(field => {
-                for (const operator in this.value[field.value]) {
-                    const value = this.value[field.value][operator];
+                for (const operator in this.modelValue[field.value]) {
+                    const value = this.modelValue[field.value][operator];
                     return {
                         text: field.text,
                         name: field.value,
@@ -182,13 +182,13 @@ export default {
             });
         },
         remove(filter, i) {
-            this.$emit('input', {
-                ...this.value,
+            this.$emit('update:modelValue', {
+                ...this.modelValue,
                 [filter.name]: undefined,
             });
         },
         apply() {
-            this.$emit('input', this.filters.reduce((a, c) => {
+            this.$emit('update:modelValue', this.filters.reduce((a, c) => {
                 if (c.value) {
                     a[c.name] = { [c.operator]: c.value };
                 }

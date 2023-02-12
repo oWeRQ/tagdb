@@ -24,7 +24,7 @@ import { debounce } from 'lodash';
 
 export default {
     props: {
-        value: {
+        modelValue: {
             type: String,
             default: '',
         },
@@ -41,7 +41,7 @@ export default {
     computed: {
         inputValue: {
             get() {
-                return this.value;
+                return this.modelValue;
             },
             set(value) {
                 this.emitInput(value);
@@ -53,7 +53,7 @@ export default {
     },
     mounted() {
         this.emitInput = debounce(function(value) {
-            this.$emit('input', value);
+            this.$emit('update:modelValue', value);
         }, this.wait);
     },
     methods: {
@@ -61,12 +61,12 @@ export default {
             this.isShow = true;
         },
         blur() {
-            this.isShow = !!this.value;
+            this.isShow = !!this.modelValue;
         },
         clear() {
             this.isShow = false;
-            if (this.value) {
-                this.$emit('input', '');
+            if (this.modelValue) {
+                this.$emit('update:modelValue', '');
             }
         },
     },

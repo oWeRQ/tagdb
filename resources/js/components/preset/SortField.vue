@@ -3,7 +3,7 @@
         :label="label"
         :items="items"
         v-model="sort.sortBy"
-        item-text="name"
+        item-title="name"
         item-value="value"
         multiple
         :menuProps="{ closeOnContentClick: true }"

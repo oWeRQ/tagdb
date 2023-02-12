@@ -11,7 +11,7 @@
                         v-model="field"
                         :items="fieldItems"
                         :filter="fieldFilter"
-                        item-text="name"
+                        item-title="name"
                         item-value="id"
                         clearable
                         outlined

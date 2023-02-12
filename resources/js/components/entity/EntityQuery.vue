@@ -2,7 +2,7 @@
     <div class="d-flex align-center">
         <TagsField
             v-model="tags"
-            @input="onInput"
+            @update:modelValue="onInput"
             @click:plus="showTag"
             return-object
             :hidden-tags="hiddenTags"
@@ -11,8 +11,8 @@
             class="shrink mr-2"
             prepend-inner-icon="mdi-tag-multiple-outline"
         ></TagsField>
-        <EntityFilter v-model="filter" @input="onInput" :fields="fields"></EntityFilter>
-        <ToolbarSearch v-model="search" @input="onInput"></ToolbarSearch>
+        <EntityFilter v-model="filter" @update:modelValue="onInput" :fields="fields"></EntityFilter>
+        <ToolbarSearch v-model="search" @update:modelValue="onInput"></ToolbarSearch>
     </div>
 </template>
 

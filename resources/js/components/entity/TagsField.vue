@@ -1,18 +1,17 @@
 <template>
     <v-combobox
         ref="combobox"
-        @input="input"
+        @update:modelValue="input"
         @change="change"
-        :search-input.sync="search"
+        v-model:search="search"
         :loading="loading"
-        :value="valueSorted"
+        :modelValue="valueSorted"
         :rules="rules"
         :items="filteredTags"
         :label="label"
-        item-text="name"
+        item-title="name"
         item-value="name"
         no-filter
-        chips
         multiple
         hide-selected
         hide-no-data
@@ -27,7 +26,7 @@
         :prepend-icon="prependIcon"
         :prepend-inner-icon="prependInnerIcon"
     >
-        <template v-slot:selection="{ item, index }">
+        <template v-slot:selection="{ item: { value: item }, index }">
             <v-chip close @click.stop="click(index, item)" @click:close="remove(index)" class="lighten-2" :color="item.color" :dark="!!item.color">
                 <v-icon left v-if="returnObject && !item.id" @click.stop="plus(index, item)">
                     mdi-plus
@@ -39,11 +38,13 @@
             </v-chip>
         </template>
         <template v-slot:item="{ item }">
-            <v-icon @click="keepActive" class="mr-2" :class="iconColor(item)">
-                mdi-tag-plus-outline
-            </v-icon>
-            <span :class="textColor(item)">{{ item.name }}</span>
-            <span v-if="item.entities_count" class="caption grey--text text--lighten-1 ml-2">({{ item.entities_count }})</span>
+            <v-list-item @click="$refs.combobox.select(item)">
+                <v-icon @click="keepActive" class="mr-2" :class="iconColor(item.value)">
+                    mdi-tag-plus-outline
+                </v-icon>
+                <span :class="textColor(item.value)">{{ item.value.name }}</span>
+                <span v-if="item.value.entities_count" class="caption grey--text text--lighten-1 ml-2">({{ item.value.entities_count }})</span>
+            </v-list-item>
         </template>
     </v-combobox>
 </template>

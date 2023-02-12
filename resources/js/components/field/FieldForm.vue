@@ -3,7 +3,7 @@
         <v-text-field v-model="modelValue.name" @change="nameChanged(modelValue)" :rules="rules.required" label="Name" autofocus />
         <v-text-field v-model="modelValue.code" @change="nameChanged(modelValue)" :rules="rules.required" label="Code" />
         <v-autocomplete :items="types" v-model="modelValue.type" :rules="rules.required" label="Type" />
-        <v-autocomplete :items="tags" item-value="id" item-text="name" v-model="modelValue.tag_id" :rules="rules.required" label="Tag" chips />
+        <v-autocomplete :items="tags" item-value="id" item-title="name" v-model="modelValue.tag_id" :rules="rules.required" label="Tag" chips />
     </div>
 </template>
 
@@ -23,14 +23,14 @@
                 tags: state => state.project.tags,
             }),
             types: () => [
-                { text: 'String', value: 'string' },
-                { text: 'Text', value: 'text' },
-                { text: 'Url', value: 'url' },
-                { text: 'Email', value: 'email' },
-                { text: 'Color', value: 'color' },
-                { text: 'Date', value: 'date' },
-                { text: 'Time', value: 'time' },
-                { text: 'Rating', value: 'rating' },
+                { title: 'String', value: 'string' },
+                { title: 'Text', value: 'text' },
+                { title: 'Url', value: 'url' },
+                { title: 'Email', value: 'email' },
+                { title: 'Color', value: 'color' },
+                { title: 'Date', value: 'date' },
+                { title: 'Time', value: 'time' },
+                { title: 'Rating', value: 'rating' },
             ],
             rules() {
                 return ({
