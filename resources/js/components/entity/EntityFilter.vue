@@ -19,7 +19,7 @@
                         <span class="grey--text text--darken-1 mr-1">
                             {{ filter.text }}
                         </span>
-                        <v-icon size="14" class="mr-1" v-text="getOperatorIcon(filter)"></v-icon>
+                        <v-icon size="14" class="mr-1" :icon="getOperatorIcon(filter)"></v-icon>
                         {{ filter.value }}
                     </v-chip>
                 </span>
@@ -117,9 +117,9 @@ export default {
     },
     methods: {
         getFieldText(fieldName) {
-            const field = this.fields.find(field => field.value === fieldName);
+            const field = this.fields.find(field => field.key === fieldName);
             if (field) {
-                return field.text;
+                return field.title;
             }
 
             const match = fieldName.match(/^contents\.(\d+)$/);
@@ -163,19 +163,19 @@ export default {
         fieldsUpdate() {
             this.focus = 0;
             this.filters = this.fields.map(field => {
-                for (const operator in this.modelValue[field.value]) {
-                    const value = this.modelValue[field.value][operator];
+                for (const operator in this.modelValue[field.key]) {
+                    const value = this.modelValue[field.key][operator];
                     return {
-                        text: field.text,
-                        name: field.value,
+                        text: field.title,
+                        name: field.key,
                         operator,
                         value,
                     };
                 }
 
                 return {
-                    text: field.text,
-                    name: field.value,
+                    text: field.title,
+                    name: field.key,
                     operator: this.typeOperators[field.type] || 'eq',
                     value: '',
                 };
