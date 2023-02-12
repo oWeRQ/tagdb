@@ -19,11 +19,11 @@
             </v-toolbar>
         </template>
         <template v-slot:item.name="{ item }">
-            <TagChip @click="editItem(item)" :tag="item" small></TagChip>
+            <TagChip @click="editItem(item.raw)" :tag="item.raw" small></TagChip>
         </template>
         <template v-slot:item.fields="{ item }">
             <v-chip
-                v-for="field in item.fields"
+                v-for="field in item.raw.fields"
                 :key="field.id"
                 label
                 outlined
@@ -33,10 +33,10 @@
             >{{ field.name }}</v-chip>
         </template>
         <template v-slot:item.created_at="{ item }">
-            {{ item.created_at | date }}
+            {{ date(item.raw.created_at) }}
         </template>
         <template v-slot:item.actions="{ item }">
-            <v-icon @click="editItem(item)" color="grey">
+            <v-icon @click="editItem(item.raw)" color="grey">
                 mdi-pencil
             </v-icon>
         </template>
@@ -74,9 +74,6 @@
             TagChip,
             ToolbarSearch,
         },
-        filters: {
-            date,
-        },
         data() {
             return {
                 loading: true,
@@ -98,11 +95,11 @@
             },
             headers() {
                 return [
-                    { text: 'Tag', value: 'name' },
-                    { text: 'Fields', value: 'fields', sortable: false },
-                    { text: 'Entities Count', value: 'entities_count' },
-                    { text: 'Created', value: 'created_at' },
-                    { text: 'Actions', value: 'actions', sortable: false, width: '120px', align: 'center' },
+                    { title: 'Tag', key: 'name' },
+                    { title: 'Fields', key: 'fields', sortable: false },
+                    { title: 'Entities Count', key: 'entities_count' },
+                    { title: 'Created', key: 'created_at' },
+                    { title: 'Actions', key: 'actions', sortable: false, width: '120px', align: 'center' },
                 ];
             },
             sort() {
@@ -113,7 +110,11 @@
             search: 'getItems',
             options: 'getItems',
         },
+        mounted() {
+            this.getItems();
+        },
         methods: {
+            date,
             getItems() {
                 const params = {
                     search: this.search,
