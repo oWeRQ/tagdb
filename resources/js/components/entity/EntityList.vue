@@ -30,25 +30,24 @@
                 <v-btn v-if="isPreset" icon @click="editPreset(preset)" class="mr-2">
                     <v-icon>mdi-database-edit</v-icon>
                 </v-btn>
+                <!--
                 <EntityQuery
                     v-model="query"
                     :hidden-tags="presetQueryTagNames"
                     :fields="filterFields"
                 ></EntityQuery>
+                -->
                 <v-btn icon @click="getItems">
                     <v-icon>mdi-refresh</v-icon>
                 </v-btn>
             </v-toolbar>
         </template>
-        <template v-slot:item="{ item, headers, isSelected, isMobile, select }">
+        <template v-slot:item="{ item: { raw: item }, columns }">
             <EntityRow
                 :tags="allQueryTagNames"
                 @click:tag="addQueryTag"
                 :item="item"
-                :headers="headers"
-                :isSelected="isSelected"
-                :isMobile="isMobile"
-                :select="select"
+                :headers="columns"
                 @edit="editItem(item, $event)"
             ></EntityRow>
         </template>
@@ -163,7 +162,7 @@
             },
             displayFields() {
                 return this.allQueryTags.flatMap(item => item.fields).map((field) => {
-                    return { text: field.name, value: 'contents.' + field.id, type: field.type };
+                    return { title: field.name, key: 'contents.' + field.id, type: field.type };
                 });
             },
             displayItems() {

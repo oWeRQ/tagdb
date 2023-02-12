@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getObjectValueByPath } from 'vuetify/lib/util/helpers';
+import getPath from '../../functions/getPath';
 
 export default {
     props: {
@@ -31,7 +31,7 @@ export default {
     },
     computed: {
         value() {
-            return Number(getObjectValueByPath(this.item, this.header.value));
+            return Number(getPath(this.item, this.header.key));
         },
     },
 };

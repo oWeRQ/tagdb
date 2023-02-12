@@ -3,8 +3,8 @@
 </template>
 
 <script>
+import getPath from '../../functions/getPath';
 import truncate from '../../functions/truncate';
-import { getObjectValueByPath } from 'vuetify/lib/util/helpers';
 
 export default {
     props: {
@@ -17,7 +17,7 @@ export default {
     },
     computed: {
         value() {
-            return truncate(getObjectValueByPath(this.item, this.header.value));
+            return truncate(getPath(this.item, this.header.key));
         },
     },
 };

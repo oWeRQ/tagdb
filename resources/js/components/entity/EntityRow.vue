@@ -1,28 +1,28 @@
 <template>
     <tr :class="{'v-data-table__selected': isSelected, 'v-data-table__mobile-table-row': isMobile}">
-        <td v-for="header in headers" :key="header.value" :class="{[`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
+        <td v-for="header in headers" :key="header.key" :class="{[`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
             <span v-if="isMobile" :class="{'v-data-table__mobile-row__header': isMobile}">
                 {{ header.text }}
             </span>
             <span :class="{'v-data-table__mobile-row__cell': isMobile}">
                 <RowCheckbox
-                    v-if="header.value === 'data-table-select'"
+                    v-if="header.key === 'data-table-select'"
                     :isSelected="isSelected"
                     :select="select"
                 ></RowCheckbox>
                 <RowTags
-                    v-else-if="header.value === 'tags'"
+                    v-else-if="header.key === 'tags'"
                     :item="item"
                     :tags="tags"
                     @click:tag="$emit('click:tag', $event)"
-                    @edit="$emit('edit', header.value)"
+                    @edit="$emit('edit', header.key)"
                 ></RowTags>
                 <component
                     v-else
                     :is="getComponent(header)"
                     :header="header"
                     :item="item"
-                    @edit="$emit('edit', header.value)"
+                    @edit="$emit('edit', header.key)"
                 ></component>
             </span>
         </td>
@@ -65,14 +65,15 @@
             },
             select: {
                 type: Function,
+                default: () => [],
             },
         },
         methods: {
             getComponent(header) {
-                if (header.value === 'actions')
+                if (header.key === 'actions')
                     return RowActions;
 
-                if (header.value === 'name')
+                if (header.key === 'name')
                     return RowName;
 
                 if (header.type === 'date')
