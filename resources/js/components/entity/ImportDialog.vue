@@ -28,11 +28,11 @@
                                         :prepend-inner-icon="fieldsMap[header] ? undefined : 'mdi-plus'"
                                         @click:prepend-inner="addField(header)"
                                     >
-                                        <template v-slot:selection="{ item }">
+                                        <template v-slot:selection="{ item: { raw: item } }">
                                             <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2" @click.stop="editTag(item.tag)"></TagChip>
                                             {{ item.name }}
                                         </template>
-                                        <template v-slot:item="{ item }">
+                                        <template v-slot:item="{ item: { raw: item } }">
                                             <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2"></TagChip>
                                             {{ item.name }}
                                         </template>
@@ -199,7 +199,7 @@ export default {
         },
         preview() {
             const data = toFormData({
-                importFile: this.importFile,
+                importFile: this.importFile[0],
                 fields: this.fieldsMap,
                 preview: 0,
             });
@@ -212,7 +212,7 @@ export default {
         },
         import() {
             const data = toFormData({
-                importFile: this.importFile,
+                importFile: this.importFile[0],
                 fields: this.fieldsMap,
                 ...this.params,
             });
