@@ -140,7 +140,7 @@
                 this.$root.showDialog(TagDialog, {
                     value: item,
                 }, {
-                    input: this.saveItem,
+                    save: this.saveItem,
                     delete: this.deleteItem,
                 });
             },
@@ -154,7 +154,7 @@
                 this.$root.showDialog(FieldDialog, {
                     value: item,
                 }, {
-                    input: this.getItems,
+                    save: this.getItems,
                     delete: this.getItems,
                 });
             },

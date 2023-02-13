@@ -292,7 +292,7 @@
                     value: item,
                     focus: field,
                 }, {
-                    input: this.saveItem,
+                    save: this.saveItem,
                     delete: this.deleteItem,
                 });
             },
@@ -313,7 +313,7 @@
                 this.$root.showDialog(PresetDialog, {
                     value: preset,
                 }, {
-                    input: this.savePreset,
+                    save: this.savePreset,
                     delete: this.deletePreset,
                 });
             },

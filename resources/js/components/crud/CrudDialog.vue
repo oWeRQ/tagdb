@@ -113,7 +113,7 @@
                 }
 
                 this.api.save(this.id, this.data).then(result => {
-                    this.$emit('input', result);
+                    this.$emit('save', result);
                     this.close();
                 });
             },

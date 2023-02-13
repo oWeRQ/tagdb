@@ -96,7 +96,7 @@
                 }
 
                 return api.projects.save(this.id, this.data).then(project => {
-                    this.$emit('input', project);
+                    this.$emit('save', project);
                     this.$store.dispatch('saveProject', project);
                     this.close();
                 }).catch(error => {

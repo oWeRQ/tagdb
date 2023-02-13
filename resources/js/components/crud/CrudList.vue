@@ -150,7 +150,7 @@
                     processItem: this.processItem,
                     value: item,
                 }, {
-                    input: this.saveItem,
+                    save: this.saveItem,
                     delete: this.deleteItem,
                 });
             },

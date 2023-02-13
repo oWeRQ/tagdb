@@ -11,29 +11,29 @@
             <v-row justify="space-between" class="ml-0 mr-4">
                 <v-checkbox
                     label="Create"
-                    @change="changeAccess(item.preset_id, 'can_create', $event)"
-                    :input-value="item.can_create"
+                    @update:modelValue="changeAccess(item.preset_id, 'can_create', $event)"
+                    :modelValue="item.can_create"
                     :true-value="1"
                     :false-value="0"
                 />
                 <v-checkbox
                     label="Read"
-                    @change="changeAccess(item.preset_id, 'can_read', $event)"
-                    :input-value="item.can_read"
+                    @update:modelValue="changeAccess(item.preset_id, 'can_read', $event)"
+                    :modelValue="item.can_read"
                     :true-value="1"
                     :false-value="0"
                 />
                 <v-checkbox
                     label="Update"
-                    @change="changeAccess(item.preset_id, 'can_update', $event)"
-                    :input-value="item.can_update"
+                    @update:modelValue="changeAccess(item.preset_id, 'can_update', $event)"
+                    :modelValue="item.can_update"
                     :true-value="1"
                     :false-value="0"
                 />
                 <v-checkbox
                     label="Delete"
-                    @change="changeAccess(item.preset_id, 'can_delete', $event)"
-                    :input-value="item.can_delete"
+                    @update:modelValue="changeAccess(item.preset_id, 'can_delete', $event)"
+                    :modelValue="item.can_delete"
                     :true-value="1"
                     :false-value="0"
                 />

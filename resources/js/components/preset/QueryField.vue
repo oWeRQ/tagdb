@@ -22,7 +22,7 @@
             EntityFilter,
         },
         props: {
-            value: {
+            modelValue: {
                 type: String,
             },
             label: {
@@ -45,7 +45,7 @@
                     tags: [],
                     filter: {},
                     search: '',
-                    ...JSON.parse(this.value || '{}'),
+                    ...JSON.parse(this.modelValue || '{}'),
                 };
             },
             queryTags() {
@@ -65,7 +65,7 @@
             query: {
                 deep: true,
                 handler(value) {
-                    this.$emit('input', JSON.stringify(value));
+                    this.$emit('update:modelValue', JSON.stringify(value));
                 },
             },
         },

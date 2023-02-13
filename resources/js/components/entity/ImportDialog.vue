@@ -143,7 +143,7 @@ export default {
             this.$root.showDialog(FieldDialog, {
                 value: field,
             }, {
-                input: (result) => {
+                save: (result) => {
                     this.fieldsMap[field.name] = result.id;
                 },
             });
@@ -160,7 +160,7 @@ export default {
             this.$root.showDialog(TagDialog, {
                 value: tag,
             }, {
-                input: this.saveTag,
+                save: this.saveTag,
                 delete: this.deleteTag,
             });
         },

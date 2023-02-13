@@ -170,7 +170,7 @@
                 this.$root.showDialog(TagDialog, {
                     value: tag,
                 }, {
-                    input: this.saveTag,
+                    save: this.saveTag,
                     delete: this.deleteTag,
                 });
             },
@@ -192,7 +192,7 @@
                 this.$root.showDialog(FieldDialog, {
                     value: field,
                 }, {
-                    input: this.saveField,
+                    save: this.saveField,
                 });
             },
             saveField(field) {

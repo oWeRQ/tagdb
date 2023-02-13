@@ -118,7 +118,7 @@
                 }
 
                 api.entities.save(this.id, this.data).then(entity => {
-                    this.$emit('input', entity);
+                    this.$emit('save', entity);
                     this.$store.dispatch('saveEntity', entity);
                     this.close();
                 });

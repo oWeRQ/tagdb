@@ -91,7 +91,7 @@
                 }
 
                 api.tags.save(this.id, this.data).then(tag => {
-                    this.$emit('input', tag);
+                    this.$emit('save', tag);
                     this.$store.dispatch('saveTag', tag);
                     this.close();
                 });

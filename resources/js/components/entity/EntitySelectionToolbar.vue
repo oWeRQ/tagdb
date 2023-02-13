@@ -1,6 +1,6 @@
 <template>
     <v-toolbar flat color="blue lighten-5">
-        <v-btn icon @click="$emit('input', [])">
+        <v-btn icon @click="$emit('update:modelValue', [])">
             <v-icon>mdi-close</v-icon>
         </v-btn>
 
@@ -36,7 +36,7 @@
 
     export default {
         props: {
-            value: {
+            modelValue: {
                 type: Array,
                 default: () => [],
             },
@@ -47,12 +47,12 @@
         },
         computed: {
             selectedId() {
-                return this.value.map(item => item.id);
+                return this.modelValue.map(item => item.id);
             },
             availableTags() {
                 const tags = [];
                 let found;
-                for (let item of this.value) {
+                for (let item of this.modelValue) {
                     for (let tag of item.tags) {
                         if (found = tags.find(t => t.id === tag.id))
                             found.entities_count++;
@@ -115,7 +115,7 @@
             },
             done() {
                 this.$emit('update');
-                this.$emit('input', []);
+                this.$emit('update:modelValue', []);
             },
         },
     }

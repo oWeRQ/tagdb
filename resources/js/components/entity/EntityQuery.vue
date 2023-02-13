@@ -72,7 +72,7 @@
                 this.$root.showDialog(TagDialog, {
                     value: tag,
                 }, {
-                    input: this.saveTag,
+                    save: this.saveTag,
                 });
             },
             saveTag(tag) {

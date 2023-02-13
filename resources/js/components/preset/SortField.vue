@@ -25,7 +25,7 @@
 
     export default {
         props: {
-            value: {
+            modelValue: {
                 type: String,
             },
             label: {
@@ -58,7 +58,7 @@
         watch: {
             value: {
                 handler() {
-                    this.sort = this.value ? parseSort(this.value) : {
+                    this.sort = this.modelValue ? parseSort(this.modelValue) : {
                         sortBy: [],
                         sortDesc: [],
                     };
@@ -72,7 +72,7 @@
         },
         methods: {
             input() {
-                this.$emit('input', stringifySort(this.sort.sortBy, this.sort.sortDesc));
+                this.$emit('update:modelValue', stringifySort(this.sort.sortBy, this.sort.sortDesc));
             },
             reverse(index) {
                 this.sort.sortDesc[index] = !this.sort.sortDesc[index];

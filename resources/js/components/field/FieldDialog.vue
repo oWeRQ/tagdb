@@ -91,7 +91,7 @@
                 }
 
                 api.fields.save(this.id, this.data).then(field => {
-                    this.$emit('input', field);
+                    this.$emit('save', field);
                     this.$store.dispatch('saveField', field);
                     this.close();
                 });

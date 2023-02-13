@@ -91,7 +91,7 @@
                 }
 
                 api.presets.save(this.id, this.data).then(preset => {
-                    this.$emit('input', preset);
+                    this.$emit('save', preset);
                     this.$store.dispatch('savePreset', preset);
                     this.close();
                 });

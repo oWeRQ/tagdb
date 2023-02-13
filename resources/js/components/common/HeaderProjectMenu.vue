@@ -77,7 +77,7 @@ export default {
                 deletable: this.projectDeletable,
                 value: item,
             }, {
-                input: this.saveProject,
+                save: this.saveProject,
                 delete: this.deleteProject,
             });
         },
