@@ -15,8 +15,8 @@
                         v-for="header in headersExtended"
                         :key="header.value"
                         v-model="columns"
-                        :value="header.value"
-                        :label="header.text"
+                        :value="header.key"
+                        :label="header.title"
                         hide-details
                     ></v-checkbox>
                 </v-card-text>
@@ -65,9 +65,9 @@ export default {
         headersExtended() {
             return [
                 ...this.headers,
-                ...this.fields.map(field => ({ text: field.name, value: 'contents.' + field.id })),
-                { text: 'Created At', value: 'created_at' },
-                { text: 'Updated At', value: 'updated_at' },
+                ...this.fields.map(field => ({ title: field.name, key: 'contents.' + field.id })),
+                { title: 'Created At', key: 'created_at' },
+                { title: 'Updated At', key: 'updated_at' },
             ];
         },
     },
@@ -80,7 +80,7 @@ export default {
     },
     methods: {
         selectAll() {
-            this.columns = this.headersExtended.map(header => header.value);
+            this.columns = this.headersExtended.map(header => header.key);
         },
         fetchFields() {
             const params = {
@@ -102,7 +102,7 @@ export default {
             this.close();
         },
         show() {
-            this.columns = this.headers.map(header => header.value);
+            this.columns = this.headers.map(header => header.key);
             this.fetchFields();
             this.visible = true;
         },
