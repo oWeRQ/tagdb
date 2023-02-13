@@ -8,7 +8,7 @@
         multiple
         :menuProps="{ closeOnContentClick: true }"
     >
-        <template v-slot:selection="{ item, index }">
+        <template v-slot:selection="{ item: { raw: item }, index }">
             <v-chip @click.stop="reverse(index)">
                 {{ item.name }}
                 <v-icon color="grey darken-1" size="18">

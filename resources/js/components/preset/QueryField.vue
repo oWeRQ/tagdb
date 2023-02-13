@@ -12,6 +12,7 @@
 </template>
 
 <script>
+    import { reactive } from 'vue';
     import { mapState } from 'vuex';
     import TagsField from '../entity/TagsField.vue';
     import EntityFilter from '../entity/EntityFilter.vue';
@@ -41,12 +42,12 @@
                 };
             },
             query() {
-                return {
+                return reactive({
                     tags: [],
                     filter: {},
                     search: '',
                     ...JSON.parse(this.modelValue || '{}'),
-                };
+                });
             },
             queryTags() {
                 return this.tags.filter(tag => this.query.tags.includes(tag.name));
@@ -56,8 +57,8 @@
             },
             filterFields() {
                 return [
-                    { text: 'Name', value: 'name', type: 'text' },
-                    ...this.displayFields.map(field => ({ text: field.name, value: 'contents.' + field.id, type: field.type })),
+                    { title: 'Name', key: 'name', type: 'text' },
+                    ...this.displayFields.map(field => ({ title: field.name, key: 'contents.' + field.id, type: field.type })),
                 ];
             },
         },
