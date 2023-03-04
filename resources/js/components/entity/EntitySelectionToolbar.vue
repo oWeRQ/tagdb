@@ -4,7 +4,7 @@
             <v-icon>mdi-close</v-icon>
         </v-btn>
 
-        <v-toolbar-title class="mr-6">{{ value.length }} selected</v-toolbar-title>
+        <v-toolbar-title class="mr-6">{{ modelValue.length }} selected</v-toolbar-title>
 
         <v-btn icon @click="showAddTag">
             <v-icon>mdi-tag-plus</v-icon>

@@ -40,13 +40,15 @@
                 </v-btn>
             </v-toolbar>
         </template>
-        <template v-slot:item="{ item: { raw: item }, columns }">
+        <template v-slot:item="{ item, columns, isSelected, toggleSelect }">
             <EntityRow
                 :tags="allQueryTagNames"
                 @click:tag="addQueryTag"
-                :item="item"
+                :item="item.raw"
+                :isSelected="isSelected([item])"
+                :select="() => toggleSelect(item)"
                 :headers="columns"
-                @edit="editItem(item, $event)"
+                @edit="editItem(item.raw, $event)"
             ></EntityRow>
         </template>
         <template v-slot:footer.prepend>

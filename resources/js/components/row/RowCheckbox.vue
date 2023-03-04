@@ -1,5 +1,5 @@
 <template>
-    <v-checkbox :value="isSelected" @input="select" class="v-data-table__checkbox"></v-checkbox>
+    <v-checkbox-btn :modelValue="isSelected" @update:modelValue="select" class="v-data-table__checkbox"></v-checkbox-btn>
 </template>
 
 <script>

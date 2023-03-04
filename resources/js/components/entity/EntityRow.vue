@@ -1,6 +1,6 @@
 <template>
     <tr :class="{'v-data-table__selected': isSelected, 'v-data-table__mobile-table-row': isMobile}">
-        <td v-for="header in headers" :key="header.key" :class="{[`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
+        <td v-for="header in headers" :key="header.key" :class="{'v-data-table__td': true, 'v-data-table-column--no-padding': true, [`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
             <span v-if="isMobile" :class="{'v-data-table__mobile-row__header': isMobile}">
                 {{ header.text }}
             </span>
