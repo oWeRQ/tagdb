@@ -27,7 +27,7 @@
         :prepend-inner-icon="prependInnerIcon"
     >
         <template v-slot:selection="{ item: { value: item }, index }">
-            <v-chip close @click.stop="click(index, item)" @click:close="remove(index)" class="lighten-2" :color="item.color" :dark="!!item.color">
+            <v-chip closable @click.stop="click(index, item)" @click:close="remove(index)" class="lighten-2" :color="item.color" :dark="!!item.color">
                 <v-icon left v-if="returnObject && !item.id" @click.stop="plus(index, item)">
                     mdi-plus
                 </v-icon>

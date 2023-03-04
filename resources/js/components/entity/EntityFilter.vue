@@ -12,7 +12,7 @@
                     <v-chip
                         v-if="filter.value"
                         class="mr-1"
-                        close
+                        closable
                         @click="edit(filter, i)"
                         @click:close="remove(filter, i)"
                     >

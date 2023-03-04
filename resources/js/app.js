@@ -16,7 +16,7 @@ import autoselect from './directives/autoselect';
 
 const app = createApp({
     render() {
-        return h(App, [
+        return h(App, () => [
             h(AuthDialog),
             h(DialogStack, { ref: 'dialogStack' }),
         ]);

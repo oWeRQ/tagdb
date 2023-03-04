@@ -6,7 +6,7 @@
 
         <v-app-bar app clipped-left color="indigo" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-toolbar-title>TagDB</v-toolbar-title>
+            <v-toolbar-title class="flex-grow-0" :style="{'flex-basis': 'auto'}">TagDB</v-toolbar-title>
             <HeaderProjectMenu></HeaderProjectMenu>
             <v-spacer></v-spacer>
             <HeaderAccountMenu></HeaderAccountMenu>
