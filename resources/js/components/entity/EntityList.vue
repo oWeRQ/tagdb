@@ -1,12 +1,12 @@
 <template>
-    <v-data-table
+    <v-data-table-server
         v-model="selected"
         :show-select="true"
         :headers="headers"
         :items="displayItems"
         :options="options"
         @update:options="updateOptions"
-        :server-items-length="serverItemsLength"
+        :items-length="serverItemsLength"
         :loading="loading"
         :items-per-page="100"
         :footer-props="{
@@ -65,7 +65,7 @@
                 Import
             </v-btn>
         </template>
-    </v-data-table>
+    </v-data-table-server>
 </template>
 
 <script>

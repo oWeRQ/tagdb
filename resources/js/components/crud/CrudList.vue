@@ -1,9 +1,9 @@
 <template>
-    <v-data-table
+    <v-data-table-server
         :headers="headers"
         :items="items"
-        :options.sync="options"
-        :server-items-length="serverItemsLength"
+        v-model:options="options"
+        :items-length="serverItemsLength"
         :loading="loading"
         :items-per-page="100"
         :footer-props="{
@@ -31,7 +31,7 @@
                 Add {{ singularTitle }}
             </v-btn>
         </template>
-    </v-data-table>
+    </v-data-table-server>
 </template>
 
 <script>
