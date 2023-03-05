@@ -13,7 +13,7 @@
             :key="tag.name"
             @click="$emit('click:tag', tag)"
             tabindex="0"
-            class="v-chip v-chip--link v-chip--size-small mr-2 my-1"
+            class="v-chip v-chip--link v-chip--density-default v-chip--size-small mr-2 my-1"
             :class="tag.color ? `bg-${tag.color}-lighten-1` : `bg-grey-lighten-2`"
         >
             {{ tag.name }}

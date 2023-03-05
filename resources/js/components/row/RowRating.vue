@@ -20,13 +20,13 @@ export default {
             type: Object,
         },
         emptyClass: {
-            default: 'mdi-star-outline grey--text',
+            default: 'mdi-star-outline text-grey',
         },
         halfClass: {
-            default: 'mdi-star-half-full orange--text',
+            default: 'mdi-star-half-full text-orange',
         },
         fullClass: {
-            default: 'mdi-star orange--text',
+            default: 'mdi-star text-orange',
         },
     },
     computed: {
