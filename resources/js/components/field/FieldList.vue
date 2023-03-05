@@ -37,10 +37,11 @@
             </v-icon>
         </template>
         <template v-slot:footer.prepend>
-            <v-btn text large color="blue darken-3" @click="addItem">
+            <v-btn variant="text" size="large" color="blue darken-3" @click="addItem">
                 <v-icon left>mdi-plus</v-icon>
                 Add Field
             </v-btn>
+            <v-spacer></v-spacer>
         </template>
     </v-data-table-server>
 </template>

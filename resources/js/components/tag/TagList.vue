@@ -41,18 +41,19 @@
             </v-icon>
         </template>
         <template v-slot:footer.prepend>
-            <v-btn text large color="blue darken-3" @click="addItem">
+            <v-btn variant="text" size="large" color="blue darken-3" @click="addItem">
                 <v-icon left>mdi-plus</v-icon>
                 Add Tag
             </v-btn>
-            <v-btn text large color="blue darken-3" @click="exportTags">
+            <v-btn variant="text" size="large" color="blue darken-3" @click="exportTags">
                 <v-icon left>mdi-export</v-icon>
                 Export
             </v-btn>
-            <v-btn text large color="blue darken-3" @click="importTags">
+            <v-btn variant="text" size="large" color="blue darken-3" @click="importTags">
                 <v-icon left>mdi-import</v-icon>
                 Import
             </v-btn>
+            <v-spacer></v-spacer>
         </template>
     </v-data-table-server>
 </template>
