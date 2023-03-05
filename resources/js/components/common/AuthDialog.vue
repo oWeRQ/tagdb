@@ -1,7 +1,7 @@
 <template>
-    <v-dialog :value="visible" persistent max-width="400px">
+    <v-dialog :modelValue="visible" persistent max-width="400px">
         <v-card>
-            <v-tabs v-model="tab" grow background-color="blue lighten-5">
+            <v-tabs v-model="tab" grow color="blue-darken-1" bg-color="blue-lighten-5">
                 <v-tab>Login</v-tab>
                 <v-tab>Register</v-tab>
             </v-tabs>
@@ -15,6 +15,7 @@
                                 label="Email"
                                 required
                                 :error-messages="loginErrors.email"
+                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password"
@@ -23,8 +24,9 @@
                                 :type="passwordType"
                                 required
                                 :error-messages="loginErrors.password"
-                                :append-icon="passwordIcon"
-                                @click:append="togglePassword"
+                                :append-inner-icon="passwordIcon"
+                                @click:append-inner="togglePassword"
+                                variant="underlined"
                             ></v-text-field>
                             <v-checkbox
                                 v-model="remember"
@@ -49,6 +51,7 @@
                                 label="Name"
                                 required
                                 :error-messages="registerErrors.name"
+                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="email"
@@ -56,6 +59,7 @@
                                 label="Email"
                                 required
                                 :error-messages="registerErrors.email"
+                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password"
@@ -64,8 +68,9 @@
                                 :type="passwordType"
                                 required
                                 :error-messages="registerErrors.password"
-                                :append-icon="passwordIcon"
-                                @click:append="togglePassword"
+                                :append-inner-icon="passwordIcon"
+                                @click:append-inner="togglePassword"
+                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password_confirmation"
@@ -74,8 +79,9 @@
                                 :type="passwordType"
                                 required
                                 :error-messages="registerErrors.password_confirmation"
-                                :append-icon="passwordIcon"
-                                @click:append="togglePassword"
+                                :append-inner-icon="passwordIcon"
+                                @click:append-inner="togglePassword"
+                                variant="underlined"
                             ></v-text-field>
                         </v-card-text>
                         <v-card-actions>
