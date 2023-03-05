@@ -1,9 +1,5 @@
 <template>
     <v-app>
-        <v-navigation-drawer v-if="isReady" v-model="drawer" app clipped class="elevation-2">
-            <DrawerNavList></DrawerNavList>
-        </v-navigation-drawer>
-
         <v-app-bar app clipped-left color="indigo" dark>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <v-toolbar-title class="flex-grow-0" :style="{'flex-basis': 'auto'}">TagDB</v-toolbar-title>
@@ -11,6 +7,10 @@
             <v-spacer></v-spacer>
             <HeaderAccountMenu></HeaderAccountMenu>
         </v-app-bar>
+
+        <v-navigation-drawer v-if="isReady" v-model="drawer" app clipped class="elevation-2">
+            <DrawerNavList></DrawerNavList>
+        </v-navigation-drawer>
 
         <v-main>
             <slot></slot>
@@ -47,21 +47,12 @@
         overflow-y: auto;
     }
 
-    html,
-    body {
-        height: 100%;
+    .v-main {
+        overflow: auto;
+        flex: 1 1 0 !important;
     }
 
-    .v-application,
-    .v-application--wrap {
-        min-height: -webkit-fill-available;
-    }
-
-    .v-data-table__wrapper {
+    .v-table__wrapper {
         flex: 1 1 0;
-    }
-
-    .v-dialog__content {
-        align-items: flex-start;
     }
 </style>
