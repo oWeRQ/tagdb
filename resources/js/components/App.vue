@@ -64,4 +64,16 @@
     .v-dialog__content {
         align-items: flex-start;
     }
+
+    .v-dialog__content:nth-last-of-type(4) {
+        transform: scale(0.7);
+    }
+
+    .v-dialog__content:nth-last-of-type(3) {
+        transform: scale(0.8);
+    }
+
+    .v-dialog__content:nth-last-of-type(2) {
+        transform: scale(0.9);
+    }
 </style>

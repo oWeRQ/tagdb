@@ -43,14 +43,3 @@ export default {
 };
 </script>
 
-<style>
-    [role=dialog]:nth-last-of-type(4) {
-        transform: scale(0.7);
-    }
-    [role=dialog]:nth-last-of-type(3) {
-        transform: scale(0.8);
-    }
-    [role=dialog]:nth-last-of-type(2) {
-        transform: scale(0.9);
-    }
-</style>
