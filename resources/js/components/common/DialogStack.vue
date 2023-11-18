@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import { markRaw } from 'vue';
-
 export default {
     data() {
         return {
@@ -24,7 +22,6 @@ export default {
     },
     methods: {
         show(component, bind, on) {
-            markRaw(component);
             return new Promise(resolve => {
                 const dialog = { id: ++this.id, component, bind, on };
                 this.dialogs.push(dialog);

@@ -17,10 +17,10 @@
                 <v-toolbar-title v-title>{{ title }}</v-toolbar-title>
             </v-toolbar>
         </template>
-        <template v-for="column in slotColumn" v-slot:[column.slot]="{ item: { raw: item } }">
+        <template v-for="column in slotColumn" v-slot:[column.slot]="{ item }">
             <component :is="column.component" :item="item" :value="item[column.key]" />
         </template>
-        <template v-slot:item.actions="{ item: { raw: item } }">
+        <template v-slot:item.actions="{ item }">
             <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
             </v-icon>
@@ -40,16 +40,17 @@
     import stringifySort from '../../functions/stringifySort';
     import CrudDialog from './CrudDialog.vue';
     import CrudForm from './CrudForm.vue';
+    import { markRaw } from 'vue';
 
     export default {
         props: {
             dialog: {
                 type: Object,
-                default: () => CrudDialog,
+                default: () => markRaw(CrudDialog),
             },
             form: {
                 type: Object,
-                default: () => CrudForm,
+                default: () => markRaw(CrudForm),
             },
             defaultItem: {
                 type: Object,
@@ -145,7 +146,7 @@
             editItem(item) {
                 this.$root.showDialog(this.dialog, {
                     title: this.singularTitle,
-                    form: this.form,
+                    form: markRaw(this.form),
                     api: this.api,
                     editable: this.editable,
                     processItem: this.processItem,
