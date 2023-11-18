@@ -14,8 +14,10 @@
     >
         <template v-slot:top>
             <v-toolbar flat color="white" class="flex-grow-0">
-                <v-toolbar-title class="mr-2" v-title>Tags</v-toolbar-title>
-                <ToolbarSearch v-model="search"></ToolbarSearch>
+                <v-toolbar-title class="mr-2 flex-grow-0" :style="{'flex-basis': 'auto'}" v-title>Tags</v-toolbar-title>
+                <div class="d-flex align-center">
+                    <ToolbarSearch v-model="search"></ToolbarSearch>
+                </div>
             </v-toolbar>
         </template>
         <template v-slot:item.name="{ item }">

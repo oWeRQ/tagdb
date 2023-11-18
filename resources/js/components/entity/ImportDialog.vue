@@ -32,9 +32,11 @@
                                             <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2" @click.stop="editTag(item.tag)"></TagChip>
                                             {{ item.name }}
                                         </template>
-                                        <template v-slot:item="{ item: { raw: item } }">
-                                            <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2"></TagChip>
-                                            {{ item.name }}
+                                        <template v-slot:item="{ item: { raw: item }, props: { onClick } }">
+                                            <v-list-item @click="onClick">
+                                                <TagChip v-if="item.tag" :tag="item.tag" small class="mr-2"></TagChip>
+                                                {{ item.name }}
+                                            </v-list-item>
                                         </template>
                                     </v-autocomplete>
                                 </div>
@@ -49,7 +51,7 @@
                                     @click="editTag(tag)"
                                 ></TagChip>
                                 <div class="mt-2">
-                                    <v-btn @click="addTag" text x-small color="blue darken-1">
+                                    <v-btn @click="addTag" variant="text" size="x-small" color="blue-darken-1">
                                         <v-icon left>mdi-plus</v-icon>
                                         Add Tag
                                     </v-btn>
@@ -60,8 +62,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text type="submit">{{ submitText }}</v-btn>
+                    <v-btn color="blue-darken-1" text @click="close">Cancel</v-btn>
+                    <v-btn color="blue-darken-1" text type="submit">{{ submitText }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>
@@ -227,7 +229,7 @@ export default {
             this.previewData = null;
             this.fieldsMap = {};
             this.$nextTick(() => {
-                this.$refs.importFile.$refs.input.click();
+                this.$refs.importFile.click();
             });
         },
         close() {

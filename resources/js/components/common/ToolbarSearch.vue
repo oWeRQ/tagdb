@@ -6,16 +6,16 @@
         v-else
         v-model="inputValue"
         placeholder="Search"
-        dense
-        solo
+        density="compact"
+        variant="solo"
         single-line
         hide-details
         prepend-inner-icon="mdi-magnify"
-        append-icon="mdi-close"
+        append-inner-icon="mdi-close"
         class="shrink mx-2"
         autofocus
         @blur="blur"
-        @click:append="clear"
+        @click:append-inner="clear"
     ></v-text-field>
 </template>
 
@@ -64,7 +64,7 @@ export default {
             this.isShow = !!this.modelValue;
         },
         clear() {
-            this.isShow = false;
+            this.$el.focus();
             if (this.modelValue) {
                 this.$emit('update:modelValue', '');
             }
@@ -72,3 +72,9 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+    .v-input {
+        min-width: 240px;
+    }
+</style>

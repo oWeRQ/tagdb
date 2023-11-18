@@ -2,7 +2,7 @@
     <v-menu v-model="isShow" offset-y :close-on-content-click="false" max-width="360px">
         <template v-slot:activator="{ props }">
             <span>
-                <v-btn icon v-bind="props" @click="focus = 0">
+                <v-btn icon v-bind="props" @click="focus = 0" elevation="0">
                     <v-icon>mdi-filter-variant</v-icon>
                 </v-btn>
                 <span
@@ -26,7 +26,7 @@
             </span>
         </template>
         <v-form ref="form" @submit.prevent="apply">
-            <v-card>
+            <v-card min-width="300px">
                 <v-card-title class="pb-0">
                     Filter
                 </v-card-title>

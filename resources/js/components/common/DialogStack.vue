@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { markRaw } from 'vue';
+
 export default {
     data() {
         return {
@@ -21,9 +23,9 @@ export default {
         };
     },
     methods: {
-        show(component, bind, on) {
+        show(component, bind, on = {}) {
             return new Promise(resolve => {
-                const dialog = { id: ++this.id, component, bind, on };
+                const dialog = { id: ++this.id, component: markRaw(component), bind, on };
                 this.dialogs.push(dialog);
                 this.$nextTick(() => {
                     const idx = this.dialogs.indexOf(dialog);

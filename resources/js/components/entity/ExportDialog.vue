@@ -9,7 +9,7 @@
                 <v-card-text>
                     <div class="d-flex">
                         Columns
-                        <v-btn @click="selectAll" text x-small color="blue darken-1" class="ml-auto">Select All</v-btn>
+                        <v-btn @click="selectAll" variant="text" size="x-small" color="blue-darken-1" class="ml-auto">Select All</v-btn>
                     </div>
                     <v-checkbox
                         v-for="header in headersExtended"

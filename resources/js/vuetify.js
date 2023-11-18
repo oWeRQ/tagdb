@@ -10,4 +10,21 @@ import 'vuetify/dist/vuetify.min.css';
 export default createVuetify({
     components,
     directives,
+    defaults: {
+        VTextField: {
+            variant: 'underlined',
+        },
+        VTextarea: {
+            variant: 'underlined',
+        },
+        VAutocomplete: {
+            variant: 'underlined',
+        },
+        VCombobox: {
+            variant: 'underlined',
+        },
+        VSelect: {
+            variant: 'underlined',
+        },
+    },
 });

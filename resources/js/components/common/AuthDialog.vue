@@ -15,7 +15,6 @@
                                 label="Email"
                                 required
                                 :error-messages="loginErrors.email"
-                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password"
@@ -26,7 +25,6 @@
                                 :error-messages="loginErrors.password"
                                 :append-inner-icon="passwordIcon"
                                 @click:append-inner="togglePassword"
-                                variant="underlined"
                             ></v-text-field>
                             <v-checkbox
                                 v-model="remember"
@@ -51,7 +49,6 @@
                                 label="Name"
                                 required
                                 :error-messages="registerErrors.name"
-                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="email"
@@ -59,7 +56,6 @@
                                 label="Email"
                                 required
                                 :error-messages="registerErrors.email"
-                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password"
@@ -70,7 +66,6 @@
                                 :error-messages="registerErrors.password"
                                 :append-inner-icon="passwordIcon"
                                 @click:append-inner="togglePassword"
-                                variant="underlined"
                             ></v-text-field>
                             <v-text-field
                                 v-model="password_confirmation"
@@ -81,7 +76,6 @@
                                 :error-messages="registerErrors.password_confirmation"
                                 :append-inner-icon="passwordIcon"
                                 @click:append-inner="togglePassword"
-                                variant="underlined"
                             ></v-text-field>
                         </v-card-text>
                         <v-card-actions>

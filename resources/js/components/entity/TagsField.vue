@@ -202,3 +202,9 @@
         },
     }
 </script>
+
+<style lang="scss" scoped>
+    .v-input {
+        min-width: 200px;
+    }
+</style>

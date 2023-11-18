@@ -8,7 +8,7 @@
             :hidden-tags="hiddenTags"
             solo
             hyphen
-            class="shrink mr-2"
+            class="mr-2"
             prepend-inner-icon="mdi-tag-multiple-outline"
         ></TagsField>
         <EntityFilter v-model="filter" @update:modelValue="onInput" :fields="fields"></EntityFilter>
