@@ -17,10 +17,10 @@
                 <v-toolbar-title v-title>Fields</v-toolbar-title>
             </v-toolbar>
         </template>
-        <template v-slot:item.tag="{ item: { raw: item } }">
+        <template v-slot:item.tag="{ item }">
             <TagChip v-if="item.tag" @click="editTag(item.tag)" :tag="item.tag" small></TagChip>
         </template>
-        <template v-slot:item.name="{ item: { raw: item } }">
+        <template v-slot:item.name="{ item }">
             <v-chip
                 label
                 outlined
@@ -28,10 +28,10 @@
                 @click="editItem(item)"
             >{{ item.name }}</v-chip>
         </template>
-        <template v-slot:item.created_at="{ item: { raw: item } }">
+        <template v-slot:item.created_at="{ item }">
             {{ date(item.created_at) }}
         </template>
-        <template v-slot:item.actions="{ item: { raw: item } }">
+        <template v-slot:item.actions="{ item }">
             <v-icon @click="editItem(item)" color="grey">
                 mdi-pencil
             </v-icon>

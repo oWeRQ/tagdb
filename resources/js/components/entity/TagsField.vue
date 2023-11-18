@@ -18,16 +18,17 @@
         deletable-chips
         auto-select-first
         :clearable="solo"
-        :dense="solo"
-        :solo="solo"
+        :density="solo ? 'compact' : 'default'"
+        :variant="solo ? 'solo' : 'underlined'"
+        :single-line="solo"
         :hide-details="solo"
         :return-object="returnObject"
         :autofocus="autofocus"
         :prepend-icon="prependIcon"
         :prepend-inner-icon="prependInnerIcon"
     >
-        <template v-slot:selection="{ item: { value: item }, index }">
-            <v-chip closable @click.stop="click(index, item)" @click:close="remove(index)" class="lighten-2" :color="item.color" :dark="!!item.color">
+        <template v-slot:selection="{ item: { raw: item }, index }">
+            <v-chip closable @click.stop="click(index, item)" @click:close="remove(index)" :color="item.color + '-darken-3'">
                 <v-icon left v-if="returnObject && !item.id" @click.stop="plus(index, item)">
                     mdi-plus
                 </v-icon>
@@ -37,13 +38,13 @@
                 <sup v-if="returnObject && item.fields.length">{{ item.fields.length }}</sup>
             </v-chip>
         </template>
-        <template v-slot:item="{ item }">
-            <v-list-item @click="$refs.combobox.select(item)">
-                <v-icon @click="keepActive" class="mr-2" :class="iconColor(item.value)">
+        <template v-slot:item="{ item: { raw: item }, props: { onClick } }">
+            <v-list-item @click="onClick">
+                <v-icon @click="keepActive" class="mr-2" :class="iconColor(item)">
                     mdi-tag-plus-outline
                 </v-icon>
-                <span :class="textColor(item.value)">{{ item.value.name }}</span>
-                <span v-if="item.value.entities_count" class="caption grey--text text--lighten-1 ml-2">({{ item.value.entities_count }})</span>
+                <span :class="textColor(item)">{{ item.name }}</span>
+                <span v-if="item.entities_count" class="caption text-grey-lighten-1 ml-2">({{ item.entities_count }})</span>
             </v-list-item>
         </template>
     </v-combobox>
@@ -126,7 +127,7 @@
         },
         methods: {
             iconColor(item) {
-                const prefix = (item.color || 'grey') + '--text text--';
+                const prefix = 'text-' + (item.color || 'grey') + '-';
                 if (item.color) {
                     return prefix + (item.entities_count ? 'lighten-1' : 'lighten-3');
                 } else {
@@ -134,7 +135,7 @@
                 }
             },
             textColor(item) {
-                const prefix = (item.color || 'grey') + '--text text--';
+                const prefix = 'text-' + (item.color || 'grey') + '-';
                 if (item.color) {
                     return prefix + (item.entities_count ? 'darken-2' : 'lighten-2');
                 } else {

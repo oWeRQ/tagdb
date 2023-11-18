@@ -43,7 +43,7 @@
                 <v-chip
                     v-for="tag in selected"
                     :key="tag.name"
-                    close
+                    closable
                     @click:close="removeSelected(tag)"
                     class="lighten-2"
                     :color="tag.color"

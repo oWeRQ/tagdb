@@ -1,17 +1,15 @@
 <template>
     <tr :class="{'v-data-table__selected': isSelected, 'v-data-table__mobile-table-row': isMobile}">
+        <td :class="{'v-data-table__td': true, 'v-data-table-column--no-padding': true, 'v-data-table__mobile-row': isMobile}">
+            <RowCheckbox :isSelected="isSelected" :select="select" ></RowCheckbox>
+        </td>
         <td v-for="header in headers" :key="header.key" :class="{'v-data-table__td': true, 'v-data-table-column--no-padding': true, [`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
             <span v-if="isMobile" :class="{'v-data-table__mobile-row__header': isMobile}">
                 {{ header.text }}
             </span>
             <span :class="{'v-data-table__mobile-row__cell': isMobile}">
-                <RowCheckbox
-                    v-if="header.key === 'data-table-select'"
-                    :isSelected="isSelected"
-                    :select="select"
-                ></RowCheckbox>
                 <RowTags
-                    v-else-if="header.key === 'tags'"
+                    v-if="header.key === 'tags'"
                     :item="item"
                     :tags="tags"
                     @click:tag="$emit('click:tag', $event)"
@@ -65,7 +63,7 @@
             },
             select: {
                 type: Function,
-                default: () => [],
+                default: () => null,
             },
         },
         methods: {

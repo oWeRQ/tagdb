@@ -19,30 +19,26 @@
          <v-card>
             <v-list>
                 <v-list-item v-for="(user, i) in modelValue.users" :key="i">
-                    <v-list-item-action>
+                    <template v-slot:prepend>
                         <v-icon @click="remove(user)" color="grey lighten-1">mdi-close</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-row no-gutters>
-                            <v-col>
-                                <v-text-field v-model="user.email" :rules="rules.required" label="Email" hide-details class="mr-4"></v-text-field>
-                            </v-col>
-                            <!--
-                            <v-col cols="3">
-                                <v-select :items="roles" v-model="user.membership.role" :rules="rules.required" label="Role" hide-details></v-select>
-                            </v-col>
-                            -->
-                        </v-row>
-                    </v-list-item-content>
+                    </template>
+                    <v-row no-gutters>
+                        <v-col>
+                            <v-text-field v-model="user.email" :rules="rules.required" label="Email" hide-details class="mr-4"></v-text-field>
+                        </v-col>
+                        <!--
+                        <v-col cols="3">
+                            <v-select :items="roles" v-model="user.membership.role" :rules="rules.required" label="Role" hide-details></v-select>
+                        </v-col>
+                        -->
+                    </v-row>
                 </v-list-item>
 
                 <v-list-item @click="add">
-                    <v-list-item-action>
+                    <template v-slot:prepend>
                         <v-icon>mdi-plus</v-icon>
-                    </v-list-item-action>
-                    <v-list-item-content>
-                        <v-list-item-title>Add User</v-list-item-title>
-                    </v-list-item-content>
+                    </template>
+                    <v-list-item-title>Add User</v-list-item-title>
                 </v-list-item>
             </v-list>
         </v-card>

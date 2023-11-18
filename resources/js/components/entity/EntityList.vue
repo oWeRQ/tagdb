@@ -2,6 +2,7 @@
     <v-data-table-server
         v-model="selected"
         :show-select="true"
+        :return-object="true"
         :headers="headers"
         :items="displayItems"
         :options="options"
@@ -40,15 +41,15 @@
                 </v-btn>
             </v-toolbar>
         </template>
-        <template v-slot:item="{ item, columns, isSelected, toggleSelect }">
+        <template v-slot:item="{ item, internalItem, isSelected, toggleSelect }">
             <EntityRow
                 :tags="allQueryTagNames"
                 @click:tag="addQueryTag"
-                :item="item.raw"
-                :isSelected="isSelected([item])"
-                :select="() => toggleSelect(item)"
-                :headers="columns"
-                @edit="editItem(item.raw, $event)"
+                :item="item"
+                :headers="headers"
+                :isSelected="isSelected([internalItem])"
+                :select="() => toggleSelect(internalItem)"
+                @edit="editItem(item, $event)"
             ></EntityRow>
         </template>
         <template v-slot:footer.prepend>

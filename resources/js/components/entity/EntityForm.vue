@@ -29,6 +29,7 @@
                 <v-date-picker v-model="modelValue.contents[field.id]" @input="menu[field.id] = false" first-day-of-week="1"></v-date-picker>
             </v-menu>
 
+            <!--
             <v-menu v-else-if="field.type === 'time'" v-model="menu[field.id]" :close-on-content-click="false" offset-y min-width="290px">
                 <template v-slot:activator="{ on, attrs }">
                     <v-text-field
@@ -44,6 +45,7 @@
                 </template>
                 <v-time-picker v-model="modelValue.contents[field.id]" @click:minute="menu[field.id] = false" format="24hr"></v-time-picker>
             </v-menu>
+            -->
 
             <div v-else-if="field.type === 'rating'">
                 <div class="text-caption ml-8">{{ field.name }}</div>
@@ -101,7 +103,7 @@
             prepend-icon="mdi-tag-multiple-outline"
         ></TagsField>
 
-        <v-btn @click="addField" :disabled="!firstSavedTag" text x-small color="blue darken-1">
+        <v-btn @click="addField" :disabled="!firstSavedTag" color="blue darken-1" variant="text" size="small">
             <v-icon left>mdi-plus</v-icon>
             Add Field
         </v-btn>
