@@ -10,9 +10,7 @@
         :items-length="serverItemsLength"
         :loading="loading"
         :items-per-page="100"
-        :footer-props="{
-            itemsPerPageOptions: [100, 500, 1000],
-        }"
+        :items-per-page-options="[100, 500, 1000]"
         :fixed-header="true"
         class="fill-height d-flex flex-column"
     >

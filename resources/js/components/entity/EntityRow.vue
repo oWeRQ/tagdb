@@ -1,28 +1,23 @@
 <template>
-    <tr :class="{'v-data-table__selected': isSelected, 'v-data-table__mobile-table-row': isMobile}">
-        <td :class="{'v-data-table__td': true, 'v-data-table-column--no-padding': true, 'v-data-table__mobile-row': isMobile}">
+    <tr :class="{'v-data-table__selected': isSelected}">
+        <td :class="{'v-data-table__td': true, 'v-data-table-column--no-padding': true}">
             <RowCheckbox :isSelected="isSelected" :select="select" ></RowCheckbox>
         </td>
-        <td v-for="header in headers" :key="header.key" :class="{'v-data-table__td': true, 'v-data-table-column--no-padding': true, [`text-${header.align}`]: header.align, 'v-data-table__mobile-row': isMobile}">
-            <span v-if="isMobile" :class="{'v-data-table__mobile-row__header': isMobile}">
-                {{ header.text }}
-            </span>
-            <span :class="{'v-data-table__mobile-row__cell': isMobile}">
-                <RowTags
-                    v-if="header.key === 'tags'"
-                    :item="item"
-                    :tags="tags"
-                    @click:tag="$emit('click:tag', $event)"
-                    @edit="$emit('edit', header.key)"
-                ></RowTags>
-                <component
-                    v-else
-                    :is="getComponent(header)"
-                    :header="header"
-                    :item="item"
-                    @edit="$emit('edit', header.key)"
-                ></component>
-            </span>
+        <td v-for="header in headers" :key="header.key" :class="{'v-data-table__td': true, [`v-data-table-column--align-${header.align}`]: !!header.align}">
+            <RowTags
+                v-if="header.key === 'tags'"
+                :item="item"
+                :tags="tags"
+                @click:tag="$emit('click:tag', $event)"
+                @edit="$emit('edit', header.key)"
+            ></RowTags>
+            <component
+                v-else
+                :is="getComponent(header)"
+                :header="header"
+                :item="item"
+                @edit="$emit('edit', header.key)"
+            ></component>
         </td>
     </tr>
 </template>
@@ -44,10 +39,6 @@
             RowTags,
         },
         props: {
-            isMobile: {
-                type: Boolean,
-                default: false,
-            },
             tags: {
                 type: Array,
                 default: () => [],
