@@ -42,8 +42,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" text @click="cancel">Cancel</v-btn>
-                    <v-btn color="blue darken-1" text type="submit">Apply</v-btn>
+                    <v-btn color="blue-darken-1" text @click="cancel">Cancel</v-btn>
+                    <v-btn color="blue-darken-1" text type="submit">Apply</v-btn>
                 </v-card-actions>
             </v-card>
         </v-form>

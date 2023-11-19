@@ -2,7 +2,7 @@
     <i
         @click="$emit('edit')"
         :title="'ID: ' + item.id"
-        class="v-icon notranslate mdi mdi-pencil theme--light grey--text"
+        class="v-icon v-icon--size-default notranslate mdi mdi-pencil v-theme--light text-grey"
         aria-hidden="true"
     ></i>
 </template>

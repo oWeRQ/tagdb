@@ -20,7 +20,7 @@
             <v-list>
                 <v-list-item v-for="(user, i) in modelValue.users" :key="i">
                     <template v-slot:prepend>
-                        <v-icon @click="remove(user)" color="grey lighten-1">mdi-close</v-icon>
+                        <v-icon @click="remove(user)" color="grey-lighten-1">mdi-close</v-icon>
                     </template>
                     <v-row no-gutters>
                         <v-col>

@@ -36,7 +36,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text type="submit">Login</v-btn>
+                            <v-btn color="blue-darken-1" text type="submit">Login</v-btn>
                         </v-card-actions>
                     </v-form>
                 </v-window-item>
@@ -80,7 +80,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" text type="submit">Register</v-btn>
+                            <v-btn color="blue-darken-1" text type="submit">Register</v-btn>
                         </v-card-actions>
                     </v-form>
                 </v-window-item>

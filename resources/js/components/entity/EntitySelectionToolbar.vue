@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar flat color="blue lighten-5">
+    <v-toolbar flat color="blue-lighten-5">
         <v-btn icon @click="$emit('update:modelValue', [])">
             <v-icon>mdi-close</v-icon>
         </v-btn>

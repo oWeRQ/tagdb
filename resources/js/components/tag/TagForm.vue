@@ -8,7 +8,7 @@
             <v-list>
                 <v-list-item v-for="(field, i) in modelValue.fields" :key="'item' + i">
                     <template v-slot:prepend>
-                        <v-icon @click="remove(field)" color="grey lighten-1">mdi-close</v-icon>
+                        <v-icon @click="remove(field)" color="grey-lighten-1">mdi-close</v-icon>
                     </template>
                     <v-row no-gutters>
                         <v-col>

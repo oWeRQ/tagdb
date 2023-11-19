@@ -11,7 +11,7 @@
         <template v-slot:selection="{ item: { raw: item }, index }">
             <v-chip @click.stop="reverse(index)">
                 {{ item.name }}
-                <v-icon color="grey darken-1" size="18">
+                <v-icon color="grey-darken-1" size="18">
                     mdi-arrow-{{ getDirection(index) }}
                 </v-icon>
             </v-chip>

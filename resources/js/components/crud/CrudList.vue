@@ -24,7 +24,7 @@
             </v-icon>
         </template>
         <template v-slot:footer.prepend>
-            <v-btn variant="text" size="large" color="blue darken-3" @click="addItem">
+            <v-btn variant="text" size="large" color="blue-darken-3" @click="addItem">
                 <v-icon left>mdi-plus</v-icon>
                 Add {{ singularTitle }}
             </v-btn>

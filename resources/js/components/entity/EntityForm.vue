@@ -103,7 +103,7 @@
             prepend-icon="mdi-tag-multiple-outline"
         ></TagsField>
 
-        <v-btn @click="addField" :disabled="!firstSavedTag" color="blue darken-1" variant="text" size="small">
+        <v-btn @click="addField" :disabled="!firstSavedTag" color="blue-darken-1" variant="text" size="small">
             <v-icon left>mdi-plus</v-icon>
             Add Field
         </v-btn>
