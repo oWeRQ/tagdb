@@ -14,7 +14,7 @@ export default {
             { title: 'ID', key: 'id' },
             { title: 'Name', key: 'name' },
             { title: 'Api Key', key: 'apikey' },
-            { title: 'OpenApi', key: 'openapi', component: ColumnOpenapi },
+            { title: 'OpenApi', key: 'openapi', sortable: false, component: ColumnOpenapi },
         ],
         editable: [
             { text: 'Name', value: 'name' },

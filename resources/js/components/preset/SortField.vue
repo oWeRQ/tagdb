@@ -2,7 +2,7 @@
     <v-select
         :label="label"
         :items="items"
-        v-model="sort.sortBy"
+        v-model="selected"
         item-title="name"
         item-value="value"
         multiple
@@ -12,7 +12,7 @@
             <v-chip @click.stop="reverse(index)">
                 {{ item.name }}
                 <v-icon color="grey darken-1" size="18">
-                    mdi-arrow-{{ sort.sortDesc[index] ? 'down' : 'up' }}
+                    mdi-arrow-{{ getDirection(index) }}
                 </v-icon>
             </v-chip>
         </template>
@@ -39,7 +39,6 @@
             return {
                 sort: {
                     sortBy: [],
-                    sortDesc: [],
                 },
             };
         },
@@ -54,14 +53,20 @@
                     })),
                 ];
             },
+            selected: {
+                get() {
+                    return this.sort.sortBy.map(item => item.key);
+                },
+                set(selected) {
+                    const sortBy = selected.map(key => ({ key, order: this.getOrder(key) }));
+                    this.sort = { sortBy };
+                },
+            },
         },
         watch: {
             value: {
                 handler() {
-                    this.sort = this.modelValue ? parseSort(this.modelValue) : {
-                        sortBy: [],
-                        sortDesc: [],
-                    };
+                    this.sort = { sortBy: parseSort(this.modelValue) };
                 },
                 immediate: true,
             },
@@ -72,11 +77,17 @@
         },
         methods: {
             input() {
-                this.$emit('update:modelValue', stringifySort(this.sort.sortBy, this.sort.sortDesc));
+                this.$emit('update:modelValue', stringifySort(this.sort.sortBy));
             },
             reverse(index) {
-                this.sort.sortDesc[index] = !this.sort.sortDesc[index];
+                this.sort.sortBy[index].order = this.sort.sortBy[index].order === 'desc' ? 'asc' : 'desc';
                 this.input();
+            },
+            getDirection(index) {
+                return this.sort.sortBy[index].order === 'desc' ? 'down' : 'up';
+            },
+            getOrder(key) {
+                return this.sort.sortBy.find(item => item.key === key)?.order ?? 'asc';
             },
         },
     }

@@ -1,6 +1,6 @@
-export default function (sortBy, sortDesc) {
+export default function (sortBy) {
     if (sortBy && sortBy.length) {
-        return sortBy.map((v, i) => (sortDesc[i] ? '-' : '') + v).join(',');
+        return sortBy.map(({ key, order }) => (order === 'desc' ? '-' : '') + key).join(',');
     }
 
     return undefined;

@@ -100,8 +100,12 @@
                 total: 0,
                 items: [],
                 options: {
-                    sortBy: ['created_at'],
-                    sortDesc: [true],
+                    sortBy: [
+                        {
+                            key: 'created_at',
+                            order: 'desc',
+                        },
+                    ],
                     page: undefined,
                     itemsPerPage: undefined,
                 },
@@ -194,7 +198,7 @@
                 ];
             },
             sort() {
-                return stringifySort(this.options.sortBy, this.options.sortDesc);
+                return stringifySort(this.options.sortBy);
             },
         },
         watch: {
@@ -217,7 +221,7 @@
             },
         },
         mounted() {
-            this.options = { ...parseSort(this.routeSort), page: undefined, itemsPerPage: undefined };
+            this.options = { sortBy: parseSort(this.routeSort), page: undefined, itemsPerPage: undefined };
             this.query = this.routeQuery;
         },
         methods: {
@@ -281,7 +285,7 @@
                 this.total = 0;
             },
             resetQuery() {
-                this.options = parseSort(this.preset?.sort);
+                this.options = { sortBy: parseSort(this.preset?.sort) };
                 this.query = this.defaultQuery();
             },
             addItem() {

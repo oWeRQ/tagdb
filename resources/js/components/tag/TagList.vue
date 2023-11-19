@@ -84,8 +84,7 @@
                 total: 0,
                 items: [],
                 options: {
-                    sortBy: ['name'],
-                    sortDesc: [false],
+                    sortBy: [{ key: 'name', order: 'asc' }],
                 },
             }
         },
@@ -106,7 +105,7 @@
                 ];
             },
             sort() {
-                return stringifySort(this.options.sortBy, this.options.sortDesc);
+                return stringifySort(this.options.sortBy);
             },
         },
         watch: {

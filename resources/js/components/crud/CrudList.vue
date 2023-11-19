@@ -111,7 +111,7 @@
                 ];
             },
             sort() {
-                return stringifySort(this.options.sortBy, this.options.sortDesc);
+                return stringifySort(this.options.sortBy);
             },
         },
         watch: {
