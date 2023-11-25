@@ -143,10 +143,10 @@
                 }
             },
             isHyphen(item) {
-                return (this.returnObject ? item.name : item)[0] === '-';
+                return (typeof item === 'string' ? item : item.name)[0] === '-';
             },
             itemText(item) {
-                return (this.returnObject ? item.name : item).replace(/^[+-]/, '');
+                return (typeof item === 'string' ? item : item.name).replace(/^[+-]/, '');
             },
             click(index, item) {
                 this.$emit('click:tag', item);
